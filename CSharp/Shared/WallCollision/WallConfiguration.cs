@@ -2,8 +2,6 @@ using System;
 using Barotrauma;
 
 namespace PrimaryPackage.WallCollision {
-    // Stored in Structure.SpecialTag because Structure.Save serializes this property into .sub.
-    // An isolated, versioned suffix preserves user-defined SpecialTag data.
     internal static class WallConfiguration {
         private const string Marker = " [PP_EC_V1:";
         private const char Terminator = ']';
@@ -38,17 +36,20 @@ namespace PrimaryPackage.WallCollision {
             string original = RemoveMarker(wall.SpecialTag ?? string.Empty);
             wall.SpecialTag = original + Marker + (char)('0' + (int)mode) + ":" +
                               (char)('0' + (int)face) + Terminator;
+            WallRules.RegisterPrepared(wall);
         }
 
         internal static void Remove(Structure wall) {
-            if (wall != null) { wall.SpecialTag = RemoveMarker(wall.SpecialTag ?? string.Empty); }
+            if (wall != null) {
+                wall.SpecialTag = RemoveMarker(wall.SpecialTag ?? string.Empty);
+                WallRules.UnregisterPrepared(wall);
+            }
         }
 
         private static string RemoveMarker(string original) {
             int marker = original.LastIndexOf(Marker, StringComparison.Ordinal);
             if (marker < 0) { return original; }
             int terminator = original.IndexOf(Terminator, marker + Marker.Length);
-            // Never remove arbitrary text if an incomplete marker is present.
             if (terminator < 0) { return original; }
             return original.Remove(marker, terminator - marker + 1);
         }
