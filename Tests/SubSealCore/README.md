@@ -2,7 +2,7 @@
 
 Run with `dotnet run --project Tests/SubSealCore/SubSealCore.csproj --configuration Release` on .NET 8 or use `.github/workflows/subseal-core.yml` on GitHub Actions.
 
-This project directly compiles the real production source files `contentserver/CSharp/Server/Leases.cs`, `Wire/Protocol.cs`, `Wire/TransferSeal.cs`; only Barotrauma-specific entity/time dependencies are replaced with simple deterministic test stubs. The test program verifies the authenticated-seal roundtrip and tamper detection, key wrapping, contract invariants, per-client lease quotas, ACK ownership, consumption, per-connection revocation, expiration, key wiping and uint ID wraparound.
+This project directly compiles the real production source files `contentserver/CSharp/Server/Leases.cs`, `Wire/Protocol.cs`, `Wire/TransferSeal.cs`; only Barotrauma-specific entity/time dependencies are replaced with simple deterministic test stubs. The test program verifies the authenticated-seal roundtrip and tamper detection, key wrapping, contract invariants, per-client lease quotas, ACK ownership, consumption, per-connection revocation, expiration, key wiping uint ID wraparound, and transactional ECDH session replacement.
 
 The workflow also verifies that the client and server protocol files are byte-identical.
 

@@ -21,6 +21,7 @@ internal static class Program
         Test(ConnectionIsolation);
         Test(Expiry);
         Test(IdWraparound);
+        Test(TransactionalSessionReplacement);
         Console.WriteLine($"PASS={passed} FAIL=0 (offline SubSeal source tests)");
     }
 
@@ -152,6 +153,45 @@ internal static class Program
         Require(store.Count == 0 && store.RetryCandidateCount == 0 && store.Outstanding(a) == 0,
             "armed expires after grace");
         Require(armed.ContentKey.All(x => x == 0), "armed expiry zeroed");
+    }
+
+    static void TransactionalSessionReplacement()
+    {
+        var store = new SessionKeys();
+        var connection = new NetworkConnection();
+        using ECDiffieHellman client = ECDiffieHellman.Create(ECCurve.NamedCurves.nistP256);
+        byte[] publicKey = client.ExportSubjectPublicKeyInfo();
+
+        byte[] responseKey = new byte[256];
+        byte[] salt = new byte[Protocol.SaltLength];
+        var original = store.Establish(connection, 1, Protocol.CapabilityCanOpenSealed,
+            publicKey, responseKey, out int responseLength, salt);
+        Require(original != null && responseLength > 0 && store.Find(connection) == original,
+            "initial ECDH established");
+        byte[] originalKey = original!.Key;
+
+        Require(store.Establish(connection, 2, Protocol.CapabilityCanOpenSealed,
+            new byte[] { 0x01, 0x02, 0x03 }, responseKey, out _, salt) == null,
+            "invalid point rejected");
+        Require(ReferenceEquals(store.Find(connection), original), "invalid key preserves session");
+        Require(originalKey.Any(b => b != 0), "active key remains usable");
+
+        byte[] trailingBytes = publicKey.Concat(new byte[] { 0 }).ToArray();
+        Require(store.Establish(connection, 3, Protocol.CapabilityCanOpenSealed,
+            trailingBytes, responseKey, out _, salt) == null,
+            "trailing SPKI bytes rejected");
+        Require(ReferenceEquals(store.Find(connection), original), "malformed SPKI preserves session");
+
+        var replaced = store.Establish(connection, 4, Protocol.CapabilityCanOpenSealed,
+            publicKey, responseKey, out _, salt);
+        Require(replaced != null && !ReferenceEquals(replaced, original),
+            "valid second handshake replaces session");
+        Require(originalKey.All(b => b == 0), "old key zeroed on replacement");
+        Require(replaced!.Key.Any(b => b != 0), "new key derived");
+        byte[] freshKey = replaced.Key;
+        store.Drop(connection);
+        Require(store.Find(connection) == null && freshKey.All(b => b == 0),
+            "explicit drop wipes replacement key");
     }
 
     static void IdWraparound()

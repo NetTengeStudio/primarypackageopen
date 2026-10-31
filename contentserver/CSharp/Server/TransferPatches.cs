@@ -201,7 +201,7 @@ namespace SubSeal.Server
 
         public static void AfterStartTransfer(FileSender.FileTransferOut __result, Leases.Lease __state)
         {
-            if (__state is null || leases is null) { return; }
+            if (__state is null) { return; }
 
             if (__result is null)
             {
@@ -210,12 +210,13 @@ namespace SubSeal.Server
             }
 
             // FileSender.StartTransfer creates a transfer containing plaintext
-            // before Harmony postfixes run. Any sealing or replacement failure
-            // must leave it non-sendable, even if a crypto routine throws.
-            leases.MarkConsumed(__state);
+            // before Harmony postfixes run. No state transition can be allowed
+            // to throw past this boundary while leaving the transfer sendable.
             byte[] plain = __result.Data;
             try
             {
+                if (leases is null) { throw new InvalidOperationException("lease registry not bound"); }
+                leases.MarkConsumed(__state);
                 byte[] output = __state.FileType == FileTransferType.CampaignSave
                     ? SaveResealer.Reseal(plain, __state.ContentKey, __state.Id)
                     : SealSubmarine(plain, __state);

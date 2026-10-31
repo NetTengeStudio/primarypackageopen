@@ -9,6 +9,7 @@
   <ItemGroup>
     <!-- Exercise the actual production C# sources, not copies of their algorithms. -->
     <Compile Include="../../contentserver/CSharp/Server/Leases.cs" Link="Production/Leases.cs" />
+    <Compile Include="../../contentserver/CSharp/Server/SessionKeys.cs" Link="Production/SessionKeys.cs" />
     <Compile Include="../../contentserver/CSharp/Server/Wire/Protocol.cs" Link="Production/Protocol.cs" />
     <Compile Include="../../contentserver/CSharp/Server/Wire/TransferSeal.cs" Link="Production/TransferSeal.cs" />
   </ItemGroup>
