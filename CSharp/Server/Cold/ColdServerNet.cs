@@ -14,21 +14,25 @@ namespace PrimaryPackage.Cold {
         private static float netTimer;
         private static int knownVersion = -1;
         private static bool initialized;
+        private static float lastQuantizeMin = float.NaN, lastQuantizeMax = float.NaN;
 
         public static double LastSentAt { get; private set; } = double.NegativeInfinity;
         public static int LastSentHulls { get; private set; }
         public static int SentMessages { get; private set; }
         public static bool LastTickSilent { get; private set; } = true;
+        public static long InspectedHulls { get; private set; }
 
         public static void Reset() {
             sent = Array.Empty<byte>();
             knownVersion = -1;
+            lastQuantizeMin = lastQuantizeMax = float.NaN;
             keepAliveTimer = 0.0f;
             netTimer = 0.0f;
             LastSentAt = double.NegativeInfinity;
             LastSentHulls = 0;
             SentMessages = 0;
             LastTickSilent = true;
+            InspectedHulls = 0;
         }
 
         public static void Hook() {
@@ -52,8 +56,13 @@ namespace PrimaryPackage.Cold {
             float elapsed = netTimer;
             netTimer = 0.0f;
 
-            bool forceAll = knownVersion != ColdField.Version;
-            if (forceAll) { knownVersion = ColdField.Version; }
+            bool forceAll = knownVersion != ColdField.Version ||
+                lastQuantizeMin != ColdConfig.MinTemperature || lastQuantizeMax != ColdConfig.MaxTemperature;
+            if (forceAll) {
+                knownVersion = ColdField.Version;
+                lastQuantizeMin = ColdConfig.MinTemperature;
+                lastQuantizeMax = ColdConfig.MaxTemperature;
+            }
             if (sent.Length < count) {
                 sent = new byte[count];
                 forceAll = true;
@@ -68,9 +77,13 @@ namespace PrimaryPackage.Cold {
             if (keepAlive) { keepAliveTimer = 0.0f; }
 
             int changed = 0;
-            for (int i = 0; i < count; i++) {
+            bool scanAll = forceAll || keepAlive;
+            int toInspect = scanAll ? count : ColdField.ChangedCount;
+            InspectedHulls += toInspect;
+            for (int candidate = 0; candidate < toInspect; candidate++) {
+                int i = scanAll ? candidate : ColdField.ChangedAt(candidate);
                 byte q = ColdNet.Quantize(ColdField.Raw(i));
-                if (q == sent[i] && !forceAll && !keepAlive) { continue; }
+                if (q == sent[i] && !scanAll) { continue; }
                 sent[i] = q;
                 Hull hull = ColdField.HullAt(i);
                 if (hull == null) { continue; }
@@ -78,6 +91,7 @@ namespace PrimaryPackage.Cold {
                 pendingValues[changed] = q;
                 changed++;
             }
+            ColdField.ConsumeChanges();
             LastTickSilent = changed == 0;
             if (changed == 0) { return; }
             LastSentAt = Timing.TotalTime;

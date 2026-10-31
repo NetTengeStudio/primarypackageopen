@@ -37,6 +37,30 @@ namespace PrimaryPackage.Cold {
         private static int[] degree = Array.Empty<int>();
         private static Edge[] edges = Array.Empty<Edge>();
 
+#if SERVER
+        // The simulation is already visiting changed temperatures; collect only
+        // quantization-boundary crossings for the network replication stage.
+        private static byte[] quantized = Array.Empty<byte>();
+        private static bool[] queued = Array.Empty<bool>();
+        private static readonly List<int> changed = new List<int>();
+        public static int ChangedCount => changed.Count;
+        public static int ChangedAt(int index) => changed[index];
+
+        public static void ConsumeChanges() {
+            for (int i = 0; i < changed.Count; i++) { queued[changed[i]] = false; }
+            changed.Clear();
+        }
+
+        private static void TemperatureChanged(int index) {
+            byte value = ColdNet.Quantize(temperature[index]);
+            if (value == quantized[index]) { return; }
+            quantized[index] = value;
+            if (queued[index]) { return; }
+            queued[index] = true;
+            changed.Add(index);
+        }
+#endif
+
         private static int hullCount;
         private static int edgeCount;
         private static int knownHulls = -1;
@@ -67,6 +91,9 @@ namespace PrimaryPackage.Cold {
             index.Clear();
             restored.Clear();
             carry.Clear();
+#if SERVER
+            ConsumeChanges();
+#endif
             hullCount = 0;
             edgeCount = 0;
             knownHulls = -1;
@@ -93,6 +120,9 @@ namespace PrimaryPackage.Cold {
             int i = IndexOf(hull);
             if (i < 0) { return; }
             temperature[i] = Clamp(value);
+#if SERVER
+            TemperatureChanged(i);
+#endif
         }
 
         public static void Nudge(Hull hull, float target, float rate, float deltaTime) {
@@ -101,6 +131,9 @@ namespace PrimaryPackage.Cold {
             float sizedRate = i < baseCapacity.Length && baseCapacity[i] > 0.0f
                 ? rate * (ColdConfig.MinHullVolume / baseCapacity[i]) : rate;
             temperature[i] = Clamp(temperature[i] + (target - temperature[i]) * Response(sizedRate, deltaTime));
+#if SERVER
+            TemperatureChanged(i);
+#endif
         }
 
         public static void Interpolate(float deltaTime) {
@@ -162,6 +195,9 @@ namespace PrimaryPackage.Cold {
             for (int i = 0; i < hullCount; i++) {
                 float value = next[i];
                 temperature[i] = Clamp(value + (baseTemp - value) * relax);
+#if SERVER
+                TemperatureChanged(i);
+#endif
             }
 
             for (int i = 0; i < sources.Count; i++) {
@@ -243,6 +279,13 @@ namespace PrimaryPackage.Cold {
             Grow(ref baseCapacity, hullCount);
             Grow(ref group, hullCount);
             Grow(ref degree, hullCount);
+#if SERVER
+            // Index identity may have changed even when the total hull count did not.
+            // A graph-version change forces a full network snapshot.
+            ConsumeChanges();
+            Grow(ref quantized, hullCount);
+            Grow(ref queued, hullCount);
+#endif
             Array.Clear(degree, 0, hullCount);
 
             float minVolume = ColdConfig.MinHullVolume;
@@ -260,6 +303,9 @@ namespace PrimaryPackage.Cold {
                     : baseTemp;
                 temperature[i] = start;
                 shown[i] = start;
+#if SERVER
+                quantized[i] = ColdNet.Quantize(start);
+#endif
             }
             restored.Clear();
             carry.Clear();
