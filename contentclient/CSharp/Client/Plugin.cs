@@ -131,9 +131,9 @@ namespace SubSeal.Client
             {
                 harmony.Patch(target,
                     prefix: prefix is null ? null : new HarmonyMethod(
-                        typeof(PreviewSurfacePatches).GetMethod(prefix)),
+                        typeof(PreviewSurfacePatches).GetMethod(prefix, System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public)),
                     postfix: postfix is null ? null : new HarmonyMethod(
-                        typeof(PreviewSurfacePatches).GetMethod(postfix)));
+                        typeof(PreviewSurfacePatches).GetMethod(postfix, System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public)));
             }
             catch (Exception)
             {
