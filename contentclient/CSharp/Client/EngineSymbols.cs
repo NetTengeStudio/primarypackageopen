@@ -28,6 +28,10 @@ namespace SubSeal.Client
         internal static MethodInfo PreviewDispose { get; private set; }
 
         internal static MethodInfo CampaignRetry { get; private set; }
+        internal static MethodInfo TabMenuPreview { get; private set; }
+        internal static MethodInfo SelectionPreviewImage { get; private set; }
+        internal static MethodInfo SelectionRefresh { get; private set; }
+        internal static MethodInfo SelectionSelect { get; private set; }
 
         internal static FieldInfo PreviewBounds { get; private set; }
 
@@ -144,6 +148,21 @@ namespace SubSeal.Client
                 null,
                 System.Type.EmptyTypes,
                 null);
+
+            // Resolve internal game UI types by exact method signatures.
+            const BindingFlags guiFlags = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static;
+            Assembly clientAssembly = typeof(SubmarinePreview).Assembly;
+            Type tabMenuType = clientAssembly.GetType("Barotrauma.TabMenu");
+            TabMenuPreview = tabMenuType?.GetMethod("CreateSubmarineInfo", guiFlags, null,
+                new[] { typeof(GUIFrame), typeof(Submarine) }, null);
+
+            Type selectionType = clientAssembly.GetType("Barotrauma.SubmarineSelection");
+            SelectionPreviewImage = selectionType?.GetMethod("GetPreviewImage", guiFlags, null,
+                new[] { typeof(SubmarineInfo) }, null);
+            SelectionRefresh = selectionType?.GetMethod("RefreshSubmarineDisplay", guiFlags, null,
+                new[] { typeof(bool), typeof(bool) }, null);
+            SelectionSelect = selectionType?.GetMethod("SelectSubmarine", guiFlags, null,
+                new[] { typeof(SubmarineInfo), typeof(Rectangle) }, null);
 
             FileCorrupted = typeof(SubmarineInfo).GetField(
                 $"<{nameof(SubmarineInfo.IsFileCorrupted)}>k__BackingField",
