@@ -5,40 +5,28 @@ using FarseerPhysics.Dynamics.Contacts;
 using Microsoft.Xna.Framework;
 
 namespace PrimaryPackage.WallCollision {
+    /// <summary>
+    /// Narrow-phase gate on a physical wall section. The rule shares a crossing state across
+    /// all its sections so a body is not blocked by a neighboring section halfway through.
+    /// </summary>
     public sealed class WallGate {
-        public const float AwaySpeed = 0.02f;
-
-        public WallGate(Body body, WallFace face) {
+        internal WallGate(Body body, WallRule rule) {
             Body = body;
-            Face = face;
-            Normal = new WallPlane(face).Normal(body.Rotation);
+            Rule = rule;
         }
 
-        public Body Body { get; }
+        internal Body Body { get; }
+        internal WallRule Rule { get; }
 
-        public WallFace Face { get; }
-
-        public Vector2 Normal { get; }
-
-        public bool Passable(Body other) {
-            if (other == null) { return false; }
-            Vector2 offset = other.WorldCenter - Body.Position;
-            float side = offset.X * Normal.X + offset.Y * Normal.Y;
-            if (side > 0f) { return true; }
-            Vector2 velocity = other.LinearVelocity;
-            return velocity.X * Normal.X + velocity.Y * Normal.Y < -AwaySpeed;
-        }
+        internal bool Passable(Body other) => Rule.AllowCrossing(other);
     }
 
     public static class WallContacts {
         private static readonly Dictionary<Body, WallGate> gates = new Dictionary<Body, WallGate>(64);
-
         private static readonly PreSolveDelegate hook = OnPreSolve;
-
         private static World bound;
 
         public static int Count => gates.Count;
-
         public static World BoundWorld => bound;
 
         public static void Attach(World world, WallGate gate) {
@@ -48,8 +36,7 @@ namespace PrimaryPackage.WallCollision {
         }
 
         public static void Detach(Body body) {
-            if (body == null) { return; }
-            gates.Remove(body);
+            if (body != null) { gates.Remove(body); }
         }
 
         public static void Clear() {
@@ -74,15 +61,20 @@ namespace PrimaryPackage.WallCollision {
             if (gates.Count == 0) { return; }
             Fixture first = contact.FixtureA;
             Fixture second = contact.FixtureB;
-            if (first == null || second == null) { return; }
+            if (first == null || second == null || first.IsSensor || second.IsSensor) { return; }
             Body bodyA = first.Body;
             Body bodyB = second.Body;
             if (bodyA == null || bodyB == null) { return; }
-            if (gates.TryGetValue(bodyA, out WallGate gate) && gate.Passable(bodyB)) {
+
+            if (gates.TryGetValue(bodyA, out WallGate gate) &&
+                WallGeometry.IsWallFixture(first, Physics.CollisionWall) &&
+                gate.Passable(bodyB)) {
                 contact.Enabled = false;
                 return;
             }
-            if (gates.TryGetValue(bodyB, out gate) && gate.Passable(bodyA)) {
+            if (gates.TryGetValue(bodyB, out gate) &&
+                WallGeometry.IsWallFixture(second, Physics.CollisionWall) &&
+                gate.Passable(bodyA)) {
                 contact.Enabled = false;
             }
         }
