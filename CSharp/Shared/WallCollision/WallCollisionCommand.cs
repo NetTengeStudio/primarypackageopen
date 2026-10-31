@@ -128,13 +128,13 @@ namespace PrimaryPackage.WallCollision {
             Vector2 normal;
             string sideArg = args.Length > 1 && args[1] != null ? args[1].Trim().ToLowerInvariant() : string.Empty;
             if (sideArg.Length == 0) {
-                if (!WallGeometry.TryFaceFromPoint(wall.Bodies, Physics.CollisionWall, sideWorld, hasSide, out face, out normal)) {
+                if (!WallGeometry.TryFaceFromWorldPoint(wall.Bodies, Physics.CollisionWall, sideWorld, hasSide, out face, out normal)) {
                     text = "ec 2: у стены нет сплошных участков.";
                     return RuleChange.None;
                 }
             }
             else if (sideArg == "flip" || sideArg == "invert") {
-                if (!WallGeometry.TryFaceFromPoint(wall.Bodies, Physics.CollisionWall, sideWorld, hasSide, out face, out normal)) {
+                if (!WallGeometry.TryFaceFromWorldPoint(wall.Bodies, Physics.CollisionWall, sideWorld, hasSide, out face, out normal)) {
                     text = "ec 2: у стены нет сплошных участков.";
                     return RuleChange.None;
                 }

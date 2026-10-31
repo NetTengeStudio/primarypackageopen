@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using FarseerPhysics;
 using FarseerPhysics.Collision;
 using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Dynamics;
@@ -86,6 +87,13 @@ namespace PrimaryPackage.WallCollision {
                 ? new Vector2(cos, sin)
                 : new Vector2(-sin, cos);
         }
+
+        // Public gameplay coordinates are world/display units. Farseer body
+        // positions are simulation units; keep this conversion at the boundary.
+        public static bool TryFaceFromWorldPoint(IReadOnlyList<Body> bodies, Category wallCategory,
+            Vector2 pointWorld, bool hasPoint, out WallFace face, out Vector2 normal) =>
+            TryFaceFromPoint(bodies, wallCategory,
+                ConvertUnits.ToSimUnits(pointWorld), hasPoint, out face, out normal);
 
         public static bool TryFaceFromPoint(IReadOnlyList<Body> bodies, Category wallCategory,
             Vector2 pointSim, bool hasPoint, out WallFace face, out Vector2 normal) {

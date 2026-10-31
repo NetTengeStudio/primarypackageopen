@@ -38,3 +38,9 @@ After: structure removal performs a single dictionary lookup (`O(1)` average) an
 3. End the round with active rules and start another round; verify that the old world has no `PreSolve` subscription.
 4. Test host, dedicated server, late joining clients and reconnects, verifying full snapshots and subsequent rule changes.
 5. Record CPU profiles with 0/10/100/1000 active rules for the old and new branches before asserting a speedup.
+
+## Direction-space correctness
+
+In the original `WallCollisionCommand.ApplyOneWay`, `Character.WorldPosition` (display/world units) was passed unchanged into `WallGeometry.TryFaceFromPoint`, whose dot product uses `Farseer Body.Position` (simulation units). That mixes unit systems and can select the wrong side of the wall. The command now calls `TryFaceFromWorldPoint`, which converts once at the engine boundary with `ConvertUnits.ToSimUnits`. Existing `TryFaceFromPoint` retains its simulation-unit contract for internal or external callers. The selector `WallPicker.Pick` already performed this conversion.
+
+Required regression: test walls at near-origin and far-origin locations and rotated walls, on both the host and dedicated server, with the admin on either side; confirm orientation and reverse-side blocking. **NOT_RUN**.
