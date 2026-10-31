@@ -201,6 +201,7 @@ namespace PrimaryPackage.WallCollision {
 
         public static int ActivatePrepared() {
             if (Ready) { return ordered.Count; }
+            prepared.RemoveWhere(static wall => wall == null || wall.Removed);
             Ready = true;
             int activated = 0;
             WallContacts.BeginBatch();
