@@ -99,7 +99,7 @@ static class HullIndex
         Clear();
         if (!On || !ItemRegistry.Tracking) { return; }
         Item[] items = ItemRegistry.Items;
-        for (int slot = 0; slot < items.Length; slot++)
+        for (int slot = 0, limit = ItemRegistry.SlotLimit; slot < limit; slot++)
         {
             if (items[slot] is { } item) { OnAssigned(slot, item); }
         }
@@ -130,7 +130,7 @@ static class HullIndex
     {
         int bad = 0;
         Item[] items = ItemRegistry.Items;
-        for (int slot = 0; slot < items.Length; slot++)
+        for (int slot = 0, limit = ItemRegistry.SlotLimit; slot < limit; slot++)
         {
             if (items[slot] is not { } item) { continue; }
             Hull h = item.currentHull;

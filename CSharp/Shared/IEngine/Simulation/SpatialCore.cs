@@ -41,6 +41,9 @@ static class SpatialCore
     public static long Rebuilds, Frozen, Thawed, EventRefreezes, Reindexed;
     public static CostMeter RebuildCost, TickCost;
     public static int IndexedCount;
+    // Highest slot range touched by the last completed index generation,
+    // including additions processed between full topology rebuilds.
+    static int previouslyAssignedSlots;
 
     public static bool IsIndexed(Item item) => ItemRegistry.TryGetSlot(item, out int s) && s < indexed.Length && indexed[s];
 
@@ -147,7 +150,9 @@ static class SpatialCore
     static void ProcessPending()
     {
         Item[] items = ItemRegistry.Items;
-        EnsureCapacity(items.Length);
+        int assigned = ItemRegistry.SlotLimit;
+        EnsureCapacity(assigned);
+        if (assigned > previouslyAssignedSlots) { previouslyAssignedSlots = assigned; }
         foreach (int s in pendingOrder)
         {
             Unindex(s);
@@ -417,13 +422,17 @@ static class SpatialCore
         Dormancy.WakeAll(Dormancy.BySpatial);
         pending.Clear();
         pendingOrder.Clear();
-        int n = ItemRegistry.Items.Length;
-        EnsureCapacity(n);
+        int n = ItemRegistry.SlotLimit;
+        // Reset slots indexed in the old generation too: compaction can reduce
+        // the live high-water mark while the arrays retain their old capacity.
+        int resetLimit = Math.Max(n, previouslyAssignedSlots);
+        EnsureCapacity(resetLimit);
+        previouslyAssignedSlots = n;
         foreach (var list in cells.Values) { list.Clear(); }
         subs.Clear();
         subs.AddRange(Submarine.Loaded);
         IndexedCount = 0;
-        for (int s = 0; s < n; s++)
+        for (int s = 0; s < resetLimit; s++)
         {
             parent[s] = s;
             islandAwake[s] = 0;

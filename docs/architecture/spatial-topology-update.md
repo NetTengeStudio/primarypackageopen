@@ -46,3 +46,9 @@ Verified source inputs:
 - CPU/FPS/GC comparison: **NOT_MEASURED**. The complexity reductions above are analytical, not measured speedups.
 
 Known constraint: a topology split currently causes a full rebuild, not dynamic graph deletion. This trades rare-event rebuilding for correct connected-component membership; it should be profiled under mass item removal.
+
+## Used-slot reconstruction boundary (31 Oct 2026)
+
+The previous `SpatialCore.Rebuild` visited `ItemRegistry.Items.Length` three times to index roots/children and once to reset all allocated structures. That array starts with capacity 8192 even on maps with a handful of items. The new `ItemRegistry.SlotLimit` high-water mark is the actual boundary for roots, children and active-root scans. Clearing uses `max(currentSlotLimit, previousIndexedSlotRange)`, preserving cleanup after item-registry compaction or removal. Incremental item registrations update the previous indexed range to ensure future rebuilds remove their stale slots. `HullIndex.Rebuild` and `HullIndex.Mismatches` also iterate assigned slots rather than capacity.
+
+The loop work changes from O(arrayCapacity) to O(assigned slots) for the index passes, with cleanup bounded by the previously indexed range. The reset remains complete for all previously used slots. No performance measurement or actual compilation has occurred; tests should cover rebuild immediately after compaction, item removal, and repeated start/stop cycles.
