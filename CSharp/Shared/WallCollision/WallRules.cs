@@ -152,7 +152,8 @@ namespace PrimaryPackage.WallCollision {
                 }
                 bool changed = rule.Mode != mode || rule.Face != face ||
                                !ReferenceEquals(rule.Wall, wall);
-                if (changed) { rule.Release(); }
+                if (!changed) { return; }
+                rule.Release();
                 rule.Wall = wall;
                 rule.Mode = mode;
                 rule.Face = face;
