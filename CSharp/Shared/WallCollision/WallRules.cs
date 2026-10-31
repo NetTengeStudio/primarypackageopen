@@ -28,8 +28,9 @@ namespace PrimaryPackage.WallCollision {
             Vector2 offset = other.WorldCenter - referencePosition;
             float side = offset.X * normal.X + offset.Y * normal.Y;
             if (side <= 0f) { return false; }
-            Vector2 velocity = other.LinearVelocity;
-            if (velocity.X * normal.X + velocity.Y * normal.Y >= 0f) { return false; }
+            // PreSolve must also admit resting bodies: a character standing on the
+            // upper face can have zero normal velocity until that contact is disabled.
+            // The body's position, not its instantaneous velocity, chooses the entry side.
             if (crossings.TryAdd(other, MeasureRadius(other))) { return true; }
             return crossings.ContainsKey(other);
         }
@@ -253,6 +254,17 @@ namespace PrimaryPackage.WallCollision {
 
         public static int ActivatePrepared() {
             if (Ready) { return ordered.Count; }
+
+            // Some submarines are loaded before the Structure.Load hook is installed.
+            // Reconstruct the authoring registry from the live level at activation.
+            // This also discards stale Structure references left over from prior rounds.
+            prepared.Clear();
+            foreach (MapEntity entity in MapEntity.MapEntityList) {
+                if (entity is Structure wall && !wall.Removed) {
+                    RegisterPrepared(wall);
+                }
+            }
+
             Ready = true;
             int activated = 0;
             retiredPrepared.Clear();
