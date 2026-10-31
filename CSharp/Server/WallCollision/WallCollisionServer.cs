@@ -11,7 +11,9 @@ namespace PrimaryPackage.WallCollision {
             ModNet.Receive(WallCollisionNet.RequestId, OnRequest, 1.0);
         }
 
-        public static void OnRoundStart() {
+        public static void OnRoundStart() => BroadcastSnapshot();
+
+        public static void BroadcastSnapshot() {
             ushort revision = WallCollisionNet.Advance();
             ModNet.Broadcast(WallCollisionNet.StateId, message => WriteSnapshot(message, revision));
         }

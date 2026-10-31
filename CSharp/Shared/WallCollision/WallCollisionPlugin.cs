@@ -7,6 +7,7 @@ namespace PrimaryPackage.WallCollision {
     public sealed class WallCollisionPlugin : PrimaryPackage.Core.IModule {
         public void Attach(Harmony harmony) {
             WallCollisionCommand.Register();
+            WallPreparations.Install(harmony);
 #if CLIENT
             // Snapshot retries need an update tick only on the client. No wall-rule polling.
             PrimaryPackage.Core.ModuleHost.Guard("ec client sync", () => harmony.Patch(
@@ -36,6 +37,7 @@ namespace PrimaryPackage.WallCollision {
 
         public void RoundStart() {
             WallRules.Reset();
+            WallPreparations.Disarm();
 #if SERVER
             WallCollisionServer.OnRoundStart();
 #else
@@ -43,17 +45,24 @@ namespace PrimaryPackage.WallCollision {
 #endif
         }
 
-        public void Release() => WallRules.Reset();
+        public void Release() {
+            WallRules.Reset();
+            WallPreparations.Reset();
+        }
 
 #if CLIENT
         public static void SessionUpdatePostfix(float deltaTime) => WallCollisionClient.Update(deltaTime);
 #endif
 
         // Release fixture gates before the engine removes their bodies.
-        public static void StructureRemovingPrefix(Structure __instance) => WallRules.Removed(__instance);
+        public static void StructureRemovingPrefix(Structure __instance) {
+            WallRules.Removed(__instance);
+            WallPreparations.Removed(__instance);
+        }
 
         public static void EndRoundPostfix() {
             WallRules.Reset();
+            WallPreparations.Reset();
 #if CLIENT
             WallCollisionClient.OnRoundEnd();
 #endif

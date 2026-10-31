@@ -89,6 +89,10 @@ namespace PrimaryPackage.WallCollision {
                 return RuleChange.None;
             }
             string verb = args[0] == null ? string.Empty : args[0].Trim().ToLowerInvariant();
+            if (verb != "list" && verb != "ls" && !WallPreparations.Ready) {
+                text = "ec: система не активирована, сначала выполните ec_ready в раунде.";
+                return RuleChange.None;
+            }
             if (verb == "list" || verb == "ls") {
                 text = List();
                 return RuleChange.None;
@@ -171,7 +175,7 @@ namespace PrimaryPackage.WallCollision {
             return rule != null && rule.Mode == mode && rule.Face == face;
         }
 
-        private static bool TryDirection(string text, out Vector2 direction) {
+        internal static bool TryDirection(string text, out Vector2 direction) {
             switch (text) {
                 case "left":
                 case "-x":
