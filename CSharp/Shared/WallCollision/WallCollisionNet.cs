@@ -1,7 +1,7 @@
 namespace PrimaryPackage.WallCollision {
     public static class WallCollisionNet {
-        public const string StateId = "PP_WallCollisionState";
-        public const string RequestId = "PP_WallCollisionRequest";
+        public const string StateId = "PP_WallCollisionStateV2";
+        public const string RequestId = "PP_WallCollisionRequestV2";
 
         public static uint Revision { get; private set; }
 
