@@ -4,6 +4,8 @@
         public const string RequestId = "PP_ColdRequest";
 
         public const byte FlagFull = 1;
+        // Explicit completion marker for an ordered multipart full snapshot.
+        public const byte FlagSnapshotComplete = 2;
         public const int MaxPerMessage = 220;
 
         private static readonly PrimaryPackage.Core.BitField temperature = new PrimaryPackage.Core.BitField(0, 8);

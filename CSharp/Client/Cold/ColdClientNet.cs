@@ -59,7 +59,13 @@ namespace PrimaryPackage.Cold {
                 ColdField.Set(hull, value);
                 applied++;
             }
-            if ((flags & ColdNet.FlagFull) != 0 && (count == 0 || applied > 0)) { synced = true; }
+            // Data chunks alone are not a completed snapshot: the server sends
+            // a final reliable marker only after writing every chunk.
+            if ((flags & (ColdNet.FlagFull | ColdNet.FlagSnapshotComplete)) ==
+                (ColdNet.FlagFull | ColdNet.FlagSnapshotComplete) && count == 0)
+            {
+                synced = true;
+            }
             LastReceivedAt = Timing.TotalTime;
             LastReceivedHulls = applied;
             ReceivedMessages++;

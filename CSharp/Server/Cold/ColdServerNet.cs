@@ -122,7 +122,7 @@ namespace PrimaryPackage.Cold {
                 int chunk = Math.Min(ColdNet.MaxPerMessage, count - offset);
                 int start = offset;
                 int size = chunk;
-                PrimaryPackage.Core.ModNet.Send(ColdNet.StateId, connection, msg => {
+                if (!PrimaryPackage.Core.ModNet.Send(ColdNet.StateId, connection, msg => {
                     msg.WriteByte(ColdNet.FlagFull);
                     msg.WriteUInt16((ushort)size);
                     for (int i = 0; i < size; i++) {
@@ -130,9 +130,16 @@ namespace PrimaryPackage.Cold {
                         msg.WriteUInt16(hull == null ? (ushort)0 : hull.ID);
                         msg.WriteByte(ColdNet.Quantize(ColdField.Raw(start + i)));
                     }
-                });
+                })) { return; }
                 offset += chunk;
             }
+
+            // A partial transfer must not declare the client synchronized.
+            // ModNet defaults to reliable delivery; this follows all chunks.
+            PrimaryPackage.Core.ModNet.Send(ColdNet.StateId, connection, msg => {
+                msg.WriteByte((byte)(ColdNet.FlagFull | ColdNet.FlagSnapshotComplete));
+                msg.WriteUInt16(0);
+            });
         }
     }
 

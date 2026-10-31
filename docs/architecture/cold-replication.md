@@ -33,3 +33,13 @@ Each temperature write performs an O(1) quantization check. Actual gain depends 
 8. Compare `InspectedHulls`, bytes sent, GC, P95/P99 network preparation and whole-frame CPU across 0/10/100/1000 hull scenarios.
 
 Status: source-path analysis and GitHub changes only. `Client/Server` compilation, gameplay tests, and measured comparisons **NOT_RUN**.
+
+## Transactional multipart snapshot completion (31 Oct 2026)
+
+Previous client logic set `synced=true` on the **first nonempty full packet**, even if the server needed multiple packets of up to 220 hulls. Subsequent request retries stopped immediately, so a failed later packet could leave part of the state uninitialized indefinitely. Normal `ModNet` traffic uses reliable delivery, but serialization/send failures can still produce a partial attempt.
+
+The full response now consists of ordered reliable data chunks followed by a zero-entry `FlagFull | FlagSnapshotComplete` completion marker. The server **does not send** that marker if any chunk fails to queue. The client marks the full snapshot received only on this explicit marker; deltas remain unchanged. Wire item records (Hull ID and quantized temperature) are unchanged. This modifies only a reserved flags bit and adds one small completion packet to each full response.
+
+**Compatibility note:** an older server without the marker will not satisfy the newer client's synchronization criterion, so it will keep requesting snapshots. Both packages should be deployed together; protocol version negotiation and multi-epoch snapshot handling remain future integration requirements. The marker is not a checksum of all hull IDs or a transaction barrier against concurrent configuration changes; do not claim complete network correctness until dedicated tests pass.
+
+**Required tests (NOT_RUN):** 0, 1, 219, 220, 221 and 1000 hull snapshots; simulate failed chunk queue before final marker, validate client retries; on reconnect or round start ensure no stale marker accepts a different snapshot. Test with packet lag/out-of-order transports and verify reliable ordering. Measure extra one-packet cost only for snapshot requests.
