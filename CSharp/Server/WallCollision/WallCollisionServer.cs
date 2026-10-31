@@ -1,4 +1,6 @@
 using Barotrauma.Networking;
+using System.Security.Cryptography;
+using System;
 using PrimaryPackage.Core;
 
 namespace PrimaryPackage.WallCollision {
@@ -12,11 +14,13 @@ namespace PrimaryPackage.WallCollision {
         }
 
         public static void OnRoundStart() {
+            WallCollisionNet.BeginEpoch((uint)RandomNumberGenerator.GetInt32(1, int.MaxValue));
             uint revision = WallCollisionNet.Advance();
             ModNet.Broadcast(WallCollisionNet.StateId, message => WriteSnapshot(message, revision));
         }
 
         public static int Activate() {
+            if (WallCollisionNet.Epoch == 0) { WallCollisionNet.BeginEpoch((uint)RandomNumberGenerator.GetInt32(1, int.MaxValue)); }
             int count = WallRules.ActivatePrepared();
             uint revision = WallCollisionNet.Advance();
             ModNet.Broadcast(WallCollisionNet.StateId, message => WriteSnapshot(message, revision));
@@ -31,6 +35,7 @@ namespace PrimaryPackage.WallCollision {
             byte face = (byte)change.Face;
             ModNet.Broadcast(WallCollisionNet.StateId, message => {
                 message.WriteByte((byte)WallPacket.Set);
+                message.WriteUInt32(WallCollisionNet.Epoch);
                 message.WriteUInt32(revision);
                 message.WriteUInt16(id);
                 message.WriteByte(mode);
@@ -46,6 +51,7 @@ namespace PrimaryPackage.WallCollision {
 
         private static void WriteSnapshot(IWriteMessage message, uint revision) {
             message.WriteByte((byte)WallPacket.Snapshot);
+            message.WriteUInt32(WallCollisionNet.Epoch);
             message.WriteUInt32(revision);
             message.WriteByte(WallRules.Ready ? (byte)1 : (byte)0);
             int count = WallRules.Ready ? WallRules.Count : 0;
