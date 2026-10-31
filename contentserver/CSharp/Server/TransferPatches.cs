@@ -108,9 +108,15 @@ namespace SubSeal.Server
         {
             __state = null;
 
-            if (fileType != FileTransferType.Submarine && fileType != FileTransferType.CampaignSave) { return true; }
-            if (recipient is null || recipient == GameMain.Server.OwnerConnection) { return true; }
+            if (recipient is null) { return false; }
+            if (recipient == GameMain.Server?.OwnerConnection) { return true; }
+            if (!ModTransferPolicy.Allows(fileType, filePath))
+            {
+                Diagnostics.Note($"{Diagnostics.Describe(recipient)} refused mod archive {Name(filePath)}");
+                return false;
+            }
 
+            if (fileType != FileTransferType.Submarine && fileType != FileTransferType.CampaignSave) { return true; }
             if (leases is null || sessions is null || channel is null || entitlement is null) { return false; }
 
             SessionKeys.Session session = sessions.Find(recipient);
@@ -124,12 +130,21 @@ namespace SubSeal.Server
                     return false;
                 }
                 Diagnostics.Note($"{Diagnostics.Describe(recipient)} cannot open sealed content");
-                if (!settings.AllowUnsealedForIncapableClients)
+                // A peer's capability bit is self-reported, never proof of integrity.
+                // Compatibility mode is forbidden when preview protection is active.
+                if (settings.PreviewProtection || !settings.AllowUnsealedForIncapableClients)
                 {
                     Diagnostics.Note($"{Name(filePath)} refused");
                     return false;
                 }
-                Diagnostics.Note($"{Name(filePath)} sent unsealed");
+
+                if (!entitlement.Allows(recipient, fileType, filePath, out Claim unsealedClaim))
+                {
+                    Diagnostics.Note($"{Diagnostics.Describe(recipient)} not entitled to {Name(filePath)} ({unsealedClaim})");
+                    return false;
+                }
+
+                Diagnostics.Note($"{Name(filePath)} sent unsealed under explicit compatibility policy");
                 return true;
             }
 
@@ -187,19 +202,30 @@ namespace SubSeal.Server
 
             leases.MarkConsumed(__state);
 
-            byte[] plain = __result.Data;
-            byte[] output = __state.FileType == FileTransferType.CampaignSave
-                ? SaveResealer.Reseal(plain, __state.ContentKey, __state.Id)
-                : SealSubmarine(plain, __state);
-
-            if (output is null)
+            try
             {
-                __result.Status = FileTransferStatus.Error;
-                Diagnostics.Fault($"{Name(__state.FilePath)} lease {__state.Id} seal aborted");
-                return;
-            }
+                byte[] plain = __result.Data;
+                if (plain is null) { throw new System.IO.InvalidDataException("transfer has no source data"); }
 
-            EngineSymbols.OverwriteData(__result, output);
+                byte[] output = __state.FileType == FileTransferType.CampaignSave
+                    ? SaveResealer.Reseal(plain, __state.ContentKey, __state.Id)
+                    : SealSubmarine(plain, __state);
+
+                if (output is null) { throw new System.IO.InvalidDataException("sealing returned no output"); }
+
+                EngineSymbols.OverwriteData(__result, output);
+                if (!object.ReferenceEquals(__result.Data, output))
+                {
+                    throw new System.InvalidOperationException("transfer payload replacement failed");
+                }
+            }
+            catch (System.Exception exception)
+            {
+                // FileSender has already enqueued the plaintext transfer at this point.
+                // Error status causes FileSender.Update to discard it before Send().
+                __result.Status = FileTransferStatus.Error;
+                Diagnostics.Fault($"{Name(__state.FilePath)} lease {__state.Id} seal aborted: {exception.GetType().Name}");
+            }
         }
 
         private static byte[] SealSubmarine(byte[] plain, Leases.Lease lease)
