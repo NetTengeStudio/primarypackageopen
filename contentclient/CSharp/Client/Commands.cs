@@ -20,11 +20,17 @@ namespace SubSeal.Client
             var revokeCmd = new DebugConsole.Command("subseal_revoke", "subseal_revoke [session id|name|all]", OnRevoke, GetRevokeValidArgs);
             added.Add(revokeCmd);
 
-            added.Add(new DebugConsole.Command(
-                "subseal_preview_status", "subseal_preview_status", OnPreviewStatus));
+            var previewStatus = new DebugConsole.Command(
+                "subseal_preview_status", "subseal_preview_status", OnPreviewStatus);
+            previewStatus.RelayToServer = false;
+            previewStatus.OnClientExecute = OnPreviewStatus;
+            added.Add(previewStatus);
 
-            added.Add(new DebugConsole.Command(
-                "subseal_preview_test", "subseal_preview_test", OnPreviewTest));
+            var previewTest = new DebugConsole.Command(
+                "subseal_preview_test", "subseal_preview_test", OnPreviewTest);
+            previewTest.RelayToServer = false;
+            previewTest.OnClientExecute = OnPreviewTest;
+            added.Add(previewTest);
 
             DebugConsole.Commands.AddRange(added);
         }
