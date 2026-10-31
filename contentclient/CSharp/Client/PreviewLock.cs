@@ -30,6 +30,7 @@ namespace SubSeal.Client
             bool now = (flags & Protocol.PolicyPreviewProtected) != 0;
             if (now == protection) { return; }
             protection = now;
+            if (!now) { PreviewSurfacePatches.HideAll(); }
             refreshPending = true;
         }
 
@@ -39,6 +40,7 @@ namespace SubSeal.Client
             refreshPending = false;
             creating = false;
             heldLocked = false;
+            PreviewSurfacePatches.HideAll();
         }
 
         internal static bool ConsumeRefresh()
