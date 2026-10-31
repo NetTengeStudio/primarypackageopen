@@ -57,6 +57,7 @@ namespace SubSeal.Client
 
         internal static void Shutdown()
         {
+            previewUiReady = false;
             policyKnown = true;
             protection = false;
             creating = false;
