@@ -27,23 +27,47 @@ namespace SubSeal.Client
         private static readonly FieldInfo CardTextField =
             CardType?.GetField("middleTextBlock", InstanceFields);
 
-        private static readonly ConditionalWeakTable<GUIComponent, GUIFrame> overlays =
-            new ConditionalWeakTable<GUIComponent, GUIFrame>();
+        private sealed class SurfaceEntry
+        {
+            internal readonly GUIComponent Parent;
+            internal readonly GUIFrame Overlay;
+            internal readonly bool OriginalFocusable;
+            internal bool EnableProtectedOpening;
 
-        private static readonly List<WeakReference<GUIFrame>> overlayRefs =
-            new List<WeakReference<GUIFrame>>();
+            internal SurfaceEntry(GUIComponent parent, GUIFrame overlay)
+            {
+                Parent = parent;
+                Overlay = overlay;
+                OriginalFocusable = parent.CanBeFocused;
+            }
+
+            internal void SetProtection(bool protectedContent)
+            {
+                Overlay.Visible = protectedContent;
+                if (EnableProtectedOpening)
+                {
+                    Parent.CanBeFocused = OriginalFocusable || protectedContent;
+                }
+            }
+        }
+
+        private static readonly ConditionalWeakTable<GUIComponent, SurfaceEntry> surfaces =
+            new ConditionalWeakTable<GUIComponent, SurfaceEntry>();
+
+        private static readonly List<WeakReference<SurfaceEntry>> entries =
+            new List<WeakReference<SurfaceEntry>>();
 
         internal static void SetProtection(bool protectedContent)
         {
-            for (int i = overlayRefs.Count - 1; i >= 0; i--)
+            for (int i = entries.Count - 1; i >= 0; i--)
             {
-                if (overlayRefs[i].TryGetTarget(out GUIFrame overlay))
+                if (entries[i].TryGetTarget(out SurfaceEntry entry))
                 {
-                    overlay.Visible = protectedContent;
+                    entry.SetProtection(protectedContent);
                 }
                 else
                 {
-                    overlayRefs.RemoveAt(i);
+                    entries.RemoveAt(i);
                 }
             }
         }
@@ -70,13 +94,13 @@ namespace SubSeal.Client
 
         internal static void AfterSelectSubmarine(object __instance) => TrackSelection(__instance);
 
-        internal static void Track(GUIComponent surface)
+        internal static void Track(GUIComponent surface, bool enableProtectedOpening = false)
         {
             if (surface is null) { return; }
 
-            GUIFrame overlay = overlays.GetValue(surface, component =>
+            SurfaceEntry entry = surfaces.GetValue(surface, component =>
             {
-                GUIFrame black = new GUIFrame(
+                GUIFrame overlay = new GUIFrame(
                     new RectTransform(Vector2.One, component.RectTransform), style: null)
                 {
                     Color = Color.Black,
@@ -87,7 +111,7 @@ namespace SubSeal.Client
                 };
 
                 new GUITextBlock(
-                    new RectTransform(Vector2.One, black.RectTransform, Anchor.Center),
+                    new RectTransform(Vector2.One, overlay.RectTransform, Anchor.Center),
                     PreviewLock.Text,
                     textColor: Color.White,
                     font: GUIStyle.LargeFont,
@@ -96,11 +120,13 @@ namespace SubSeal.Client
                     CanBeFocused = false
                 };
 
-                overlayRefs.Add(new WeakReference<GUIFrame>(black));
-                return black;
+                SurfaceEntry result = new SurfaceEntry(component, overlay);
+                entries.Add(new WeakReference<SurfaceEntry>(result));
+                return result;
             });
 
-            overlay.Visible = PreviewLock.ProtectionActive;
+            if (enableProtectedOpening) { entry.EnableProtectedOpening = true; }
+            entry.SetProtection(PreviewLock.ProtectionActive);
         }
 
         private static void TrackSelection(object selection)
@@ -113,9 +139,8 @@ namespace SubSeal.Client
             {
                 foreach (object card in cards)
                 {
-                    if (card is null || DisplayedSubmarineField?.GetValue(card) is not SubmarineInfo) {
-                        continue;
-                    }
+                    if (card is null ||
+                        DisplayedSubmarineField?.GetValue(card) is not SubmarineInfo) { continue; }
 
                     GUIImage image = CardImageField?.GetValue(card) as GUIImage;
                     if (image is not null)
