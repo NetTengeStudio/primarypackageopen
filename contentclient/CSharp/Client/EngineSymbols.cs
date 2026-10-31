@@ -27,7 +27,6 @@ namespace SubSeal.Client
 
         internal static MethodInfo PreviewDispose { get; private set; }
 
-        internal static MethodInfo CampaignRetry { get; private set; }
         internal static MethodInfo TabMenuPreview { get; private set; }
         internal static MethodInfo SelectionPreviewImage { get; private set; }
         internal static MethodInfo SelectionRefresh { get; private set; }
@@ -141,13 +140,6 @@ namespace SubSeal.Client
             {
                 PreviewBounds = null;
             }
-
-            CampaignRetry = typeof(GameClient).GetMethod(
-                "TryRequestMissingCampaignSubs",
-                BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance,
-                null,
-                System.Type.EmptyTypes,
-                null);
 
             const BindingFlags guiFlags = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static;
             Assembly clientAssembly = typeof(SubmarinePreview).Assembly;
