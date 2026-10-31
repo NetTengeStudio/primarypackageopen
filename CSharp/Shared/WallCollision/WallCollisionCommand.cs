@@ -35,7 +35,7 @@ namespace PrimaryPackage.WallCollision {
             }
             Character character = client.Character;
             bool hasSide = character != null;
-            Vector2 side = hasSide ? character.WorldPosition : cursorWorld;
+            Vector2 side = hasSide ? character.SimPosition : FarseerPhysics.ConvertUnits.ToSimUnits(cursorWorld);
             RuleChange change = Apply(args, cursorWorld, side, hasSide, out string text);
             SendTo(client, text, change.Changed ? Color.LightGreen : Color.White);
             if (!change.Changed) { return; }
@@ -70,7 +70,7 @@ namespace PrimaryPackage.WallCollision {
             }
             Character controlled = Character.Controlled;
             bool hasSide = controlled != null;
-            Vector2 side = hasSide ? controlled.WorldPosition : camera.WorldViewCenter;
+            Vector2 side = hasSide ? controlled.SimPosition : FarseerPhysics.ConvertUnits.ToSimUnits(camera.WorldViewCenter);
             RuleChange change = Apply(args, camera.ScreenToWorld(PlayerInput.MousePosition), side, hasSide, out string text);
             Reply(text, change.Changed ? Color.LightGreen : Color.White);
 #else
