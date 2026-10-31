@@ -72,11 +72,23 @@ namespace SubSeal.Server
         private readonly Dictionary<NetworkConnection, ConnectionState> byConnection =
             new Dictionary<NetworkConnection, ConnectionState>(ReferenceEqualityComparer.Instance);
         private readonly List<uint> expired = new List<uint>();
+        // Only acknowledged, unconsumed leases can enter the retry scheduler.
+        private readonly HashSet<uint> armedIds = new HashSet<uint>();
         private uint nextId = 1;
 
         internal IEnumerable<Lease> All => byId.Values;
         internal int Count => byId.Count;
         internal int Connections => byConnection.Count;
+        internal int RetryCandidateCount => armedIds.Count;
+
+        internal void CaptureRetryCandidates(List<uint> ids)
+        {
+            ids.Clear();
+            ids.AddRange(armedIds);
+        }
+
+        internal Lease FindRetryCandidate(uint id)
+            => byId.TryGetValue(id, out Lease lease) && lease.Armed && !lease.Consumed ? lease : null;
 
         internal int Outstanding(NetworkConnection connection)
             => connection != null && byConnection.TryGetValue(connection, out ConnectionState state)
@@ -141,6 +153,7 @@ namespace SubSeal.Server
                 return null;
             }
             lease.State |= LeaseState.Armed;
+            armedIds.Add(id);
             return lease;
         }
 
@@ -152,6 +165,7 @@ namespace SubSeal.Server
             if (!byId.TryGetValue(lease.Id, out Lease live) || !ReferenceEquals(live, lease)) { return; }
 
             lease.State |= LeaseState.Consumed;
+            armedIds.Remove(lease.Id);
             ConnectionState state = byConnection[lease.Connection];
             TransferIdentity identity = new TransferIdentity(lease.FileType, lease.FilePath);
             if (state.Pending.TryGetValue(identity, out Lease pending) && ReferenceEquals(pending, lease))
@@ -199,6 +213,7 @@ namespace SubSeal.Server
             }
             byId.Clear();
             byConnection.Clear();
+            armedIds.Clear();
             expired.Clear();
         }
 
@@ -207,6 +222,7 @@ namespace SubSeal.Server
             foreach (uint id in ids)
             {
                 if (!byId.Remove(id, out Lease lease)) { continue; }
+                armedIds.Remove(id);
 
                 if (byConnection.TryGetValue(lease.Connection, out ConnectionState state))
                 {

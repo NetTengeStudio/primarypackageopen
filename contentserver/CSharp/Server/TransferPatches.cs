@@ -24,6 +24,9 @@ namespace SubSeal.Server
         }
 
         private static readonly Dictionary<NetworkConnection, List<DeferredTransfer>> deferred = new();
+        private static readonly List<uint> retryCandidates = new();
+        private static readonly Dictionary<NetworkConnection, int> activeByConnection =
+            new(ReferenceEqualityComparer.Instance);
 
         private static Settings settings;
         private static SessionKeys sessions;
@@ -43,6 +46,8 @@ namespace SubSeal.Server
         internal static void Unbind()
         {
             deferred.Clear();
+            retryCandidates.Clear();
+            activeByConnection.Clear();
             settings = null;
             sessions = null;
             leases = null;
@@ -69,20 +74,35 @@ namespace SubSeal.Server
             FileSender sender = GameMain.Server?.FileSender;
             if (sender is null) { return; }
 
-            foreach (Leases.Lease lease in leases.All)
+            // One snapshot for the entire retry pass, not a scan of all network
+            // transfers for every armed lease. Callbacks may consume leases during Retry.
+            leases.CaptureRetryCandidates(retryCandidates);
+            activeByConnection.Clear();
+            foreach (FileSender.FileTransferOut transfer in sender.ActiveTransfers)
             {
-                if (!lease.Armed || lease.Consumed || Timing.TotalTime - lease.LastRetryAt < RegrantIntervalSeconds) { continue; }
+                if (transfer.Connection == null) { continue; }
+                activeByConnection.TryGetValue(transfer.Connection, out int count);
+                activeByConnection[transfer.Connection] = count + 1;
+            }
 
-                int recipientTransfers = 0;
-                foreach (FileSender.FileTransferOut transfer in sender.ActiveTransfers)
-                {
-                    if (transfer.Connection == lease.Connection) { recipientTransfers++; }
-                }
+            for (int i = 0; i < retryCandidates.Count; i++)
+            {
+                Leases.Lease lease = leases.FindRetryCandidate(retryCandidates[i]);
+                if (lease == null || Timing.TotalTime - lease.LastRetryAt < RegrantIntervalSeconds) { continue; }
+                activeByConnection.TryGetValue(lease.Connection, out int recipientTransfers);
                 if (sender.ActiveTransfers.Count >= 16 || recipientTransfers >= 5) { continue; }
 
                 lease.LastRetryAt = Timing.TotalTime;
+                int previousCount = sender.ActiveTransfers.Count;
                 Retry(lease.Connection, lease.FileType, lease.FilePath);
+                // FileSender.StartTransfer appends the transfer synchronously.
+                // Reflect only actual successes; a rejected or missing file adds nothing.
+                int added = sender.ActiveTransfers.Count - previousCount;
+                if (added > 0) { activeByConnection[lease.Connection] = recipientTransfers + added; }
             }
+
+            retryCandidates.Clear();
+            activeByConnection.Clear();
         }
 
         private static void Defer(NetworkConnection recipient, FileTransferType type, string path)

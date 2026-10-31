@@ -48,3 +48,15 @@ The handshake, license entitlement, transfer policy and sealing algorithm are un
 - Compare CPU work on repeated submarine download requests, active transfer throttling, GC and total network bandwidth with the baseline.
 
 **Verification:** GitHub source review only; no build, gameplay execution or benchmark has been run. This change does not establish that a user who receives an authorized playable submarine can never extract its contents.
+
+## Retry scheduler reconstruction
+
+The original `TransferPatches.RetryArmed` iterated all `L` live leases, then iterated all `T` active outgoing transfers **for each eligible lease** to count transfers for that recipient.
+
+`Leases` now tracks an exact `armedIds` set, updated on ACK, consumption, revocation and expiry. Each sweep snapshots the `A` armed IDs to avoid mutating an enumerated collection while `StartTransfer` callbacks consume them. The current outgoing transfers are counted once by connection (`O(T)`). The scheduler checks each armed lease in `O(1)` average and updates counts by the actual synchronous change in `FileSender.ActiveTransfers.Count` after each retry.
+
+**Work model:** `O(L + A*T)` worst if all leases are eligible previously; now `O(A+T)` typical. `A` is armed and unconsumed leases. The per-recipient and global transfer limits are unchanged.
+
+The synchronous `StartTransfer` mutation of `ActiveTransfers` was verified against `Barotrauma/BarotraumaServer/ServerSource/Networking/FileTransfer/FileSender.cs` in `evilfactory/LuaCsForBarotrauma`.
+
+Additional tests: interleave successful and failed retry attempts, verify recipient totals after every successful transfer, test mid-loop ACK/consumption and disconnect; compare scheduled retry order without assuming dictionary enumeration order, and validate under the game's native 16/5 transfer limits.
