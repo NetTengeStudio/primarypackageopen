@@ -6,10 +6,6 @@ using FarseerPhysics.Dynamics.Contacts;
 using Microsoft.Xna.Framework;
 
 namespace PrimaryPackage.WallCollision {
-    /// <summary>
-    /// Narrow-phase gate on a physical wall section. The rule shares a crossing state across
-    /// all its sections so a body is not blocked by a neighboring section halfway through.
-    /// </summary>
     public sealed class WallGate {
         internal WallGate(Body body, WallRule rule) {
             Body = body;
