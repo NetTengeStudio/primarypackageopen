@@ -241,6 +241,7 @@ namespace SubSeal.Client
                 sessionKey?.Discard();
                 clientIdentity = null;
                 PreviewLock.Clear();
+                PreviewLock.ConsumeRefresh();
                 OpenPatches.Bind(null);
                 Artifacts.DiscardAll();
                 active = false;
