@@ -43,7 +43,6 @@ namespace SubSeal.Client
                 {
                     sessionKey.Discard();
                     leases.ReleaseAll();
-                    PreviewLock.Clear();
                 }
             });
         }
