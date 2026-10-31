@@ -25,6 +25,8 @@ namespace PrimaryPackage.WallCollision {
         private static bool synced;
         private static float timer;
         private static float delay = FirstRequestDelay;
+        private static object clientIdentity;
+        private static object peerIdentity;
         private static object connectionIdentity;
         private static object sessionIdentity;
 
@@ -42,16 +44,25 @@ namespace PrimaryPackage.WallCollision {
             synced = false;
             timer = FirstRequestDelay;
             delay = FirstRequestDelay;
-            connectionIdentity = GameMain.Client;
+            clientIdentity = GameMain.Client;
+            peerIdentity = GameMain.Client?.ClientPeer;
+            connectionIdentity = GameMain.Client?.ClientPeer?.ServerConnection;
             sessionIdentity = GameMain.GameSession;
             WallCollisionNet.BeginEpoch(0);
         }
 
         public static void Update(float deltaTime) {
             object client = GameMain.Client;
+            object peer = GameMain.Client?.ClientPeer;
+            object connection = GameMain.Client?.ClientPeer?.ServerConnection;
             object session = GameMain.GameSession;
-            if (!ReferenceEquals(client, connectionIdentity) || !ReferenceEquals(session, sessionIdentity)) {
-                connectionIdentity = client;
+            if (!ReferenceEquals(client, clientIdentity) ||
+                !ReferenceEquals(peer, peerIdentity) ||
+                !ReferenceEquals(connection, connectionIdentity) ||
+                !ReferenceEquals(session, sessionIdentity)) {
+                clientIdentity = client;
+                peerIdentity = peer;
+                connectionIdentity = connection;
                 sessionIdentity = session;
                 synced = false;
                 timer = FirstRequestDelay;
@@ -59,7 +70,7 @@ namespace PrimaryPackage.WallCollision {
                 WallCollisionNet.Accept(0);
                 WallRules.Reset();
             }
-            if (synced || deltaTime <= 0f || client is null || session is null) { return; }
+            if (synced || deltaTime <= 0f || connection is null || session is null) { return; }
             timer -= deltaTime;
             if (timer > 0f) { return; }
             if (ModNet.Send(WallCollisionNet.RequestId, static message => message.WriteByte(0))) {
