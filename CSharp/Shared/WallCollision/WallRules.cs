@@ -141,11 +141,23 @@ namespace PrimaryPackage.WallCollision {
         public static RuleChange None => default;
     }
 
+    internal readonly struct PreparedRule {
+        internal readonly WallMode Mode;
+        internal readonly WallFace Face;
+
+        internal PreparedRule(WallMode mode, WallFace face) {
+            Mode = mode;
+            Face = face;
+        }
+    }
+
     public static class WallRules {
         private static readonly List<WallRule> ordered = new List<WallRule>(16);
         private static readonly Dictionary<ushort, WallRule> byId = new Dictionary<ushort, WallRule>(16);
         private static readonly List<ushort> stale = new List<ushort>(8);
-        private static readonly HashSet<Structure> prepared = new HashSet<Structure>();
+        private static readonly Dictionary<Structure, PreparedRule> prepared =
+            new Dictionary<Structure, PreparedRule>();
+        private static readonly List<Structure> retiredPrepared = new List<Structure>(8);
         private static double nextCrossingSweep;
         private static double nextPrune;
 
@@ -217,33 +229,45 @@ namespace PrimaryPackage.WallCollision {
         }
 
         public static void RegisterPrepared(Structure wall) {
-            if (wall != null && !wall.Removed && WallConfiguration.TryRead(wall, out _, out _)) {
-                prepared.Add(wall);
+            if (wall is null || wall.Removed) { return; }
+            if (WallConfiguration.TryRead(wall, out WallMode mode, out WallFace face)) {
+                prepared[wall] = new PreparedRule(mode, face);
+            }
+            else {
+                prepared.Remove(wall);
             }
         }
 
         public static void UnregisterPrepared(Structure wall) {
-            if (wall == null) { return; }
+            if (wall is null) { return; }
             prepared.Remove(wall);
-            if (Ready) { Unbind(wall.ID); }
+            if (Ready && Find(wall) != null) { Unbind(wall.ID); }
         }
 
         public static int ActivatePrepared() {
             if (Ready) { return ordered.Count; }
-            prepared.RemoveWhere(static wall => wall == null || wall.Removed);
             Ready = true;
             int activated = 0;
+            retiredPrepared.Clear();
             WallContacts.BeginBatch();
             try {
-                foreach (Structure wall in prepared) {
-                    if (wall.Removed || !wall.HasBody) { continue; }
-                    if (!WallConfiguration.TryRead(wall, out WallMode mode, out WallFace face)) { continue; }
+                foreach (KeyValuePair<Structure, PreparedRule> entry in prepared) {
+                    Structure wall = entry.Key;
+                    if (wall.Removed) {
+                        retiredPrepared.Add(wall);
+                        continue;
+                    }
+                    if (!wall.HasBody) { continue; }
                     if (!WallGeometry.TryAxis(wall.Bodies, Physics.CollisionWall, out _, out _, out _)) { continue; }
-                    Bind(wall, mode, face);
+                    Bind(wall, entry.Value.Mode, entry.Value.Face);
                     activated++;
+                }
+                for (int i = 0; i < retiredPrepared.Count; i++) {
+                    prepared.Remove(retiredPrepared[i]);
                 }
             }
             finally {
+                retiredPrepared.Clear();
                 WallContacts.EndBatch();
             }
             return activated;
