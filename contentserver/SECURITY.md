@@ -162,3 +162,25 @@ The following source-verified gaps remain:
 integration for TabMenu and SubmarineSelection with game-version-matched
 method signatures and runtime tests. Verify black text placement and close
 button visually. Current visual acceptance status: NOT_RUN.
+
+## Client GUI coverage update
+
+The earlier GUI gaps are addressed at the source level by
+`contentclient/CSharp/Client/PreviewSurfacePatches.cs`:
+- Mask `TabMenu.CreateSubmarineInfo`'s preview button with a nonfocusable,
+  locally scoped black `ого.` overlay.
+- Suppress `SubmarineSelection.GetPreviewImage` when the network protection
+  policy is active, then mask card images and the selected-background image
+  after `RefreshSubmarineDisplay` or `SelectSubmarine`.
+- Preserve vanilla click callbacks, tab navigation, Escape/Close and the
+  expanded `SubmarinePreview` window. Masks are hidden on policy reset and
+  disconnect. GUI methods are resolved through exact reflected signatures
+  so missing methods do not break the unrelated encryption hooks.
+- Allow unprotected `SubmarinePreview.Create` to execute even if
+  `ResidentAsset.Rehydrate` did not need to restore any bytes.
+
+**Source-verified only.** The target game's exact LuaCs fork/build could
+change internal GUI signatures. The plugin skips missing optional hooks.
+Live rendering, keyboard/mouse input, compiler compatibility, and multiplayer
+regression checks remain NOT_RUN. These visual patches do not prevent a
+modified authorized client from extracting already delivered geometry.
