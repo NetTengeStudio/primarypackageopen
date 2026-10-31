@@ -28,7 +28,7 @@ namespace PrimaryPackage.WallCollision {
         public int GatedBodies => gated.Count;
 
         internal void Rebind() {
-            Release();
+            Release(clearCrossings: false);
             if (Mode != WallMode.OneWay || Wall == null || Wall.Bodies == null) { return; }
             List<Body> bodies = Wall.Bodies;
             if (!WallGeometry.TryMeasure(bodies, Physics.CollisionWall, out float width, out float height, out _)) { return; }
@@ -99,10 +99,10 @@ namespace PrimaryPackage.WallCollision {
             return radiusSquared > 0f ? (float)Math.Sqrt(radiusSquared) : 0.5f;
         }
 
-        internal void Release() {
+        internal void Release(bool clearCrossings = true) {
             for (int i = 0; i < gated.Count; i++) { WallContacts.Detach(gated[i]); }
             gated.Clear();
-            crossings.Clear();
+            if (clearCrossings) { crossings.Clear(); }
         }
     }
 
@@ -147,6 +147,7 @@ namespace PrimaryPackage.WallCollision {
                 byId.Add(wall.ID, rule);
                 ordered.Add(rule);
             }
+            if (rule.Mode != mode || rule.Face != face) { rule.Release(); }
             rule.Wall = wall;
             rule.Mode = mode;
             rule.Face = face;
