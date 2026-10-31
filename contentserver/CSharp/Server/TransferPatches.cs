@@ -230,10 +230,9 @@ namespace SubSeal.Server
                 return;
             }
 
-            leases.MarkConsumed(__state);
-
             try
             {
+                leases.MarkConsumed(__state);
                 byte[] plain = __result.Data;
                 if (plain is null) { throw new System.IO.InvalidDataException("transfer has no source data"); }
 
@@ -253,6 +252,13 @@ namespace SubSeal.Server
             {
                 __result.Status = FileTransferStatus.Error;
                 Diagnostics.Fault($"{Name(__state.FilePath)} lease {__state.Id} seal aborted: {exception.GetType().Name}");
+            }
+            finally
+            {
+                if (__state.ContentKey is not null)
+                {
+                    System.Security.Cryptography.CryptographicOperations.ZeroMemory(__state.ContentKey);
+                }
             }
         }
 
