@@ -108,9 +108,15 @@ namespace SubSeal.Server
         {
             __state = null;
 
-            if (fileType != FileTransferType.Submarine && fileType != FileTransferType.CampaignSave) { return true; }
-            if (recipient is null || recipient == GameMain.Server.OwnerConnection) { return true; }
+            if (recipient is null) { return false; }
+            if (recipient == GameMain.Server?.OwnerConnection) { return true; }
+            if (!ModTransferPolicy.Allows(fileType, filePath))
+            {
+                Diagnostics.Note($"{Diagnostics.Describe(recipient)} refused mod archive {Name(filePath)}");
+                return false;
+            }
 
+            if (fileType != FileTransferType.Submarine && fileType != FileTransferType.CampaignSave) { return true; }
             if (leases is null || sessions is null || channel is null || entitlement is null) { return false; }
 
             SessionKeys.Session session = sessions.Find(recipient);
@@ -124,12 +130,21 @@ namespace SubSeal.Server
                     return false;
                 }
                 Diagnostics.Note($"{Diagnostics.Describe(recipient)} cannot open sealed content");
-                if (!settings.AllowUnsealedForIncapableClients)
+                // A peer's capability bit is self-reported, never proof of integrity.
+                // Compatibility mode is forbidden when preview protection is active.
+                if (settings.PreviewProtection || !settings.AllowUnsealedForIncapableClients)
                 {
                     Diagnostics.Note($"{Name(filePath)} refused");
                     return false;
                 }
-                Diagnostics.Note($"{Name(filePath)} sent unsealed");
+
+                if (!entitlement.Allows(recipient, fileType, filePath, out Claim unsealedClaim))
+                {
+                    Diagnostics.Note($"{Diagnostics.Describe(recipient)} not entitled to {Name(filePath)} ({unsealedClaim})");
+                    return false;
+                }
+
+                Diagnostics.Note($"{Name(filePath)} sent unsealed under explicit compatibility policy");
                 return true;
             }
 
