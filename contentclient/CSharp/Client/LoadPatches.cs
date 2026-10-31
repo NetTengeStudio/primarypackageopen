@@ -22,7 +22,7 @@ namespace SubSeal.Client
 
             if (__state.Locked)
             {
-                if (!EngineSymbols.PreviewUiAvailable)
+                if (!PreviewLock.PreviewUiReady)
                 {
                     PreviewLock.Release();
                     return false;
@@ -32,7 +32,9 @@ namespace SubSeal.Client
             }
 
             __state.Rehydrated = ResidentAsset.Rehydrate(submarineInfo);
-            return true;
+            if (__state.Rehydrated) { return true; }
+            PreviewLock.Release();
+            return false;
         }
 
         public static void AfterPreviewCreate(SubmarineInfo submarineInfo, PreviewLoadState __state)
