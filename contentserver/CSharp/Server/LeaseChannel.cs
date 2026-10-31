@@ -14,6 +14,7 @@ namespace SubSeal.Server
         private readonly SessionKeys sessions;
         private readonly Leases leases;
         private readonly bool previewProtection;
+        private bool malformedReported;
 
         private readonly RateLimiter handshakeLimit = new RateLimiter(
             maxRequests: MaxHandshakesPerWindow,
@@ -36,15 +37,26 @@ namespace SubSeal.Server
             {
                 if (client?.Connection is null) { return; }
 
-                switch (message.ReadByte())
+                try
                 {
-                    case Protocol.ToServerHello:
-                        if (handshakeLimit.IsLimitReached(client)) { return; }
-                        ReadHello(message, client);
-                        break;
-                    case Protocol.ToServerLeaseAck:
-                        ReadLeaseAck(message, client);
-                        break;
+                    switch (message.ReadByte())
+                    {
+                        case Protocol.ToServerHello:
+                            if (handshakeLimit.IsLimitReached(client)) { return; }
+                            ReadHello(message, client);
+                            break;
+                        case Protocol.ToServerLeaseAck:
+                            ReadLeaseAck(message, client);
+                            break;
+                    }
+                }
+                catch (Exception exception) when (exception is IndexOutOfRangeException ||
+                    exception is ArgumentException || exception is InvalidOperationException ||
+                    exception is OverflowException)
+                {
+                    if (malformedReported) { return; }
+                    malformedReported = true;
+                    Diagnostics.Fault($"malformed SubSeal channel message: {exception.GetType().Name}");
                 }
             });
         }
