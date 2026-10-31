@@ -51,7 +51,16 @@ namespace SubSeal.Server
         }
 
         internal static void Retry(NetworkConnection recipient, FileTransferType fileType, string filePath)
-            => GameMain.Server?.FileSender?.StartTransfer(recipient, fileType, filePath);
+        {
+            try
+            {
+                GameMain.Server?.FileSender?.StartTransfer(recipient, fileType, filePath);
+            }
+            catch (System.Exception exception)
+            {
+                Diagnostics.Fault($"file retry rejected: {exception.GetType().Name}");
+            }
+        }
 
         internal static void FlushDeferred(NetworkConnection recipient)
         {
@@ -116,6 +125,20 @@ namespace SubSeal.Server
         public static bool BeforeStartTransfer(NetworkConnection recipient, FileTransferType fileType, string filePath, ref Leases.Lease __state)
         {
             __state = null;
+            try
+            {
+                return AuthorizeTransfer(recipient, fileType, filePath, ref __state);
+            }
+            catch (System.Exception exception)
+            {
+                __state = null;
+                Diagnostics.Fault($"transfer authorization rejected: {exception.GetType().Name}");
+                return false;
+            }
+        }
+
+        private static bool AuthorizeTransfer(NetworkConnection recipient, FileTransferType fileType, string filePath, ref Leases.Lease __state)
+        {
 
             if (recipient is null) { return false; }
             if (recipient == GameMain.Server?.OwnerConnection) { return true; }
