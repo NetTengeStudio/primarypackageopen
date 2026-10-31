@@ -113,6 +113,9 @@ static class SpatialCore
     public static void BeginTick()
     {
         long t0 = Stopwatch.GetTimestamp();
+        // Submarine.Loaded is a mutable list. An added/removed/reordered submarine
+        // changes the local-coordinate domain of every spatial key.
+        if (!dirty && SubmarineSetChanged()) { dirty = true; }
         if (dirty)
         {
             Rebuild();
@@ -130,6 +133,17 @@ static class SpatialCore
         }
         RefreezeExpired();
         TickCost.Add(Stopwatch.GetTimestamp() - t0);
+    }
+
+    static bool SubmarineSetChanged()
+    {
+        List<Submarine> loaded = Submarine.Loaded;
+        if (loaded.Count != subs.Count) { return true; }
+        for (int i = 0; i < loaded.Count; i++)
+        {
+            if (!ReferenceEquals(loaded[i], subs[i])) { return true; }
+        }
+        return false;
     }
 
     static void ProcessPending()
