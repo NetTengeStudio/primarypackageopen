@@ -58,13 +58,21 @@ namespace PrimaryPackage.WallCollision {
                     WallFace face = (WallFace)message.ReadByte();
                     if (!WallRules.Apply(id, mode, face)) { resolved = false; }
                 }
-                if (Newer(revision)) { WallCollisionNet.Accept(revision); }
+                // A fresh authoritative snapshot establishes the revision epoch.
+                // After reconnecting, the new server may have a lower ushort revision.
+                WallCollisionNet.Accept(revision);
                 synced = resolved;
                 ReceivedSnapshots++;
                 return;
             }
-            if (!synced) { return; }
+            if (kind != WallPacket.Set || !synced) { return; }
             if (!Newer(revision)) { DroppedStale++; return; }
+            if (revision != unchecked((ushort)(WallCollisionNet.Revision + 1))) {
+                // A missing reliable delta would leave the client's rule table incomplete.
+                // Request a full snapshot rather than applying an out-of-sequence update.
+                ResetSynchronization();
+                return;
+            }
             ushort changedId = message.ReadUInt16();
             WallMode changedMode = (WallMode)message.ReadByte();
             WallFace changedFace = (WallFace)message.ReadByte();

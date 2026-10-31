@@ -142,7 +142,7 @@ static class SpatialCore
             if (items[s] is { Removed: false } item && Index(s, item))
             {
                 Reindexed++;
-                if ((Dormancy.ReasonsOf(s) & Dormancy.BySpatial) == 0) { eventAwake.Enqueue((s, Dormancy.SimTime + EventAwakeSeconds)); }
+                if ((Dormancy.ReasonsOf(s) & Dormancy.BySpatial) == 0) { OnEventWake(s); }
             }
         }
         pending.Clear();
