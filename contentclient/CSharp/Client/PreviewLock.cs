@@ -17,13 +17,12 @@ namespace SubSeal.Client
         private static bool heldLocked;
         private static bool previewUiReady;
         private static bool refreshPending;
-        private static int policyRevision;
+        private static bool closePending;
 
         internal static bool ProtectionActive => GameMain.Client is not null && (!policyKnown || protection);
         internal static bool ConfirmedProtected => policyKnown && protection;
         internal static bool PreviewUiReady => previewUiReady;
         internal static bool IsCreating => creating;
-        internal static int PolicyRevision => policyRevision;
 
         internal static bool IsHeldLocked() => heldLocked || ProtectionActive;
 
@@ -41,14 +40,8 @@ namespace SubSeal.Client
             protection = now;
             if (!changed) { return; }
 
-            policyRevision++;
             refreshPending = true;
-            PreviewSurfacePatches.SetProtection(ProtectionActive);
-
-            if (wasProtected != ProtectionActive)
-            {
-                SubmarinePreview.Close();
-            }
+            closePending |= wasProtected != ProtectionActive;
         }
 
         internal static void Clear()
@@ -58,17 +51,21 @@ namespace SubSeal.Client
             protection = false;
             creating = false;
             heldLocked = false;
-            policyRevision++;
             refreshPending = true;
-            PreviewSurfacePatches.SetProtection(ProtectionActive);
-            if (wasProtected != ProtectionActive) { SubmarinePreview.Close(); }
+            closePending |= wasProtected != ProtectionActive;
         }
 
         internal static bool ConsumeRefresh()
         {
-            bool pending = refreshPending;
+            if (!refreshPending) { return false; }
             refreshPending = false;
-            return pending;
+            PreviewSurfacePatches.SetProtection(ProtectionActive);
+            if (closePending)
+            {
+                closePending = false;
+                SubmarinePreview.Close();
+            }
+            return true;
         }
 
         internal static void BeginCreate(bool locked)
