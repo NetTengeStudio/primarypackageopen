@@ -17,6 +17,7 @@ namespace SubSeal.Client
 
         internal byte[] BeginExchange()
         {
+            if (local is not null && key is null) { return local.ExportSubjectPublicKeyInfo(); }
             Discard();
             local = ECDiffieHellman.Create(ECCurve.NamedCurves.nistP256);
             return local.ExportSubjectPublicKeyInfo();
