@@ -103,39 +103,72 @@ namespace SubSeal.Client
                 return false;
             }
 
-            TryPatchPreviewUi();
-            TryPatchAdditionalPreviewSurfaces();
+            bool previewReady = TryPatchPreviewUi();
+            bool surfacesReady = TryPatchAdditionalPreviewSurfaces();
+            PreviewLock.SetUiReady(previewReady && surfacesReady);
+            if (!PreviewLock.PreviewUiReady)
+            {
+                harmony.UnpatchSelf();
+                OpenPatches.Bind(null);
+                return false;
+            }
             TryPatchCampaignRetry();
             return true;
         }
 
-        private void TryPatchAdditionalPreviewSurfaces()
+        private bool TryPatchAdditionalPreviewSurfaces()
         {
-            TryPatchAdditional(EngineSymbols.TabMenuPreview,
+            bool tabMenu = TryPatchAdditional(
+                EngineSymbols.TabMenuPreview,
                 nameof(PreviewSurfacePatches.BeforeCreateTabPreview),
                 nameof(PreviewSurfacePatches.AfterCreateTabPreview));
-            TryPatchAdditional(EngineSymbols.SelectionPreviewImage,
+
+            bool selectionImage = TryPatchAdditional(
+                EngineSymbols.SelectionPreviewImage,
                 nameof(PreviewSurfacePatches.BeforeGetSelectionPreview), null);
-            TryPatchAdditional(EngineSymbols.SelectionRefresh, null,
+
+            bool selectionRefresh = TryPatchAdditional(
+                EngineSymbols.SelectionRefresh, null,
                 nameof(PreviewSurfacePatches.AfterSelectionRefresh));
-            TryPatchAdditional(EngineSymbols.SelectionSelect, null,
+
+            bool selectionSelect = TryPatchAdditional(
+                EngineSymbols.SelectionSelect, null,
                 nameof(PreviewSurfacePatches.AfterSelectSubmarine));
+
+            return tabMenu && selectionImage && selectionRefresh && selectionSelect;
         }
 
-        private void TryPatchAdditional(System.Reflection.MethodInfo target, string prefix, string postfix)
+        private bool TryPatchAdditional(System.Reflection.MethodInfo target,
+            string prefix, string postfix)
         {
-            if (target is null) { return; }
+            if (target is null) { return false; }
+            const System.Reflection.BindingFlags flags =
+                System.Reflection.BindingFlags.Static |
+                System.Reflection.BindingFlags.NonPublic |
+                System.Reflection.BindingFlags.Public;
+
             try
             {
+                System.Reflection.MethodInfo prefixMethod = prefix is null ? null :
+                    typeof(PreviewSurfacePatches).GetMethod(prefix, flags);
+                System.Reflection.MethodInfo postfixMethod = postfix is null ? null :
+                    typeof(PreviewSurfacePatches).GetMethod(postfix, flags);
+
+                if ((prefix is not null && prefixMethod is null) ||
+                    (postfix is not null && postfixMethod is null))
+                {
+                    return false;
+                }
+
                 harmony.Patch(target,
-                    prefix: prefix is null ? null : new HarmonyMethod(
-                        typeof(PreviewSurfacePatches).GetMethod(prefix, System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public)),
-                    postfix: postfix is null ? null : new HarmonyMethod(
-                        typeof(PreviewSurfacePatches).GetMethod(postfix, System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public)));
+                    prefix: prefixMethod is null ? null : new HarmonyMethod(prefixMethod),
+                    postfix: postfixMethod is null ? null : new HarmonyMethod(postfixMethod));
+                return true;
             }
             catch (Exception)
             {
                 harmony.Unpatch(target, HarmonyPatchType.All, harmony.Id);
+                return false;
             }
         }
 
@@ -155,9 +188,9 @@ namespace SubSeal.Client
             }
         }
 
-        private void TryPatchPreviewUi()
+        private bool TryPatchPreviewUi()
         {
-            if (!EngineSymbols.PreviewUiAvailable) { return; }
+            if (!EngineSymbols.PreviewUiAvailable) { return false; }
 
             try
             {
@@ -180,10 +213,12 @@ namespace SubSeal.Client
                         EngineSymbols.PreviewDispose,
                         postfix: new HarmonyMethod(typeof(PreviewPatches).GetMethod(nameof(PreviewPatches.AfterPreviewDisposed))));
                 }
+                return true;
             }
             catch (Exception)
             {
                 UnpatchPreviewUi();
+                return false;
             }
         }
 
@@ -212,6 +247,7 @@ namespace SubSeal.Client
                 active = false;
             }
 
+            PreviewLock.SetUiReady(false);
             harmony.UnpatchSelf();
         }
     }
