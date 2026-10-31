@@ -8,11 +8,16 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace SubSeal.Client
 {
-    // GUI-only masking. Never changes the submarine data, button callbacks,
-    // selection state, keyboard navigation or expanded-preview Close/Escape.
     internal static class PreviewSurfacePatches
     {
         private const BindingFlags InstanceFields = BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public;
+        private static readonly Type SelectionType = typeof(SubmarinePreview).Assembly.GetType("Barotrauma.SubmarineSelection");
+        private static readonly FieldInfo DisplayCardsField = SelectionType?.GetField("submarineDisplays", InstanceFields);
+        private static readonly FieldInfo BackgroundField = SelectionType?.GetField("listBackground", InstanceFields);
+        private static readonly Type CardType = DisplayCardsField?.FieldType.GetElementType();
+        private static readonly FieldInfo DisplayedSubmarineField = CardType?.GetField("displayedSubmarine", InstanceFields);
+        private static readonly FieldInfo CardImageField = CardType?.GetField("submarineImage", InstanceFields);
+        private static readonly FieldInfo CardTextField = CardType?.GetField("middleTextBlock", InstanceFields);
         private static readonly ConditionalWeakTable<GUIComponent, GUIFrame> overlays =
             new ConditionalWeakTable<GUIComponent, GUIFrame>();
         private static readonly List<WeakReference<GUIFrame>> overlayRefs = new List<WeakReference<GUIFrame>>();
@@ -58,33 +63,30 @@ namespace SubSeal.Client
         private static void MaskSelection(object selection)
         {
             if (!PreviewLock.ProtectionActive || selection is null) { return; }
-            Type type = selection.GetType();
-            Array cards = type.GetField("submarineDisplays", InstanceFields)?.GetValue(selection) as Array;
+            if (DisplayCardsField is null || !SelectionType.IsInstanceOfType(selection)) { return; }
+            Array cards = DisplayCardsField.GetValue(selection) as Array;
             if (cards is not null)
             {
                 foreach (object card in cards)
                 {
                     if (card is null) { continue; }
-                    Type cardType = card.GetType();
-                    if (cardType.GetField("displayedSubmarine", InstanceFields)?.GetValue(card) is not SubmarineInfo) { continue; }
+                    if (DisplayedSubmarineField?.GetValue(card) is not SubmarineInfo) { continue; }
 
-                    GUIImage image = cardType.GetField("submarineImage", InstanceFields)?.GetValue(card) as GUIImage;
+                    GUIImage image = CardImageField?.GetValue(card) as GUIImage;
                     if (image is not null)
                     {
                         image.Sprite = null;
                         Mask(image);
                     }
-                    GUITextBlock middle = cardType.GetField("middleTextBlock", InstanceFields)?.GetValue(card) as GUITextBlock;
+                    GUITextBlock middle = CardTextField?.GetValue(card) as GUITextBlock;
                     if (middle is not null)
                     {
-                        // The non-focusable mask already draws the label.
-                        // Avoid rendering a second text layer on top of it.
                         middle.AutoDraw = false;
                     }
                 }
             }
 
-            GUIImage background = type.GetField("listBackground", InstanceFields)?.GetValue(selection) as GUIImage;
+            GUIImage background = BackgroundField?.GetValue(selection) as GUIImage;
             if (background is not null)
             {
                 background.Sprite = null;
