@@ -41,7 +41,8 @@ jobs:
           curl --fail --location --retry 3 -o /tmp/luacs-refs.zip https://github.com/evilfactory/LuaCsForBarotrauma/releases/download/latest/luacsforbarotrauma_refs.zip
           mkdir -p /tmp/luacs-refs
           unzip -q /tmp/luacs-refs.zip -d /tmp/luacs-refs
-          find /tmp/luacs-refs -name '${{ matrix.assembly }}' -print
+          find /tmp/luacs-refs -maxdepth 3 -type f -name '*.dll' | head -30
+          test -d /tmp/luacs-refs/Linux
       - name: Compile separate LuaCs target
         shell: bash
         env:
@@ -57,7 +58,7 @@ jobs:
           target = os.environ["TARGET"]
           assembly = os.environ["ASSEMBLY"]
           root = pathlib.Path("/tmp/luacs-refs")
-          game = next((p for p in root.rglob(assembly) if "Linux" in p.parts), None)
+          game = next((p for p in root.rglob(assembly) if p.parent.name.lower() == "linux"), None)
           if game is None:
               raise SystemExit("Missing Linux " + assembly + " in LuaCs refs")
           refs_dir = game.parent
@@ -66,10 +67,10 @@ jobs:
               files += sorted(pathlib.Path(folder).rglob("*.cs"))
           if not files:
               raise SystemExit("No source files discovered")
-          all_refs = list(refs_dir.glob("*.dll"))
+          all_refs = sorted(refs_dir.glob("*.dll"))
           if not all_refs:
               raise SystemExit("No reference assemblies found")
-          project = pathlib.Path("/tmp/luacs-ci") / os.environ["MODULE"] / target
+          project = pathlib.Path("obj/luacs-ci") / os.environ["MODULE"] / target
           project.mkdir(parents=True, exist_ok=True)
           symbols = "CLIENT" if target == "Client" else "SERVER"
           references = "".join(f'<Reference Include="{escape(p.stem)}"><HintPath>{escape(str(p))}</HintPath></Reference>' for p in all_refs)
@@ -78,7 +79,7 @@ jobs:
           (project / "Compile.csproj").write_text(xml)
           print(f"Compiling {len(files)} sources for {os.environ['MODULE']} {target}")
           PY
-          dotnet build "/tmp/luacs-ci/$MODULE/$TARGET/Compile.csproj" -c Release 2>&1 | tee "$RUNNER_TEMP/compile-$MODULE-$TARGET.log"
+          dotnet build "obj/luacs-ci/$MODULE/$TARGET/Compile.csproj" -c Release --nologo -v normal 2>&1 | tee "$RUNNER_TEMP/compile-$MODULE-$TARGET.log"
       - name: Save compiler diagnostics
         if: always()
         uses: actions/upload-artifact@v4
