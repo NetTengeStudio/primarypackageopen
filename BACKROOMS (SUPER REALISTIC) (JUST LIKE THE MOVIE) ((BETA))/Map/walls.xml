@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<prefabs>
+  <!-- AUUUGHHHH -->
+  <Structure name="Backroom wall" description="" descriptionidentifier="backgroundwall" subcategory="Backrooms" identifier="brms_wallcrete1" allowattachitems="true" width="450" height="224" resizehorizontal="true" resizevertical="true" texturescale="1,1" category="Decorative" tags="backgroundwall">
+    <sprite texture="%ModDir%/Map/walls1.png" sourcerect="1,1,456,227" depth="0.98" premultiplyalpha="false" origin="0.5,0.5" />
+    <Upgrade gameversion="0.10.0.0" texturescale="0.5,0.5" />
+  </Structure>
+  <Structure name="Backroom wall 2" description="" descriptionidentifier="backgroundwall" subcategory="Backrooms" identifier="brms_wallcrete2" allowattachitems="true" width="450" height="224" resizehorizontal="true" resizevertical="true" texturescale="1,1" category="Decorative" tags="backgroundwall">
+    <sprite texture="%ModDir%/Map/walls1.png" sourcerect="459,459,227,227" depth="0.98" premultiplyalpha="false" origin="0.5,0.5" />
+    <Upgrade gameversion="0.10.0.0" texturescale="0.5,0.5" />
+  </Structure>
+</prefabs>

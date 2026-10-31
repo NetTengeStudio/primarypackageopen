@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<infotexts language="English" nowhitespace="false" translatedname="English">
+  <!-- Jobs -->
+  <Override>
+    <jobname.civilian>Wanderer</jobname.civilian>
+    <jobname.researcher>Researcher</jobname.researcher>
+    <entityname.weaponsparts>Weapon Parts</entityname.weaponsparts>
+    <entitydescription.weaponsparts>A collection of several weapon parts. Can be manipulated into a variety of weapons.</entitydescription.weaponsparts>
+    <entityname.walkietalkie>Handheld Radio</entityname.walkietalkie>
+    <entitydescription.walkietalkie>Requires a battery.</entitydescription.walkietalkie>
+    <entityname.mobileladderdeployed>Ladder (Deployed)</entityname.mobileladderdeployed>
+    <entityname.mobileladder>Ladder</entityname.mobileladder>
+    <entitydescription.mobileladder>For reaching high up places.</entitydescription.mobileladder>
+    <interaction.open>Open</interaction.open>
+    <!-- ammo boxes -->
+    <entityname.pistolammobox>9mm Ammo Box</entityname.pistolammobox>
+    <entitydescription.pistolammobox>A box of 30 9mm rounds.</entitydescription.pistolammobox>
+    <entityname.revolverammobox>.38 Ammo Box</entityname.revolverammobox>
+    <entitydescription.revolverammobox>A box of 20 .38 rounds.</entitydescription.revolverammobox>
+    <entityname.buckshotammobox>12 Gauge Ammo Box</entityname.buckshotammobox>
+    <entitydescription.buckshotammobox>A box of 12 shotgun shells.</entitydescription.buckshotammobox>
+    <entityname.bluntshellammobox>12 Gauge Blunt Ammo Box</entityname.bluntshellammobox>
+    <entitydescription.bluntshellammobox>A box of 18 blunt shotgun shells.</entitydescription.bluntshellammobox>
+    <entityname.rifleammobox>.303 Ammo Box</entityname.rifleammobox>
+    <entitydescription.rifleammobox>A box of 20 .303 rounds.</entitydescription.rifleammobox>
+    <!-- Weapons -->
+    <entityname.pistol>Pistol</entityname.pistol>
+    <entitydescription.pistol>A 9mm pistol. Reliable.</entitydescription.pistol>
+    <entityname.pistolmag>Pistol Magazine</entityname.pistolmag>
+    <entitydescription.pistolmag>A 15 round magazine for 9mm Rounds.</entitydescription.pistolmag>
+    <entityname.pistolround>9mm Round</entityname.pistolround>
+    <entitydescription.pistolround>A 9mm round.</entitydescription.pistolround>
+    <entityname.revolverround>.38 Round</entityname.revolverround>
+    <entityname.revolverrounddepletedfuel>.38 Round (Depleted Fuel)</entityname.revolverrounddepletedfuel>
+    <entityname.smgmagazinedepletedfuel>9mm Round (Depleted Fuel)</entityname.smgmagazinedepletedfuel>
+    <entitydescription.smgmagazinedepletedfuel>A depleted fuel 9mm round.</entitydescription.smgmagazinedepletedfuel>
+    <entitydescription.smgmagazine>A 30 round magazine for 9mm Rounds.</entitydescription.smgmagazine>
+    <entityname.machinepistol>PDW</entityname.machinepistol>
+    <entitydescription.machinepistol>A compact 9mm Personal Defense Weapon. High firerate and spread. Uses SMG magazines.</entitydescription.machinepistol>
+    <entitydescription.smg>A bulky 9mm submachine-gun.</entitydescription.smg>
+    <entityname.smgunique>Burst Machine Pistol</entityname.smgunique>
+    <entitydescription.smgunique>A three round burst 9mm pistol.</entitydescription.smgunique>
+    <entityname.shotgun>Pump-Action Shotgun</entityname.shotgun>
+    <entitydescription.shotgun>A 12 gauge pump action shotgun.</entitydescription.shotgun>
+    <entityname.shotgunshell>12 Gauge Shell</entityname.shotgunshell>
+    <entitydescription.shotgunshell>A 12 gauge shotgun shell.</entitydescription.shotgunshell>
+    <entityname.shotgunshellblunt>12 Gauge Blunt Shell</entityname.shotgunshellblunt>
+    <entitydescription.shotgunshellblunt>A 12 gauge shotgun shell for riot control.</entitydescription.shotgunshellblunt>
+    <entityname.riflebullet>.303 Round</entityname.riflebullet>
+    <entitydescription.riflebullet>A .303 caliber round.</entitydescription.riflebullet>
+    <entityname.rifle>Hunting Rifle</entityname.rifle>
+    <entitydescription.rifle>A .303 caliber bolt-action rifle.</entitydescription.rifle>
+  </Override>
+</infotexts>

@@ -1,0 +1,463 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Items>
+  <Item name="Fancy Suit" identifier="fancybusinesssuit" category="Equipment" description="Dress to kill." cargocontaineridentifier="metalcrate" tags="smallitem,clothing" scale="0.5" impactsoundtag="impact_soft">
+    <Deconstruct time="20">
+      <Item identifier="organicfiber" />
+    </Deconstruct>
+    <Fabricate suitablefabricators="fabricator" requiredtime="20">
+      <Item identifier="organicfiber" amount="3" />
+    </Fabricate>
+    <InventoryIcon name="insurgentuniform" texture="%ModDir%/Items/fancysuit.png" sourcerect="689,130,90,90" origin="0.5,0.5" />
+    <Sprite name="insurgentmground" texture="%ModDir%/Items/fancysuit.png" sourcerect="690,58,115,58" depth="0.6" origin="0.5,0.5" />
+    <Body width="180" height="50" density="30" friction="0.8" restitution="0.01" />
+    <Wearable slots="Any,InnerClothes" msg="ItemMsgPickUpSelect">
+      <sprite name="Uniform Torso" texture="%ModDir%/Items/fancysuit.png" limb="Torso" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Right Hand" texture="%ModDir%/Items/fancysuit.png" limb="RightHand" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Left Hand" texture="%ModDir%/Items/fancysuit.png" limb="LeftHand" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Right Lower Arm" texture="%ModDir%/Items/fancysuit.png" limb="RightArm" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Left Lower Arm" texture="%ModDir%/Items/fancysuit.png" limb="LeftArm" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Right Upper Arm" texture="%ModDir%/Items/fancysuit.png" limb="RightForearm" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Left Upper Arm" texture="%ModDir%/Items/fancysuit.png" limb="LeftForearm" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Waist" texture="%ModDir%/Items/fancysuit.png" limb="Waist" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Right Thigh" texture="%ModDir%/Items/fancysuit.png" limb="RightThigh" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Left Thigh" texture="%ModDir%/Items/fancysuit.png" limb="LeftThigh" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Right Leg" texture="%ModDir%/Items/fancysuit.png" limb="RightLeg" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Left Leg" texture="%ModDir%/Items/fancysuit.png" limb="LeftLeg" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Left Shoe" texture="%ModDir%/Items/fancysuit.png" limb="LeftFoot" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Right Shoe" texture="%ModDir%/Items/fancysuit.png" limb="RightFoot" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <damagemodifier afflictionidentifiers="lacerations,gunshotwound,bleeding" armorsector="0.0,360.0" damagemultiplier="0.9" />
+    </Wearable>
+    <ItemContainer capacity="1">
+      <Containable items="smallitem" excludeditems="toolbox,mobilecontainer,rucksack,backpack,waistbelt,vest,backpack1,medicalbackpack,power-backpack,duffelbag,heavybackpack,oxy-gen. backpack,xeno-backpack,techno-backpack" />
+    </ItemContainer>
+  </Item>
+  <Item name="Brown Formal Workwear" identifier="worksuitbrown" category="Equipment" description="A suit fit for you and the job." cargocontaineridentifier="metalcrate" tags="smallitem,clothing" scale="0.5" impactsoundtag="impact_soft">
+    <Deconstruct time="10">
+      <Item identifier="organicfiber" />
+    </Deconstruct>
+    <Fabricate suitablefabricators="fabricator" requiredtime="20">
+      <Item identifier="organicfiber" amount="2" />
+    </Fabricate>
+    <InventoryIcon name="uniform" texture="%ModDir%/Items/workwearbrown.png" sourcerect="691,132,103,91" origin="0.5,0.5" />
+    <Sprite name="ground" texture="%ModDir%/Items/workwearbrown.png" sourcerect="690,58,115,58" depth="0.6" origin="0.5,0.5" />
+    <Body width="180" height="50" density="30" friction="0.8" restitution="0.01" />
+    <Wearable slots="Any,InnerClothes" msg="ItemMsgPickUpSelect">
+      <sprite name="Uniform Torso" texture="%ModDir%/Items/workwearbrown.png" limb="Torso" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Right Hand" texture="%ModDir%/Items/workwearbrown.png" limb="RightHand" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Left Hand" texture="%ModDir%/Items/workwearbrown.png" limb="LeftHand" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Right Lower Arm" texture="%ModDir%/Items/workwearbrown.png" limb="RightArm" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Left Lower Arm" texture="%ModDir%/Items/workwearbrown.png" limb="LeftArm" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Right Upper Arm" texture="%ModDir%/Items/workwearbrown.png" limb="RightForearm" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Left Upper Arm" texture="%ModDir%/Items/workwearbrown.png" limb="LeftForearm" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Waist" texture="%ModDir%/Items/workwearbrown.png" limb="Waist" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Right Thigh" texture="%ModDir%/Items/workwearbrown.png" limb="RightThigh" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Left Thigh" texture="%ModDir%/Items/workwearbrown.png" limb="LeftThigh" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Right Leg" texture="%ModDir%/Items/workwearbrown.png" limb="RightLeg" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Left Leg" texture="%ModDir%/Items/workwearbrown.png" limb="LeftLeg" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Left Shoe" texture="%ModDir%/Items/workwearbrown.png" limb="LeftFoot" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Right Shoe" texture="%ModDir%/Items/workwearbrown.png" limb="RightFoot" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <damagemodifier armorsector="0.0,360.0" afflictionidentifiers="lacerations" damagemultiplier="0.95" />
+      <damagemodifier armorsector="0.0,360.0" afflictionidentifiers="bitewounds, blunttrauma" damagemultiplier="0.9" />
+    </Wearable>
+  </Item>
+  <Item name="Blue Formal Workwear" identifier="worksuitblue" category="Equipment" description="A suit fit for you and the job." cargocontaineridentifier="metalcrate" tags="smallitem,clothing" scale="0.5" impactsoundtag="impact_soft">
+    <Deconstruct time="10">
+      <Item identifier="organicfiber" />
+    </Deconstruct>
+    <Fabricate suitablefabricators="fabricator" requiredtime="20">
+      <Item identifier="organicfiber" amount="2" />
+    </Fabricate>
+    <InventoryIcon name="uniform" texture="%ModDir%/Items/workwearblue.png" sourcerect="692,130,101,93" origin="0.5,0.5" />
+    <Sprite name="ground" texture="%ModDir%/Items/workwearblue.png" sourcerect="690,58,115,58" depth="0.6" origin="0.5,0.5" />
+    <Body width="180" height="50" density="30" friction="0.8" restitution="0.01" />
+    <Wearable slots="Any,InnerClothes" msg="ItemMsgPickUpSelect">
+      <sprite name="Uniform Torso" texture="%ModDir%/Items/workwearblue.png" limb="Torso" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Right Hand" texture="%ModDir%/Items/workwearblue.png" limb="RightHand" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Left Hand" texture="%ModDir%/Items/workwearblue.png" limb="LeftHand" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Right Lower Arm" texture="%ModDir%/Items/workwearblue.png" limb="RightArm" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Left Lower Arm" texture="%ModDir%/Items/workwearblue.png" limb="LeftArm" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Right Upper Arm" texture="%ModDir%/Items/workwearblue.png" limb="RightForearm" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Left Upper Arm" texture="%ModDir%/Items/workwearblue.png" limb="LeftForearm" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Waist" texture="%ModDir%/Items/workwearblue.png" limb="Waist" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Right Thigh" texture="%ModDir%/Items/workwearblue.png" limb="RightThigh" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Left Thigh" texture="%ModDir%/Items/workwearblue.png" limb="LeftThigh" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Right Leg" texture="%ModDir%/Items/workwearblue.png" limb="RightLeg" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Left Leg" texture="%ModDir%/Items/workwearblue.png" limb="LeftLeg" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Left Shoe" texture="%ModDir%/Items/workwearblue.png" limb="LeftFoot" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Right Shoe" texture="%ModDir%/Items/workwearblue.png" limb="RightFoot" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <damagemodifier armorsector="0.0,360.0" afflictionidentifiers="lacerations" damagemultiplier="0.95" />
+      <damagemodifier armorsector="0.0,360.0" afflictionidentifiers="bitewounds, blunttrauma" damagemultiplier="0.9" />
+    </Wearable>
+  </Item>
+  <Item name="Lab Coat" identifier="labcoat" category="Equipment" description="let's go practice medicine." cargocontaineridentifier="metalcrate" tags="smallitem,clothing" scale="0.5" impactsoundtag="impact_soft">
+    <PreferredContainer secondary="researchcontainer" spawnprobability="0.02" />
+    <Deconstruct time="10">
+      <Item identifier="organicfiber" />
+    </Deconstruct>
+    <Fabricate suitablefabricators="fabricator" requiredtime="20">
+      <Item identifier="organicfiber" amount="1" />
+      <Item identifier="plastic" amount="1" />
+      <Item identifier="medicalofficerclothes" amount="1" />
+    </Fabricate>
+    <InventoryIcon name="uniform" texture="%ModDir%/Items/labcoat.png" sourcerect="692,130,101,93" origin="0.5,0.5" />
+    <Sprite name="ground" texture="%ModDir%/Items/labcoat.png" sourcerect="690,58,115,58" depth="0.6" origin="0.5,0.5" />
+    <Body width="180" height="50" density="30" friction="0.8" restitution="0.01" />
+    <Wearable slots="Any,InnerClothes" msg="ItemMsgPickUpSelect">
+      <sprite name="Uniform Torso" texture="%ModDir%/Items/labcoat.png" limb="Torso" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Right Hand" texture="%ModDir%/Items/labcoat.png" limb="RightHand" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Left Hand" texture="%ModDir%/Items/labcoat.png" limb="LeftHand" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Right Lower Arm" texture="%ModDir%/Items/labcoat.png" limb="RightArm" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Left Lower Arm" texture="%ModDir%/Items/labcoat.png" limb="LeftArm" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Right Upper Arm" texture="%ModDir%/Items/labcoat.png" limb="RightForearm" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Left Upper Arm" texture="%ModDir%/Items/labcoat.png" limb="LeftForearm" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Waist" texture="%ModDir%/Items/labcoat.png" limb="Waist" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Right Thigh" texture="%ModDir%/Items/labcoat.png" limb="RightThigh" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Left Thigh" texture="%ModDir%/Items/labcoat.png" limb="LeftThigh" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Right Leg" texture="%ModDir%/Items/labcoat.png" limb="RightLeg" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Left Leg" texture="%ModDir%/Items/labcoat.png" limb="LeftLeg" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Left Shoe" texture="%ModDir%/Items/labcoat.png" limb="LeftFoot" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Right Shoe" texture="%ModDir%/Items/labcoat.png" limb="RightFoot" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <damagemodifier armorsector="0.0,360.0" afflictionidentifiers="lacerations" damagemultiplier="0.95" />
+      <damagemodifier armorsector="0.0,360.0" afflictionidentifiers="bitewounds, blunttrauma" damagemultiplier="0.9" />
+      <damagemodifier armorsector="0.0,360.0" afflictionidentifiers="infection,huskinfection" damagemultiplier="0.85" />
+      <SkillModifier skillidentifier="medical" skillvalue="15" />
+    </Wearable>
+  </Item>
+  <Item name="Sweater" identifier="sailoruniform1" category="Equipment" description="Organized, cozy, and cheap." cargocontaineridentifier="metalcrate" tags="smallitem,clothing" scale="0.5" impactsoundtag="impact_soft">
+    <Deconstruct time="10">
+      <Item identifier="organicfiber" />
+    </Deconstruct>
+    <Fabricate suitablefabricators="fabricator" requiredtime="20">
+      <Item identifier="organicfiber" amount="1" />
+    </Fabricate>
+    <InventoryIcon name="uniform" texture="%ModDir%/Items/sailor1.png" sourcerect="691,132,103,91" origin="0.5,0.5" />
+    <Sprite name="ground" texture="%ModDir%/Items/sailor1.png" sourcerect="690,58,115,58" depth="0.6" origin="0.5,0.5" />
+    <Body width="180" height="50" density="30" friction="0.8" restitution="0.01" />
+    <Wearable slots="Any,InnerClothes" msg="ItemMsgPickUpSelect">
+      <sprite name="Uniform Torso" texture="%ModDir%/Items/sailor1.png" limb="Torso" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Right Hand" texture="%ModDir%/Items/sailor1.png" limb="RightHand" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Left Hand" texture="%ModDir%/Items/sailor1.png" limb="LeftHand" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Right Lower Arm" texture="%ModDir%/Items/sailor1.png" limb="RightArm" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Left Lower Arm" texture="%ModDir%/Items/sailor1.png" limb="LeftArm" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Right Upper Arm" texture="%ModDir%/Items/sailor1.png" limb="RightForearm" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Left Upper Arm" texture="%ModDir%/Items/sailor1.png" limb="LeftForearm" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Waist" texture="%ModDir%/Items/sailor1.png" limb="Waist" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Right Thigh" texture="%ModDir%/Items/sailor1.png" limb="RightThigh" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Left Thigh" texture="%ModDir%/Items/sailor1.png" limb="LeftThigh" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Right Leg" texture="%ModDir%/Items/sailor1.png" limb="RightLeg" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Left Leg" texture="%ModDir%/Items/sailor1.png" limb="LeftLeg" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Left Shoe" texture="%ModDir%/Items/sailor1.png" limb="LeftFoot" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Right Shoe" texture="%ModDir%/Items/sailor1.png" limb="RightFoot" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <damagemodifier armorsector="0.0,360.0" afflictionidentifiers="lacerations,bitewounds, blunttrauma" damagemultiplier="0.9" />
+    </Wearable>
+  </Item>
+  <Item name="Winter Clothes" identifier="scavclothes" category="Equipment" cargocontaineridentifier="metalcrate" tags="smallitem,clothing,vest" scale="0.5" impactsoundtag="impact_soft">
+    <PreferredContainer primary="outpostcrewcabinet" amount="1" spawnprobability="0.08" />
+    <PreferredContainer primary="crewcab" />
+    <PreferredContainer primary="wreckcrewcab" spawnprobability="0.02" />
+    <Price baseprice="124">
+      <Price storeidentifier="merchantoutpost" minavailable="1" />
+      <Price storeidentifier="merchantcity" multiplier="0.9" minavailable="1" />
+      <Price storeidentifier="merchantresearch" minavailable="1" />
+      <Price storeidentifier="merchantmilitary" minavailable="1" />
+      <Price storeidentifier="merchantmine" minavailable="1" />
+    </Price>
+    <Deconstruct time="10">
+      <Item identifier="organicfiber" />
+    </Deconstruct>
+    <InventoryIcon texture="bandit.png" sourcerect="422,-2,84,64" origin="0.5,0.5" />
+    <Sprite name="commoner 1" texture="Content/Items/Jobgear/MiscJobGear.png" sourcerect="1,8,120,59" depth="0.6" origin="0.5,0.5" />
+    <Body width="100" height="50" density="15" friction="0.8" restitution="0.01" />
+    <Wearable slots="Any,InnerClothes" msg="ItemMsgPickUpSelect">
+      <sprite name="Commoner's Clothes 1 Torso" texture="bandit.png" limb="Torso" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+      <sprite name="Commoner's Clothes 1 Left Lower Arm" texture="bandit.png" limb="LeftForearm" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+      <sprite name="Commoner's Clothes 1 Right Lower Arm" texture="bandit.png" limb="RightForearm" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+      <sprite name="Commoner's Clothes 1 Left Upper Arm" texture="bandit.png" limb="LeftArm" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+      <sprite name="Commoner's Clothes 1 Right Upper Arm" texture="bandit.png" limb="RightArm" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+      <sprite name="Commoner's Clothes 1 Waist" texture="bandit.png" limb="Waist" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+      <sprite name="Commoner's Clothes 1 Right Thigh" texture="bandit.png" limb="RightThigh" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+      <sprite name="Commoner's Clothes 1 Left Thigh" texture="bandit.png" limb="LeftThigh" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+      <sprite name="Commoner's Clothes 1 Right Leg" texture="bandit.png" limb="RightLeg" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+      <sprite name="Commoner's Clothes 1 Left Leg" texture="bandit.png" limb="LeftLeg" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+      <sprite name="Commoner's Clothes 1 Right Shoe" texture="bandit.png" limb="RightFoot" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+      <sprite name="Commoner's Clothes 1 Left Shoe" texture="bandit.png" limb="LeftFoot" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+      <damagemodifier armorsector="0.0,360.0" afflictionidentifiers="lacerations, bitewounds" damagemultiplier="0.95" deflectprojectiles="false" />
+      <SkillModifier skillidentifier="electrical" skillvalue="2" />
+      <SkillModifier skillidentifier="mechanical" skillvalue="2" />
+    </Wearable>
+    <ItemContainer capacity="2" maxstacksize="4">
+      <Containable items="smallitem,grenade,handgrenade,pistolitem" />
+    </ItemContainer>
+  </Item>
+  <Item name="Hazmat Suit" identifier="cbrnsuitheavy" category="Equipment" description="A military-grade protective full-body suit with excellent defense against biohazards, radiation, burns, and bullets." cargocontaineridentifier="metalcrate" tags="mediumitem,clothing" scale="0.5" impactsoundtag="impact_soft">
+    <Deconstruct time="20">
+      <Item identifier="plastic" />
+      <Item identifier="ballisticfiber" amount="2" />
+    </Deconstruct>
+    <Fabricate suitablefabricators="fabricator" requiredtime="60">
+      <RequiredSkill identifier="weapons" level="50" />
+      <Item identifier="rubber" amount="1" />
+      <Item identifier="ballisticfiber" amount="3" />
+      <Item identifier="plastic" amount="2" />
+    </Fabricate>
+    <InventoryIcon name="uniform" texture="hazmat.png" sourcerect="587,0,112,120" origin="0.5,0.5" />
+    <Sprite name="ground" texture="hazmat.png" sourcerect="572,168,131,86" depth="0.6" origin="0.5,0.5" />
+    <Body width="180" height="50" density="30" friction="0.8" restitution="0.01" />
+    <Wearable slots="Any,InnerClothes+OuterClothes" msg="ItemMsgPickUpSelect">
+      <sprite name="Hat" texture="hazmat.png" limb="Head" hidewearablesoftype="Hair" inheritlimbdepth="true" inheritscale="true" ignorelimbscale="true" scale="0.675" hidelimb="true" sourcerect="606,129,22,36" origin="0.52801293,0.53574544" />
+      <sprite name="Uniform Right Hand" texture="hazmat.png" limb="RightHand" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Exosuit Torso" texture="hazmat.png" limb="Torso" scale="0.95" hidelimb="true" inherittexturescale="true" hideotherwearables="true" inheritorigin="false" origin="0.60669,0.6457307" inheritlimbdepth="true" inheritsourcerect="false" sourcerect="403,7,118,193" />
+      <sprite name="Uniform Left Hand" texture="hazmat.png" limb="LeftHand" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Right Lower Arm" texture="hazmat.png" limb="RightArm" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Left Lower Arm" texture="hazmat.png" limb="LeftArm" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Right Upper Arm" texture="hazmat.png" limb="RightForearm" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Left Upper Arm" texture="hazmat.png" limb="LeftForearm" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Waist" texture="hazmat.png" limb="Waist" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Right Thigh" texture="hazmat.png" limb="RightThigh" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Left Thigh" texture="hazmat.png" limb="LeftThigh" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Right Leg" texture="hazmat.png" limb="RightLeg" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Left Leg" texture="hazmat.png" limb="LeftLeg" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Left Shoe" texture="hazmat.png" limb="LeftFoot" sound="footstep_heavysuit" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Right Shoe" texture="hazmat.png" limb="RightFoot" sound="footstep_heavysuit" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <damagemodifier armorsector="0.0,360.0" afflictionidentifiers="lacerations,bitewounds,blunttrauma" damagemultiplier="0.7" />
+      <!--      <damagemodifier armorsector="0.0,360.0" afflictiontypes="burn" damagemultiplier="0.6" damagesound="" deflectprojectiles="true" /> -->
+      <damagemodifier armorsector="0.0,360.0" afflictionidentifiers="radiationsickness,acidburn" damagemultiplier="0.35" />
+      <damagemodifier armorsector="0.0,360.0" afflictionidentifiers="infection,huskinfection" damagemultiplier="0" />
+      <damagemodifier armorsector="0.0,360.0" afflictionidentifiers="explosiondamage,gunshotwound" damagemultiplier="0.75" damagesound="LimbArmor" deflectprojectiles="true" />
+      <damagemodifier armorsector="0.0,360.0" afflictiontypes="bleeding" damagemultiplier="0.3" damagesound="LimbArmor" deflectprojectiles="true" />
+      <StatValue stattype="WalkingSpeed" value="-0.075" />
+    </Wearable>
+    <ItemContainer capacity="3" slotsperrow="8" keepopenwhenequipped="false" movableframe="true">
+      <Containable items="smallitem" excludeditems="toolbox,mobilecontainer,rucksack,backpack,waistbelt,vest,backpack1,medicalbackpack,power-backpack,duffelbag,heavybackpack,oxy-gen. backpack,xeno-backpack,techno-backpack" />
+    </ItemContainer>
+  </Item>
+  <Item name="Caveman Cutout" identifier="caveman" Tags="mediumitem" cargocontaineridentifier="metalcrate" scale="0.6" description="" impactsoundtag="impact_soft" isshootable="true">
+    <Fabricate suitablefabricators="fabricator" requiredtime="15">
+      <Item identifier="plastic" amount="3" />
+    </Fabricate>
+    <ContainedSprite texture="%ModDir%/Misc/misc.png" usewhenattached="true" decorativespritebehavior="HideWhenNotVisible" depth="0.55" sourcerect="8,7,129,324" origin="0.5,0.5" />
+    <Sprite texture="%ModDir%/Misc/misc.png" depth="0.8" sourcerect="8,7,129,323" origin="0.5,0.5" canflipx="false" canflipy="false" />
+    <Body width="100" radius="175" density="15" />
+    <PreferredContainer primary="crewcab" spawnprobability="0" />
+    <Holdable selectkey="Select" pickkey="Use" slots="Any,RightHand,LeftHand" msg="ItemMsgDetach" PickingTime="5.0" aimpos="65,-10" handle1="0,0" attachable="true" aimable="true" />
+  </Item>
+  <Item name="Voicelines (Woman)" identifier="voicelineswoman" category="Misc" maxstacksize="1" maxstacksizecharacterinventory="1" Tags="smallitem" scale="0.3" impactsoundtag="impact_softitem">
+    <PreferredContainer primary="crewcab" />
+    <InventoryIcon texture="%ModDir%/Misc/misc.png" sourcerect="579,0,72,72" origin="0.5,0.5" />
+    <Sprite texture="%ModDir%/Misc/misc.png" depth="0.6" sourcerect="536,4,39,129" origin="0.5,0.5" />
+    <Body width="35" height="65" density="10.1" />
+    <Holdable canBeCombined="true" removeOnCombined="true" slots="Any,RightHand,LeftHand" characterusable="false" aimpos="20,10" holdangle="0" aimangle="90" aimable="false" msg="ItemMsgPickUpSelect" />
+    <CustomInterface canbeselected="false" drawhudwhenequipped="true">
+      <GuiFrame style="ItemUI" absoluteoffset="0,0" anchor="BottomCenter" relativesize="0.12,0.3" />
+      <Button text="I'm not your wife!">
+        <StatusEffect type="OnUse" target="This" delay="0.1">
+          <Sound file="%ModDir%/Items/Sounds/imnotyourwife.ogg" loop="false" range="1000" volume="15" />
+        </StatusEffect>
+      </Button>
+      <Button text="I've never even met her!">
+        <StatusEffect type="OnUse" target="This" delay="0.1">
+          <Sound file="%ModDir%/Items/Sounds/iveneverevenmether.ogg" loop="false" range="1000" volume="15" />
+        </StatusEffect>
+      </Button>
+      <Button text="FUCK YOU!">
+        <StatusEffect type="OnUse" target="This" delay="0.1">
+          <Sound file="%ModDir%/Items/Sounds/fuckyou.ogg" loop="false" range="1000" volume="15" />
+        </StatusEffect>
+      </Button>
+    </CustomInterface>
+  </Item>
+  <Item name="Voicelines (Man)" identifier="voicelines" category="Misc" maxstacksize="1" maxstacksizecharacterinventory="1" Tags="smallitem" scale="0.3" impactsoundtag="impact_softitem">
+    <PreferredContainer primary="crewcab" />
+    <InventoryIcon texture="%ModDir%/Misc/misc.png" sourcerect="579,0,72,72" origin="0.5,0.5" />
+    <Sprite texture="%ModDir%/Misc/misc.png" depth="0.6" sourcerect="536,4,39,129" origin="0.5,0.5" />
+    <Body width="35" height="65" density="10.1" />
+    <Holdable canBeCombined="true" removeOnCombined="true" slots="Any,RightHand,LeftHand" characterusable="false" aimpos="20,10" holdangle="0" aimangle="90" aimable="false" msg="ItemMsgPickUpSelect" />
+    <CustomInterface canbeselected="false" drawhudwhenequipped="true">
+      <GuiFrame style="ItemUI" absoluteoffset="0,0" anchor="BottomCenter" relativesize="0.12,0.3" />
+      <Button text="I AM A FUCKING ARCHITECT!">
+        <StatusEffect type="OnUse" target="This" delay="0.1">
+          <Sound file="%ModDir%/Items/Sounds/iamarch.ogg" loop="false" range="1000" volume="15" />
+        </StatusEffect>
+      </Button>
+      <Button text="FAT FUCKING ASS.">
+        <StatusEffect type="OnUse" target="This" delay="0.1">
+          <Sound file="%ModDir%/Items/Sounds/fatfuckingass.ogg" loop="false" range="1000" volume="15" />
+        </StatusEffect>
+      </Button>
+      <Button text="Stay in character!">
+        <StatusEffect type="OnUse" target="This" delay="0.1">
+          <Sound file="%ModDir%/Items/Sounds/stayincharacter.ogg" loop="false" range="1000" volume="15" />
+        </StatusEffect>
+      </Button>
+      <Button text="STAY IN CHARACTER!!!">
+        <StatusEffect type="OnUse" target="This" delay="0.1">
+          <Sound file="%ModDir%/Items/Sounds/stayincharacter2.ogg" loop="false" range="1000" volume="15" />
+        </StatusEffect>
+      </Button>
+      <Button text="What did you say?">
+        <StatusEffect type="OnUse" target="This" delay="0.1">
+          <Sound file="%ModDir%/Items/Sounds/whatdidyousay.ogg" loop="false" range="1000" volume="15" />
+        </StatusEffect>
+      </Button>
+      <Button text="It's just the way we're wired.">
+        <StatusEffect type="OnUse" target="This" delay="0.1">
+          <Sound file="%ModDir%/Items/Sounds/justthewaywerewired.ogg" loop="false" range="1000" volume="15" />
+        </StatusEffect>
+      </Button>
+    </CustomInterface>
+  </Item>
+  <Item name="Box" identifier="footlocker" tags="container" pickdistance="150" scale="0.35" waterproof="true" fireproof="true" explosiondamagemultiplier="0.1">
+    <Price baseprice="200" sold="false" minleveldifficulty="15">
+      <Price storeidentifier="merchantoutpost" multiplier="1.25" />
+      <Price storeidentifier="merchantcity" multiplier="1.1" />
+      <Price storeidentifier="merchantresearch" multiplier="1.25" />
+      <Price storeidentifier="merchantmilitary" multiplier="0.9" sold="true" minamount="1" />
+      <Price storeidentifier="merchantmine" multiplier="1.3" />
+      <Price storeidentifier="merchantengineering" multiplier="1.1" sold="true" minamount="1" />
+    </Price>
+    <Deconstruct time="30">
+      <Item identifier="steel" />
+      <Item identifier="titaniumaluminiumalloy" />
+    </Deconstruct>
+    <Fabricate suitablefabricators="fabricator" requiredtime="30">
+      <RequiredSkill identifier="mechanical" level="25" />
+      <RequiredItem identifier="plastic" amount="3" />
+      <RequiredItem identifier="titaniumaluminiumalloy" amount="2" />
+    </Fabricate>
+    <Sprite texture="%ModDir%/Misc/misc.png" depth="0.84" sourcerect="272,6,249,103" origin="0.5,0.5" />
+    <Body width="192" height="192" density="25" />
+    <Holdable selectkey="Select" pickkey="Use" slots="RightHand+LeftHand" msg="ItemMsgDetachWrench" PickingTime="10.0" aimpos="65,-10" handle1="-90,0" attachable="true" aimable="false">
+      <StatusEffect type="OnActive" target="Character" SpeedMultiplier="0.55" setvalue="true" />
+    </Holdable>
+    <ItemContainer autofill="False" capacity="8" slotsperrow="4" canbeselected="true" hideitems="true" msg="ItemMsgInteractSelect">
+      <GuiFrame relativesize="0.15,0.35" anchor="Center" style="ItemUI" />
+      <Containable items="smallitem,mediumitem" />
+    </ItemContainer>
+  </Item>
+  <Item name="" identifier="mobileladderdeployed" category="Equipment" Tags="largeitem" cargocontaineridentifier="metalcrate" scale="0.5" impactsoundtag="impact_metal_Heavy" hideinmenus="true">
+    <InventoryIcon texture="Content/Map/Outposts/Art/Shop.png" sourcerect="0,484,95,364" origin="0.5,0.5" />
+    <!-- the actual sprite is empty as the item would otherwise always display in front of the character -->
+    <sprite texture="%ModDir%/Misc/LadderBlank.png" sourcerect="0,0,95,364" depth="0.501" premultiplyalpha="false" origin="0.5,0.5" />
+    <!-- decorative sprite is used to display the ladder sprite as it is displayed further back, allowing the character to be displayed in front of the item -->
+    <DecorativeSprite texture="Content/Map/Outposts/Art/Shop.png" sourcerect="0,484,95,364" depth="0.52" premultiplyalpha="false" origin="0.5,0.5" />
+    <Body width="161" height="364" bodytype="Static" />
+    <trigger x="-40" y="20" width="180" />
+    <Ladder canbeselected="true" msg="ItemMsgClimbSelect" />
+    <!-- ConnectionPanel used to allow for a secondary action triggered via the "action" keybind to convert the ladder back to a holdable item -->
+    <ConnectionPanel selectkey="Action" canbeselected="true" msg="ItemMsgDetach" hudpriority="10">
+      <GuiFrame relativesize="0.2,0.32" minsize="400,350" maxsize="480,420" anchor="Center" style="ConnectionPanel" />
+      <StatusEffect type="OnPicked" target="This" disabledeltatime="true">
+        <Remove />
+        <SpawnItem identifier="mobileladder" spawnposition="This" />
+      </StatusEffect>
+    </ConnectionPanel>
+  </Item>
+  <Item name="" identifier="mobileladder" category="Equipment" tags="largeitem" Scale="0.5" impactsoundtag="impact_metal_heavy" description="" isshootable="true" requireaimtouse="true">
+    <InventoryIcon texture="%ModDir%/Misc/misc.png" sourcerect="5,629,129,128" origin="0.5,0.5" />
+    <sprite texture="Content/Map/Outposts/Art/Shop.png" sourcerect="0,484,95,364" depth="0.51" premultiplyalpha="false" origin="0.5,0.5" />
+    <Body width="60" height="364" density="50" />
+    <Price baseprice="75">
+      <Price locationtype="outpost" multiplier="1.1" sold="true" minavailable="1" />
+      <Price locationtype="city" multiplier="1.0" sold="true" minavailable="1" />
+      <Price locationtype="research" multiplier="0.9" sold="true" minavailable="1" />
+      <Price locationtype="military" multiplier="1.2" sold="true" minavailable="1" />
+      <Price locationtype="mine" multiplier="1.0" sold="true" minavailable="1" />
+    </Price>
+    <Deconstruct time="10">
+      <Item identifier="steel" amount="2" />
+    </Deconstruct>
+    <Fabricate suitablefabricators="fabricator" requiredtime="20">
+      <RequiredSkill identifier="mechanical" level="35" />
+      <RequiredItem identifier="steel" amount="3" />
+    </Fabricate>
+    <ItemComponent characterusable="false">
+      <IsActiveConditional attached="true" targetitemcomponent="Holdable" />
+      <StatusEffect type="Always" target="This" condition="-199.9">
+        <Conditional attached="true" />
+      </StatusEffect>
+      <StatusEffect type="OnBroken" target="This">
+        <SpawnItem identifier="mobileladderdeployed" spawnposition="This" />
+        <Remove />
+      </StatusEffect>
+    </ItemComponent>
+    <Holdable selectkey="Select" pickkey="Select" slots="RightHand,LeftHand" controlpose="true" aimpos="45,10" handle1="20,-18" holdpos="25,-1" holdangle="270" msg="ItemMsgPickUpSelect" attachable="true" attachedbydefault="false" attached="false" aimable="true" PickingTime="0.0" characterusable="true">
+      <StatusEffect type="OnUse" target="This" noninteractable="true" setvalue="true" />
+    </Holdable>
+  </Item>
+  <Item name="" identifier="walkietalkie" scale="0.3" category="Equipment" tags="smallitem,mobileradio" description="" cargocontaineridentifier="metalcrate" impactsoundtag="impact_metal_light">
+    <PreferredContainer primary="crewcab" secondary="divingcab" />
+    <Price baseprice="96">
+      <Price storeidentifier="merchantoutpost" minavailable="3" />
+      <Price storeidentifier="merchantcity" multiplier="0.9" minavailable="10" />
+      <Price storeidentifier="merchantresearch" minavailable="4" />
+      <Price storeidentifier="merchantmilitary" minavailable="6" />
+      <Price storeidentifier="merchantmine" minavailable="6" />
+    </Price>
+    <InventoryIcon texture="%ModDir%/Misc/misc.png" sourcerect="579,0,72,72" origin="0.5,0.5" />
+    <Sprite texture="%ModDir%/Misc/misc.png" depth="0.6" sourcerect="536,4,39,129" origin="0.5,0.5" />
+    <Body radius="20" height="20" density="15" />
+    <Deconstruct time="5">
+      <Item identifier="plastic" />
+      <Item identifier="copper" />
+    </Deconstruct>
+    <Fabricate suitablefabricators="fabricator" requiredtime="10">
+      <RequiredItem identifier="plastic" />
+      <RequiredItem identifier="copper" />
+      <RequiredItem identifier="fpgacircuit" />
+    </Fabricate>
+    <Holdable slots="Any,RightHand,LeftHand" holdangle="55" holdpos="20,-6" handle1="0,-15" msg="ItemMsgPickUpSelect">
+      <StatusEffect type="OnActive" targettype="Contained" Condition="-0.2">
+        <RequiredItem items="mobilebattery" type="Contained" />
+      </StatusEffect>
+    </Holdable>
+    <WifiComponent range="35000.0" LinkToChat="true" MinChatMessageInterval="0.0">
+      <RequiredItems items="mobilebattery" type="Contained" mincondition="0.01" />
+    </WifiComponent>
+    <ItemContainer capacity="1" maxstacksize="1" hideitems="true" containedstateindicatorstyle="battery">
+      <SlotIcon slotindex="0" texture="Content/UI/StatusMonitorUI.png" sourcerect="128,448,64,64" origin="0.5,0.5" />
+      <Containable items="mobilebattery" />
+    </ItemContainer>
+    <Upgrade gameversion="0.18.0.0">
+      <WifiComponent>
+        <RequiredItems items="" />
+      </WifiComponent>
+    </Upgrade>
+  </Item>
+  <Item name="Archibald" identifier="archibald" category="Equipment" noninteractable="true" cargocontaineridentifier="metalcrate" tags="smallitem,clothing,vest" scale="0.5" impactsoundtag="impact_soft">
+    <InventoryIcon name="Icon" texture="archibald.png" sourcerect="640,2,66,65" origin="0.5,0.5" />
+    <Sprite name="Medic Uniform 1" texture="archibald.png" sourcerect="640,2,66,65" depth="0.6" origin="0.5,0.5" />
+    <Body width="100" height="50" density="15" friction="0.8" restitution="0.01" />
+    <Wearable slots="InnerClothes" msg="ItemMsgPickUpSelect">
+      <sprite name="Hat" texture="archibald.png" limb="Head" hidewearablesoftype="Hair" inheritlimbdepth="true" inheritscale="true" ignorelimbscale="true" scale="0.69" hidelimb="true" sourcerect="633,167,73,81" origin="0.50181687,0.541065" />
+      <sprite name="Medic Uniform 1 Right Lower Arm" texture="archibald.png" limb="RightForearm" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+      <sprite name="Medic Uniform 1 Left Lower Arm" texture="archibald.png" limb="LeftForearm" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,708,260" origin="0.5,0.5" />
+      <sprite name="Medic Uniform 1 Right Upper Arm" texture="archibald.png" limb="RightArm" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+      <sprite name="Medic Uniform 1 Left Upper Arm" texture="archibald.png" limb="LeftArm" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+      <sprite name="Uniform Right Hand" texture="archibald.png" limb="RightHand" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Left Hand" texture="archibald.png" limb="LeftHand" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Exosuit Torso" texture="archibald.png" limb="Torso" scale="1.2" hidelimb="true" inherittexturescale="true" hideotherwearables="true" inheritorigin="false" origin="0.44279808,0.47327906" inheritlimbdepth="true" inheritsourcerect="false" sourcerect="0,0,156,260">
+        <!--         <LightComponent range="200.0" lightcolor="250,224,165,255" IsOn="true" allowingameediting="false" offset="-50,-50">
+            <LightTexture texture="%ModDir%/Items/archibald_light.png" origin="0.05, 0.5" size="1.0,1.0" />
+          </LightComponent> -->
+      </sprite>
+      <sprite name="Exosuit Right Thigh" texture="nothing.png" limb="RightThigh" hidelimb="true" inherittexturescale="true" hideotherwearables="true" inheritorigin="false" origin="0.5,0.5" inheritsourcerect="false" inheritlimbdepth="true" sourcerect="0,0,96,113" />
+      <sprite name="Exosuit Left Thigh" texture="nothing.png" limb="LeftThigh" hidelimb="true" inherittexturescale="true" hideotherwearables="true" inheritorigin="false" origin="0.5,0.5" inheritsourcerect="false" sourcerect="0,0,96,113" />
+      <sprite name="Exosuit Right Leg" texture="nothing.png" limb="RightLeg" hidelimb="true" inherittexturescale="true" hideotherwearables="true" inheritorigin="true" inheritlimbdepth="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+      <sprite name="Exosuit Left Leg" texture="nothing.png" limb="LeftLeg" hidelimb="true" inherittexturescale="true" hideotherwearables="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+      <sprite name="Exosuit Left Shoe" texture="nothing.png" limb="LeftFoot" hidelimb="true" inherittexturescale="true" hideotherwearables="true" inheritorigin="false" origin="0.4,0.5" inheritsourcerect="false" sourcerect="364,211,108,37" />
+      <sprite name="Exosuit Right Shoe" texture="nothing.png" limb="RightFoot" hidelimb="true" inherittexturescale="true" hideotherwearables="true" inheritorigin="false" origin="0.4,0.5" inheritsourcerect="false" sourcerect="364,211,108,37" />
+      <StatValue stattype="WalkingSpeed" value="-0.5" />
+      <StatusEffect type="OnWearing" target="Character" setvalue="true" disabledeltatime="true">
+        <TriggerAnimation Type="Walk" path="%ModDir%/Animations/ArchibaldWalk.xml" priority="99" />
+        <TriggerAnimation Type="Run" path="%ModDir%/Animations/ArchibaldRun.xml" priority="99" />
+      </StatusEffect>
+    </Wearable>
+    <!--   <CustomInterface canbeselected="false" drawhudwhenequipped="true" allowuioverlap="true">
+      <GuiFrame relativesize="0.09,0.07" anchor="BottomCenter" pivot="BottomRight" relativeoffset="-0.025,0.093" style="ItemUI" />
+      <TickBox text="Light">
+        <StatusEffect type="OnUse" targettype="This" IsOn="true" />
+        <StatusEffect type="OnSecondaryUse" targettype="This" IsOn="false" />
+      </TickBox>
+    </CustomInterface>-->
+  </Item>
+</Items>

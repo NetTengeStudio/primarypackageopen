@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<contentpackage name="BACKROOMS (SUPER REALISTIC) (JUST LIKE THE MOVIE) ((BETA))" steamworkshopid="3770569274" corepackage="false" modversion="1" gameversion="1.13.4.0" installtime="1784863308" expectedhash="3DA2916B55F0AE4704267D25ECD42857">
+  <Character file="%ModDir%/Characters/kanye/kanye.xml" />
+  <Item file="%ModDir%/Doors/surfacedoors.xml" />
+  <Item file="%ModDir%/Items/items.xml" />
+  <Item file="%ModDir%/Weapons/overrides.xml" />
+  <Item file="%ModDir%/Weapons/addon.xml" />
+  <Structure file="%ModDir%/Map/walls.xml" />
+  <Structure file="%ModDir%/Map/SWalls.xml" />
+  <Particles file="%ModDir%/Particles.xml" />
+  <Jobs file="%ModDir%/Jobs.xml" />
+  <Text file="%ModDir%/English.xml" />
+  <Submarine file="%ModDir%/#Complex.sub" />
+</contentpackage>

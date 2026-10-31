@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<prefabs>
+  <!-- Backrooms bro -->
+  <structure name="Backroom Floor" identifier="brms_H1" subcategory="Backrooms" descriptionidentifier="resizeablewallwithcollisiondetection" width="1024" height="96" resizehorizontal="true" body="true" castshadow="true" health="300" scale="0.5" tags="inner">
+    <Upgrade gameversion="0.10.0.0" scale="*0.5" />
+    <sprite texture="%ModDir%/Map/SWalls.png" name="CC_CW_H1_st" depth="0.06" sourcerect="12,115,1021,96" origin="0.5,0.5" />
+    <backgroundsprite texture="%ModDir%/Map/SWalls.png" name="CC_CW_H1_bs" depth="0.85" sourcerect="12,115,1021,97" color="60,60,60,255" origin="0.5,0.5" />
+  </structure>
+  <structure name="Backroom Ceiling" identifier="brms_H2" subcategory="Backrooms" descriptionidentifier="resizeablewallwithcollisiondetection" width="1024" height="96" resizehorizontal="true" body="true" castshadow="true" health="300" scale="0.5" tags="inner">
+    <Upgrade gameversion="0.10.0.0" scale="*0.5" />
+    <sprite texture="%ModDir%/Map/SWalls.png" name="CC_CW_H323_st" depth="0.06" sourcerect="12,5,1021,96" origin="0.5,0.5" />
+    <backgroundsprite texture="%ModDir%/Map/SWalls.png" name="CC_CW_H1_bs" depth="0.85" sourcerect="12,5,1022,97" color="60,60,60,255" origin="0.5,0.5" />
+  </structure>
+  <structure name="Backroom Wall" identifier="brms_V1" subcategory="Backrooms" descriptionidentifier="resizeablewallwithcollisiondetection" width="32" height="1024" resizevertical="true" body="true" bodywidth="32" castshadow="true" health="75" scale="1" tags="inner">
+    <Upgrade gameversion="0.10.0.0" scale="*0.5" />
+    <sprite texture="%ModDir%/Map/SWalls.png" name="CC_CW_V1_st" depth="0.06" sourcerect="222,440,32,229" origin="0.5,0.5" />
+    <backgroundsprite texture="%ModDir%/Map/SWalls.png" name="CC_CW_V1_bs" depth="0.85" sourcerect="222,440,32,229" color="60,60,60,255" origin="0.5,0.5" />
+  </structure>
+</prefabs>

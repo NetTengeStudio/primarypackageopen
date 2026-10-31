@@ -1,0 +1,547 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Override>
+  <Items>
+    <!--Misc-->
+    <Item name="" identifier="weaponsparts" description="" maxstacksize="8" maxstacksizecharacterinventory="4" category="Material" tags="mediumitem" cargocontaineridentifier="metalcrate" impactsoundtag="impact_metal_light" scale="0.2">
+      <Price baseprice="98">
+        <Price storeidentifier="merchantoutpost" multiplier="1.3" minavailable="7" sold="false" />
+        <Price storeidentifier="merchantcity" multiplier="1.5" maxavailable="3" />
+        <Price storeidentifier="merchantresearch" minavailable="6" sold="false" />
+        <Price storeidentifier="merchantmilitary" multiplier="1" maxavailable="4" />
+        <Price storeidentifier="merchantmine" multiplier="0.9" minavailable="4" sold="false" />
+        <Price storeidentifier="merchantarmory" multiplier="1" maxavailable="8" />
+      </Price>
+      <Fabricate suitablefabricators="fabricator" requiredtime="25" amount="2">
+        <RequiredSkill identifier="weapons" level="15" />
+        <RequiredSkill identifier="mechanical" level="20" />
+        <RequiredItem identifier="plastic" amount="1" />
+        <RequiredItem identifier="steel" amount="2" />
+      </Fabricate>
+      <Deconstruct time="7">
+        <Item identifier="steel" copycondition="true" />
+        <Item identifier="plastic" copycondition="true" />
+      </Deconstruct>
+      <Sprite texture="%ModDir%/Weapons/misc.png" sourcerect="495,4,233,106" depth="0.55" origin="0.5,0.5" />
+      <Body width="50" height="25" density="50" />
+      <Holdable canBeCombined="true" removeOnCombined="true" slots="Any,RightHand,LeftHand" handle1="0,0" holdangle="90" msg="ItemMsgPickUpSelect">
+        <StatusEffect type="OnBroken" target="This">
+          <Remove />
+        </StatusEffect>
+      </Holdable>
+      <AiTarget sightrange="1250" static="true" />
+    </Item>
+    <!--Ammo Boxes-->
+    <Item name="" identifier="rifleammobox" category="Weapon" subcategory="Rifle" maxstacksize="4" maxstacksizecharacterinventory="1" cargocontaineridentifier="metalcrate" description="" Tags="smallitem" useinhealthinterface="false" scale="0.12" impactsoundtag="impact_metal_light" impacttolerance="9" isshootable="true" requireaimtouse="true" canflipx="false">
+      <InventoryIcon texture="%ModDir%/Weapons/cof01.png" sourcerect="788,562,234,195" depth="0.6" origin="0.5,0.5" />
+      <Sprite texture="%ModDir%/Weapons/cof01.png" sourcerect="707,759,314,87" depth="0.6" origin="0.5,0.5" />
+      <Body width="96" height="64" density="10" />
+      <PreferredContainer primary="armcab" amount="1" spawnprobability="1" notcampaign="true" notpvp="true" />
+      <PreferredContainer secondary="wrecksecarmcab,abandonedsecarmcab,piratesecarmcab" maxamount="1" spawnprobability="0.02" />
+      <PreferredContainer secondary="wreckarmcab,abandonedarmcab,piratearmcab" maxamount="1" spawnprobability="0.01" />
+      <PreferredContainer primary="crewcab" />
+      <Price baseprice="196" minleveldifficulty="40">
+        <Price storeidentifier="merchantoutpost" sold="false" multiplier="1.5" />
+        <Price storeidentifier="merchantcity" multiplier="1.25" maxavailable="2" sold="true" />
+        <Price storeidentifier="merchantresearch" sold="false" multiplier="1.25" />
+        <Price storeidentifier="merchantmilitary" multiplier="0.9" maxavailable="4" />
+        <Price storeidentifier="merchantmine" sold="false" multiplier="1.25" />
+        <Price storeidentifier="merchantarmory" multiplier="0.9" minavailable="6" />
+      </Price>
+      <Holdable canbepicked="true" characterusable="true" canBeCombined="true" removeOnCombined="true" slots="Any,RightHand,LeftHand" handle1="0,-10" throwforce="4.0" aimpos="35,-10" swingwhenusing="true" msg="ItemMsgPickUpSelect">
+        <!-- simulate throwing actions -->
+        <StatusEffect type="OnSecondaryUse" target="This" aimpos="50,10" setvalue="true">
+          <Conditional targetitemcomponent="RangedWeapon" reloadtimer="gt 0.6" />
+        </StatusEffect>
+        <StatusEffect type="OnSecondaryUse" target="This" aimpos="-10,30" setvalue="true">
+          <Conditional targetitemcomponent="RangedWeapon" reloadtimer="lt 0.6" />
+        </StatusEffect>
+        <StatusEffect type="OnUse" target="This" aimpos="50,10" setvalue="true" comparison="And">
+          <Conditional targetitemcomponent="RangedWeapon" reloadtimer="lt 0.1" />
+        </StatusEffect>
+        <!-- clone self only once -->
+        <StatusEffect type="OnActive" target="This" oneshot="true">
+          <SpawnItem identifier="rifleammobox" spawnposition="ThisInventory" spawnifinventoryfull="true" />
+        </StatusEffect>
+        <StatusEffect type="OnBroken" target="this">
+          <Remove />
+        </StatusEffect>
+      </Holdable>
+      <!-- projectile container -->
+      <ItemContainer characterusable="false" canbeselected="false" capacity="1" maxstacksize="1" hideitems="true" allowaccess="false" drawinventory="false" allowdraganddrop="false" allowswappingcontaineditems="false" autofill="false" ShowConditionInContainedStateIndicator="false" ShowContainedStateIndicator="false" removecontaineditemsondeconstruct="true">
+        <Containable items="rifleammobox" />
+      </ItemContainer>
+      <CustomInterface canbeselected="false" drawhudwhenequipped="true">
+        <GuiFrame style="ItemUI" absoluteoffset="0,0" anchor="BottomCenter" relativesize="0.12,0.08" />
+        <Button text="interaction.open">
+          <StatusEffect type="OnUse" target="This">
+            <Sound file="%ModDir%/Items/Sounds/boxopen.ogg" loop="false" range="200" volume="1.5" />
+            <Remove />
+            <SpawnItem identifier="riflebullet" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="riflebullet" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="riflebullet" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="riflebullet" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="riflebullet" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="riflebullet" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="riflebullet" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="riflebullet" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="riflebullet" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="riflebullet" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="riflebullet" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="riflebullet" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="riflebullet" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="riflebullet" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="riflebullet" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="riflebullet" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="riflebullet" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="riflebullet" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="riflebullet" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="riflebullet" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+          </StatusEffect>
+        </Button>
+      </CustomInterface>
+    </Item>
+    <Item name="" identifier="buckshotammobox" category="Weapon" subcategory="Shotgun" maxstacksize="4" maxstacksizecharacterinventory="1" cargocontaineridentifier="metalcrate" description="" Tags="smallitem" useinhealthinterface="false" scale="0.12" impactsoundtag="impact_metal_light" impacttolerance="9" isshootable="true" requireaimtouse="true" canflipx="false">
+      <Sprite texture="%ModDir%/Weapons/misc.png" sourcerect="907,7,113,99" depth="0.6" origin="0.5,0.5" />
+      <Body width="96" height="64" density="10" />
+      <PreferredContainer primary="armcab" amount="1" spawnprobability="1" notcampaign="true" notpvp="true" />
+      <PreferredContainer secondary="wrecksecarmcab,abandonedsecarmcab,piratesecarmcab" maxamount="1" spawnprobability="0.045" />
+      <PreferredContainer secondary="wreckarmcab,abandonedarmcab,piratearmcab" maxamount="1" spawnprobability="0.06" />
+      <PreferredContainer primary="crewcab" />
+      <Price baseprice="128" minleveldifficulty="30">
+        <Price storeidentifier="merchantoutpost" multiplier="1.5" maxavailable="2" sold="false" />
+        <Price storeidentifier="merchantcity" multiplier="1.25" maxavailable="2" />
+        <Price storeidentifier="merchantresearch" multiplier="1.25" maxavailable="1" sold="false" />
+        <Price storeidentifier="merchantmilitary" multiplier="0.9" maxavailable="8" />
+        <Price storeidentifier="merchantmine" multiplier="1.25" maxavailable="2" sold="false" />
+        <Price storeidentifier="merchantarmory" multiplier="0.9" maxavailable="10" />
+      </Price>
+      <Holdable canbepicked="true" characterusable="true" canBeCombined="true" removeOnCombined="true" slots="Any,RightHand,LeftHand" handle1="0,-10" throwforce="4.0" aimpos="35,-10" swingwhenusing="true" msg="ItemMsgPickUpSelect">
+        <!-- simulate throwing actions -->
+        <StatusEffect type="OnSecondaryUse" target="This" aimpos="50,10" setvalue="true">
+          <Conditional targetitemcomponent="RangedWeapon" reloadtimer="gt 0.6" />
+        </StatusEffect>
+        <StatusEffect type="OnSecondaryUse" target="This" aimpos="-10,30" setvalue="true">
+          <Conditional targetitemcomponent="RangedWeapon" reloadtimer="lt 0.6" />
+        </StatusEffect>
+        <StatusEffect type="OnUse" target="This" aimpos="50,10" setvalue="true" comparison="And">
+          <Conditional targetitemcomponent="RangedWeapon" reloadtimer="lt 0.1" />
+        </StatusEffect>
+        <!-- clone self only once -->
+        <StatusEffect type="OnActive" target="This" oneshot="true">
+          <SpawnItem identifier="buckshotammobox" spawnposition="ThisInventory" spawnifinventoryfull="true" />
+        </StatusEffect>
+        <StatusEffect type="OnBroken" target="this">
+          <Remove />
+        </StatusEffect>
+      </Holdable>
+      <!-- projectile container -->
+      <ItemContainer characterusable="false" canbeselected="false" capacity="1" maxstacksize="1" hideitems="true" allowaccess="false" drawinventory="false" allowdraganddrop="false" allowswappingcontaineditems="false" autofill="false" ShowConditionInContainedStateIndicator="false" ShowContainedStateIndicator="false" removecontaineditemsondeconstruct="true">
+        <Containable items="buckshotammobox" />
+      </ItemContainer>
+      <CustomInterface canbeselected="false" drawhudwhenequipped="true">
+        <GuiFrame style="ItemUI" absoluteoffset="0,0" anchor="BottomCenter" relativesize="0.12,0.08" />
+        <Button text="interaction.open">
+          <StatusEffect type="OnUse" target="This">
+            <Sound file="%ModDir%/Items/Sounds/boxopen.ogg" loop="false" range="200" volume="1.5" />
+            <Remove />
+            <SpawnItem identifier="shotgunshell" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="shotgunshell" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="shotgunshell" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="shotgunshell" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="shotgunshell" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="shotgunshell" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="shotgunshell" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="shotgunshell" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="shotgunshell" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="shotgunshell" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="shotgunshell" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="shotgunshell" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+          </StatusEffect>
+        </Button>
+      </CustomInterface>
+    </Item>
+    <Item name="" identifier="bluntshellammobox" category="Weapon" subcategory="Shotgun" maxstacksize="4" maxstacksizecharacterinventory="1" cargocontaineridentifier="metalcrate" description="" Tags="smallitem" useinhealthinterface="false" scale="0.12" impactsoundtag="impact_metal_light" impacttolerance="9" isshootable="true" requireaimtouse="true" canflipx="false">
+      <Sprite texture="%ModDir%/Weapons/misc.png" sourcerect="791,7,114,99" depth="0.6" origin="0.5,0.5" />
+      <Body width="96" height="64" density="10" />
+      <PreferredContainer primary="armcab" amount="1" spawnprobability="1" notcampaign="true" notpvp="true" />
+      <PreferredContainer secondary="wrecksecarmcab,abandonedsecarmcab,piratesecarmcab" maxamount="1" spawnprobability="0.05" />
+      <PreferredContainer secondary="wreckarmcab,abandonedarmcab,piratearmcab" maxamount="1" spawnprobability="0.065" />
+      <PreferredContainer primary="crewcab" />
+      <Price baseprice="78" minleveldifficulty="30">
+        <Price storeidentifier="merchantoutpost" multiplier="1.5" maxavailable="2" sold="false" />
+        <Price storeidentifier="merchantcity" multiplier="1.25" maxavailable="2" />
+        <Price storeidentifier="merchantresearch" multiplier="1.25" maxavailable="1" sold="false" />
+        <Price storeidentifier="merchantmilitary" multiplier="0.9" maxavailable="8" />
+        <Price storeidentifier="merchantmine" multiplier="1.25" maxavailable="2" sold="false" />
+        <Price storeidentifier="merchantarmory" multiplier="0.9" maxavailable="10" />
+      </Price>
+      <Holdable canbepicked="true" characterusable="true" canBeCombined="true" removeOnCombined="true" slots="Any,RightHand,LeftHand" handle1="0,-10" throwforce="4.0" aimpos="35,-10" swingwhenusing="true" msg="ItemMsgPickUpSelect">
+        <!-- simulate throwing actions -->
+        <StatusEffect type="OnSecondaryUse" target="This" aimpos="50,10" setvalue="true">
+          <Conditional targetitemcomponent="RangedWeapon" reloadtimer="gt 0.6" />
+        </StatusEffect>
+        <StatusEffect type="OnSecondaryUse" target="This" aimpos="-10,30" setvalue="true">
+          <Conditional targetitemcomponent="RangedWeapon" reloadtimer="lt 0.6" />
+        </StatusEffect>
+        <StatusEffect type="OnUse" target="This" aimpos="50,10" setvalue="true" comparison="And">
+          <Conditional targetitemcomponent="RangedWeapon" reloadtimer="lt 0.1" />
+        </StatusEffect>
+        <!-- clone self only once -->
+        <StatusEffect type="OnActive" target="This" oneshot="true">
+          <SpawnItem identifier="bluntshellammobox" spawnposition="ThisInventory" spawnifinventoryfull="true" />
+        </StatusEffect>
+        <StatusEffect type="OnBroken" target="this">
+          <Remove />
+        </StatusEffect>
+      </Holdable>
+      <!-- projectile container -->
+      <ItemContainer characterusable="false" canbeselected="false" capacity="1" maxstacksize="1" hideitems="true" allowaccess="false" drawinventory="false" allowdraganddrop="false" allowswappingcontaineditems="false" autofill="false" ShowConditionInContainedStateIndicator="false" ShowContainedStateIndicator="false" removecontaineditemsondeconstruct="true">
+        <Containable items="bluntshellammobox" />
+      </ItemContainer>
+      <CustomInterface canbeselected="false" drawhudwhenequipped="true">
+        <GuiFrame style="ItemUI" absoluteoffset="0,0" anchor="BottomCenter" relativesize="0.12,0.08" />
+        <Button text="interaction.open">
+          <StatusEffect type="OnUse" target="This">
+            <Sound file="%ModDir%/Items/Sounds/boxopen.ogg" loop="false" range="200" volume="1.5" />
+            <Remove />
+            <SpawnItem identifier="shotgunshellblunt" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="shotgunshellblunt" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="shotgunshellblunt" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="shotgunshellblunt" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="shotgunshellblunt" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="shotgunshellblunt" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="shotgunshellblunt" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="shotgunshellblunt" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="shotgunshellblunt" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="shotgunshellblunt" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="shotgunshellblunt" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="shotgunshellblunt" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="shotgunshellblunt" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="shotgunshellblunt" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="shotgunshellblunt" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="shotgunshellblunt" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="shotgunshellblunt" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="shotgunshellblunt" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+          </StatusEffect>
+        </Button>
+      </CustomInterface>
+    </Item>
+    <Item name="" identifier="pistolammobox" category="Weapon" subcategory="Pistol" maxstacksize="8" maxstacksizecharacterinventory="2" cargocontaineridentifier="metalcrate" description="" Tags="smallitem" useinhealthinterface="false" scale="0.12" impactsoundtag="impact_metal_light" impacttolerance="9" isshootable="true" requireaimtouse="true" canflipx="false">
+      <InventoryIcon texture="%ModDir%/Weapons/cof01.png" sourcerect="671,292,157,190" origin="0.5,0.5" />
+      <Sprite texture="%ModDir%/Weapons/cof01.png" sourcerect="638,487,191,72" depth="0.6" origin="0.5,0.5" />
+      <Body width="96" height="64" density="10" />
+      <PreferredContainer primary="armcab" amount="4" spawnprobability="1" notcampaign="true" notpvp="true" />
+      <PreferredContainer secondary="wrecksecarmcab,abandonedsecarmcab,piratesecarmcab" minamount="1" maxamount="2" spawnprobability="0.05" />
+      <PreferredContainer secondary="wreckarmcab,abandonedarmcab,piratearmcab" minamount="1" maxamount="2" spawnprobability="0.08" />
+      <PreferredContainer primary="crewcab" />
+      <Price baseprice="128" minleveldifficulty="10">
+        <Price storeidentifier="merchantoutpost" multiplier="1.5" maxavailable="4" />
+        <Price storeidentifier="merchantcity" multiplier="1.25" maxavailable="6" />
+        <Price storeidentifier="merchantresearch" multiplier="1.25" maxavailable="2" />
+        <Price storeidentifier="merchantmilitary" multiplier="0.9" maxavailable="10" />
+        <Price storeidentifier="merchantmine" multiplier="1.25" maxavailable="4" />
+        <Price storeidentifier="merchantarmory" multiplier="0.9" maxavailable="12" />
+      </Price>
+      <Holdable canbepicked="true" characterusable="true" canBeCombined="true" removeOnCombined="true" slots="Any,RightHand,LeftHand" handle1="0,-10" throwforce="4.0" aimpos="35,-10" swingwhenusing="true" msg="ItemMsgPickUpSelect">
+        <!-- simulate throwing actions -->
+        <StatusEffect type="OnSecondaryUse" target="This" aimpos="50,10" setvalue="true">
+          <Conditional targetitemcomponent="RangedWeapon" reloadtimer="gt 0.6" />
+        </StatusEffect>
+        <StatusEffect type="OnSecondaryUse" target="This" aimpos="-10,30" setvalue="true">
+          <Conditional targetitemcomponent="RangedWeapon" reloadtimer="lt 0.6" />
+        </StatusEffect>
+        <StatusEffect type="OnUse" target="This" aimpos="50,10" setvalue="true" comparison="And">
+          <Conditional targetitemcomponent="RangedWeapon" reloadtimer="lt 0.1" />
+        </StatusEffect>
+        <!-- clone self only once -->
+        <StatusEffect type="OnActive" target="This" oneshot="true">
+          <SpawnItem identifier="pistolammobox" spawnposition="ThisInventory" spawnifinventoryfull="true" />
+        </StatusEffect>
+        <StatusEffect type="OnBroken" target="this">
+          <Remove />
+        </StatusEffect>
+      </Holdable>
+      <!-- projectile container -->
+      <ItemContainer characterusable="false" canbeselected="false" capacity="1" maxstacksize="1" hideitems="true" allowaccess="false" drawinventory="false" allowdraganddrop="false" allowswappingcontaineditems="false" autofill="false" ShowConditionInContainedStateIndicator="false" ShowContainedStateIndicator="false" removecontaineditemsondeconstruct="true">
+        <Containable items="pistolammobox" />
+      </ItemContainer>
+      <CustomInterface canbeselected="false" drawhudwhenequipped="true">
+        <GuiFrame style="ItemUI" absoluteoffset="0,0" anchor="BottomCenter" relativesize="0.12,0.08" />
+        <Button text="interaction.open">
+          <StatusEffect type="OnUse" target="This">
+            <Sound file="%ModDir%/Items/Sounds/boxopen.ogg" loop="false" range="200" volume="1.5" />
+            <Remove />
+            <SpawnItem identifier="pistolround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="pistolround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="pistolround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="pistolround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="pistolround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="pistolround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="pistolround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="pistolround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="pistolround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="pistolround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="pistolround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="pistolround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="pistolround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="pistolround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="pistolround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="pistolround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="pistolround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="pistolround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="pistolround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="pistolround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="pistolround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="pistolround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="pistolround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="pistolround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="pistolround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="pistolround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="pistolround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="pistolround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="pistolround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="pistolround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+          </StatusEffect>
+        </Button>
+      </CustomInterface>
+    </Item>
+    <Item name="" identifier="revolverammobox" category="Weapon" subcategory="Pistol" maxstacksize="8" maxstacksizecharacterinventory="2" cargocontaineridentifier="metalcrate" description="" Tags="smallitem" useinhealthinterface="false" scale="0.12" impactsoundtag="impact_metal_light" impacttolerance="9" isshootable="true" requireaimtouse="true" canflipx="false">
+      <InventoryIcon texture="%ModDir%/Weapons/cof01.png" sourcerect="834,292,157,190" origin="0.5,0.5" />
+      <Sprite texture="%ModDir%/Weapons/cof01.png" sourcerect="832,487,191,72" depth="0.6" origin="0.5,0.5" />
+      <Body width="96" height="64" density="10" />
+      <PreferredContainer primary="armcab" amount="1" spawnprobability="1" notcampaign="true" notpvp="true" />
+      <PreferredContainer secondary="wrecksecarmcab,abandonedsecarmcab,piratesecarmcab" minamount="1" maxamount="2" spawnprobability="0.04" />
+      <PreferredContainer secondary="wreckarmcab,abandonedarmcab,piratearmcab" minamount="1" maxamount="2" spawnprobability="0.08" />
+      <PreferredContainer primary="crewcab" />
+      <Price baseprice="96">
+        <Price storeidentifier="merchantoutpost" multiplier="1.5" maxavailable="2" />
+        <Price storeidentifier="merchantcity" multiplier="1.25" maxavailable="4" />
+        <Price storeidentifier="merchantresearch" multiplier="1.25" maxavailable="2" />
+        <Price storeidentifier="merchantmilitary" multiplier="0.9" maxavailable="6" />
+        <Price storeidentifier="merchantmine" multiplier="1.25" maxavailable="4" />
+        <Price storeidentifier="merchantarmory" multiplier="0.9" maxavailable="8" />
+      </Price>
+      <Holdable canbepicked="true" characterusable="true" canBeCombined="true" removeOnCombined="true" slots="Any,RightHand,LeftHand" handle1="0,-10" throwforce="4.0" aimpos="35,-10" swingwhenusing="true" msg="ItemMsgPickUpSelect">
+        <!-- simulate throwing actions -->
+        <StatusEffect type="OnSecondaryUse" target="This" aimpos="50,10" setvalue="true">
+          <Conditional targetitemcomponent="RangedWeapon" reloadtimer="gt 0.6" />
+        </StatusEffect>
+        <StatusEffect type="OnSecondaryUse" target="This" aimpos="-10,30" setvalue="true">
+          <Conditional targetitemcomponent="RangedWeapon" reloadtimer="lt 0.6" />
+        </StatusEffect>
+        <StatusEffect type="OnUse" target="This" aimpos="50,10" setvalue="true" comparison="And">
+          <Conditional targetitemcomponent="RangedWeapon" reloadtimer="lt 0.1" />
+        </StatusEffect>
+        <!-- clone self only once -->
+        <StatusEffect type="OnActive" target="This" oneshot="true">
+          <SpawnItem identifier="revolverammobox" spawnposition="ThisInventory" spawnifinventoryfull="true" />
+        </StatusEffect>
+        <StatusEffect type="OnBroken" target="this">
+          <Remove />
+        </StatusEffect>
+      </Holdable>
+      <!-- projectile container -->
+      <ItemContainer characterusable="false" canbeselected="false" capacity="1" maxstacksize="1" hideitems="true" allowaccess="false" drawinventory="false" allowdraganddrop="false" allowswappingcontaineditems="false" autofill="false" ShowConditionInContainedStateIndicator="false" ShowContainedStateIndicator="false" removecontaineditemsondeconstruct="true">
+        <Containable items="revolverammobox" />
+      </ItemContainer>
+      <CustomInterface canbeselected="false" drawhudwhenequipped="true">
+        <GuiFrame style="ItemUI" absoluteoffset="0,0" anchor="BottomCenter" relativesize="0.12,0.08" />
+        <Button text="interaction.open">
+          <StatusEffect type="OnUse" target="This">
+            <Sound file="%ModDir%/Items/Sounds/boxopen.ogg" loop="false" range="200" volume="1.5" />
+            <Remove />
+            <SpawnItem identifier="revolverround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="revolverround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="revolverround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="revolverround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="revolverround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="revolverround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="revolverround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="revolverround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="revolverround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="revolverround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="revolverround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="revolverround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="revolverround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="revolverround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="revolverround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="revolverround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="revolverround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="revolverround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="revolverround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+            <SpawnItem identifier="revolverround" spawnposition="SameInventory" spawnifcantbecontained="true" SpawnIfInventoryFull="true" />
+          </StatusEffect>
+        </Button>
+      </CustomInterface>
+    </Item>
+    <!--Firearms-->
+    <Item name="" identifier="pistolround" category="Weapon" subcategory="Pistol" maxstacksize="45" maxstacksizecharacterinventory="15" interactthroughwalls="true" cargocontaineridentifier="metalcrate" Scale="0.5" tags="smallitem,pistolammo,handheldammo,pistolammoitem" impactsoundtag="impact_metal_light">
+      <Price baseprice="20" sold="false">
+        <Price storeidentifier="merchantoutpost" multiplier="1.5" minavailable="12" />
+        <Price storeidentifier="merchantcity" multiplier="1.25" minavailable="12" />
+        <Price storeidentifier="merchantresearch" multiplier="1.25" minavailable="12" />
+        <Price storeidentifier="merchantmilitary" multiplier="0.9" minavailable="60" />
+        <Price storeidentifier="merchantmine" multiplier="1.25" minavailable="12" />
+        <Price storeidentifier="merchantarmory" multiplier="0.9" minavailable="60" />
+      </Price>
+      <Fabricate suitablefabricators="fabricator" requiredtime="20" requiresrecipe="true" amount="30">
+        <RequiredSkill identifier="weapons" level="30" />
+        <RequiredItem tag="munition_propulsion" description="fabricationdescription.munition_propulsion" />
+        <RequiredItem tag="munition_core" description="fabricationdescription.munition_core" />
+        <RequiredItem tag="munition_jacket" description="fabricationdescription.munition_jacket" />
+      </Fabricate>
+      <PreferredContainer primary="pistolmag" amount="15" spawnprobability="0.75" />
+      <PreferredContainer secondary="smgmagazine" amount="30" spawnprobability="0.75" />
+      <InventoryIcon texture="%ModDir%/Weapons/cof01.png" sourcerect="4,637,51,51" origin="0.5,0.5" />
+      <Sprite texture="%ModDir%/Weapons/cof01.png" sourcerect="3,690,17,6" depth="0.55" origin="0.5,0.5" />
+      <Body width="40" height="14" density="30" />
+      <Pickable slots="Any" msg="ItemMsgPickUpSelect" />
+      <Projectile characterusable="false" hitscan="true" removeonhit="true">
+        <ParticleEmitter particle="tracerfirearm" particleamount="1" velocitymin="0" velocitymax="0" colormultiplier="255,255,115,175" scalemultiplier="1,0.75" />
+        <Attack structuredamage="4" targetforce="4" itemdamage="4" severlimbsprobability="0.1" penetration="0.15">
+          <Affliction identifier="gunshotwound" strength="48" />
+          <Affliction identifier="bleeding" strength="18" />
+          <Affliction identifier="stun" strength="0.2" probability="0.1" />
+        </Attack>
+        <StatusEffect type="OnImpact" target="UseTarget">
+          <ParticleEmitter particle="impactfirearm" particleamount="1" velocitymin="0" velocitymax="0" />
+        </StatusEffect>
+        <StatusEffect type="OnImpact" target="UseTarget">
+          <Conditional entitytype="eq Structure" />
+          <Conditional hastag="eq door" />
+          <ParticleEmitter particle="spark" copyentityangle="true" anglemin="-10" anglemax="10" particleamount="5" velocitymin="-10" velocitymax="-200" scalemin="0.5" scalemax="1" />
+        </StatusEffect>
+      </Projectile>
+      <Upgrade gameversion="0.10.0.0" scale="0.5" />
+    </Item>
+    <Item name="" identifier="pistolmag" description="" tags="smallitem,pistolmag,handheldammo" category="Weapon" subcategory="Pistol" maxstacksize="1" maxstacksizecharacterinventory="1" impactsoundtag="impact_metal_light" scale="0.175">
+      <PreferredContainer primary="smgunique,pistol" amount="1" spawnprobability="1" />
+      <PreferredContainer secondary="outpostsecarmcab" minamount="1" maxamount="3" spawnprobability="0.5" />
+      <PreferredContainer secondary="wrecksecarmcab" minamount="1" maxamount="2" spawnprobability="0.2" />
+      <PreferredContainer primary="secarmcab" secondary="armcab" />
+      <Fabricate suitablefabricators="fabricator" requiredtime="15" requiresrecipe="true">
+        <RequiredSkill identifier="weapons" level="35" />
+        <RequiredItem identifier="steel" amount="1" mincondition="0.5" />
+      </Fabricate>
+      <Deconstruct time="6">
+        <Item identifier="steel" outcondition="0.25" />
+      </Deconstruct>
+      <Price baseprice="24" minleveldifficulty="10">
+        <Price storeidentifier="merchantoutpost" multiplier="1.5" maxavailable="2" />
+        <Price storeidentifier="merchantcity" multiplier="1.25" maxavailable="6" />
+        <Price storeidentifier="merchantresearch" multiplier="1.25" maxavailable="6" />
+        <Price storeidentifier="merchantmilitary" multiplier="0.9" maxavailable="12" />
+        <Price storeidentifier="merchantmine" multiplier="1.25" maxavailable="4" />
+        <Price storeidentifier="merchantarmory" multiplier="0.9" maxavailable="20" />
+      </Price>
+      <Sprite texture="%ModDir%/Weapons/cof01.png" depth="0.54" sourcerect="8,26,68,106" origin="0.5,0.5" />
+      <Body width="30" height="40" density="50" />
+      <ItemContainer hideitems="true" capacity="3" maxstacksize="5" drawinventory="true" canbeselected="true" autofill="true" showcontainedstateindicator="false">
+        <SlotIcon texture="Content/UI/StatusMonitorUI.png" sourcerect="256,448,64,64" origin="0.5,0.5" />
+        <Containable items="pistolammo" />
+        <StatusEffect type="OnUse" target="This" disabledeltatime="true">
+          <RequiredItem items="pistolammo" type="Contained" />
+        </StatusEffect>
+        <StatusEffect type="Always" targettype="This" tags="loaded" duration="0.05" stackable="false">
+          <RequiredItem items="pistolammo" type="Contained" />
+        </StatusEffect>
+        <StatusEffect type="Always" targettype="This" Condition="100" SetValue="true">
+          <Conditional HasStatusTag="loaded" />
+        </StatusEffect>
+        <StatusEffect type="OnContained" targettype="This" Condition="0" SetValue="true">
+          <Conditional HasStatusTag="neq loaded" />
+        </StatusEffect>
+      </ItemContainer>
+      <Holdable canBeCombined="true" slots="Any,RightHand,LeftHand" handle1="0,0" msg="ItemMsgPickUpSelect" />
+    </Item>
+    <Item name="" identifier="pistol" description="" subcategory="Pistol" category="Weapon" tags="smallitem,weapon,gun,pistolitem,gunsmith,provocativetohumanai" Scale="0.175" impactsoundtag="weaponlightdrop">
+      <PreferredContainer secondary="outpostsecarmcab" amount="1" spawnprobability="0.5" />
+      <PreferredContainer secondary="wrecksecarmcab,abandonedsecarmcab,piratesecarmcab" amount="1" spawnprobability="0.15" />
+      <Fabricate suitablefabricators="fabricator" requiredtime="35" requiresrecipe="true">
+        <RequiredSkill identifier="weapons" level="35" />
+        <RequiredItem identifier="weaponsparts" amount="1" mincondition="0.5" />
+        <RequiredItem identifier="steel" amount="1" />
+        <RequiredItem identifier="plastic" amount="1" />
+      </Fabricate>
+      <Deconstruct time="10">
+        <Item identifier="steel" />
+        <Item identifier="plastic" />
+      </Deconstruct>
+      <Price baseprice="200" minleveldifficulty="10">
+        <Price storeidentifier="merchantoutpost" multiplier="1.5" maxavailable="1" />
+        <Price storeidentifier="merchantcity" multiplier="1.25" maxavailable="2" />
+        <Price storeidentifier="merchantresearch" multiplier="1.25" maxavailable="2" />
+        <Price storeidentifier="merchantmilitary" multiplier="0.9" maxavailable="4" />
+        <Price storeidentifier="merchantmine" multiplier="1.25" maxavailable="2" />
+        <Price storeidentifier="merchantarmory" multiplier="0.9" maxavailable="6" />
+      </Price>
+      <InventoryIcon texture="%ModDir%/Weapons/cof01.png" sourcerect="4,853,115,169" origin="0.5,0.5" />
+      <Sprite texture="%ModDir%/Weapons/cof01.png" sourcerect="78,6,187,120" depth="0.55" origin="0.5299403,0.08390678" />
+      <BrokenSprite texture="%ModDir%/Weapons/cof01.png" sourcerect="267,7,218,120" depth="0.55" origin="0.5904072,0.092959814" />
+      <Body width="140" height="60" density="50" />
+      <Holdable slots="Any,RightHand+LeftHand" controlpose="true" holdpos="40,-10" aimpos="75,12" handle1="-55,-55" handle2="-55,-55" holdangle="-40" aimangle="0" msg="ItemMsgPickUpSelect" />
+      <RangedWeapon reload="0.2" reloadnoskill="0.3" reloadskillrequirement="45" barrelpos="50,-5" spread="3" unskilledspread="16" combatPriority="60" drawhudwhenequipped="true" crosshairscale="0.2">
+        <Crosshair texture="Content/Items/Weapons/Crosshairs.png" sourcerect="0,256,256,256" />
+        <CrosshairPointer texture="Content/Items/Weapons/Crosshairs.png" sourcerect="256,256,256,256" />
+        <ParticleEmitter particle="smallmuzzleflash" particleamount="1" />
+        <ParticleEmitter particle="swirlysmoke" particleamount="1" CopyEntityAngle="true" scalemultiplier="1,1" colormultiplier="200,200,200,225" />
+        <ParticleEmitter particle="muzzlelight" particleamount="1" scalemultiplier="4,2" colormultiplier="255,255,100,175" CopyEntityAngle="true" />
+        <ParticleEmitter particle="muzzlelight" particleamount="1" scalemultiplier="10,8" colormultiplier="215,215,215,100" CopyEntityAngle="true" />
+        <ParticleEmitter particle="smallgunsmoke" particleamount="1" velocitymin="80" velocitymax="100" />
+        <Sound file="%ModDir%/Weapons/Sounds/glock.ogg" type="OnUse" range="3000" selectionmode="Random" />
+        <Sound file="%ModDir%/Weapons/Sounds/glock.ogg" type="OnUse" range="3000" frequencymultiplier="0.96" />
+        <Sound file="%ModDir%/Weapons/Sounds/glock.ogg" type="OnUse" range="3000" frequencymultiplier="1.02" />
+        <StatusEffect type="OnUse" target="This">
+          <Explosion range="150.0" force="1.25" shockwave="false" smoke="false" flames="false" sparks="false" underwaterbubble="false" camerashake="8.0" />
+          <ParticleEmitter particle="casingfirearm" particleamount="1" anglemin="90" anglemax="150" velocitymin="125" velocitymax="175" CopyEntityAngle="true" />
+        </StatusEffect>
+        <StatusEffect type="OnUse" target="Contained">
+          <Use />
+        </StatusEffect>
+        <RequiredItems msg="ItemmsgAmmoRequired" type="Contained" tags="pistolmag" />
+        <RequiredSkill identifier="weapons" level="45" />
+        <StatusEffect type="OnUse" target="This" condition="-100000"></StatusEffect>
+        <StatusEffect delay=".1" type="OnUse" target="This" condition="100000"></StatusEffect>
+      </RangedWeapon>
+      <ItemContainer capacity="1" maxstacksize="1" hideitems="true" containedstateindicatorslot="0" containedstateindicatorstyle="bullet" containedspritedepth="0.56">
+        <SlotIcon slotindex="0" texture="Content/UI/StatusMonitorUI.png" sourcerect="256,448,64,64" origin="0.5,0.5" />
+        <Containable items="pistolmag" hide="false">
+          <StatusEffect type="OnInserted" target="This" delay="0.1" IsShootable="false" noninteractable="true" />
+          <StatusEffect type="OnInserted" target="This" delay="1.5" IsShootable="true" noninteractable="false" />
+          <StatusEffect type="OnInserted" target="This" targetslot="0" disabledeltatime="true" delay="1.5" condition="100" stackable="false" />
+          <StatusEffect type="OnInserted" target="This" targetslot="0" disabledeltatime="true" condition="-100" stackable="false" />
+          <StatusEffect type="OnInserted" target="This" targetslot="0" disabledeltatime="true" stackable="false" condition="0" holdpos="75,12" aimpos="75,12" handle1="-55,-55" handle2="-55,-55" holdangle="0" aimangle="0" delay="0" setvalue="true">
+            <Conditional targetcontainer="true" isplayer="true" />
+          </StatusEffect>
+          <StatusEffect type="OnInserted" target="This" targetslot="0" disabledeltatime="true" stackable="false" condition="0" holdpos="65,12" aimpos="65,12" handle1="-55,-55" handle2="-55,-55" holdangle="-5" aimangle="-5" delay="0.2" setvalue="true">
+            <Conditional targetcontainer="true" isplayer="true" />
+          </StatusEffect>
+          <StatusEffect type="OnInserted" target="This" targetslot="0" disabledeltatime="true" stackable="false" condition="0" holdpos="65,12" aimpos="65,12" handle1="-55,-55" handle2="-256,-125" holdangle="-5" aimangle="-5" delay="0.4" setvalue="true">
+            <Conditional targetcontainer="true" isplayer="true" />
+          </StatusEffect>
+          <StatusEffect type="OnInserted" target="This" targetslot="0" disabledeltatime="true" stackable="false" condition="0" holdpos="65,12" aimpos="65,12" handle1="-55,-55" handle2="-55,-85" holdangle="-5" aimangle="-5" delay="0.6" setvalue="true">
+            <Conditional targetcontainer="true" isplayer="true" />
+          </StatusEffect>
+          <StatusEffect type="OnInserted" target="This" targetslot="0" disabledeltatime="true" stackable="false" condition="0" holdpos="65,12" aimpos="65,12" handle1="-55,-55" handle2="-55,-55" holdangle="-5" aimangle="-5" delay="0.8" setvalue="true">
+            <Conditional targetcontainer="true" isplayer="true" />
+          </StatusEffect>
+          <StatusEffect type="OnInserted" target="This" targetslot="0" disabledeltatime="true" stackable="false" condition="0" holdpos="63,12" aimpos="63,12" handle1="-55,-55" handle2="-65,-25" holdangle="5" aimangle="5" delay="1" setvalue="true">
+            <Conditional targetcontainer="true" isplayer="true" />
+          </StatusEffect>
+          <StatusEffect type="OnInserted" target="This" targetslot="0" disabledeltatime="true" stackable="false" condition="0" holdpos="62,12" aimpos="62,12" handle1="-55,-55" handle2="-105,-25" holdangle="10" aimangle="10" delay="1.2" setvalue="true">
+            <Conditional targetcontainer="true" isplayer="true" />
+          </StatusEffect>
+          <StatusEffect type="OnInserted" target="This" targetslot="0" disabledeltatime="true" stackable="false" condition="0" holdpos="40,-10" aimpos="75,12" handle1="-55,-55" handle2="-55,-55" holdangle="-40" aimangle="0" delay="1.4" setvalue="true">
+            <Conditional targetcontainer="true" isplayer="true" />
+          </StatusEffect>
+          <StatusEffect type="OnInserted" target="This" targetslot="0" disabledeltatime="true" delay="0.1" stackable="false" comparison="or">
+            <Conditional EntityType="eq character" TargetContainer="True" />
+            <Conditional EntityType="eq null" TargetContainer="True" />
+            <sound file="%ModDir%/Weapons/Sounds/glock_reload.ogg" type="OnUse" forceplay="true" range="900.0" loop="false" volume="1" />
+          </StatusEffect>
+        </Containable>
+      </ItemContainer>
+      <SkillRequirementHint identifier="weapons" level="45" />
+    </Item>
+  </Items>
+</Override>
