@@ -19,23 +19,16 @@ static class BodyIndex
 
     public static int Count => candidates.Count;
 
-    static bool Matches(PhysicsBody b) => !b.Removed && (b.Enabled || b.UserData is Character) && b.FarseerBody.BodyType != BodyType.Static;
+    static bool Matches(PhysicsBody b) => b != null && !b.Removed &&
+        (b.Enabled || b.UserData is Character) && b.FarseerBody is { BodyType: not BodyType.Static };
 
     public static void Touch(PhysicsBody b)
     {
         if (!On || b == null) { return; }
         if (b.FarseerBody != null) { owners[b.FarseerBody] = b; }
-        if (Matches(b))
-        {
-            if (!slots.ContainsKey(b)) { Add(b); }
-            changed.Remove(b);
-        }
-        else if (slots.ContainsKey(b))
-        {
-            // Do not mutate the candidate array in the middle of a GameScreen loop.
-            // Process only changed bodies at the next ForUpdate boundary.
-            changed.Add(b);
-        }
+        // PhysicsBody setters and constructors may run during a foreach of the
+        // current snapshot. Defer both additions and removals until ForUpdate.
+        changed.Add(b);
     }
 
     public static void TouchFarseer(Body body)
@@ -47,8 +40,7 @@ static class BodyIndex
     {
         if (b == null) { return; }
         if (b.FarseerBody != null) { owners.Remove(b.FarseerBody); }
-        changed.Remove(b);
-        if (slots.TryGetValue(b, out int i)) { RemoveAt(i); }
+        if (On) { changed.Add(b); }
     }
 
     static void Add(PhysicsBody b)
@@ -105,8 +97,8 @@ static class BodyIndex
     public static List<PhysicsBody> ForUpdate()
     {
         if (!On) { return PhysicsBody.List; }
+        ApplyChanges();
         if (--untilAudit <= 0) { Audit(); }
-        else { ApplyChanges(); }
         Served++;
         return candidates;
     }
@@ -116,8 +108,11 @@ static class BodyIndex
         if (changed.Count == 0) { return; }
         foreach (PhysicsBody body in changed)
         {
-            if (Matches(body)) { continue; }
-            if (slots.TryGetValue(body, out int slot))
+            if (Matches(body))
+            {
+                if (!slots.ContainsKey(body)) { Add(body); }
+            }
+            else if (slots.TryGetValue(body, out int slot))
             {
                 RemoveAt(slot);
                 Pruned++;
@@ -141,8 +136,8 @@ static class BodyIndex
                 Pruned++;
             }
         }
-        changed.Clear();
         Missed += Uncovered(true);
+        ApplyChanges();
     }
 
     public static int Uncovered(bool repair)
