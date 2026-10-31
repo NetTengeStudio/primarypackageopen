@@ -58,6 +58,9 @@ namespace PrimaryPackage.Cold {
                     : $"pp_cold: последняя рассылка {Timing.TotalTime - ColdServerNet.LastSentAt:0.0} с назад, " +
                       $"{ColdServerNet.LastSentHulls} отс., сообщений всего {ColdServerNet.SentMessages}",
                 Color.LightBlue);
+            DebugConsole.NewMessage(
+                $"pp_cold: проверено кандидатов репликации {ColdServerNet.InspectedHulls}, " +
+                $"ожидают отправки {ColdField.ChangedCount}", Color.Gray);
 #endif
             Hull focus = Focus();
             if (focus == null) {
