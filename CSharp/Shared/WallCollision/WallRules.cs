@@ -190,12 +190,18 @@ namespace PrimaryPackage.WallCollision {
             if (Ready) { return ordered.Count; }
             Ready = true;
             int activated = 0;
-            foreach (MapEntity entity in MapEntity.MapEntityList) {
-                if (entity is not Structure wall || wall.Removed || !wall.HasBody) { continue; }
-                if (!WallConfiguration.TryRead(wall, out WallMode mode, out WallFace face)) { continue; }
-                if (!WallGeometry.TryAxis(wall.Bodies, Physics.CollisionWall, out _, out _, out _)) { continue; }
-                Bind(wall, mode, face);
-                activated++;
+            WallContacts.BeginBatch();
+            try {
+                foreach (MapEntity entity in MapEntity.MapEntityList) {
+                    if (entity is not Structure wall || wall.Removed || !wall.HasBody) { continue; }
+                    if (!WallConfiguration.TryRead(wall, out WallMode mode, out WallFace face)) { continue; }
+                    if (!WallGeometry.TryAxis(wall.Bodies, Physics.CollisionWall, out _, out _, out _)) { continue; }
+                    Bind(wall, mode, face);
+                    activated++;
+                }
+            }
+            finally {
+                WallContacts.EndBatch();
             }
             return activated;
         }
