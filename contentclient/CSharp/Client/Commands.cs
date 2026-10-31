@@ -20,6 +20,12 @@ namespace SubSeal.Client
             var revokeCmd = new DebugConsole.Command("subseal_revoke", "subseal_revoke [session id|name|all]", OnRevoke, GetRevokeValidArgs);
             added.Add(revokeCmd);
 
+            added.Add(new DebugConsole.Command(
+                "subseal_preview_status", "subseal_preview_status", OnPreviewStatus));
+
+            added.Add(new DebugConsole.Command(
+                "subseal_preview_test", "subseal_preview_test", OnPreviewTest));
+
             DebugConsole.Commands.AddRange(added);
         }
 
@@ -30,6 +36,38 @@ namespace SubSeal.Client
                 DebugConsole.Commands.Remove(command);
             }
             added.Clear();
+        }
+
+        private static void OnPreviewStatus(string[] args)
+        {
+            DebugConsole.NewMessage(
+                $"SubSeal preview: hooks={(PreviewLock.PreviewUiReady ? "ready" : "unavailable")}, " +
+                $"mask={(PreviewLock.ProtectionActive ? "active" : "inactive")}, " +
+                $"serverPolicy={(PreviewLock.ConfirmedProtected ? "protected" : "not confirmed")}");
+        }
+
+        private static void OnPreviewTest(string[] args)
+        {
+            if (GameMain.Client?.ServerSubmarines is null)
+            {
+                DebugConsole.NewMessage("SubSeal preview: no network submarine list");
+                return;
+            }
+
+            if (!PreviewLock.PreviewUiReady || !PreviewLock.ProtectionActive)
+            {
+                DebugConsole.NewMessage("SubSeal preview: protected renderer unavailable");
+                return;
+            }
+
+            foreach (SubmarineInfo submarine in GameMain.Client.ServerSubmarines)
+            {
+                if (submarine is null) { continue; }
+                SubmarinePreview.Create(submarine);
+                return;
+            }
+
+            DebugConsole.NewMessage("SubSeal preview: no submarine available");
         }
 
         private static string[][] GetRevokeValidArgs()
