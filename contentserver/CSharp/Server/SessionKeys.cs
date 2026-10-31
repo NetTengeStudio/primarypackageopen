@@ -22,25 +22,37 @@ namespace SubSeal.Server
         internal Session Find(NetworkConnection connection)
             => connection is not null && sessions.TryGetValue(connection, out Session session) ? session : null;
 
-        internal Session Establish(NetworkConnection connection, byte sessionId, byte capabilities, ReadOnlySpan<byte> clientPublicKey, Span<byte> serverPublicKey, out int serverPublicKeyLength, Span<byte> salt)
+        internal Session Establish(NetworkConnection connection, byte sessionId, byte capabilities,
+            ReadOnlySpan<byte> clientPublicKey, Span<byte> serverPublicKey,
+            out int serverPublicKeyLength, Span<byte> salt)
         {
             serverPublicKeyLength = 0;
-            Drop(connection);
+            if (connection is null) { return null; }
 
+            // Derive the new session before mutating the active one.
+            // An invalid or unauthenticated Hello must not destroy a valid key.
             using ECDiffieHellman local = ECDiffieHellman.Create(ECCurve.NamedCurves.nistP256);
             using ECDiffieHellman remote = ECDiffieHellman.Create();
 
-            byte[] shared;
-
+            byte[] shared = null;
+            byte[] nextKey = null;
             try
             {
-                remote.ImportSubjectPublicKeyInfo(clientPublicKey, out _);
-                if (remote.KeySize != ExpectedKeySizeBits) { return null; }
+                remote.ImportSubjectPublicKeyInfo(clientPublicKey, out int bytesRead);
+                if (bytesRead != clientPublicKey.Length || remote.KeySize != ExpectedKeySizeBits)
+                {
+                    return null;
+                }
 
-                if (!local.TryExportSubjectPublicKeyInfo(serverPublicKey, out serverPublicKeyLength)) { return null; }
+                if (!local.TryExportSubjectPublicKeyInfo(serverPublicKey, out serverPublicKeyLength))
+                {
+                    serverPublicKeyLength = 0;
+                    return null;
+                }
 
                 RandomNumberGenerator.Fill(salt);
                 shared = local.DeriveRawSecretAgreement(remote.PublicKey);
+                nextKey = TransferSeal.DeriveSessionKey(shared, salt, sessionId);
             }
             catch (CryptographicException)
             {
@@ -54,15 +66,20 @@ namespace SubSeal.Server
             {
                 return null;
             }
+            finally
+            {
+                if (shared != null) { CryptographicOperations.ZeroMemory(shared); }
+            }
+
+            if (nextKey is null) { return null; }
 
             Session session = new Session
             {
-                Key = TransferSeal.DeriveSessionKey(shared, salt, sessionId),
+                Key = nextKey,
                 Capabilities = capabilities,
                 SessionId = sessionId
             };
-            CryptographicOperations.ZeroMemory(shared);
-
+            Drop(connection);
             sessions[connection] = session;
             return session;
         }

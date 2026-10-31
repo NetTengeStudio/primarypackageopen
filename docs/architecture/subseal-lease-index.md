@@ -74,3 +74,11 @@ The `AllowUnsealedForIncapableClients` compatibility switch no longer permits pl
 **Known limit:** `FileSender.OnStarted` is invoked by upstream before the Harmony postfix. This change prevents the standard sender's subsequent `Update` from sending plaintext after a failure; it does not prove that arbitrary third-party callbacks cannot observe the in-memory payload at startup. Live tests are required to validate exact hook ordering and subscriptions.
 
 **Required tests:** inject exceptions from `SaveResealer.Reseal`, `TransferSeal.Seal` and `EngineSymbols.OverwriteData`; confirm status `Error`, plaintext erased, no outgoing unsealed file; repeat under slow network and multiple clients. Benchmark the added O(file-bytes) plaintext erasure as a deliberate security cost. **NOT_RUN**.
+
+## Transactional session-key replacement
+
+Before reconstruction, `SessionKeys.Establish` called `Drop(connection)` **before validating** the new ECDH public key. An invalid Hello with a correct contract hash therefore destroyed an established session without negotiating a replacement, potentially invalidating an active transfer's handshake state.
+
+The ECDH derivation now occurs first; only after successful key derivation is the old session securely wiped and the new one published. The parser also checks that the SubjectPublicKeyInfo input was fully consumed, and the temporary raw ECDH secret is cleared in `finally`, including on key-derivation failure. `LeaseChannel` continues to revoke existing leases after a successfully replaced session, as before.
+
+Test: valid session followed by invalid point, malformed/trailing SPKI and unsupported curve must leave the original key/session unchanged. A successful second Hello must install a different key and wipe the prior key. Repeat with live leases and deferred transfers. **NOT_RUN**.
