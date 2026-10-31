@@ -90,14 +90,22 @@ namespace PrimaryPackage.WallCollision {
                         return;
                     }
                 }
-                WallRules.Reset();
-                WallRules.SetReady(ready);
-                for (int i = 0; i < count; i++) {
-                    if (!WallRules.Apply(ids[i], modes[i], faces[i])) {
-                        Resync();
-                        return;
+                bool applied = true;
+                WallContacts.BeginBatch();
+                try {
+                    WallRules.Reset();
+                    WallRules.SetReady(ready);
+                    for (int i = 0; i < count; i++) {
+                        if (WallRules.Apply(ids[i], modes[i], faces[i])) { continue; }
+                        applied = false;
+                        WallRules.Reset();
+                        break;
                     }
                 }
+                finally {
+                    WallContacts.EndBatch();
+                }
+                if (!applied) { Resync(); return; }
                 WallCollisionNet.Accept(revision);
                 synced = true;
                 delay = FirstRequestDelay;
