@@ -23,7 +23,7 @@ namespace PrimaryPackage.WallCollision {
         }
 
         internal bool AllowCrossing(Body other) {
-            if (other == null || other.BodyType != BodyType.Dynamic || !other.Enabled) { return false; }
+            if (other == null || other.BodyType != FarseerPhysics.BodyType.Dynamic || !other.Enabled) { return false; }
             if (crossings.ContainsKey(other)) { return true; }
             Vector2 offset = other.WorldCenter - referencePosition;
             float side = offset.X * normal.X + offset.Y * normal.Y;
@@ -38,7 +38,7 @@ namespace PrimaryPackage.WallCollision {
             if (crossings.IsEmpty) { return; }
             foreach (KeyValuePair<Body, float> entry in crossings) {
                 Body body = entry.Key;
-                if (body.World != world || !body.Enabled || body.BodyType != BodyType.Dynamic) {
+                if (body.World != world || !body.Enabled || body.BodyType != FarseerPhysics.BodyType.Dynamic) {
                     crossings.TryRemove(body, out _);
                     continue;
                 }
