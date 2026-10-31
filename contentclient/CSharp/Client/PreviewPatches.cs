@@ -17,44 +17,28 @@ namespace SubSeal.Client
             ResidentAsset.EvictPreviewed();
         }
 
-        public static bool BeforeCampaignRetry() => !PreviewLock.ProtectionActive;
+        public static bool BeforeCampaignRetry() => !PreviewLock.ConfirmedProtected;
 
-        public static void AfterCreatePreviewWindow(SubmarineInfo __instance, GUIComponent parent, int __state)
+        public static void AfterCreatePreviewWindow(SubmarineInfo __instance,
+            GUIComponent parent, int __state)
         {
-            if (__state < 0 || !PreviewLock.ShowLocked(__instance)) { return; }
-
+            if (__instance is null || parent is null || __state < 0) { return; }
             GUIComponent content = parent.GetChild(__state);
-            GUIComponent area = content?.GetChild(0);
-            if (area is null) { return; }
-
-            GUIFrame black = new GUIFrame(new RectTransform(Vector2.One, area.RectTransform), style: null)
-            {
-                Color = Color.Black,
-                CanBeFocused = false
-            };
-
-            new GUITextBlock(
-                new RectTransform(Vector2.One, black.RectTransform, Anchor.Center),
-                PreviewLock.Text,
-                textColor: Color.White,
-                font: GUIStyle.LargeFont,
-                textAlignment: Alignment.Center)
-            {
-                CanBeFocused = false
-            };
-
-            area.CanBeFocused = true;
+            GUIComponent button = content?.GetChild(0);
+            PreviewSurfacePatches.Track(button);
         }
 
-        public static bool BeforeGeneratePreviewMeshes(SubmarinePreview __instance, ref Task __result)
+        public static bool BeforeGeneratePreviewMeshes(
+            SubmarinePreview __instance, ref Task __result)
         {
             if (!PreviewLock.IsHeldLocked()) { return true; }
             EngineSymbols.SetPreviewBounds(__instance);
-            __result = Task.FromResult(0);
+            __result = Task.CompletedTask;
             return false;
         }
 
-        public static bool BeforeRenderSubmarine(SpriteBatch spriteBatch, Rectangle scissorRectangle)
+        public static bool BeforeRenderSubmarine(
+            SpriteBatch spriteBatch, Rectangle scissorRectangle)
         {
             if (!PreviewLock.IsHeldLocked()) { return true; }
             PreviewLock.Draw(spriteBatch, scissorRectangle);
