@@ -139,8 +139,6 @@ namespace SubSeal.Server
                     return false;
                 }
                 Diagnostics.Note($"{Diagnostics.Describe(recipient)} cannot open sealed content");
-                // A peer's capability bit is self-reported, never proof of integrity.
-                // Compatibility mode is forbidden when preview protection is active.
                 if (settings.PreviewProtection || !settings.AllowUnsealedForIncapableClients)
                 {
                     Diagnostics.Note($"{Name(filePath)} refused");
@@ -230,8 +228,6 @@ namespace SubSeal.Server
             }
             catch (System.Exception exception)
             {
-                // FileSender has already enqueued the plaintext transfer at this point.
-                // Error status causes FileSender.Update to discard it before Send().
                 __result.Status = FileTransferStatus.Error;
                 Diagnostics.Fault($"{Name(__state.FilePath)} lease {__state.Id} seal aborted: {exception.GetType().Name}");
             }
