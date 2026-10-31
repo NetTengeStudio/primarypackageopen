@@ -70,13 +70,6 @@ namespace SubSeal.Client
         {
             if (!protection || info is null || GameMain.Client is null) { return false; }
 
-            // The visual lock must NOT depend on whether this client has the .sub file,
-            // has already loaded its XML, or possesses a content lease. Those states
-            // describe file availability, not whether the server permits a preview.
-            // The wire protocol currently advertises a global protected-preview
-            // policy, not a per-submarine allowlist. Mask all network previews
-            // including active/previously decrypted submarine files.
-            // This presentation policy is not a security boundary.
             return true;
         }
 
