@@ -15,6 +15,8 @@ namespace PrimaryPackage.WallCollision {
         internal Body Body { get; }
         internal WallGateState State { get; }
         internal bool Passable(Body other) => State.AllowCrossing(other);
+        internal bool IgnoreFloorRay(Microsoft.Xna.Framework.Vector2 start, Microsoft.Xna.Framework.Vector2 end)
+            => State.IgnoreFloorRay(start, end);
     }
 
     public static class WallContacts {
@@ -34,6 +36,15 @@ namespace PrimaryPackage.WallCollision {
 
         public static int Count => mutable.Count;
         public static World BoundWorld => bound;
+
+        // Queried only by the raycast emitted by Ragdoll.GetFloorY.
+        internal static bool IgnoreFloorFixture(Fixture fixture,
+            Microsoft.Xna.Framework.Vector2 start, Microsoft.Xna.Framework.Vector2 end) {
+            if (fixture?.Body == null ||
+                !WallGeometry.IsWallFixture(fixture, Physics.CollisionWall)) { return false; }
+            Dictionary<Body, WallGate> current = Volatile.Read(ref snapshot);
+            return current.TryGetValue(fixture.Body, out WallGate gate) && gate.IgnoreFloorRay(start, end);
+        }
 
         public static void Attach(World world, WallGate gate) {
             if (world == null || gate?.Body == null) { return; }
