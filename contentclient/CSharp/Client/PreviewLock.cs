@@ -45,7 +45,7 @@ namespace SubSeal.Client
             refreshPending = true;
             PreviewSurfacePatches.SetProtection(ProtectionActive);
 
-            if (!wasProtected && ProtectionActive)
+            if (wasProtected != ProtectionActive)
             {
                 SubmarinePreview.Close();
             }
@@ -53,6 +53,7 @@ namespace SubSeal.Client
 
         internal static void Clear()
         {
+            bool wasProtected = ProtectionActive;
             policyKnown = false;
             protection = false;
             creating = false;
@@ -60,6 +61,7 @@ namespace SubSeal.Client
             policyRevision++;
             refreshPending = true;
             PreviewSurfacePatches.SetProtection(ProtectionActive);
+            if (wasProtected != ProtectionActive) { SubmarinePreview.Close(); }
         }
 
         internal static bool ConsumeRefresh()
