@@ -111,8 +111,6 @@ namespace SubSeal.Client
 
         private void TryPatchAdditionalPreviewSurfaces()
         {
-            // Each surface is independent. A version mismatch must not remove
-            // the core SubSeal patches or disrupt GUI navigation.
             TryPatchAdditional(EngineSymbols.TabMenuPreview,
                 nameof(PreviewSurfacePatches.BeforeCreateTabPreview),
                 nameof(PreviewSurfacePatches.AfterCreateTabPreview));
