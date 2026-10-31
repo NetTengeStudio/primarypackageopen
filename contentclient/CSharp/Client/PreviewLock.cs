@@ -66,24 +66,31 @@ namespace SubSeal.Client
 
         internal static bool IsLocked(SubmarineInfo info)
         {
-            if (info is null) { return false; }
+            if (!protection || info is null || GameMain.Client is null) { return false; }
 
-            bool loaded = !info.LazyLoad && info.SubmarineElement is not null;
-            bool corrupted = info.IsFileCorrupted;
-            bool exists = !string.IsNullOrEmpty(info.FilePath) && System.IO.File.Exists(info.FilePath);
-            bool sealedFile = exists && SealedFile.CarriesSeal(info.FilePath);
+            // The visual lock must NOT depend on whether this client has the .sub file,
+            // has already loaded its XML, or possesses a content lease. Those states
+            // describe file availability, not whether the server permits a preview.
+            // The current wire policy only advertises a global protection bit, so
+            // conservatively mask server-supplied submarines, including active ones.
+            // Clients may modify this code; server file admission remains authoritative.
+            if (GameMain.Client.ServerSubmarines is not null)
+            {
+                foreach (SubmarineInfo candidate in GameMain.Client.ServerSubmarines)
+                {
+                    if (ReferenceEquals(candidate, info)) { return true; }
+                    if (candidate is null) { continue; }
+                    if (string.Equals(candidate.Name, info.Name, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return true;
+                    }
+                }
+            }
 
-            if (corrupted) { return protection; }
-            if (!Decide(protection, corrupted, exists, sealedFile, loaded)) { return false; }
-            if (!sealedFile || !loaded) { return true; }
-
-            if (!SubmarineSkeleton.IsReduced(info.SubmarineElement)) { return false; }
-            if (!SealedFile.TryReadLeaseId(info.FilePath, out uint leaseId)) { return true; }
-            return leases is null || !leases.TryGet(leaseId, out _);
+            // GameSession may hold a different SubmarineInfo instance.
+            // Fail closed for network submarine previews when protected mode is active.
+            return true;
         }
-
-        internal static bool Decide(bool protectedContent, bool corrupted, bool fileExists, bool sealedFile, bool elementLoaded)
-            => protectedContent && (corrupted || !fileExists || (sealedFile && !elementLoaded));
 
         internal static void Draw(SpriteBatch spriteBatch, Rectangle area)
         {
