@@ -80,7 +80,7 @@ namespace PrimaryPackage.WallCollision {
             WallConfiguration.Prepare(selected, mode, face);
             DebugConsole.NewMessage("ec_init: стена #" + selected.ID + " подготовлена (" +
                 (mode == WallMode.Solid ? "двусторонняя" : "односторонняя, " +
-                WallGeometry.Describe(new WallPlane(face).Normal(selected.Bodies[0].Rotation))) +
+                WallGeometry.Describe(normal)) +
                 "). До ec_ready действует обычная физика. Сохраните подлодку.", Color.LightGreen);
         }
     }
