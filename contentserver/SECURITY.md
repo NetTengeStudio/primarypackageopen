@@ -127,3 +127,38 @@ LuaCs C# build, end-to-end multiplayer test, rendering test, or load benchmark h
 been executed in this environment.** Accordingly, the above scenarios are
 `NOT_RUN`, not `PASS`. Production use requires game-version-matched compilation
 and multiplayer validation.
+
+
+## Follow-up audit: 2026-10-31 — GUI implementation gaps
+
+The original client condition in `PreviewLock.IsLocked` allowed ordinary previews
+when a `.sub` had already been loaded or decrypted. The policy was changed to
+mask **all network submarine previews** while the server's global preview protection
+flag is active, irrespective of local file and lease state.
+
+The following source-verified gaps remain:
+- `SubmarineInfo.CreatePreviewWindow` has a separate image button; existing
+  `PreviewPatches.AfterCreatePreviewWindow` adds a black `ого.` child there.
+- `SubmarinePreview.RenderSubmarine` has the full expanded drawing area; existing
+  `BeforeRenderSubmarine` draws black with `ого.`; Close/Escape handlers are
+  owned by the vanilla preview constructor and remain unmodified.
+- `TabMenu.CreateSubmarineInfo` renders `sub.Info.PreviewImage` directly.
+  This thumbnail is **not intercepted** by current `PreviewPatches`.
+- `SubmarineSelection.GetPreviewImage` chooses between `info.PreviewImage`
+  and locally saved preview sprites. The images appear in selection cards and
+  another large background image; these are **not intercepted**.
+- The protection policy on the client has only a global flag, not an
+  authenticated per-submarine policy. It currently masks all network previews;
+  public submarines are not independently exempted in the GUI.
+- Without contentclient, a vanilla client cannot be compelled to draw
+  `ого.` at all. Such clients must receive no confidential geometry before
+  authorization; display customization is necessarily best-effort.
+- An expanded preview may not be openable if the runtime's private reflection
+  symbols mismatch. `BeforePreviewCreate` explicitly aborts opening when
+  `EngineSymbols.PreviewUiAvailable` is false. This is a safe denial but
+  does not meet the functional requirement for working navigation.
+
+**Do not claim every GUI path is covered.** Required next work: targeted UI
+integration for TabMenu and SubmarineSelection with game-version-matched
+method signatures and runtime tests. Verify black text placement and close
+button visually. Current visual acceptance status: NOT_RUN.
