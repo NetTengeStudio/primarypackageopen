@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 namespace PrimaryPackage.WallCollision {
     public static class WallCollisionCommand {
         private const string Usage =
-            "ec 1|2|off — коллизия стены под курсором: 1 блокирует с обеих сторон, 2 пропускает с выбранной стороны, off снимает переопределение.";
+            "ec 1|2|off — для подготовленной через ec_init стены: коллизия стены под курсором: 1 блокирует с обеих сторон, 2 пропускает с выбранной стороны, off снимает переопределение.";
         private const string UsageSide =
             "ec 2 [left|right|up|down|+x|-x|+y|-y|flip] — с какой стороны разрешён проход; ec list — активные переопределения.";
 
@@ -93,9 +93,17 @@ namespace PrimaryPackage.WallCollision {
                 text = List();
                 return RuleChange.None;
             }
+            if (!WallRules.Ready) {
+                text = "ec: физика ещё не активирована, выполните ec_ready на сервере.";
+                return RuleChange.None;
+            }
             Structure wall = WallPicker.Pick(cursorWorld);
             if (wall == null) {
                 text = "ec: под курсором нет стены со сплошной коллизией; декор, платформы и полностью разрушенные стены не подходят.";
+                return RuleChange.None;
+            }
+            if (!WallConfiguration.TryRead(wall, out _, out _)) {
+                text = "ec: стена #" + wall.ID + " не подготовлена командой ec_init в редакторе.";
                 return RuleChange.None;
             }
             if (verb == "1" || verb == "solid" || verb == "both") {
