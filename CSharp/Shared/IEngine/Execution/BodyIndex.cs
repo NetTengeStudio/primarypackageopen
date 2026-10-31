@@ -12,9 +12,10 @@ static class BodyIndex
     static readonly List<PhysicsBody> candidates = new(1024);
     static readonly Dictionary<PhysicsBody, int> slots = new(1024, ReferenceEqualityComparer.Instance);
     static readonly Dictionary<Body, PhysicsBody> owners = new(4096, ReferenceEqualityComparer.Instance);
+    static readonly HashSet<PhysicsBody> changed = new(ReferenceEqualityComparer.Instance);
     static int untilAudit;
     public static bool On;
-    public static long Missed, Audits, Served;
+    public static long Missed, Audits, Served, Deltas, Pruned;
 
     public static int Count => candidates.Count;
 
@@ -24,7 +25,17 @@ static class BodyIndex
     {
         if (!On || b == null) { return; }
         if (b.FarseerBody != null) { owners[b.FarseerBody] = b; }
-        if (!slots.ContainsKey(b) && Matches(b)) { Add(b); }
+        if (Matches(b))
+        {
+            if (!slots.ContainsKey(b)) { Add(b); }
+            changed.Remove(b);
+        }
+        else if (slots.ContainsKey(b))
+        {
+            // Do not mutate the candidate array in the middle of a GameScreen loop.
+            // Process only changed bodies at the next ForUpdate boundary.
+            changed.Add(b);
+        }
     }
 
     public static void TouchFarseer(Body body)
@@ -36,6 +47,7 @@ static class BodyIndex
     {
         if (b == null) { return; }
         if (b.FarseerBody != null) { owners.Remove(b.FarseerBody); }
+        changed.Remove(b);
         if (slots.TryGetValue(b, out int i)) { RemoveAt(i); }
     }
 
@@ -76,6 +88,7 @@ static class BodyIndex
         candidates.Clear();
         slots.Clear();
         owners.Clear();
+        changed.Clear();
     }
 
     static void Rebuild()
@@ -93,18 +106,42 @@ static class BodyIndex
     {
         if (!On) { return PhysicsBody.List; }
         if (--untilAudit <= 0) { Audit(); }
-        for (int i = candidates.Count - 1; i >= 0; i--)
-        {
-            if (!Matches(candidates[i])) { RemoveAt(i); }
-        }
+        else { ApplyChanges(); }
         Served++;
         return candidates;
+    }
+
+    static void ApplyChanges()
+    {
+        if (changed.Count == 0) { return; }
+        foreach (PhysicsBody body in changed)
+        {
+            if (Matches(body)) { continue; }
+            if (slots.TryGetValue(body, out int slot))
+            {
+                RemoveAt(slot);
+                Pruned++;
+            }
+        }
+        Deltas += changed.Count;
+        changed.Clear();
     }
 
     static void Audit()
     {
         untilAudit = AuditInterval;
         Audits++;
+        // Foreign mods can bypass the observed properties: repair that drift at a
+        // deliberately lower frequency instead of scanning every body every tick.
+        for (int i = candidates.Count - 1; i >= 0; i--)
+        {
+            if (!Matches(candidates[i]))
+            {
+                RemoveAt(i);
+                Pruned++;
+            }
+        }
+        changed.Clear();
         Missed += Uncovered(true);
     }
 
