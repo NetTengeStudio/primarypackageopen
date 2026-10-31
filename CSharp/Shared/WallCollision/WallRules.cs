@@ -70,12 +70,14 @@ namespace PrimaryPackage.WallCollision {
         private static readonly Dictionary<ushort, WallRule> byId = new Dictionary<ushort, WallRule>(16);
         private static readonly List<ushort> stale = new List<ushort>(8);
 
+        public static bool Ready { get; private set; }
+
         public static int Count => ordered.Count;
 
         public static WallRule At(int index) => ordered[index];
 
         public static void Bind(Structure wall, WallMode mode, WallFace face) {
-            if (wall == null) { return; }
+            if (!Ready || wall == null) { return; }
             if (mode == WallMode.None) {
                 Unbind(wall.ID);
                 return;
@@ -92,6 +94,7 @@ namespace PrimaryPackage.WallCollision {
         }
 
         public static bool Apply(ushort id, WallMode mode, WallFace face) {
+            if (!Ready) { return false; }
             if (mode == WallMode.None) { return Unbind(id); }
             if (Entity.FindEntityByID(id) is not Structure wall) { return false; }
             if (wall.Removed) { return false; }
@@ -114,9 +117,33 @@ namespace PrimaryPackage.WallCollision {
         }
 
         public static void Rebind(Structure wall) {
+            if (!Ready) { return; }
             WallRule rule = Find(wall);
             if (rule == null) { return; }
             rule.Rebind();
+        }
+
+        public static int ActivatePrepared() {
+            if (Ready) { return ordered.Count; }
+            Ready = true;
+            int activated = 0;
+            foreach (MapEntity entity in MapEntity.MapEntityList) {
+                if (entity is not Structure wall || wall.Removed || !wall.HasBody) { continue; }
+                if (!WallConfiguration.TryRead(wall, out WallMode mode, out WallFace face)) { continue; }
+                if (!WallGeometry.HasWallFixture(wall.Bodies != null && wall.Bodies.Count != 0 ?
+                        wall.Bodies[0] : null, Physics.CollisionWall)) { continue; }
+                Bind(wall, mode, face);
+                activated++;
+            }
+            return activated;
+        }
+
+        public static void SetReady(bool ready) {
+            if (!ready) {
+                Reset();
+                return;
+            }
+            Ready = true;
         }
 
         public static void Prune() {
@@ -130,6 +157,7 @@ namespace PrimaryPackage.WallCollision {
         }
 
         public static void Reset() {
+            Ready = false;
             for (int i = 0; i < ordered.Count; i++) { ordered[i].Release(); }
             ordered.Clear();
             byId.Clear();
