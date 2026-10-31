@@ -7,6 +7,10 @@ namespace PrimaryPackage.WallCollision {
     public sealed class WallCollisionPlugin : PrimaryPackage.Core.IModule {
         public void Attach(Harmony harmony) {
             WallCollisionCommand.Register();
+            WallCollisionActivation.Register();
+#if CLIENT
+            WallCollisionPreparation.Register();
+#endif
             PrimaryPackage.Core.ModuleHost.Guard("ec frame", () => harmony.Patch(
                 AccessTools.Method(typeof(GameSession), nameof(GameSession.Update)),
                 postfix: PrimaryPackage.Core.ModuleHost.Bind(typeof(WallCollisionPlugin), nameof(SessionUpdatePostfix))));
