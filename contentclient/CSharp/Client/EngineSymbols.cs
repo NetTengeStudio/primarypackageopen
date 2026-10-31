@@ -149,7 +149,6 @@ namespace SubSeal.Client
                 System.Type.EmptyTypes,
                 null);
 
-            // Resolve internal game UI types by exact method signatures.
             const BindingFlags guiFlags = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static;
             Assembly clientAssembly = typeof(SubmarinePreview).Assembly;
             Type tabMenuType = clientAssembly.GetType("Barotrauma.TabMenu");
