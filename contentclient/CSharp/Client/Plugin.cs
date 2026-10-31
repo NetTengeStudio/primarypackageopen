@@ -52,7 +52,7 @@ namespace SubSeal.Client
 
         public void OnUpdate(double fixedDeltaTime)
         {
-            GameClient client = GameMain.Client;
+            var client = GameMain.Client;
             object peer = client?.ClientPeer;
             object connection = client?.ClientPeer?.ServerConnection;
             if (!ReferenceEquals(client, clientIdentity) ||
