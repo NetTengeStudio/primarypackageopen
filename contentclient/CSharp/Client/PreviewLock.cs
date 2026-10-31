@@ -11,36 +11,55 @@ namespace SubSeal.Client
     {
         internal const string Text = "ого.";
 
-        private static LeaseStore leases;
+        private static bool policyKnown;
         private static bool protection;
-        private static bool refreshPending;
         private static bool creating;
         private static bool heldLocked;
+        private static bool previewUiReady;
+        private static bool refreshPending;
+        private static int policyRevision;
 
-        internal static bool ProtectionActive => protection;
-
+        internal static bool ProtectionActive => GameMain.Client is not null && (!policyKnown || protection);
+        internal static bool ConfirmedProtected => policyKnown && protection;
+        internal static bool PreviewUiReady => previewUiReady;
         internal static bool IsCreating => creating;
+        internal static int PolicyRevision => policyRevision;
 
-        internal static bool IsHeldLocked() => heldLocked;
+        internal static bool IsHeldLocked() => heldLocked || ProtectionActive;
 
-        internal static void Bind(LeaseStore store) => leases = store;
+        internal static void SetUiReady(bool ready)
+        {
+            previewUiReady = ready;
+        }
 
         internal static void SetPolicy(byte flags)
         {
+            bool wasProtected = ProtectionActive;
             bool now = (flags & Protocol.PolicyPreviewProtected) != 0;
-            if (now == protection) { return; }
+            bool changed = !policyKnown || protection != now;
+            policyKnown = true;
             protection = now;
-            if (!now) { PreviewSurfacePatches.HideAll(); }
+            if (!changed) { return; }
+
+            policyRevision++;
             refreshPending = true;
+            PreviewSurfacePatches.SetProtection(ProtectionActive);
+
+            if (!wasProtected && ProtectionActive)
+            {
+                SubmarinePreview.Close();
+            }
         }
 
         internal static void Clear()
         {
+            policyKnown = false;
             protection = false;
-            refreshPending = false;
             creating = false;
             heldLocked = false;
-            PreviewSurfacePatches.HideAll();
+            policyRevision++;
+            refreshPending = true;
+            PreviewSurfacePatches.SetProtection(ProtectionActive);
         }
 
         internal static bool ConsumeRefresh()
@@ -64,14 +83,8 @@ namespace SubSeal.Client
             creating = false;
         }
 
-        internal static bool ShowLocked(SubmarineInfo info) => protection && IsLocked(info);
-
-        internal static bool IsLocked(SubmarineInfo info)
-        {
-            if (!protection || info is null || GameMain.Client is null) { return false; }
-
-            return true;
-        }
+        internal static bool ShowLocked(SubmarineInfo info)
+            => info is not null && ProtectionActive;
 
         internal static void Draw(SpriteBatch spriteBatch, Rectangle area)
         {
@@ -79,28 +92,28 @@ namespace SubSeal.Client
             LocalizedString text = Text;
             Vector2 size = GUIStyle.LargeFont.MeasureString(text);
             Vector2 center = new Vector2(area.Center.X, area.Center.Y);
-            GUIStyle.LargeFont.DrawString(spriteBatch, text, center, Color.White, 0f, size * 0.5f, 1f, SpriteEffects.None, 0f);
+            GUIStyle.LargeFont.DrawString(spriteBatch, text, center,
+                Color.White, 0f, size * 0.5f, 1f, SpriteEffects.None, 0f);
         }
 
         internal static void RefreshLobby()
         {
+            SubmarineSelection.ContentRefreshRequired = true;
             NetLobbyScreen lobby = GameMain.NetLobbyScreen;
             GameClient client = GameMain.Client;
             if (lobby?.SubList is null || client?.ServerSubmarines is null) { return; }
 
             lobby.UpdateSubList(lobby.SubList, client.ServerSubmarines);
-
             if (lobby.ShuttleList?.ListBox is not null)
             {
-                System.Collections.Generic.List<SubmarineInfo> shuttles = new System.Collections.Generic.List<SubmarineInfo>();
+                System.Collections.Generic.List<SubmarineInfo> shuttles =
+                    new System.Collections.Generic.List<SubmarineInfo>();
                 foreach (SubmarineInfo sub in client.ServerSubmarines)
                 {
                     if (sub.HasTag(SubmarineTag.Shuttle)) { shuttles.Add(sub); }
                 }
                 lobby.UpdateSubList(lobby.ShuttleList.ListBox, shuttles);
             }
-
-            SubmarineSelection.ContentRefreshRequired = true;
         }
     }
 }
