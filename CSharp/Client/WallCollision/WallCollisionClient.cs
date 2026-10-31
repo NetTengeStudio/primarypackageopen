@@ -58,7 +58,14 @@ namespace PrimaryPackage.WallCollision {
                 }
                 WallCollisionNet.Accept(revision);
                 synced = resolved;
-                if (!resolved) { timer = FirstRequestDelay; delay = FirstRequestDelay; }
+                if (!resolved)
+                {
+                    // A joining client may not have created every Structure yet.
+                    // Never run an incomplete wall snapshot; retry after world load.
+                    WallRules.Reset();
+                    timer = FirstRequestDelay;
+                    delay = FirstRequestDelay;
+                }
                 ReceivedSnapshots++;
                 return;
             }
