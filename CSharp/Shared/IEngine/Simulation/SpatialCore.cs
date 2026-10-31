@@ -21,8 +21,8 @@ static class SpatialCore
     static readonly Dictionary<long, List<int>> cells = new();
     static readonly HashSet<long> awake = new(), inner = new(), outer = new(), scratch = new();
     static readonly List<Vector2> viewers = new(), npcs = new();
-    static readonly Queue<(int Slot, double Until)> eventAwake = new();
-    static double[] eventDeadline = Array.Empty<double>();
+    // A slot has at most one scheduled refreeze, updated in place on wake.
+    static readonly IndexedDeadlineQueue eventAwake = new();
     static readonly List<Submarine> subs = new();
 
     // Exact dependency snapshots: no region rasterization when nothing that defines
@@ -54,7 +54,6 @@ static class SpatialCore
         inner.Clear();
         outer.Clear();
         eventAwake.Clear();
-        Array.Clear(eventDeadline);
         pending.Clear();
         pendingOrder.Clear();
     }
@@ -68,7 +67,6 @@ static class SpatialCore
         outer.Clear();
         regionsValid = false;
         eventAwake.Clear();
-        Array.Clear(eventDeadline);
         pending.Clear();
         pendingOrder.Clear();
     }
@@ -95,7 +93,7 @@ static class SpatialCore
     public static void OnFreed(int slot)
     {
         if (!On) { return; }
-        if ((uint)slot < (uint)eventDeadline.Length) { eventDeadline[slot] = 0; }
+        eventAwake.Remove(slot);
         if ((uint)slot < (uint)indexed.Length && indexed[slot]) { dirty = true; }
     }
 
@@ -201,28 +199,18 @@ static class SpatialCore
 
     public static void OnEventWake(int slot)
     {
-        if (slot < 0) { return; }
-        if (slot >= eventDeadline.Length)
-        {
-            Array.Resize(ref eventDeadline, Math.Max(slot + 1, Math.Max(16, eventDeadline.Length * 2)));
-        }
-        double until = Dormancy.SimTime + EventAwakeSeconds;
-        eventDeadline[slot] = until;
-        eventAwake.Enqueue((slot, until));
+        if (!On || slot < 0) { return; }
+        eventAwake.Set(slot, Dormancy.SimTime + EventAwakeSeconds);
     }
 
     static void RefreezeExpired()
     {
-        while (eventAwake.TryPeek(out var e) && e.Until <= Dormancy.SimTime)
+        while (eventAwake.TryTakeExpired(Dormancy.SimTime, out int slot))
         {
-            eventAwake.Dequeue();
-            // Discard superseded wakeups and entries from previously recycled slots.
-            if (e.Slot >= indexed.Length || !indexed[e.Slot] ||
-                e.Slot >= eventDeadline.Length || e.Until != eventDeadline[e.Slot]) { continue; }
-            eventDeadline[e.Slot] = 0;
-            int r = Find(e.Slot);
-            if (islandAwake[r] > 0 || pinned[r] || (Dormancy.ReasonsOf(e.Slot) & Dormancy.BySpatial) != 0 || ItemRegistry.Items[e.Slot] == null) { continue; }
-            if (Dormancy.TrySleep(e.Slot, Dormancy.BySpatial)) { EventRefreezes++; }
+            if (slot >= indexed.Length || !indexed[slot]) { continue; }
+            int r = Find(slot);
+            if (islandAwake[r] > 0 || pinned[r] || (Dormancy.ReasonsOf(slot) & Dormancy.BySpatial) != 0 || ItemRegistry.Items[slot] == null) { continue; }
+            if (Dormancy.TrySleep(slot, Dormancy.BySpatial)) { EventRefreezes++; }
         }
     }
 
@@ -426,7 +414,6 @@ static class SpatialCore
         // Slot indices may have changed after ItemRegistry compaction. Invalidate
         // queued wakeups before WakeAll can enqueue events against the new layout.
         eventAwake.Clear();
-        Array.Clear(eventDeadline);
         Dormancy.WakeAll(Dormancy.BySpatial);
         pending.Clear();
         pendingOrder.Clear();
@@ -504,5 +491,5 @@ static class SpatialCore
     }
 
     public static string Report() =>
-        $"radius={Radius / 100:F0}m hysteresis={Hysteresis / 100:F0}m npcRadius={NpcRadius / 100:F0}m botsAsViewers={BotsAsViewers} viewers={viewers.Count} npcs={npcs.Count} indexed={IndexedCount} awakeCells={awake.Count} cells={cells.Count} frozenNow={FrozenNow()} frozen={Frozen} thawed={Thawed} eventRefreezes={EventRefreezes} reindexed={Reindexed} rebuilds={Rebuilds} rebuildCost={RebuildCost} tickCost={TickCost}";
+        $"radius={Radius / 100:F0}m hysteresis={Hysteresis / 100:F0}m npcRadius={NpcRadius / 100:F0}m botsAsViewers={BotsAsViewers} viewers={viewers.Count} npcs={npcs.Count} indexed={IndexedCount} awakeCells={awake.Count} cells={cells.Count} frozenNow={FrozenNow()} frozen={Frozen} thawed={Thawed} eventRefreezes={EventRefreezes} wakePending={eventAwake.Count} reindexed={Reindexed} rebuilds={Rebuilds} rebuildCost={RebuildCost} tickCost={TickCost}";
 }

@@ -1,0 +1,29 @@
+name: IEngine scheduler regression
+on:
+  push:
+    branches:
+      - architecture/**
+    paths:
+      - "CSharp/Shared/IEngine/Simulation/IndexedDeadlineQueue.cs"
+      - "Tests/IEngineCore/**"
+      - ".github/workflows/iengine-core.yml"
+  pull_request:
+    paths:
+      - "CSharp/Shared/IEngine/Simulation/IndexedDeadlineQueue.cs"
+      - "Tests/IEngineCore/**"
+      - ".github/workflows/iengine-core.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-core:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Run production-linked indexed deadline tests
+        run: dotnet run --project Tests/IEngineCore/IEngineCore.csproj --configuration Release
