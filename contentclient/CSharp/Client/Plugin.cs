@@ -240,8 +240,7 @@ namespace SubSeal.Client
                 leases?.ReleaseAll();
                 sessionKey?.Discard();
                 clientIdentity = null;
-                PreviewLock.Clear();
-                PreviewLock.ConsumeRefresh();
+                PreviewLock.Shutdown();
                 OpenPatches.Bind(null);
                 Artifacts.DiscardAll();
                 active = false;
