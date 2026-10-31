@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Barotrauma;
 using FarseerPhysics.Collision;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Dynamics.Contacts;
@@ -48,8 +49,9 @@ namespace PrimaryPackage.WallCollision {
         }
 
         public static void Detach(Body body) {
-            if (body == null) { return; }
-            gates.Remove(body);
+            if (body == null || !gates.Remove(body)) { return; }
+            // Avoid leaving a callback attached to the physics world when no gates remain.
+            if (gates.Count == 0) { Release(); }
         }
 
         public static void Clear() {
@@ -78,11 +80,14 @@ namespace PrimaryPackage.WallCollision {
             Body bodyA = first.Body;
             Body bodyB = second.Body;
             if (bodyA == null || bodyB == null) { return; }
-            if (gates.TryGetValue(bodyA, out WallGate gate) && gate.Passable(bodyB)) {
+            // A structure body may carry non-wall fixtures. Restrict the rule to wall contacts.
+            if (WallGeometry.IsWallFixture(first, Physics.CollisionWall) &&
+                gates.TryGetValue(bodyA, out WallGate gateA) && gateA.Passable(bodyB)) {
                 contact.Enabled = false;
                 return;
             }
-            if (gates.TryGetValue(bodyB, out gate) && gate.Passable(bodyA)) {
+            if (WallGeometry.IsWallFixture(second, Physics.CollisionWall) &&
+                gates.TryGetValue(bodyB, out WallGate gateB) && gateB.Passable(bodyA)) {
                 contact.Enabled = false;
             }
         }

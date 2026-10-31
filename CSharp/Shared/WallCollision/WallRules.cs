@@ -68,7 +68,6 @@ namespace PrimaryPackage.WallCollision {
     public static class WallRules {
         private static readonly List<WallRule> ordered = new List<WallRule>(16);
         private static readonly Dictionary<ushort, WallRule> byId = new Dictionary<ushort, WallRule>(16);
-        private static readonly List<ushort> stale = new List<ushort>(8);
 
         public static int Count => ordered.Count;
 
@@ -119,14 +118,10 @@ namespace PrimaryPackage.WallCollision {
             rule.Rebind();
         }
 
-        public static void Prune() {
-            if (ordered.Count == 0) { return; }
-            stale.Clear();
-            for (int i = 0; i < ordered.Count; i++) {
-                Structure wall = ordered[i].Wall;
-                if (wall == null || wall.Removed) { stale.Add(ordered[i].Id); }
-            }
-            for (int i = 0; i < stale.Count; i++) { Unbind(stale[i]); }
+        // Entity IDs can be reused. Only remove the rule attached to this exact instance.
+        public static void Removed(Structure wall) {
+            if (wall == null || !byId.TryGetValue(wall.ID, out WallRule rule)) { return; }
+            if (ReferenceEquals(rule.Wall, wall)) { Unbind(wall.ID); }
         }
 
         public static void Reset() {

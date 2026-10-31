@@ -24,7 +24,11 @@ namespace PrimaryPackage.WallCollision {
             ModNet.Receive(WallCollisionNet.StateId, OnState);
         }
 
-        public static void OnRoundStart() {
+        public static void OnRoundStart() => ResetSynchronization();
+
+        public static void OnRoundEnd() => ResetSynchronization();
+
+        private static void ResetSynchronization() {
             synced = false;
             timer = FirstRequestDelay;
             delay = FirstRequestDelay;
