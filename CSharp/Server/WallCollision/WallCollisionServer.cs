@@ -25,7 +25,7 @@ namespace PrimaryPackage.WallCollision {
 
         public static void Broadcast(in RuleChange change) {
             if (!change.Changed || !WallRules.Ready) { return; }
-            ushort revision = WallCollisionNet.Advance();
+            uint revision = WallCollisionNet.Advance();
             ushort id = change.Id;
             byte mode = (byte)change.Mode;
             byte face = (byte)change.Face;
@@ -46,7 +46,7 @@ namespace PrimaryPackage.WallCollision {
 
         private static void WriteSnapshot(IWriteMessage message, uint revision) {
             message.WriteByte((byte)WallPacket.Snapshot);
-            message.WriteUInt16(revision);
+            message.WriteUInt32(revision);
             message.WriteByte(WallRules.Ready ? (byte)1 : (byte)0);
             int count = WallRules.Ready ? WallRules.Count : 0;
             message.WriteUInt16((ushort)count);
