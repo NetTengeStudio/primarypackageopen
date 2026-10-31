@@ -1,6 +1,7 @@
 using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Collections.Generic;
 using Barotrauma;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -14,6 +15,22 @@ namespace SubSeal.Client
         private const BindingFlags InstanceFields = BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public;
         private static readonly ConditionalWeakTable<GUIComponent, GUIFrame> overlays =
             new ConditionalWeakTable<GUIComponent, GUIFrame>();
+        private static readonly List<WeakReference<GUIFrame>> overlayRefs = new List<WeakReference<GUIFrame>>();
+
+        internal static void HideAll()
+        {
+            for (int i = overlayRefs.Count - 1; i >= 0; i--)
+            {
+                if (overlayRefs[i].TryGetTarget(out GUIFrame overlay))
+                {
+                    overlay.Visible = false;
+                }
+                else
+                {
+                    overlayRefs.RemoveAt(i);
+                }
+            }
+        }
 
         internal static bool BeforeGetSelectionPreview(ref Sprite __result)
         {
@@ -77,7 +94,7 @@ namespace SubSeal.Client
         private static void Mask(GUIComponent surface)
         {
             if (surface is null) { return; }
-            overlays.GetValue(surface, component =>
+            GUIFrame overlay = overlays.GetValue(surface, component =>
             {
                 GUIFrame black = new GUIFrame(new RectTransform(Vector2.One, component.RectTransform), style: null)
                 {
@@ -96,8 +113,10 @@ namespace SubSeal.Client
                 {
                     CanBeFocused = false
                 };
+                overlayRefs.Add(new WeakReference<GUIFrame>(black));
                 return black;
             });
+            overlay.Visible = PreviewLock.ProtectionActive;
         }
     }
 }
