@@ -1,9 +1,16 @@
 namespace PrimaryPackage.WallCollision {
     public static class WallCollisionNet {
-        public const string StateId = "PP_WallCollisionStateV2";
-        public const string RequestId = "PP_WallCollisionRequestV2";
+        public const string StateId = "PP_WallCollisionStateV3";
+        public const string RequestId = "PP_WallCollisionRequestV3";
+        public const int MaxRules = 8192;
 
+        public static uint Epoch { get; private set; }
         public static uint Revision { get; private set; }
+
+        public static void BeginEpoch(uint epoch) {
+            Epoch = epoch;
+            Revision = 0;
+        }
 
         public static uint Advance() {
             Revision = unchecked(Revision + 1u);
