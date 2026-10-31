@@ -188,9 +188,16 @@ static class WakeHooks
         }
     }
 
-    static void WireDisconnected() => SpatialCore.TopologyChanged();
+    static void WireDisconnected(Connection __instance)
+    {
+        // Power connections are excluded from the spatial connectivity graph.
+        if (!__instance.IsPower) { SpatialCore.TopologyChanged(); }
+    }
 
-    static void WireTopologyChanged() => SpatialCore.TopologyChanged();
+    static void WireTopologyChanged(Connection connection)
+    {
+        if (connection != null && !connection.IsPower) { SpatialCore.TopologyChanged(); }
+    }
 
     static void LuaHookAdded(string eventName)
     {

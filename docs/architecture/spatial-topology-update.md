@@ -14,11 +14,11 @@ Verified source inputs:
 ## New execution model
 
 - **Signal-wire additions:** union the two indexed endpoints for non-power wires.
-- **Signal-wire deletions, parent-inventory changes and item removal:** mark the dependency topology dirty; rebuild once at the next spatial tick. Rebuild is required for split operations because union-find has no inverse for edge removal. Unchanged topology and ordinary movements still use the incremental indexing path.
+- **Non-power signal-wire deletions, parent-inventory changes and item removal:** mark the dependency topology dirty; rebuild once at the next spatial tick. Rebuild is required for split operations because union-find has no inverse for edge removal. Unchanged topology and ordinary movements still use the incremental indexing path.
 - **Submarine topology:** compare the loaded-submarine object identities and ordering against the indexing snapshot at the beginning of each spatial tick. Rebuild once when the coordinate domains change, before incremental reindexing or region queries. Avoid a new round-trip through all indexed items on stable scenes.
 - **Observer regions:** store exact previous observer coordinates, radii, loaded submarine identities and positions. If every dependency is unchanged, skip disc rasterization and cell-diff processing entirely. Otherwise recompute exactly: no positional threshold or approximation.
 - **Event wakeups:** keep the latest deadline per slot and discard superseded entries. Rebuilding the item registry invalidates stale queued deadlines, preventing their accidental application to reused slots.
-- **Power wiring:** connection events do not add power-only edges to the spatial graph; this matches the existing full-index rebuild, which excludes `Connection.IsPower`.
+- **Power wiring:** power-only connection changes neither merge spatial islands nor schedule topology rebuilds; this matches the full-index rebuild, which excludes `Connection.IsPower`.
 
 ## Complexity
 
