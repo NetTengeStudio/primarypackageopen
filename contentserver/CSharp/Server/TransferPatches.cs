@@ -202,19 +202,30 @@ namespace SubSeal.Server
 
             leases.MarkConsumed(__state);
 
-            byte[] plain = __result.Data;
-            byte[] output = __state.FileType == FileTransferType.CampaignSave
-                ? SaveResealer.Reseal(plain, __state.ContentKey, __state.Id)
-                : SealSubmarine(plain, __state);
-
-            if (output is null)
+            try
             {
-                __result.Status = FileTransferStatus.Error;
-                Diagnostics.Fault($"{Name(__state.FilePath)} lease {__state.Id} seal aborted");
-                return;
-            }
+                byte[] plain = __result.Data;
+                if (plain is null) { throw new System.IO.InvalidDataException("transfer has no source data"); }
 
-            EngineSymbols.OverwriteData(__result, output);
+                byte[] output = __state.FileType == FileTransferType.CampaignSave
+                    ? SaveResealer.Reseal(plain, __state.ContentKey, __state.Id)
+                    : SealSubmarine(plain, __state);
+
+                if (output is null) { throw new System.IO.InvalidDataException("sealing returned no output"); }
+
+                EngineSymbols.OverwriteData(__result, output);
+                if (!object.ReferenceEquals(__result.Data, output))
+                {
+                    throw new System.InvalidOperationException("transfer payload replacement failed");
+                }
+            }
+            catch (System.Exception exception)
+            {
+                // FileSender has already enqueued the plaintext transfer at this point.
+                // Error status causes FileSender.Update to discard it before Send().
+                __result.Status = FileTransferStatus.Error;
+                Diagnostics.Fault($"{Name(__state.FilePath)} lease {__state.Id} seal aborted: {exception.GetType().Name}");
+            }
         }
 
         private static byte[] SealSubmarine(byte[] plain, Leases.Lease lease)
