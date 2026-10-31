@@ -7,7 +7,6 @@ namespace PrimaryPackage.WallCollision {
     public static class WallCollisionClient {
         private const float FirstRequestDelay = 0.5f;
         private const float MaxRequestDelay = 15f;
-        private const int MaxRules = 8192;
 
         private static bool hooked;
         private static bool synced;
@@ -32,7 +31,7 @@ namespace PrimaryPackage.WallCollision {
             delay = FirstRequestDelay;
             connectionIdentity = GameMain.Client;
             sessionIdentity = GameMain.GameSession;
-            WallCollisionNet.Accept(0);
+            WallCollisionNet.BeginEpoch(0);
         }
 
         public static void Update(float deltaTime) {
@@ -68,11 +67,12 @@ namespace PrimaryPackage.WallCollision {
 
         private static void OnState(IReadMessage message) {
             WallPacket kind = (WallPacket)message.ReadByte();
+            uint epoch = message.ReadUInt32();
             uint revision = message.ReadUInt32();
             if (kind == WallPacket.Snapshot) {
                 bool ready = message.ReadByte() != 0;
                 int count = message.ReadUInt16();
-                if (count > MaxRules || (!ready && count != 0)) { Resync(); return; }
+                if (epoch == 0 || count > WallCollisionNet.MaxRules || (!ready && count != 0)) { Resync(); return; }
                 ushort[] ids = new ushort[count];
                 WallMode[] modes = new WallMode[count];
                 WallFace[] faces = new WallFace[count];
@@ -81,7 +81,7 @@ namespace PrimaryPackage.WallCollision {
                     modes[i] = (WallMode)message.ReadByte();
                     faces[i] = (WallFace)message.ReadByte();
                 }
-                if (synced && !Newer(revision)) { DroppedStale++; return; }
+                if (synced && (epoch != WallCollisionNet.Epoch || !Newer(revision))) { DroppedStale++; return; }
                 for (int i = 0; i < count; i++) {
                     if ((modes[i] != WallMode.Solid && modes[i] != WallMode.OneWay) ||
                         (byte)faces[i] > (byte)WallFace.MinusY ||
@@ -106,6 +106,7 @@ namespace PrimaryPackage.WallCollision {
                     WallContacts.EndBatch();
                 }
                 if (!applied) { Resync(); return; }
+                WallCollisionNet.BeginEpoch(epoch);
                 WallCollisionNet.Accept(revision);
                 synced = true;
                 delay = FirstRequestDelay;
@@ -113,6 +114,7 @@ namespace PrimaryPackage.WallCollision {
                 return;
             }
             if (kind != WallPacket.Set || !synced || !WallRules.Ready) { return; }
+            if (epoch != WallCollisionNet.Epoch) { Resync(); return; }
             if (!Newer(revision)) { DroppedStale++; return; }
             if (unchecked(revision - WallCollisionNet.Revision) != 1u) {
                 Resync();
