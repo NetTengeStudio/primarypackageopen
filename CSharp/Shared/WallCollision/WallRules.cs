@@ -10,7 +10,6 @@ namespace PrimaryPackage.WallCollision {
     public sealed class WallRule {
         private const float Clearance = 0.05f;
         private readonly List<Body> gated = new List<Body>(4);
-        // PreSolve may run on parallel physics workers; per-wall crossing state must be thread-safe.
         private readonly ConcurrentDictionary<Body, float> crossings = new ConcurrentDictionary<Body, float>();
         private Vector2 referencePosition;
         private float halfThickness;
@@ -129,6 +128,7 @@ namespace PrimaryPackage.WallCollision {
         private static readonly Dictionary<ushort, WallRule> byId = new Dictionary<ushort, WallRule>(16);
         private static readonly List<ushort> stale = new List<ushort>(8);
         private static double nextCrossingSweep;
+        private static double nextPrune;
 
         public static bool Ready { get; private set; }
 
@@ -210,14 +210,17 @@ namespace PrimaryPackage.WallCollision {
 
         public static void Prune() {
             if (ordered.Count == 0) { return; }
+            double now = Timing.TotalTime;
+            if (now < nextPrune) { return; }
+            nextPrune = now + 0.1;
             stale.Clear();
             for (int i = 0; i < ordered.Count; i++) {
                 Structure wall = ordered[i].Wall;
                 if (wall == null || wall.Removed) { stale.Add(ordered[i].Id); }
             }
             for (int i = 0; i < stale.Count; i++) { Unbind(stale[i]); }
-            if (Timing.TotalTime < nextCrossingSweep) { return; }
-            nextCrossingSweep = Timing.TotalTime + 0.1;
+            if (now < nextCrossingSweep) { return; }
+            nextCrossingSweep = now + 0.1;
             World world = GameMain.World;
             for (int i = 0; i < ordered.Count; i++) { ordered[i].SweepCrossings(world); }
         }
@@ -228,6 +231,7 @@ namespace PrimaryPackage.WallCollision {
             ordered.Clear();
             byId.Clear();
             nextCrossingSweep = 0;
+            nextPrune = 0;
             WallContacts.Clear();
         }
     }
