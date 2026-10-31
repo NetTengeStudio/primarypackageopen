@@ -77,8 +77,9 @@ namespace SubSeal.Client
                     GUITextBlock middle = cardType.GetField("middleTextBlock", InstanceFields)?.GetValue(card) as GUITextBlock;
                     if (middle is not null)
                     {
-                        middle.Text = PreviewLock.Text;
-                        middle.AutoDraw = true;
+                        // The non-focusable mask already draws the label.
+                        // Avoid rendering a second text layer on top of it.
+                        middle.AutoDraw = false;
                     }
                 }
             }
