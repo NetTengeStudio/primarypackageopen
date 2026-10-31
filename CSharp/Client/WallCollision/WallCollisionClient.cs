@@ -63,6 +63,12 @@ namespace PrimaryPackage.WallCollision {
             }
             if (!synced || !WallRules.Ready || kind != WallPacket.Set) { return; }
             if (!Newer(revision)) { DroppedStale++; return; }
+            if (unchecked(revision - WallCollisionNet.Revision) != 1u) {
+                synced = false;
+                timer = 0f;
+                delay = FirstRequestDelay;
+                return;
+            }
             ushort changedId = message.ReadUInt16();
             WallMode changedMode = (WallMode)message.ReadByte();
             WallFace changedFace = (WallFace)message.ReadByte();
