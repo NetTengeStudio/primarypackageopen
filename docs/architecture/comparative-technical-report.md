@@ -79,3 +79,19 @@ No numerical CPU, network throughput, memory or frame-time speedups are asserted
 **Prepared wall lifecycle:** Added `WallPreparations` and editor `ec_init` with per-structure `pp_ecface` XML metadata. `ec_ready` performs an explicit server-authoritative activation and one network snapshot. Unlike the previous branch, `ec 1/2/off` commands now require prior `ec_ready` in that round; this is an intentional behavior change to satisfy the requested inactive-until-ready contract. See `wall-collision-preparation.md`.
 
 **Unverified integration risks:** Harmony `Structure.Load`/`Save` postfixes, selected-wall editor command path, the dedicated-server round lifecycle, and the transfer-lease state transitions require builds and live tests. No measured performance improvement or actual gameplay test is available, so the PR remains draft.
+
+## 2026-10-31 continuation: transfer failure safety, test harness, engine coverage
+
+**SubSeal fail-closed transport:** The game constructs outgoing transfers containing plaintext before the Harmony postfix. The postfix now handles all encryption/replacement exceptions, marks failures `FileTransferStatus.Error`, and wipes the original plaintext buffer. When preview protection is enabled, the server refuses the old optional plaintext fallback for incapable clients. This may prevent an unmodified client from downloading a protected active submarine; it is a conscious security-vs-compatibility limitation and **not** a guarantee that a permitted client cannot inspect decrypted geometry. The `GateMode.None` case remains a known blocking limitation if neither a transfer nor request interception point exists.
+
+**Transactional ECDH handshakes:** New session keys are derived and validated *before* replacing existing sessions. Invalid client public keys no longer erase a valid prior session. Temporary raw ECDH shared secrets are zeroed in `finally`. Malformed control packets are contained at the network callback boundary.
+
+**Offline regression harness:** `Tests/SubSealCore` compiles actual server `Leases.cs`, `SessionKeys.cs`, `Protocol.cs` and `TransferSeal.cs` with minimal test-only Barotrauma stubs. The test program exercises AES-GCM sealing, key wrapping, ID wraparound, per-client quotas, ACK authorization, expiry/revocation/key scrubbing and handshake rollback. Workflow `.github/workflows/subseal-core.yml` checks client/server protocol identity and executes the test project with .NET 8.
+
+**CI status — BLOCKED:** GitHub Actions created runs for the PR, including <https://github.com/NetTengeStudio/primarypackageopen/actions/runs/41247828906>, but job `offline-core` failed before being assigned a runner (`runner_id=0`, `steps=[]`). Consequently no C# compiler or test method executed. This is a workflow execution/runner availability blockage, not a PASS result or established C# compile failure. The local execution environment also lacks `dotnet`, `csc` and `mcs`. The test harness remains useful but must run on a machine with .NET 8 before merging.
+
+**IEngine HullIndex audit:** The reconciliation sweep previously traversed the entire 8192-slot preallocated array, even for 1-96 used slots. It now wraps at `ItemRegistry.SlotLimit` (actual high-water mark), reducing complete audit cycle from `ceil(capacity/96)` to `ceil(assignedSlots/96)` ticks while retaining event-driven updates.
+
+**Prepared walls added mid-round:** Newly loaded XML-marked structures now activate and publish a network delta if `ec_ready` was already executed, without introducing a per-frame scan.
+
+**Verification:** Branch commits persisted; game builds, gameplay/physics and actual performance measurements remain **NOT_RUN**. CI runner availability is **BLOCKED**. Do not merge without an executing test pipeline and live host/dedicated validation.
