@@ -6,6 +6,8 @@ on:
       - architecture/**
     paths:
       - "contentserver/CSharp/Server/Leases.cs"
+      - "contentclient/CSharp/Client/PreviewDecision.cs"
+      - "contentclient/CSharp/Client/PreviewLock.cs"
       - "contentserver/CSharp/Server/Wire/**"
       - "Tests/SubSealCore/**"
       - ".github/workflows/subseal-core.yml"

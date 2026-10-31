@@ -68,22 +68,26 @@ namespace SubSeal.Client
         {
             if (info is null) { return false; }
 
+            if (!protection) { return false; }
+
             bool loaded = !info.LazyLoad && info.SubmarineElement is not null;
-            bool corrupted = info.IsFileCorrupted;
             bool exists = !string.IsNullOrEmpty(info.FilePath) && System.IO.File.Exists(info.FilePath);
-            bool sealedFile = exists && SealedFile.CarriesSeal(info.FilePath);
+            // An unreadable sealed file must not be treated as ordinary plaintext.
+            SealProbe probe = exists ? SealedFile.Probe(info.FilePath) : SealProbe.Absent;
+            bool reduced = loaded && SubmarineSkeleton.IsReduced(info.SubmarineElement);
+            bool hasKey = false;
 
-            if (corrupted) { return protection; }
-            if (!Decide(protection, corrupted, exists, sealedFile, loaded)) { return false; }
-            if (!sealedFile || !loaded) { return true; }
+            if (probe == SealProbe.Present && reduced &&
+                SealedFile.TryReadLeaseId(info.FilePath, out uint leaseId))
+            {
+                hasKey = leases is not null && leases.TryGet(leaseId, out _);
+            }
 
-            if (!SubmarineSkeleton.IsReduced(info.SubmarineElement)) { return false; }
-            if (!SealedFile.TryReadLeaseId(info.FilePath, out uint leaseId)) { return true; }
-            return leases is null || !leases.TryGet(leaseId, out _);
+            return PreviewDecision.ShouldLock(
+                protection, info.IsFileCorrupted, exists,
+                probe == SealProbe.Present, probe == SealProbe.Unreadable,
+                loaded, reduced, hasKey);
         }
-
-        internal static bool Decide(bool protectedContent, bool corrupted, bool fileExists, bool sealedFile, bool elementLoaded)
-            => protectedContent && (corrupted || !fileExists || (sealedFile && !elementLoaded));
 
         internal static void Draw(SpriteBatch spriteBatch, Rectangle area)
         {

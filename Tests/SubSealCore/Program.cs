@@ -7,6 +7,7 @@ using System.Text;
 using Barotrauma;
 using Barotrauma.Networking;
 using SubSeal.Server;
+using SubSeal.Client;
 using SubSeal.Wire;
 
 internal static class Program
@@ -22,6 +23,7 @@ internal static class Program
         Test(Expiry);
         Test(IdWraparound);
         Test(TransactionalSessionReplacement);
+        Test(PreviewLockDecision);
         Console.WriteLine($"PASS={passed} FAIL=0 (offline SubSeal source tests)");
     }
 
@@ -84,6 +86,25 @@ internal static class Program
         Require(Protocol.Version == 4, "contract version changed: review client and server together");
         Require(Protocol.AllLeases == 0, "lease revoke sentinel");
         Require(Protocol.SealOverhead == TransferSeal.SealedLength(0), "sealed size");
+    }
+
+    static void PreviewLockDecision()
+    {
+        static bool Lock(bool protection = true, bool corrupted = false,
+            bool exists = true, bool sealedFile = true, bool unreadable = false,
+            bool loaded = true, bool reduced = true, bool hasKey = false)
+            => PreviewDecision.ShouldLock(protection, corrupted, exists,
+                sealedFile, unreadable, loaded, reduced, hasKey);
+
+        Require(Lock(), "reduced sealed skeleton without key must be locked");
+        Require(!Lock(hasKey: true), "authorized sealed skeleton may rehydrate");
+        Require(Lock(loaded: false), "sealed unloaded file locked");
+        Require(Lock(exists: false), "missing file locked");
+        Require(Lock(unreadable: true), "unreadable file locked");
+        Require(Lock(corrupted: true), "corrupted file locked");
+        Require(!Lock(reduced: false), "already fully rehydrated element is not locked");
+        Require(!Lock(sealedFile: false), "unsealed local file remains vanilla");
+        Require(!Lock(protection: false), "disabled policy must not lock preview");
     }
 
     static void ConnectionIsolation()
