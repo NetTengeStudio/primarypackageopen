@@ -106,12 +106,39 @@ namespace SubSeal.Client
 
             bool previewReady = TryPatchPreviewUi();
             bool surfacesReady = TryPatchAdditionalPreviewSurfaces();
-            PreviewLock.SetUiReady(previewReady && surfacesReady);
+            PreviewLock.SetUiReady(previewReady && surfacesReady && VerifyPreviewPatchSet());
             if (!PreviewLock.PreviewUiReady)
             {
                 return false;
             }
             return true;
+        }
+
+        private static bool VerifyPreviewPatchSet()
+        {
+            return HasOwnPatch(EngineSymbols.PreviewCreate, true) &&
+                   HasOwnPatch(EngineSymbols.PreviewCreate, false) &&
+                   HasOwnPatch(EngineSymbols.PreviewCard, true) &&
+                   HasOwnPatch(EngineSymbols.PreviewCard, false) &&
+                   HasOwnPatch(EngineSymbols.PreviewGenerateMeshes, true) &&
+                   HasOwnPatch(EngineSymbols.PreviewRender, true) &&
+                   HasOwnPatch(EngineSymbols.TabMenuPreview, true) &&
+                   HasOwnPatch(EngineSymbols.TabMenuPreview, false) &&
+                   HasOwnPatch(EngineSymbols.SelectionPreviewImage, true) &&
+                   HasOwnPatch(EngineSymbols.SelectionRefresh, false) &&
+                   HasOwnPatch(EngineSymbols.SelectionSelect, false);
+        }
+
+        private static bool HasOwnPatch(System.Reflection.MethodInfo method, bool prefix)
+        {
+            if (method is null) { return false; }
+            Patches installed = Harmony.GetPatchInfo(method);
+            if (installed is null) { return false; }
+            foreach (Patch patch in prefix ? installed.Prefixes : installed.Postfixes)
+            {
+                if (patch.owner == HarmonyId) { return true; }
+            }
+            return false;
         }
 
         private bool TryPatchAdditionalPreviewSurfaces()
