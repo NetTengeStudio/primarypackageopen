@@ -77,4 +77,4 @@ jobs:
           (project / "Compile.csproj").write_text(xml)
           print(f"Compiling {len(files)} sources for {os.environ['MODULE']} {target}")
           PY
-          dotnet build "/tmp/luacs-ci/$MODULE/$TARGET/Compile.csproj" -c Release --no-restore
+          dotnet build "/tmp/luacs-ci/$MODULE/$TARGET/Compile.csproj" -c Release
