@@ -118,7 +118,7 @@ namespace SubSeal.Server
             Span<byte> salt = stackalloc byte[Protocol.SaltLength];
 
             SessionKeys.Session session = sessions.Establish(
-                client.Connection, client.SessionId, capabilities, clientPublicKey, serverPublicKey, out int serverPublicKeyLength, salt);
+                client.Connection, client.SessionId, capabilities, clientPublicKey, serverPublicKey, out int serverPublicKeyLength, salt, out bool reused);
 
             if (session is null)
             {
@@ -126,7 +126,7 @@ namespace SubSeal.Server
                 return;
             }
 
-            leases.Revoke(client.Connection);
+            if (!reused) { leases.Revoke(client.Connection); }
 
             Span<byte> confirmation = stackalloc byte[Protocol.ConfirmLength];
             Protocol.DeriveConfirmation(session.Key, confirmation);
