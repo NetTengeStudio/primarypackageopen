@@ -6,11 +6,6 @@ using Barotrauma.Networking;
 
 namespace SubSeal.Server
 {
-    /// <summary>
-    /// Refuses vanilla mod downloads that could contain protected submarine layouts.
-    /// ModSender copies entire package directories, not just files declared by filelist.xml.
-    /// Built once on startup: transfers only perform a HashSet lookup.
-    /// </summary>
     internal static class ModTransferPolicy
     {
         private static readonly HashSet<string> allowedArchives = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -65,7 +60,6 @@ namespace SubSeal.Server
                 }
             }
 
-            // A collision between generated ModSender names must never allow a blocked archive.
             allowedArchives.ExceptWith(deniedArchives);
         }
 
@@ -93,8 +87,6 @@ namespace SubSeal.Server
                 {
                     if (!settings.IsPublicSubmarine(file)) { return true; }
                 }
-                // Campaign saves and nested archives may contain .sub files.
-                // Without parsing and validating them, treating them as safe is unsound.
                 else if (extension.Equals(".save", StringComparison.OrdinalIgnoreCase)
                     || extension.Equals(".zip", StringComparison.OrdinalIgnoreCase)
                     || extension.Equals(".7z", StringComparison.OrdinalIgnoreCase)
