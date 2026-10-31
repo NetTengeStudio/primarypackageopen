@@ -1,0 +1,80 @@
+name: LuaCs CSharp compile
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - module: PrimaryPackage
+            target: Client
+            folders: CSharp/Shared CSharp/Client
+            assembly: Barotrauma.dll
+          - module: PrimaryPackage
+            target: Server
+            folders: CSharp/Shared CSharp/Server
+            assembly: DedicatedServer.dll
+          - module: contentclient
+            target: Client
+            folders: contentclient/CSharp/Client
+            assembly: Barotrauma.dll
+          - module: contentserver
+            target: Server
+            folders: contentserver/CSharp/Server
+            assembly: DedicatedServer.dll
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Fetch LuaCs publicized reference assemblies
+        shell: bash
+        run: |
+          curl --fail --location --retry 3 -o /tmp/luacs-refs.zip https://github.com/evilfactory/LuaCsForBarotrauma/releases/download/latest/luacsforbarotrauma_refs.zip
+          mkdir -p /tmp/luacs-refs
+          unzip -q /tmp/luacs-refs.zip -d /tmp/luacs-refs
+          find /tmp/luacs-refs -name '${{ matrix.assembly }}' -print
+      - name: Compile separate LuaCs target
+        shell: bash
+        env:
+          MODULE: ${{ matrix.module }}
+          TARGET: ${{ matrix.target }}
+          FOLDERS: ${{ matrix.folders }}
+          ASSEMBLY: ${{ matrix.assembly }}
+        run: |
+          python3 - <<'PY'
+          import os, pathlib, xml.etree.ElementTree as ET
+          from xml.sax.saxutils import escape
+          target = os.environ["TARGET"]
+          assembly = os.environ["ASSEMBLY"]
+          root = pathlib.Path("/tmp/luacs-refs")
+          game = next((p for p in root.rglob(assembly) if "Linux" in p.parts), None)
+          if game is None:
+              raise SystemExit("Missing Linux " + assembly + " in LuaCs refs")
+          refs_dir = game.parent
+          files = []
+          for folder in os.environ["FOLDERS"].split():
+              files += sorted(pathlib.Path(folder).rglob("*.cs"))
+          if not files:
+              raise SystemExit("No source files discovered")
+          all_refs = list(refs_dir.glob("*.dll"))
+          if not all_refs:
+              raise SystemExit("No reference assemblies found")
+          project = pathlib.Path("/tmp/luacs-ci") / os.environ["MODULE"] / target
+          project.mkdir(parents=True, exist_ok=True)
+          symbols = "CLIENT" if target == "Client" else "SERVER"
+          references = "".join(f'<Reference Include="{escape(p.stem)}"><HintPath>{escape(str(p))}</HintPath></Reference>' for p in all_refs)
+          includes = "".join(f'<Compile Include="{escape(str(p.resolve()))}" />' for p in files)
+          xml = f'<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><TargetFramework>net8.0</TargetFramework><EnableDefaultCompileItems>false</EnableDefaultCompileItems><Nullable>disable</Nullable><LangVersion>latest</LangVersion><DefineConstants>{symbols}</DefineConstants><GenerateAssemblyInfo>false</GenerateAssemblyInfo></PropertyGroup><ItemGroup>{references}{includes}</ItemGroup></Project>'
+          (project / "Compile.csproj").write_text(xml)
+          print(f"Compiling {len(files)} sources for {os.environ['MODULE']} {target}")
+          PY
+          dotnet build "/tmp/luacs-ci/$MODULE/$TARGET/Compile.csproj" -c Release --no-restore
