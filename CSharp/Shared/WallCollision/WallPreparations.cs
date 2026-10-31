@@ -110,7 +110,7 @@ namespace PrimaryPackage.WallCollision
         private static void InitCommand(string[] args)
         {
 #if CLIENT
-            if (GameMain.Client != null || Screen.Selected != GameMain.SubEditorScreen)
+            if (GameMain.Client != null || Screen.Selected is not { IsEditor: true })
             {
                 Reply("ec_init: команда работает только в локальном редакторе подлодок.", Color.Yellow);
                 return;
@@ -141,7 +141,7 @@ namespace PrimaryPackage.WallCollision
             Vector2 normal;
             if (string.IsNullOrEmpty(arg))
             {
-                Camera camera = GameMain.SubEditorScreen.Cam;
+                Camera camera = Screen.Selected.Cam;
                 Vector2 point = camera.ScreenToWorld(PlayerInput.MousePosition);
                 if (!WallGeometry.TryFaceFromWorldPoint(wall.Bodies, Physics.CollisionWall, point, true, out face, out normal))
                 {
