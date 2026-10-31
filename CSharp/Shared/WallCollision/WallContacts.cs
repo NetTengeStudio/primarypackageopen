@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Barotrauma;
 using FarseerPhysics.Collision;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Dynamics.Contacts;
