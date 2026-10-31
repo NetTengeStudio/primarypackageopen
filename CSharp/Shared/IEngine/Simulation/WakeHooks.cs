@@ -39,6 +39,9 @@ static class WakeHooks
         Patch(h, AccessTools.Method(typeof(PropertyMemberDescriptor), "SetValue"), null, nameof(LuaSetPost));
         Patch(h, AccessTools.Method(typeof(FieldMemberDescriptor), "SetValue"), null, nameof(LuaSetPost));
         Patch(h, AccessTools.Method(typeof(Connection), nameof(Connection.ConnectWire)), null, nameof(WireConnected));
+        Patch(h, AccessTools.Method(typeof(Connection), nameof(Connection.DisconnectWire)), null, nameof(WireDisconnected));
+        Patch(h, AccessTools.Method(typeof(Wire), nameof(Wire.RemoveConnection), new[] { typeof(Connection) }),
+            null, nameof(WireTopologyChanged));
         Patch(h, AccessTools.Method(typeof(Barotrauma.LuaCs.EventService), "Add", new[] { typeof(string), typeof(string), typeof(LuaCsFunc), typeof(object) }), null, nameof(LuaHookAdded));
     }
 
@@ -106,7 +109,8 @@ static class WakeHooks
 
     static void ParentPost(Item __instance, Inventory __state)
     {
-        if (SpatialCore.On && !ReferenceEquals(__state, __instance.parentInventory)) { SpatialCore.OnMoved(__instance); }
+        // Changing the containment edge may split an existing dependency island.
+        if (SpatialCore.On && !ReferenceEquals(__state, __instance.parentInventory)) { SpatialCore.TopologyChanged(); }
         Dormancy.Source = 1;
         if (!(Armed || SpatialCore.On) || ReferenceEquals(__state, __instance.parentInventory)) { return; }
         Dormancy.MarkDirty("inventory");
@@ -178,8 +182,15 @@ static class WakeHooks
 
     static void WireConnected(Connection __instance, Wire wire)
     {
-        if (SpatialCore.On) { SpatialCore.WiringChanged(__instance.Item, wire?.OtherConnection(__instance)?.Item); }
+        if (SpatialCore.On && !__instance.IsPower)
+        {
+            SpatialCore.WiringChanged(__instance.Item, wire?.OtherConnection(__instance)?.Item);
+        }
     }
+
+    static void WireDisconnected() => SpatialCore.TopologyChanged();
+
+    static void WireTopologyChanged() => SpatialCore.TopologyChanged();
 
     static void LuaHookAdded(string eventName)
     {

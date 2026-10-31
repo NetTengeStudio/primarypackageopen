@@ -43,6 +43,9 @@ static class ItemRegistry
     public static void OnUnlisted(Item item)
     {
         if (!Tracking || !slotOf.Remove(item, out int slot)) { return; }
+        // A removed item must not remain in a spatial island or a cell index.
+        // DSU topology is reconstructed once on the next simulation tick.
+        Simulation.SpatialCore.OnFreed(slot);
         items[slot] = null;
         active.Clear(slot);
         Simulation.Dormancy.OnFreed(slot);

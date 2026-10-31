@@ -22,7 +22,15 @@ static class SpatialCore
     static readonly HashSet<long> awake = new(), inner = new(), outer = new(), scratch = new();
     static readonly List<Vector2> viewers = new(), npcs = new();
     static readonly Queue<(int Slot, double Until)> eventAwake = new();
+    static double[] eventDeadline = Array.Empty<double>();
     static readonly List<Submarine> subs = new();
+
+    // Exact dependency snapshots: no region rasterization when nothing that defines
+    // the regions (observers, radii, or submarine transforms) has changed.
+    static readonly List<Vector2> lastViewers = new(), lastNpcs = new(), lastSubPositions = new();
+    static readonly List<Submarine> lastSubs = new();
+    static float lastRadius, lastHysteresis, lastNpcRadius;
+    static bool regionsValid;
     static readonly HashSet<int> pending = new();
     static readonly List<int> pendingOrder = new();
     static int[] parent = Array.Empty<int>(), islandAwake = Array.Empty<int>();
@@ -41,8 +49,12 @@ static class SpatialCore
     public static void Start()
     {
         dirty = true;
+        regionsValid = false;
         awake.Clear();
+        inner.Clear();
+        outer.Clear();
         eventAwake.Clear();
+        Array.Clear(eventDeadline);
         pending.Clear();
         pendingOrder.Clear();
     }
@@ -52,7 +64,11 @@ static class SpatialCore
         Dormancy.WakeAll(Dormancy.BySpatial);
         cells.Clear();
         awake.Clear();
+        inner.Clear();
+        outer.Clear();
+        regionsValid = false;
         eventAwake.Clear();
+        Array.Clear(eventDeadline);
         pending.Clear();
         pendingOrder.Clear();
     }
@@ -67,6 +83,20 @@ static class SpatialCore
     public static void OnAssigned(int slot)
     {
         if (On && !dirty && pending.Add(slot)) { pendingOrder.Add(slot); }
+    }
+
+    // Union-find handles additions but not deletions of edges. Deletion, reparenting
+    // and unlisting invalidate the topology, never just the spatial position.
+    public static void TopologyChanged()
+    {
+        if (On) { dirty = true; }
+    }
+
+    public static void OnFreed(int slot)
+    {
+        if (!On) { return; }
+        if ((uint)slot < (uint)eventDeadline.Length) { eventDeadline[slot] = 0; }
+        if ((uint)slot < (uint)indexed.Length && indexed[slot]) { dirty = true; }
     }
 
     static void Enqueue(Item item)
@@ -90,11 +120,14 @@ static class SpatialCore
         }
         else if (pendingOrder.Count > 0) { ProcessPending(); }
         CollectViewers();
-        ComputeRegions();
-        scratch.Clear();
-        foreach (long c in awake) { if (!outer.Contains(c)) { scratch.Add(c); } }
-        foreach (long c in scratch) { awake.Remove(c); ChangeCell(c, -1); }
-        foreach (long c in inner) { if (awake.Add(c)) { ChangeCell(c, +1); } }
+        if (RegionsChanged())
+        {
+            ComputeRegions();
+            scratch.Clear();
+            foreach (long c in awake) { if (!outer.Contains(c)) { scratch.Add(c); } }
+            foreach (long c in scratch) { awake.Remove(c); ChangeCell(c, -1); }
+            foreach (long c in inner) { if (awake.Add(c)) { ChangeCell(c, +1); } }
+        }
         RefreezeExpired();
         TickCost.Add(Stopwatch.GetTimestamp() - t0);
     }
@@ -152,14 +185,27 @@ static class SpatialCore
         }
     }
 
-    public static void OnEventWake(int slot) => eventAwake.Enqueue((slot, Dormancy.SimTime + EventAwakeSeconds));
+    public static void OnEventWake(int slot)
+    {
+        if (slot < 0) { return; }
+        if (slot >= eventDeadline.Length)
+        {
+            Array.Resize(ref eventDeadline, Math.Max(slot + 1, Math.Max(16, eventDeadline.Length * 2)));
+        }
+        double until = Dormancy.SimTime + EventAwakeSeconds;
+        eventDeadline[slot] = until;
+        eventAwake.Enqueue((slot, until));
+    }
 
     static void RefreezeExpired()
     {
         while (eventAwake.TryPeek(out var e) && e.Until <= Dormancy.SimTime)
         {
             eventAwake.Dequeue();
-            if (e.Slot >= indexed.Length || !indexed[e.Slot]) { continue; }
+            // Discard superseded wakeups and entries from previously recycled slots.
+            if (e.Slot >= indexed.Length || !indexed[e.Slot] ||
+                e.Slot >= eventDeadline.Length || e.Until != eventDeadline[e.Slot]) { continue; }
+            eventDeadline[e.Slot] = 0;
             int r = Find(e.Slot);
             if (islandAwake[r] > 0 || pinned[r] || (Dormancy.ReasonsOf(e.Slot) & Dormancy.BySpatial) != 0 || ItemRegistry.Items[e.Slot] == null) { continue; }
             if (Dormancy.TrySleep(e.Slot, Dormancy.BySpatial)) { EventRefreezes++; }
@@ -189,6 +235,52 @@ static class SpatialCore
             if (BotsAsViewers && c.IsHuman) { viewers.Add(c.WorldPosition); }
             else { npcs.Add(c.WorldPosition); }
         }
+    }
+
+    static bool RegionsChanged()
+    {
+        if (regionsValid && Radius == lastRadius && Hysteresis == lastHysteresis &&
+            NpcRadius == lastNpcRadius && SamePositions(viewers, lastViewers) &&
+            SamePositions(npcs, lastNpcs) && subs.Count == lastSubs.Count)
+        {
+            bool unchanged = true;
+            for (int i = 0; i < subs.Count; i++)
+            {
+                if (!ReferenceEquals(subs[i], lastSubs[i]) || subs[i].Position != lastSubPositions[i])
+                {
+                    unchanged = false;
+                    break;
+                }
+            }
+            if (unchanged) { return false; }
+        }
+        lastRadius = Radius;
+        lastHysteresis = Hysteresis;
+        lastNpcRadius = NpcRadius;
+        SavePositions(viewers, lastViewers);
+        SavePositions(npcs, lastNpcs);
+        lastSubs.Clear();
+        lastSubPositions.Clear();
+        for (int i = 0; i < subs.Count; i++)
+        {
+            lastSubs.Add(subs[i]);
+            lastSubPositions.Add(subs[i].Position);
+        }
+        regionsValid = true;
+        return true;
+    }
+
+    static bool SamePositions(List<Vector2> a, List<Vector2> b)
+    {
+        if (a.Count != b.Count) { return false; }
+        for (int i = 0; i < a.Count; i++) { if (a[i] != b[i]) { return false; } }
+        return true;
+    }
+
+    static void SavePositions(List<Vector2> source, List<Vector2> target)
+    {
+        target.Clear();
+        target.AddRange(source);
     }
 
     static void ComputeRegions()
@@ -317,6 +409,10 @@ static class SpatialCore
     {
         dirty = false;
         Rebuilds++;
+        // Slot indices may have changed after ItemRegistry compaction. Invalidate
+        // queued wakeups before WakeAll can enqueue events against the new layout.
+        eventAwake.Clear();
+        Array.Clear(eventDeadline);
         Dormancy.WakeAll(Dormancy.BySpatial);
         pending.Clear();
         pendingOrder.Clear();
