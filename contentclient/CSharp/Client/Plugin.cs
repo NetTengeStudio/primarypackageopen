@@ -89,8 +89,9 @@ namespace SubSeal.Client
 
                 harmony.Patch(
                     EngineSymbols.PreviewCreate,
-                    new HarmonyMethod(typeof(LoadPatches).GetMethod(nameof(LoadPatches.BeforePreviewCreate))),
-                    new HarmonyMethod(typeof(LoadPatches).GetMethod(nameof(LoadPatches.AfterPreviewCreate))));
+                    prefix: new HarmonyMethod(typeof(LoadPatches).GetMethod(nameof(LoadPatches.BeforePreviewCreate))),
+                    postfix: new HarmonyMethod(typeof(LoadPatches).GetMethod(nameof(LoadPatches.AfterPreviewCreate))),
+                    finalizer: new HarmonyMethod(typeof(LoadPatches).GetMethod(nameof(LoadPatches.AfterPreviewCreateFailure))));
 
                 harmony.Patch(
                     EngineSymbols.PreviewClose,
