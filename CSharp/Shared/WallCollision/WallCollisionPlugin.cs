@@ -4,12 +4,9 @@ using Barotrauma;
 using HarmonyLib;
 
 namespace PrimaryPackage.WallCollision {
-    public sealed class WallCollisionPlugin : PrimaryPackage.Core.IModule {
+    public sealed class WallCollisionPlugin : PrimaryPackage.Core.IModule, PrimaryPackage.Core.IFrameModule {
         public void Attach(Harmony harmony) {
             WallCollisionCommand.Register();
-            PrimaryPackage.Core.ModuleHost.Guard("ec frame", () => harmony.Patch(
-                AccessTools.Method(typeof(GameSession), nameof(GameSession.Update)),
-                postfix: PrimaryPackage.Core.ModuleHost.Bind(typeof(WallCollisionPlugin), nameof(SessionUpdatePostfix))));
             PrimaryPackage.Core.ModuleHost.Guard("ec sections", () => {
                 MethodInfo target = AccessTools.Method(typeof(Structure), "UpdateSections");
                 if (target == null) { throw new MissingMethodException("Structure.UpdateSections"); }
@@ -34,7 +31,7 @@ namespace PrimaryPackage.WallCollision {
 
         public void Release() => WallRules.Reset();
 
-        public static void SessionUpdatePostfix(float deltaTime) {
+        public void FrameUpdate(float deltaTime) {
             WallRules.Prune();
             if (WallContacts.Count == 0) { WallContacts.Release(); }
 #if CLIENT
