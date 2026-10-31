@@ -75,7 +75,7 @@ namespace SubSeal.Server
                 {
                     if (TryPatchRequestRefusal(harmony))
                     {
-                        Diagnostics.Fault("sealing unavailable, requested transfers refused, campaign save broadcast still open");
+                        Diagnostics.Fault("CRITICAL: sealing and transfer-start refusal unavailable; requests refused, but unsolicited campaign saves may leak protected data");
                         Mode = chosen;
                         return Mode;
                     }
@@ -162,8 +162,14 @@ namespace SubSeal.Server
     {
         public static bool BeforeStartTransfer(NetworkConnection recipient, FileTransferType fileType, string filePath)
         {
+            if (recipient is null) { return false; }
+            if (recipient == GameMain.Server?.OwnerConnection) { return true; }
+            if (!ModTransferPolicy.Allows(fileType, filePath))
+            {
+                Diagnostics.Note($"{Diagnostics.Describe(recipient)} refused mod archive");
+                return false;
+            }
             if (fileType != FileTransferType.Submarine && fileType != FileTransferType.CampaignSave) { return true; }
-            if (recipient is null || recipient == GameMain.Server?.OwnerConnection) { return true; }
 
             Diagnostics.Note($"{Diagnostics.Describe(recipient)} refused");
             return false;
@@ -186,6 +192,13 @@ namespace SubSeal.Server
             FileTransferType fileType = (FileTransferType)inc.ReadByte();
             inc.BitPosition = mark;
 
+            // The request-only fallback cannot identify a mod archive without decoding
+            // the remainder of the request. Refuse all mod requests in protected mode.
+            if (fileType == FileTransferType.Mod && ModTransferPolicy.RefuseAllModRequestsInRequestOnlyMode)
+            {
+                Diagnostics.Note($"{Diagnostics.Describe(inc.Sender)} refused mod request");
+                return false;
+            }
             if (fileType != FileTransferType.Submarine && fileType != FileTransferType.CampaignSave) { return true; }
 
             Diagnostics.Note($"{Diagnostics.Describe(inc.Sender)} refused");
