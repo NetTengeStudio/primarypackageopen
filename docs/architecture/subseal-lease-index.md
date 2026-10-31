@@ -60,3 +60,17 @@ The original `TransferPatches.RetryArmed` iterated all `L` live leases, then ite
 The synchronous `StartTransfer` mutation of `ActiveTransfers` was verified against `Barotrauma/BarotraumaServer/ServerSource/Networking/FileTransfer/FileSender.cs` in `evilfactory/LuaCsForBarotrauma`.
 
 Additional tests: interleave successful and failed retry attempts, verify recipient totals after every successful transfer, test mid-loop ACK/consumption and disconnect; compare scheduled retry order without assuming dictionary enumeration order, and validate under the game's native 16/5 transfer limits.
+
+## Security-critical transfer failure handling (2026-10-31)
+
+The upstream `FileSender.StartTransfer` constructs `FileTransferOut` with **plaintext bytes** and adds it to `ActiveTransfers` before the Harmony postfix. Its `Update` method removes transfers whose `Status == FileTransferStatus.Error` **before** calling `Send`.
+
+Previously `AfterStartTransfer` called the cryptographic transformation without a catch/finally. If sealing threw, the Harmony postfix could exit with a plaintext active transfer. It also retained the original plaintext array after successful replacement.
+
+The postfix now catches crypto and reflection exceptions, marks the transfer `Error` before any future `Send`, and zeroes the original transfer plaintext buffer in a `finally` block after both success and failure. Replacement must produce a separate non-null buffer. The original sealed ciphertext buffer is not scrubbed.
+
+The `AllowUnsealedForIncapableClients` compatibility switch no longer permits plaintext fallback when `PreviewProtection` is enabled, even if explicitly configured. When `PreviewProtection=false`, the existing opt-in downgrade remains available.
+
+**Known limit:** `FileSender.OnStarted` is invoked by upstream before the Harmony postfix. This change prevents the standard sender's subsequent `Update` from sending plaintext after a failure; it does not prove that arbitrary third-party callbacks cannot observe the in-memory payload at startup. Live tests are required to validate exact hook ordering and subscriptions.
+
+**Required tests:** inject exceptions from `SaveResealer.Reseal`, `TransferSeal.Seal` and `EngineSymbols.OverwriteData`; confirm status `Error`, plaintext erased, no outgoing unsealed file; repeat under slow network and multiple clients. Benchmark the added O(file-bytes) plaintext erasure as a deliberate security cost. **NOT_RUN**.

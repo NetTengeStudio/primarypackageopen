@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using Barotrauma;
 using Barotrauma.Networking;
 using SubSeal.Wire;
@@ -144,7 +146,9 @@ namespace SubSeal.Server
                     return false;
                 }
                 Diagnostics.Note($"{Diagnostics.Describe(recipient)} cannot open sealed content");
-                if (!settings.AllowUnsealedForIncapableClients)
+                // Preview-protected servers must never downgrade a protected
+                // submarine or campaign save to a plaintext vanilla transfer.
+                if (settings.PreviewProtection || !settings.AllowUnsealedForIncapableClients)
                 {
                     Diagnostics.Note($"{Name(filePath)} refused");
                     return false;
@@ -205,21 +209,38 @@ namespace SubSeal.Server
                 return;
             }
 
+            // FileSender.StartTransfer creates a transfer containing plaintext
+            // before Harmony postfixes run. Any sealing or replacement failure
+            // must leave it non-sendable, even if a crypto routine throws.
             leases.MarkConsumed(__state);
-
             byte[] plain = __result.Data;
-            byte[] output = __state.FileType == FileTransferType.CampaignSave
-                ? SaveResealer.Reseal(plain, __state.ContentKey, __state.Id)
-                : SealSubmarine(plain, __state);
+            try
+            {
+                byte[] output = __state.FileType == FileTransferType.CampaignSave
+                    ? SaveResealer.Reseal(plain, __state.ContentKey, __state.Id)
+                    : SealSubmarine(plain, __state);
 
-            if (output is null)
+                if (output is null || ReferenceEquals(output, plain))
+                {
+                    __result.Status = FileTransferStatus.Error;
+                    Diagnostics.Fault($"{Name(__state.FilePath)} lease {__state.Id} seal aborted");
+                    return;
+                }
+
+                EngineSymbols.OverwriteData(__result, output);
+            }
+            catch (Exception error)
             {
                 __result.Status = FileTransferStatus.Error;
-                Diagnostics.Fault($"{Name(__state.FilePath)} lease {__state.Id} seal aborted");
-                return;
+                Diagnostics.Fault($"{Name(__state.FilePath)} lease {__state.Id} seal exception: {error.GetType().Name}");
             }
-
-            EngineSymbols.OverwriteData(__result, output);
+            finally
+            {
+                // FileSender.Update removes Status=Error transfers before Send().
+                // Always destroy the temporary plaintext payload after replacement
+                // or failure so it does not survive in the managed transfer buffer.
+                if (plain != null) { CryptographicOperations.ZeroMemory(plain); }
+            }
         }
 
         private static byte[] SealSubmarine(byte[] plain, Leases.Lease lease)
