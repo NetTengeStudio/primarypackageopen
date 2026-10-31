@@ -57,7 +57,16 @@ namespace PrimaryPackage.WallCollision
             if (__result == null || !ValidWall(__result)) { return; }
             string raw = element?.GetAttributeString(FaceAttribute, null);
             if (raw == null || !byte.TryParse(raw, out byte face) || face > (byte)WallFace.MinusY) { return; }
-            Stage(__result, (WallFace)face);
+            WallFace selectedFace = (WallFace)face;
+            if (!Stage(__result, selectedFace)) { return; }
+
+            // Prepared structures may be spawned after the administrator armed
+            // the system. They belong to the same activated configuration epoch.
+            if (!Ready || GameMain.GameSession is not { IsRunning: true }) { return; }
+            WallRules.Bind(__result, WallMode.OneWay, selectedFace);
+#if SERVER
+            WallCollisionServer.Broadcast(new RuleChange(__result.ID, WallMode.OneWay, selectedFace));
+#endif
         }
 
         public static void Saved(Structure __instance, XElement __result)

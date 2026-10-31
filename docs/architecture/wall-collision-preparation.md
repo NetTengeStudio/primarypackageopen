@@ -36,3 +36,9 @@ Wire formats, `contentserver` and `contentclient` are unaffected by this wall ac
 7. Measure activation CPU time and snapshot size for 0/10/100/1000 prepared walls; verify that idle frames perform no prepared-rule scans.
 
 **All builds, gameplay tests and benchmarks are NOT_RUN.** This draft must not be merged before those checks succeed.
+
+## Dynamic map additions after ec_ready
+
+A newly loaded `Structure` carrying a valid `pp_ecface` attribute is bound immediately if the server already activated the prepared collision epoch and the round is running. The server publishes an incremental rule change, so dynamic submarine loading does not silently leave newly prepared walls in vanilla mode. Before `ec_ready`, loading the same structure only stages its metadata and attaches no Farseer gate. This is an event-driven path; no per-tick scan of prepared walls was introduced.
+
+Regression: late-spawn a marked shuttle or structure during an armed round, verify the server's gate and the client's delta/snapshot resync, then remove it; compare against spawning before `ec_ready`. **NOT_RUN**.
