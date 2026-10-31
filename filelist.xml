@@ -40,6 +40,7 @@
   <Item file="%ModDir%/Content/Items/Decorations/caveman_cutout.xml" />
   <Item file="%ModDir%/Content/Items/Decorations/video_screen.xml" />
   <Item file="%ModDir%/Content/Items/Doors/doors.xml" />
+  <Item file="%ModDir%/Content/Items/Doors/Backrooms/surfacedoors.xml" />
   <Item file="%ModDir%/Content/Items/Generator/diesel_generators.xml" />
   <Item file="%ModDir%/Content/Items/Drill/drill.xml" />
   <Item file="%ModDir%/Content/Items/IRTools/ir_tools.xml" />
@@ -49,6 +50,8 @@
   <Item file="%ModDir%/Content/Items/PDA/pda.xml" />
   <Item file="%ModDir%/Content/Map/Structures/containers.xml" />
   <Structure file="%ModDir%/Content/Map/Structures/backrooms_walls.xml" />
+  <Structure file="%ModDir%/Content/Map/Structures/Backrooms/SWalls.xml" />
+  <Structure file="%ModDir%/Content/Map/Structures/Backrooms/walls.xml" />
   <Sounds file="%ModDir%/Content/Items/Armor/Sounds/sounds.xml" />
   <Sounds file="%ModDir%/Content/Sounds/Ambient/pp_dh_ambience.xml" />
   <Sounds file="%ModDir%/Content/Sounds/Currency/pp_currency.xml" />
