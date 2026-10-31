@@ -17,8 +17,6 @@ namespace SubSeal.Client
             ResidentAsset.EvictPreviewed();
         }
 
-        public static bool BeforeCampaignRetry() => !PreviewLock.ConfirmedProtected;
-
         public static void AfterCreatePreviewWindow(SubmarineInfo __instance,
             GUIComponent parent, int __state)
         {
