@@ -1,9 +1,22 @@
 using System;
+using System.Buffers;
 using Barotrauma;
 using Barotrauma.Networking;
 using PrimaryPackage.Core;
 
 namespace PrimaryPackage.WallCollision {
+    internal readonly struct WallRuleRecord {
+        internal readonly ushort Id;
+        internal readonly WallMode Mode;
+        internal readonly WallFace Face;
+
+        internal WallRuleRecord(ushort id, WallMode mode, WallFace face) {
+            Id = id;
+            Mode = mode;
+            Face = face;
+        }
+    }
+
     public static class WallCollisionClient {
         private const float FirstRequestDelay = 0.5f;
         private const float MaxRequestDelay = 15f;
@@ -66,6 +79,11 @@ namespace PrimaryPackage.WallCollision {
         }
 
         private static void OnState(IReadMessage message) {
+            try { ReadState(message); }
+            catch (Exception) { Resync(); }
+        }
+
+        private static void ReadState(IReadMessage message) {
             WallPacket kind = (WallPacket)message.ReadByte();
             uint epoch = message.ReadUInt32();
             uint revision = message.ReadUInt32();
@@ -73,39 +91,46 @@ namespace PrimaryPackage.WallCollision {
                 bool ready = message.ReadByte() != 0;
                 int count = message.ReadUInt16();
                 if (epoch == 0 || count > WallCollisionNet.MaxRules || (!ready && count != 0)) { Resync(); return; }
-                ushort[] ids = new ushort[count];
-                WallMode[] modes = new WallMode[count];
-                WallFace[] faces = new WallFace[count];
-                for (int i = 0; i < count; i++) {
-                    ids[i] = message.ReadUInt16();
-                    modes[i] = (WallMode)message.ReadByte();
-                    faces[i] = (WallFace)message.ReadByte();
-                }
-                if (synced && epoch == WallCollisionNet.Epoch && !Newer(revision)) { DroppedStale++; return; }
-                for (int i = 0; i < count; i++) {
-                    if ((modes[i] != WallMode.Solid && modes[i] != WallMode.OneWay) ||
-                        (byte)faces[i] > (byte)WallFace.MinusY ||
-                        Entity.FindEntityByID(ids[i]) is not Structure wall || wall.Removed) {
-                        Resync();
+                WallRuleRecord[] records = ArrayPool<WallRuleRecord>.Shared.Rent(count);
+                try {
+                    for (int i = 0; i < count; i++) {
+                        records[i] = new WallRuleRecord(message.ReadUInt16(),
+                            (WallMode)message.ReadByte(), (WallFace)message.ReadByte());
+                    }
+                    if (synced && epoch == WallCollisionNet.Epoch && !Newer(revision)) {
+                        DroppedStale++;
                         return;
                     }
-                }
-                bool applied = true;
-                WallContacts.BeginBatch();
-                try {
-                    WallRules.Reset();
-                    WallRules.SetReady(ready);
                     for (int i = 0; i < count; i++) {
-                        if (WallRules.Apply(ids[i], modes[i], faces[i])) { continue; }
-                        applied = false;
-                        WallRules.Reset();
-                        break;
+                        WallRuleRecord record = records[i];
+                        if ((record.Mode != WallMode.Solid && record.Mode != WallMode.OneWay) ||
+                            (byte)record.Face > (byte)WallFace.MinusY ||
+                            Entity.FindEntityByID(record.Id) is not Structure wall || wall.Removed) {
+                            Resync();
+                            return;
+                        }
                     }
+                    bool applied = true;
+                    WallContacts.BeginBatch();
+                    try {
+                        WallRules.Reset();
+                        WallRules.SetReady(ready);
+                        for (int i = 0; i < count; i++) {
+                            WallRuleRecord record = records[i];
+                            if (WallRules.Apply(record.Id, record.Mode, record.Face)) { continue; }
+                            applied = false;
+                            WallRules.Reset();
+                            break;
+                        }
+                    }
+                    finally {
+                        WallContacts.EndBatch();
+                    }
+                    if (!applied) { Resync(); return; }
                 }
                 finally {
-                    WallContacts.EndBatch();
+                    ArrayPool<WallRuleRecord>.Shared.Return(records);
                 }
-                if (!applied) { Resync(); return; }
                 WallCollisionNet.BeginEpoch(epoch);
                 WallCollisionNet.Accept(revision);
                 synced = true;
