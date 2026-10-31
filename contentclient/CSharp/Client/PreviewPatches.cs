@@ -25,7 +25,7 @@ namespace SubSeal.Client
             if (__instance is null || parent is null || __state < 0) { return; }
             GUIComponent content = parent.GetChild(__state);
             GUIComponent button = content?.GetChild(0);
-            PreviewSurfacePatches.Track(button);
+            PreviewSurfacePatches.Track(button, enableProtectedOpening: true);
         }
 
         public static bool BeforeGeneratePreviewMeshes(
