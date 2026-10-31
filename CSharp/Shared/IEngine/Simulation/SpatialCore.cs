@@ -18,7 +18,11 @@ static class SpatialCore
     public static float Radius = 5000f, Hysteresis = 1000f, NpcRadius = 800f;
     public static bool BotsAsViewers;
 
+    const int MaxCachedCellLists = 256;
     static readonly Dictionary<long, List<int>> cells = new();
+    // Empty buckets must not persist in the spatial index as old positions
+    // drift away. Bound reuse memory to 256 recently released cell lists.
+    static readonly Stack<List<int>> emptyCellLists = new();
     static readonly HashSet<long> awake = new(), inner = new(), outer = new(), scratch = new();
     static readonly List<Vector2> viewers = new(), npcs = new();
     // A slot has at most one scheduled refreeze, updated in place on wake.
@@ -64,7 +68,8 @@ static class SpatialCore
     public static void Stop()
     {
         Dormancy.WakeAll(Dormancy.BySpatial);
-        cells.Clear();
+        ReleaseCells();
+        emptyCellLists.Clear();
         awake.Clear();
         inner.Clear();
         outer.Clear();
@@ -370,7 +375,11 @@ static class SpatialCore
         cellOf[s] = key;
         indexed[s] = true;
         IndexedCount++;
-        if (!cells.TryGetValue(key, out List<int> cell)) { cells[key] = cell = new List<int>(); }
+        if (!cells.TryGetValue(key, out List<int> cell))
+        {
+            cell = emptyCellLists.Count > 0 ? emptyCellLists.Pop() : new List<int>(4);
+            cells.Add(key, cell);
+        }
         cell.Add(s);
         int r = Find(s);
         (members[r] ??= new List<int>()).Add(s);
@@ -400,6 +409,11 @@ static class SpatialCore
         {
             cell[at] = cell[^1];
             cell.RemoveAt(cell.Count - 1);
+            if (cell.Count == 0)
+            {
+                cells.Remove(cellOf[s]);
+                CacheEmptyCell(cell);
+            }
         }
         int r = Find(s);
         if (awake.Contains(cellOf[s])) { islandAwake[r]--; }
@@ -410,6 +424,18 @@ static class SpatialCore
             Dormancy.WakeSlot(s, item, Dormancy.BySpatial);
             Dormancy.Source = 0;
         }
+    }
+
+    static void CacheEmptyCell(List<int> list)
+    {
+        list.Clear();
+        if (emptyCellLists.Count < MaxCachedCellLists) { emptyCellLists.Push(list); }
+    }
+
+    static void ReleaseCells()
+    {
+        foreach (List<int> list in cells.Values) { CacheEmptyCell(list); }
+        cells.Clear();
     }
 
     static void Rebuild()
@@ -428,7 +454,7 @@ static class SpatialCore
         int resetLimit = Math.Max(n, previouslyAssignedSlots);
         EnsureCapacity(resetLimit);
         previouslyAssignedSlots = n;
-        foreach (var list in cells.Values) { list.Clear(); }
+        ReleaseCells();
         subs.Clear();
         subs.AddRange(Submarine.Loaded);
         IndexedCount = 0;
@@ -500,5 +526,5 @@ static class SpatialCore
     }
 
     public static string Report() =>
-        $"radius={Radius / 100:F0}m hysteresis={Hysteresis / 100:F0}m npcRadius={NpcRadius / 100:F0}m botsAsViewers={BotsAsViewers} viewers={viewers.Count} npcs={npcs.Count} indexed={IndexedCount} awakeCells={awake.Count} cells={cells.Count} frozenNow={FrozenNow()} frozen={Frozen} thawed={Thawed} eventRefreezes={EventRefreezes} wakePending={eventAwake.Count} reindexed={Reindexed} rebuilds={Rebuilds} rebuildCost={RebuildCost} tickCost={TickCost}";
+        $"radius={Radius / 100:F0}m hysteresis={Hysteresis / 100:F0}m npcRadius={NpcRadius / 100:F0}m botsAsViewers={BotsAsViewers} viewers={viewers.Count} npcs={npcs.Count} indexed={IndexedCount} awakeCells={awake.Count} cells={cells.Count} cachedCells={emptyCellLists.Count} frozenNow={FrozenNow()} frozen={Frozen} thawed={Thawed} eventRefreezes={EventRefreezes} wakePending={eventAwake.Count} reindexed={Reindexed} rebuilds={Rebuilds} rebuildCost={RebuildCost} tickCost={TickCost}";
 }

@@ -52,3 +52,11 @@ Known constraint: a topology split currently causes a full rebuild, not dynamic 
 The previous `SpatialCore.Rebuild` visited `ItemRegistry.Items.Length` three times to index roots/children and once to reset all allocated structures. That array starts with capacity 8192 even on maps with a handful of items. The new `ItemRegistry.SlotLimit` high-water mark is the actual boundary for roots, children and active-root scans. Clearing uses `max(currentSlotLimit, previousIndexedSlotRange)`, preserving cleanup after item-registry compaction or removal. Incremental item registrations update the previous indexed range to ensure future rebuilds remove their stale slots. `HullIndex.Rebuild` and `HullIndex.Mismatches` also iterate assigned slots rather than capacity.
 
 The loop work changes from O(arrayCapacity) to O(assigned slots) for the index passes, with cleanup bounded by the previously indexed range. The reset remains complete for all previously used slots. No performance measurement or actual compilation has occurred; tests should cover rebuild immediately after compaction, item removal, and repeated start/stop cycles.
+
+## Unbounded historical cell retention eliminated
+
+Previously `SpatialCore.Rebuild` called `Clear()` on all `cells.Values` but left each historical coordinate key in the dictionary; `Unindex` also left empty buckets in the dictionary. Long journeys, submarine movements and editing cycles could accumulate old empty cells, increasing memory and full-rebuild iteration cost even when few cells currently contained items.
+
+A cell bucket is now removed immediately when it becomes empty. `Rebuild` explicitly releases all previous cell keys, and recycles up to 256 empty `List<int>` instances for subsequent indexed positions. `Stop` clears the temporary pool. No dictionary traversal or full empty-cell scan is added to ordinary ticks; the pool has a fixed maximum. Diagnostics expose `cachedCells` alongside `cells`.
+
+**Required tests:** cross >10000 distinct positions using moving/teleported anchored items, remove last item from cells, load/unload multiple submarines, rebuild with zero items, verify every `cells` entry is nonempty and indices remain unique. Measure peak allocations under repeated rebuilds. **NOT_RUN**.
