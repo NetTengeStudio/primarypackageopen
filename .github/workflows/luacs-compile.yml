@@ -8,6 +8,14 @@ on:
 permissions:
   contents: read
 jobs:
+  runner-diagnostics:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Runner information
+        run: |
+          uname -a
+          echo "Runner operational"
+          dotnet --info
   compile:
     runs-on: ubuntu-latest
     strategy:
@@ -42,7 +50,7 @@ jobs:
           mkdir -p /tmp/luacs-refs
           unzip -q /tmp/luacs-refs.zip -d /tmp/luacs-refs
           find /tmp/luacs-refs -maxdepth 3 -type f -name '*.dll' | head -30
-          test -d /tmp/luacs-refs/Linux
+          find /tmp/luacs-refs -name '*.dll' | wc -l
       - name: Compile separate LuaCs target
         id: compilation
         shell: bash
@@ -59,7 +67,7 @@ jobs:
           target = os.environ["TARGET"]
           assembly = os.environ["ASSEMBLY"]
           root = pathlib.Path("/tmp/luacs-refs")
-          game = next((p for p in root.rglob(assembly) if p.parent.name.lower() == "linux"), None)
+          game = next((p for p in root.rglob(assembly) if "linux" in str(p).lower()), None)
           if game is None:
               raise SystemExit("Missing Linux " + assembly + " in LuaCs refs")
           refs_dir = game.parent
