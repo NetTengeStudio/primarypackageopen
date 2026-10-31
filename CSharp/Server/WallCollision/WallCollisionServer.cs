@@ -12,19 +12,26 @@ namespace PrimaryPackage.WallCollision {
         }
 
         public static void OnRoundStart() {
-            ushort revision = WallCollisionNet.Advance();
+            uint revision = WallCollisionNet.Advance();
             ModNet.Broadcast(WallCollisionNet.StateId, message => WriteSnapshot(message, revision));
         }
 
+        public static int Activate() {
+            int count = WallRules.ActivatePrepared();
+            uint revision = WallCollisionNet.Advance();
+            ModNet.Broadcast(WallCollisionNet.StateId, message => WriteSnapshot(message, revision));
+            return count;
+        }
+
         public static void Broadcast(in RuleChange change) {
-            if (!change.Changed) { return; }
+            if (!change.Changed || !WallRules.Ready) { return; }
             ushort revision = WallCollisionNet.Advance();
             ushort id = change.Id;
             byte mode = (byte)change.Mode;
             byte face = (byte)change.Face;
             ModNet.Broadcast(WallCollisionNet.StateId, message => {
                 message.WriteByte((byte)WallPacket.Set);
-                message.WriteUInt16(revision);
+                message.WriteUInt32(revision);
                 message.WriteUInt16(id);
                 message.WriteByte(mode);
                 message.WriteByte(face);
@@ -33,14 +40,15 @@ namespace PrimaryPackage.WallCollision {
 
         private static void OnRequest(IReadMessage message, Client sender) {
             if (sender == null || sender.Connection == null) { return; }
-            ushort revision = WallCollisionNet.Revision;
+            uint revision = WallCollisionNet.Revision;
             ModNet.Send(WallCollisionNet.StateId, sender.Connection, snapshot => WriteSnapshot(snapshot, revision));
         }
 
-        private static void WriteSnapshot(IWriteMessage message, ushort revision) {
+        private static void WriteSnapshot(IWriteMessage message, uint revision) {
             message.WriteByte((byte)WallPacket.Snapshot);
             message.WriteUInt16(revision);
-            int count = WallRules.Count;
+            message.WriteByte(WallRules.Ready ? (byte)1 : (byte)0);
+            int count = WallRules.Ready ? WallRules.Count : 0;
             message.WriteUInt16((ushort)count);
             for (int i = 0; i < count; i++) {
                 WallRule rule = WallRules.At(i);
