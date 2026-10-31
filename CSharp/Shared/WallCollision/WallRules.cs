@@ -143,16 +143,24 @@ namespace PrimaryPackage.WallCollision {
                 Unbind(wall.ID);
                 return;
             }
-            if (!byId.TryGetValue(wall.ID, out WallRule rule)) {
-                rule = new WallRule(wall.ID);
-                byId.Add(wall.ID, rule);
-                ordered.Add(rule);
+            WallContacts.BeginBatch();
+            try {
+                if (!byId.TryGetValue(wall.ID, out WallRule rule)) {
+                    rule = new WallRule(wall.ID);
+                    byId.Add(wall.ID, rule);
+                    ordered.Add(rule);
+                }
+                bool changed = rule.Mode != mode || rule.Face != face ||
+                               !ReferenceEquals(rule.Wall, wall);
+                if (changed) { rule.Release(); }
+                rule.Wall = wall;
+                rule.Mode = mode;
+                rule.Face = face;
+                rule.Rebind();
             }
-            if (rule.Mode != mode || rule.Face != face) { rule.Release(); }
-            rule.Wall = wall;
-            rule.Mode = mode;
-            rule.Face = face;
-            rule.Rebind();
+            finally {
+                WallContacts.EndBatch();
+            }
         }
 
         public static bool Apply(ushort id, WallMode mode, WallFace face) {
@@ -184,7 +192,9 @@ namespace PrimaryPackage.WallCollision {
             if (!Ready) { return; }
             WallRule rule = Find(wall);
             if (rule == null) { return; }
-            rule.Rebind();
+            WallContacts.BeginBatch();
+            try { rule.Rebind(); }
+            finally { WallContacts.EndBatch(); }
         }
 
         public static void RegisterPrepared(Structure wall) {
@@ -247,12 +257,16 @@ namespace PrimaryPackage.WallCollision {
 
         public static void Reset() {
             Ready = false;
-            for (int i = 0; i < ordered.Count; i++) { ordered[i].Release(); }
-            ordered.Clear();
-            byId.Clear();
-            nextCrossingSweep = 0;
-            nextPrune = 0;
-            WallContacts.Clear();
+            WallContacts.BeginBatch();
+            try {
+                for (int i = 0; i < ordered.Count; i++) { ordered[i].Release(); }
+                ordered.Clear();
+                byId.Clear();
+                nextCrossingSweep = 0;
+                nextPrune = 0;
+                WallContacts.Clear();
+            }
+            finally { WallContacts.EndBatch(); }
         }
     }
 }
