@@ -81,7 +81,7 @@ namespace PrimaryPackage.WallCollision {
                     modes[i] = (WallMode)message.ReadByte();
                     faces[i] = (WallFace)message.ReadByte();
                 }
-                if (synced && (epoch != WallCollisionNet.Epoch || !Newer(revision))) { DroppedStale++; return; }
+                if (synced && epoch == WallCollisionNet.Epoch && !Newer(revision)) { DroppedStale++; return; }
                 for (int i = 0; i < count; i++) {
                     if ((modes[i] != WallMode.Solid && modes[i] != WallMode.OneWay) ||
                         (byte)faces[i] > (byte)WallFace.MinusY ||
