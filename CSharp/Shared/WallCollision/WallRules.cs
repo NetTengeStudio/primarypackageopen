@@ -87,6 +87,7 @@ namespace PrimaryPackage.WallCollision {
         public WallFace Face { get; internal set; }
         public Vector2 Normal { get; private set; }
         public int GatedBodies => gated.Count;
+        internal bool HasCrossings => !crossings.IsEmpty;
 
         internal void Rebind() {
             Release(clearCrossings: false);
@@ -290,24 +291,30 @@ namespace PrimaryPackage.WallCollision {
         public static void Prune() {
             if (ordered.Count == 0) { return; }
             double now = Timing.TotalTime;
-            if (now < nextPrune) { return; }
-            nextPrune = now + 0.1;
-            stale.Clear();
-            for (int i = 0; i < ordered.Count; i++) {
-                Structure wall = ordered[i].Wall;
-                if (wall == null || wall.Removed) { stale.Add(ordered[i].Id); }
-            }
-            WallContacts.BeginBatch();
-            try {
-                for (int i = 0; i < stale.Count; i++) { Unbind(stale[i]); }
-            }
-            finally {
-                WallContacts.EndBatch();
+            if (now >= nextPrune) {
+                nextPrune = now + 2.0;
+                stale.Clear();
+                for (int i = 0; i < ordered.Count; i++) {
+                    Structure wall = ordered[i].Wall;
+                    if (wall == null || wall.Removed) { stale.Add(ordered[i].Id); }
+                }
+                if (stale.Count != 0) {
+                    WallContacts.BeginBatch();
+                    try {
+                        for (int i = 0; i < stale.Count; i++) { Unbind(stale[i]); }
+                    }
+                    finally {
+                        WallContacts.EndBatch();
+                    }
+                }
             }
             if (now < nextCrossingSweep) { return; }
             nextCrossingSweep = now + 0.1;
             World world = GameMain.World;
-            for (int i = 0; i < ordered.Count; i++) { ordered[i].SweepCrossings(world); }
+            for (int i = 0; i < ordered.Count; i++) {
+                WallRule rule = ordered[i];
+                if (rule.HasCrossings) { rule.SweepCrossings(world); }
+            }
         }
 
         public static void Reset() {
