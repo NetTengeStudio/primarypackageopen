@@ -111,7 +111,6 @@ namespace SubSeal.Client
             {
                 return false;
             }
-            TryPatchCampaignRetry();
             return true;
         }
 
@@ -168,22 +167,6 @@ namespace SubSeal.Client
             {
                 harmony.Unpatch(target, HarmonyPatchType.All, harmony.Id);
                 return false;
-            }
-        }
-
-        private void TryPatchCampaignRetry()
-        {
-            if (EngineSymbols.CampaignRetry is null) { return; }
-
-            try
-            {
-                harmony.Patch(
-                    EngineSymbols.CampaignRetry,
-                    prefix: new HarmonyMethod(typeof(PreviewPatches).GetMethod(nameof(PreviewPatches.BeforeCampaignRetry))));
-            }
-            catch (Exception)
-            {
-                harmony.Unpatch(EngineSymbols.CampaignRetry, HarmonyPatchType.All, harmony.Id);
             }
         }
 
