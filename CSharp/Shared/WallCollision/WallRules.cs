@@ -207,9 +207,15 @@ namespace PrimaryPackage.WallCollision {
 
         public static bool Unbind(ushort id) {
             if (!byId.TryGetValue(id, out WallRule rule)) { return false; }
-            rule.Release();
-            byId.Remove(id);
-            ordered.Remove(rule);
+            WallContacts.BeginBatch();
+            try {
+                rule.Release();
+                byId.Remove(id);
+                ordered.Remove(rule);
+            }
+            finally {
+                WallContacts.EndBatch();
+            }
             return true;
         }
 
@@ -291,7 +297,13 @@ namespace PrimaryPackage.WallCollision {
                 Structure wall = ordered[i].Wall;
                 if (wall == null || wall.Removed) { stale.Add(ordered[i].Id); }
             }
-            for (int i = 0; i < stale.Count; i++) { Unbind(stale[i]); }
+            WallContacts.BeginBatch();
+            try {
+                for (int i = 0; i < stale.Count; i++) { Unbind(stale[i]); }
+            }
+            finally {
+                WallContacts.EndBatch();
+            }
             if (now < nextCrossingSweep) { return; }
             nextCrossingSweep = now + 0.1;
             World world = GameMain.World;
