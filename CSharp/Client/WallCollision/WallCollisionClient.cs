@@ -42,11 +42,13 @@ namespace PrimaryPackage.WallCollision {
 
         private static void OnState(IReadMessage message) {
             WallPacket kind = (WallPacket)message.ReadByte();
-            ushort revision = message.ReadUInt16();
+            uint revision = message.ReadUInt32();
             if (kind == WallPacket.Snapshot) {
+                bool ready = message.ReadByte() != 0;
                 if (synced && !Newer(revision)) { DroppedStale++; return; }
                 int count = message.ReadUInt16();
                 WallRules.Reset();
+                WallRules.SetReady(ready);
                 bool resolved = true;
                 for (int i = 0; i < count; i++) {
                     ushort id = message.ReadUInt16();
@@ -54,12 +56,12 @@ namespace PrimaryPackage.WallCollision {
                     WallFace face = (WallFace)message.ReadByte();
                     if (!WallRules.Apply(id, mode, face)) { resolved = false; }
                 }
-                if (Newer(revision)) { WallCollisionNet.Accept(revision); }
+                WallCollisionNet.Accept(revision);
                 synced = resolved;
                 ReceivedSnapshots++;
                 return;
             }
-            if (!synced) { return; }
+            if (!synced || !WallRules.Ready || kind != WallPacket.Set) { return; }
             if (!Newer(revision)) { DroppedStale++; return; }
             ushort changedId = message.ReadUInt16();
             WallMode changedMode = (WallMode)message.ReadByte();
@@ -73,11 +75,11 @@ namespace PrimaryPackage.WallCollision {
             WallCollisionNet.Accept(revision);
         }
 
-        private static bool Newer(ushort revision) => (short)(revision - WallCollisionNet.Revision) > 0;
+        private static bool Newer(uint revision) => unchecked((int)(revision - WallCollisionNet.Revision)) > 0;
 
         public static string Status() {
             if (GameMain.Client == null) { return "локально (одиночная игра)"; }
-            return (synced ? "получена" : "ожидается") + ", снимков " + ReceivedSnapshots +
+            return (synced ? (WallRules.Ready ? "активна" : "ожидает ec_ready") : "ожидается") + ", снимков " + ReceivedSnapshots +
                    (DroppedStale > 0 ? ", отброшено устаревших " + DroppedStale : string.Empty);
         }
     }
