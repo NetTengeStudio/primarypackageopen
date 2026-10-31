@@ -22,17 +22,28 @@ namespace SubSeal.Client
         {
             LuaCsSetup.Instance.Networking.Receive(Protocol.ChannelToClient, (IReadMessage message) =>
             {
-                switch (message.ReadByte())
+                try
                 {
-                    case Protocol.ToClientHelloAck:
-                        ReadHelloAck(message);
-                        break;
-                    case Protocol.ToClientLeaseGrant:
-                        ReadLeaseGrant(message);
-                        break;
-                    case Protocol.ToClientRevoke:
-                        leases.Release(message.ReadUInt32());
-                        break;
+                    switch (message.ReadByte())
+                    {
+                        case Protocol.ToClientHelloAck:
+                            ReadHelloAck(message);
+                            break;
+                        case Protocol.ToClientLeaseGrant:
+                            ReadLeaseGrant(message);
+                            break;
+                        case Protocol.ToClientRevoke:
+                            leases.Release(message.ReadUInt32());
+                            break;
+                    }
+                }
+                catch (Exception exception) when (exception is IndexOutOfRangeException ||
+                    exception is ArgumentException || exception is InvalidOperationException ||
+                    exception is OverflowException)
+                {
+                    sessionKey.Discard();
+                    leases.ReleaseAll();
+                    PreviewLock.Clear();
                 }
             });
         }
