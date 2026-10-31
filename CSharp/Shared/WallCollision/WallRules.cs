@@ -22,6 +22,14 @@ namespace PrimaryPackage.WallCollision {
             this.crossings = crossings;
         }
 
+        internal bool IgnoreFloorRay(Vector2 start, Vector2 end) {
+            // Ragdoll.GetFloorY casts downward. Only an upper-facing passage
+            // can be treated as non-supporting floor from its entry side.
+            if (normal.Y <= 0.5f || end.Y >= start.Y) { return false; }
+            Vector2 offset = start - referencePosition;
+            return offset.X * normal.X + offset.Y * normal.Y > 0f;
+        }
+
         internal bool AllowCrossing(Body other) {
             if (other == null || other.BodyType != FarseerPhysics.BodyType.Dynamic || !other.Enabled) { return false; }
             if (crossings.ContainsKey(other)) { return true; }
