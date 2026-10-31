@@ -31,7 +31,7 @@ namespace PrimaryPackage.WallCollision {
         }
 
         public static void Update(float deltaTime) {
-            if ((synced && WallRules.Ready) || deltaTime <= 0f) { return; }
+            if (synced || deltaTime <= 0f) { return; }
             if (GameMain.Client == null || GameMain.GameSession == null) { return; }
             timer -= deltaTime;
             if (timer > 0f) { return; }
@@ -58,6 +58,7 @@ namespace PrimaryPackage.WallCollision {
                 }
                 WallCollisionNet.Accept(revision);
                 synced = resolved;
+                if (!resolved) { timer = FirstRequestDelay; delay = FirstRequestDelay; }
                 ReceivedSnapshots++;
                 return;
             }
