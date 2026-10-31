@@ -12,7 +12,7 @@ namespace SubSeal.Client
 
         internal void Add()
         {
-            if (DebugConsole.Commands.Any(c => c.Names.Contains("subseal_leases"))) { return; }
+            if (added.Count != 0) { return; }
 
             var listCmd = new DebugConsole.Command("subseal_leases", "subseal_leases", OnListLeases);
             added.Add(listCmd);
