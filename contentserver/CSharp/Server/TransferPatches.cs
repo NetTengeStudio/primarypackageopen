@@ -69,19 +69,28 @@ namespace SubSeal.Server
             FileSender sender = GameMain.Server?.FileSender;
             if (sender is null) { return; }
 
+            int active = sender.ActiveTransfers.Count;
+            if (active >= 16) { return; }
+
+            Dictionary<NetworkConnection, int> counts = new Dictionary<NetworkConnection, int>();
+            foreach (FileSender.FileTransferOut transfer in sender.ActiveTransfers)
+            {
+                if (transfer.Connection is null) { continue; }
+                counts.TryGetValue(transfer.Connection, out int previous);
+                counts[transfer.Connection] = previous + 1;
+            }
+
+            double now = Timing.TotalTime;
             foreach (Leases.Lease lease in leases.All)
             {
-                if (!lease.Armed || lease.Consumed || Timing.TotalTime - lease.LastRetryAt < RegrantIntervalSeconds) { continue; }
+                if (!lease.Armed || lease.Consumed || now - lease.LastRetryAt < RegrantIntervalSeconds) { continue; }
+                counts.TryGetValue(lease.Connection, out int recipientTransfers);
+                if (active >= 16 || recipientTransfers >= 5) { continue; }
 
-                int recipientTransfers = 0;
-                foreach (FileSender.FileTransferOut transfer in sender.ActiveTransfers)
-                {
-                    if (transfer.Connection == lease.Connection) { recipientTransfers++; }
-                }
-                if (sender.ActiveTransfers.Count >= 16 || recipientTransfers >= 5) { continue; }
-
-                lease.LastRetryAt = Timing.TotalTime;
+                lease.LastRetryAt = now;
                 Retry(lease.Connection, lease.FileType, lease.FilePath);
+                counts[lease.Connection] = recipientTransfers + 1;
+                active++;
             }
         }
 
