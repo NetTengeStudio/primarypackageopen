@@ -104,8 +104,41 @@ namespace SubSeal.Client
             }
 
             TryPatchPreviewUi();
+            TryPatchAdditionalPreviewSurfaces();
             TryPatchCampaignRetry();
             return true;
+        }
+
+        private void TryPatchAdditionalPreviewSurfaces()
+        {
+            // Each surface is independent. A version mismatch must not remove
+            // the core SubSeal patches or disrupt GUI navigation.
+            TryPatchAdditional(EngineSymbols.TabMenuPreview,
+                nameof(PreviewSurfacePatches.BeforeCreateTabPreview),
+                nameof(PreviewSurfacePatches.AfterCreateTabPreview));
+            TryPatchAdditional(EngineSymbols.SelectionPreviewImage,
+                nameof(PreviewSurfacePatches.BeforeGetSelectionPreview), null);
+            TryPatchAdditional(EngineSymbols.SelectionRefresh, null,
+                nameof(PreviewSurfacePatches.AfterSelectionRefresh));
+            TryPatchAdditional(EngineSymbols.SelectionSelect, null,
+                nameof(PreviewSurfacePatches.AfterSelectSubmarine));
+        }
+
+        private void TryPatchAdditional(System.Reflection.MethodInfo target, string prefix, string postfix)
+        {
+            if (target is null) { return; }
+            try
+            {
+                harmony.Patch(target,
+                    prefix: prefix is null ? null : new HarmonyMethod(
+                        typeof(PreviewSurfacePatches).GetMethod(prefix)),
+                    postfix: postfix is null ? null : new HarmonyMethod(
+                        typeof(PreviewSurfacePatches).GetMethod(postfix)));
+            }
+            catch (Exception)
+            {
+                harmony.Unpatch(target, HarmonyPatchType.All, harmony.Id);
+            }
         }
 
         private void TryPatchCampaignRetry()
