@@ -7,12 +7,74 @@ using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
 
 namespace PrimaryPackage.WallCollision {
-    public sealed class WallRule {
+    internal sealed class WallGateState {
         private const float Clearance = 0.05f;
+        private readonly Vector2 normal;
+        private readonly Vector2 referencePosition;
+        private readonly float halfThickness;
+        private readonly ConcurrentDictionary<Body, float> crossings;
+
+        internal WallGateState(Vector2 normal, Vector2 referencePosition, float halfThickness,
+            ConcurrentDictionary<Body, float> crossings) {
+            this.normal = normal;
+            this.referencePosition = referencePosition;
+            this.halfThickness = halfThickness;
+            this.crossings = crossings;
+        }
+
+        internal bool AllowCrossing(Body other) {
+            if (other == null || other.BodyType != BodyType.Dynamic || !other.Enabled) { return false; }
+            if (crossings.ContainsKey(other)) { return true; }
+            Vector2 offset = other.WorldCenter - referencePosition;
+            float side = offset.X * normal.X + offset.Y * normal.Y;
+            if (side <= 0f) { return false; }
+            Vector2 velocity = other.LinearVelocity;
+            if (velocity.X * normal.X + velocity.Y * normal.Y >= 0f) { return false; }
+            if (crossings.TryAdd(other, MeasureRadius(other))) { return true; }
+            return crossings.ContainsKey(other);
+        }
+
+        internal void Sweep(World world) {
+            if (crossings.IsEmpty) { return; }
+            foreach (KeyValuePair<Body, float> entry in crossings) {
+                Body body = entry.Key;
+                if (body.World != world || !body.Enabled || body.BodyType != BodyType.Dynamic) {
+                    crossings.TryRemove(body, out _);
+                    continue;
+                }
+                Vector2 offset = body.WorldCenter - referencePosition;
+                float distance = offset.X * normal.X + offset.Y * normal.Y;
+                if (Math.Abs(distance) > halfThickness + entry.Value + Clearance) {
+                    crossings.TryRemove(body, out _);
+                }
+            }
+        }
+
+        private static float MeasureRadius(Body body) {
+            float radiusSquared = 0f;
+            Vector2 center = body.WorldCenter;
+            List<Fixture> fixtures = body.FixtureList;
+            if (fixtures is null) { return 0.5f; }
+            for (int index = 0; index < fixtures.Count; index++) {
+                Fixture fixture = fixtures[index];
+                if (fixture?.Shape is null) { continue; }
+                for (int child = 0; child < fixture.Shape.ChildCount; child++) {
+                    fixture.GetAABB(out AABB bounds, child);
+                    float dx = Math.Max(Math.Abs(bounds.LowerBound.X - center.X),
+                        Math.Abs(bounds.UpperBound.X - center.X));
+                    float dy = Math.Max(Math.Abs(bounds.LowerBound.Y - center.Y),
+                        Math.Abs(bounds.UpperBound.Y - center.Y));
+                    radiusSquared = Math.Max(radiusSquared, dx * dx + dy * dy);
+                }
+            }
+            return radiusSquared > 0f ? (float)Math.Sqrt(radiusSquared) : 0.5f;
+        }
+    }
+
+    public sealed class WallRule {
         private readonly List<Body> gated = new List<Body>(4);
         private readonly ConcurrentDictionary<Body, float> crossings = new ConcurrentDictionary<Body, float>();
-        private Vector2 referencePosition;
-        private float halfThickness;
+        private WallGateState gateState;
 
         internal WallRule(ushort id) {
             Id = id;
@@ -28,79 +90,35 @@ namespace PrimaryPackage.WallCollision {
 
         internal void Rebind() {
             Release(clearCrossings: false);
-            if (Mode != WallMode.OneWay || Wall == null || Wall.Bodies == null) { return; }
+            if (Mode != WallMode.OneWay || Wall?.Bodies is null) { return; }
             List<Body> bodies = Wall.Bodies;
-            if (!WallGeometry.TryMeasure(bodies, Physics.CollisionWall, out float width, out float height, out _)) { return; }
-            halfThickness = (Face == WallFace.PlusX || Face == WallFace.MinusX ? width : height) * 0.5f;
+            if (!WallGeometry.TryMeasure(bodies, Physics.CollisionWall, out float width,
+                out float height, out _)) { return; }
+            float halfThickness = (Face == WallFace.PlusX || Face == WallFace.MinusX
+                ? width : height) * 0.5f;
             bool measured = false;
             for (int i = 0; i < bodies.Count; i++) {
                 Body body = bodies[i];
                 if (!WallGeometry.HasWallFixture(body, Physics.CollisionWall)) { continue; }
                 if (!measured) {
                     Normal = new WallPlane(Face).Normal(body.Rotation);
-                    referencePosition = body.Position;
+                    gateState = new WallGateState(Normal, body.Position, halfThickness, crossings);
                     measured = true;
                 }
-                WallContacts.Attach(GameMain.World, new WallGate(body, this));
+                WallContacts.Attach(GameMain.World, new WallGate(body, gateState));
                 gated.Add(body);
             }
         }
 
-        internal bool AllowCrossing(Body other) {
-            if (Mode != WallMode.OneWay || other == null ||
-                other.BodyType != BodyType.Dynamic || !other.Enabled) { return false; }
-            if (crossings.ContainsKey(other)) { return true; }
+        internal bool AllowCrossing(Body other)
+            => gateState?.AllowCrossing(other) ?? false;
 
-            Vector2 offset = other.WorldCenter - referencePosition;
-            float side = offset.X * Normal.X + offset.Y * Normal.Y;
-            if (side <= 0f) { return false; }
-
-            Vector2 velocity = other.LinearVelocity;
-            if (velocity.X * Normal.X + velocity.Y * Normal.Y >= 0f) { return false; }
-
-            if (crossings.TryAdd(other, MeasureRadius(other))) { return true; }
-            return crossings.ContainsKey(other);
-        }
-
-        internal void SweepCrossings(World world) {
-            if (crossings.IsEmpty) { return; }
-            foreach (KeyValuePair<Body, float> entry in crossings) {
-                Body body = entry.Key;
-                if (body.World != world || !body.Enabled || body.BodyType != BodyType.Dynamic) {
-                    crossings.TryRemove(body, out _);
-                    continue;
-                }
-                Vector2 offset = body.WorldCenter - referencePosition;
-                float distance = offset.X * Normal.X + offset.Y * Normal.Y;
-                if (Math.Abs(distance) > halfThickness + entry.Value + Clearance) {
-                    crossings.TryRemove(body, out _);
-                }
-            }
-        }
-
-        private static float MeasureRadius(Body body) {
-            float radiusSquared = 0f;
-            Vector2 center = body.WorldCenter;
-            List<Fixture> fixtures = body.FixtureList;
-            if (fixtures == null) { return 0.5f; }
-            for (int index = 0; index < fixtures.Count; index++) {
-                Fixture fixture = fixtures[index];
-                if (fixture?.Shape == null) { continue; }
-                for (int child = 0; child < fixture.Shape.ChildCount; child++) {
-                    fixture.GetAABB(out AABB bounds, child);
-                    float dx = Math.Max(Math.Abs(bounds.LowerBound.X - center.X),
-                                        Math.Abs(bounds.UpperBound.X - center.X));
-                    float dy = Math.Max(Math.Abs(bounds.LowerBound.Y - center.Y),
-                                        Math.Abs(bounds.UpperBound.Y - center.Y));
-                    radiusSquared = Math.Max(radiusSquared, dx * dx + dy * dy);
-                }
-            }
-            return radiusSquared > 0f ? (float)Math.Sqrt(radiusSquared) : 0.5f;
-        }
+        internal void SweepCrossings(World world) => gateState?.Sweep(world);
 
         internal void Release(bool clearCrossings = true) {
             for (int i = 0; i < gated.Count; i++) { WallContacts.Detach(gated[i]); }
             gated.Clear();
+            gateState = null;
             if (clearCrossings) { crossings.Clear(); }
         }
     }
