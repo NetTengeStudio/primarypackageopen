@@ -37,11 +37,13 @@ namespace SubSeal.Server
             channel = new LeaseChannel(sessions, leases, settings.PreviewProtection);
             commands = new Commands(sessions, leases, channel);
 
+            ModTransferPolicy.Build(settings);
             TransferPatches.Bind(settings, sessions, leases, entitlement, channel);
 
             if (Gate.Install(harmony, settings) == GateMode.None)
             {
                 TransferPatches.Unbind();
+                ModTransferPolicy.Clear();
                 harmony.UnpatchSelf();
                 EngineSymbols.Forget();
                 Gate.Forget();
@@ -92,6 +94,7 @@ namespace SubSeal.Server
             }
 
             TransferPatches.Unbind();
+            ModTransferPolicy.Clear();
             harmony.UnpatchSelf();
             EngineSymbols.Forget();
             Gate.Forget();
