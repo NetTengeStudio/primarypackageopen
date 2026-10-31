@@ -108,8 +108,6 @@ namespace SubSeal.Client
             PreviewLock.SetUiReady(previewReady && surfacesReady);
             if (!PreviewLock.PreviewUiReady)
             {
-                harmony.UnpatchSelf();
-                OpenPatches.Bind(null);
                 return false;
             }
             TryPatchCampaignRetry();
