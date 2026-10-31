@@ -1,0 +1,64 @@
+using System.Threading.Tasks;
+using Barotrauma;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
+namespace SubSeal.Client
+{
+    internal static class PreviewPatches
+    {
+        public static void BeforeCreatePreviewWindow(GUIComponent parent, ref int __state)
+            => __state = parent is null ? -1 : parent.CountChildren;
+
+        public static void AfterPreviewDisposed()
+        {
+            if (PreviewLock.IsCreating) { return; }
+            PreviewLock.Release();
+            ResidentAsset.EvictPreviewed();
+        }
+
+        public static bool BeforeCampaignRetry() => !PreviewLock.ProtectionActive;
+
+        public static void AfterCreatePreviewWindow(SubmarineInfo __instance, GUIComponent parent, int __state)
+        {
+            if (__state < 0 || !PreviewLock.ShowLocked(__instance)) { return; }
+
+            GUIComponent content = parent.GetChild(__state);
+            GUIComponent area = content?.GetChild(0);
+            if (area is null) { return; }
+
+            GUIFrame black = new GUIFrame(new RectTransform(Vector2.One, area.RectTransform), style: null)
+            {
+                Color = Color.Black,
+                CanBeFocused = false
+            };
+
+            new GUITextBlock(
+                new RectTransform(Vector2.One, black.RectTransform, Anchor.Center),
+                PreviewLock.Text,
+                textColor: Color.White,
+                font: GUIStyle.LargeFont,
+                textAlignment: Alignment.Center)
+            {
+                CanBeFocused = false
+            };
+
+            area.CanBeFocused = true;
+        }
+
+        public static bool BeforeGeneratePreviewMeshes(SubmarinePreview __instance, ref Task __result)
+        {
+            if (!PreviewLock.IsHeldLocked()) { return true; }
+            EngineSymbols.SetPreviewBounds(__instance);
+            __result = Task.FromResult(0);
+            return false;
+        }
+
+        public static bool BeforeRenderSubmarine(SpriteBatch spriteBatch, Rectangle scissorRectangle)
+        {
+            if (!PreviewLock.IsHeldLocked()) { return true; }
+            PreviewLock.Draw(spriteBatch, scissorRectangle);
+            return false;
+        }
+    }
+}

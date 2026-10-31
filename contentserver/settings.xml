@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SubSeal PreviewProtection="true" PublicSubmarines="" RestrictToActiveSubmarines="false" AllowUnsealedForIncapableClients="false" AllowPlaintextWhenUnenforceable="false" LeaseRetentionSeconds="30" BudgetCapacity="8" BudgetRefillSeconds="30" BudgetRetentionSeconds="900" />
