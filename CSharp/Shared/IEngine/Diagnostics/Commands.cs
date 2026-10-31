@@ -103,6 +103,11 @@ static partial class Commands
             run(args);
         };
         var command = new DebugConsole.Command(name, help, body);
+#if CLIENT
+        // Diagnostic commands operate on this client's engine state, not the server's.
+        command.RelayToServer = false;
+        command.OnClientExecute = body;
+#endif
         DebugConsole.Commands.Add(command);
         registered.Add(command);
     }
