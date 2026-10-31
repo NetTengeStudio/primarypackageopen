@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Barotrauma;
 using Barotrauma.LuaCs;
 using Barotrauma.Networking;
@@ -11,6 +12,8 @@ namespace PrimaryPackage.Cold {
         private static bool synced;
         private static float requestTimer;
         private static float backoff = RequestInterval;
+        private static int graphVersion = -1;
+        private static readonly HashSet<ushort> receivedFullHulls = new HashSet<ushort>();
 
         public static bool Synced => synced;
         public static double LastReceivedAt { get; private set; } = double.NegativeInfinity;
@@ -27,6 +30,8 @@ namespace PrimaryPackage.Cold {
             synced = false;
             requestTimer = 0.0f;
             backoff = RequestInterval;
+            graphVersion = -1;
+            receivedFullHulls.Clear();
             LastReceivedAt = double.NegativeInfinity;
             LastReceivedHulls = 0;
             ReceivedMessages = 0;
@@ -35,9 +40,12 @@ namespace PrimaryPackage.Cold {
         private const float MaxRequestInterval = 30.0f;
 
         public static void Update(float deltaTime) {
-            if (GameMain.Client == null || GameMain.GameSession == null || synced) { return; }
+            if (GameMain.Client == null || GameMain.GameSession == null) { return; }
             ColdField.Touch();
-            if (ColdField.Count == 0) { return; }
+            if (graphVersion != ColdField.Version) {
+                InvalidateGraph();
+            }
+            if (ColdField.Count == 0 || synced) { return; }
             requestTimer -= deltaTime;
             if (requestTimer > 0.0f) { return; }
             requestTimer = backoff;
@@ -45,11 +53,21 @@ namespace PrimaryPackage.Cold {
             PrimaryPackage.Core.ModNet.Send(ColdNet.RequestId, null);
         }
 
+        private static void InvalidateGraph() {
+            graphVersion = ColdField.Version;
+            receivedFullHulls.Clear();
+            synced = false;
+            requestTimer = 0.0f;
+            backoff = RequestInterval;
+        }
+
         private static void OnState(IReadMessage msg) {
             byte flags = msg.ReadByte();
             int count = msg.ReadUInt16();
             if (count > ColdNet.MaxPerMessage) { return; }
             ColdField.Touch();
+            if (graphVersion != ColdField.Version) { InvalidateGraph(); }
+            bool full = (flags & ColdNet.FlagFull) != 0;
             int applied = 0;
             for (int i = 0; i < count; i++) {
                 ushort id = msg.ReadUInt16();
@@ -58,11 +76,13 @@ namespace PrimaryPackage.Cold {
                 if (ColdField.IndexOf(hull) < 0) { continue; }
                 ColdField.Set(hull, value);
                 applied++;
+                if (full) { receivedFullHulls.Add(id); }
             }
-            // Data chunks alone are not a completed snapshot: the server sends
-            // a final reliable marker only after writing every chunk.
-            if ((flags & (ColdNet.FlagFull | ColdNet.FlagSnapshotComplete)) ==
-                (ColdNet.FlagFull | ColdNet.FlagSnapshotComplete) && count == 0)
+            // New servers send an explicit terminator; legacy servers only
+            // send data chunks. In either case synchronize only when every
+            // currently indexed local hull has been observed in full state.
+            if (full && receivedFullHulls.Count >= ColdField.Count &&
+                (count == 0 || receivedFullHulls.Count > 0))
             {
                 synced = true;
             }
