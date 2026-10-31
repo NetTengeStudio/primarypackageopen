@@ -1,11 +1,19 @@
+using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using FarseerPhysics.Collision;
 using Barotrauma;
 using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
 
 namespace PrimaryPackage.WallCollision {
     public sealed class WallRule {
+        private const float Clearance = 0.05f;
         private readonly List<Body> gated = new List<Body>(4);
+        // PreSolve may run on parallel physics workers; per-wall crossing state must be thread-safe.
+        private readonly ConcurrentDictionary<Body, float> crossings = new ConcurrentDictionary<Body, float>();
+        private Vector2 referencePosition;
+        private float halfThickness;
 
         internal WallRule(ushort id) {
             Id = id;
@@ -13,37 +21,88 @@ namespace PrimaryPackage.WallCollision {
         }
 
         public ushort Id { get; }
-
         public Structure Wall { get; internal set; }
-
         public WallMode Mode { get; internal set; }
-
         public WallFace Face { get; internal set; }
-
         public Vector2 Normal { get; private set; }
-
         public int GatedBodies => gated.Count;
 
         internal void Rebind() {
             Release();
             if (Mode != WallMode.OneWay || Wall == null || Wall.Bodies == null) { return; }
             List<Body> bodies = Wall.Bodies;
+            if (!WallGeometry.TryMeasure(bodies, Physics.CollisionWall, out float width, out float height, out _)) { return; }
+            halfThickness = (Face == WallFace.PlusX || Face == WallFace.MinusX ? width : height) * 0.5f;
             bool measured = false;
             for (int i = 0; i < bodies.Count; i++) {
                 Body body = bodies[i];
                 if (!WallGeometry.HasWallFixture(body, Physics.CollisionWall)) { continue; }
                 if (!measured) {
                     Normal = new WallPlane(Face).Normal(body.Rotation);
+                    referencePosition = body.Position;
                     measured = true;
                 }
-                WallContacts.Attach(GameMain.World, new WallGate(body, Face));
+                WallContacts.Attach(GameMain.World, new WallGate(body, this));
                 gated.Add(body);
             }
+        }
+
+        internal bool AllowCrossing(Body other) {
+            if (Mode != WallMode.OneWay || other == null ||
+                other.BodyType != BodyType.Dynamic || !other.Enabled) { return false; }
+            if (crossings.ContainsKey(other)) { return true; }
+
+            Vector2 offset = other.WorldCenter - referencePosition;
+            float side = offset.X * Normal.X + offset.Y * Normal.Y;
+            if (side <= 0f) { return false; }
+
+            Vector2 velocity = other.LinearVelocity;
+            if (velocity.X * Normal.X + velocity.Y * Normal.Y >= 0f) { return false; }
+
+            if (crossings.TryAdd(other, MeasureRadius(other))) { return true; }
+            return crossings.ContainsKey(other);
+        }
+
+        internal void SweepCrossings(World world) {
+            if (crossings.IsEmpty) { return; }
+            foreach (KeyValuePair<Body, float> entry in crossings) {
+                Body body = entry.Key;
+                if (body.World != world || !body.Enabled || body.BodyType != BodyType.Dynamic) {
+                    crossings.TryRemove(body, out _);
+                    continue;
+                }
+                Vector2 offset = body.WorldCenter - referencePosition;
+                float distance = offset.X * Normal.X + offset.Y * Normal.Y;
+                if (Math.Abs(distance) > halfThickness + entry.Value + Clearance) {
+                    crossings.TryRemove(body, out _);
+                }
+            }
+        }
+
+        private static float MeasureRadius(Body body) {
+            float radiusSquared = 0f;
+            Vector2 center = body.WorldCenter;
+            List<Fixture> fixtures = body.FixtureList;
+            if (fixtures == null) { return 0.5f; }
+            for (int index = 0; index < fixtures.Count; index++) {
+                Fixture fixture = fixtures[index];
+                if (fixture?.Shape == null) { continue; }
+                for (int child = 0; child < fixture.Shape.ChildCount; child++) {
+                    fixture.GetAABB(out AABB bounds, child);
+                    float dx = Math.Max(Math.Abs(bounds.LowerBound.X - center.X),
+                                        Math.Abs(bounds.UpperBound.X - center.X));
+                    float dy = Math.Max(Math.Abs(bounds.LowerBound.Y - center.Y),
+                                        Math.Abs(bounds.UpperBound.Y - center.Y));
+                    radiusSquared = Math.Max(radiusSquared, dx * dx + dy * dy);
+                }
+            }
+            return radiusSquared > 0f ? (float)Math.Sqrt(radiusSquared) : 0.5f;
         }
 
         internal void Release() {
             for (int i = 0; i < gated.Count; i++) { WallContacts.Detach(gated[i]); }
             gated.Clear();
+            crossings.Clear();
         }
     }
 
@@ -69,6 +128,7 @@ namespace PrimaryPackage.WallCollision {
         private static readonly List<WallRule> ordered = new List<WallRule>(16);
         private static readonly Dictionary<ushort, WallRule> byId = new Dictionary<ushort, WallRule>(16);
         private static readonly List<ushort> stale = new List<ushort>(8);
+        private static double nextCrossingSweep;
 
         public static bool Ready { get; private set; }
 
@@ -96,6 +156,8 @@ namespace PrimaryPackage.WallCollision {
         public static bool Apply(ushort id, WallMode mode, WallFace face) {
             if (!Ready) { return false; }
             if (mode == WallMode.None) { return Unbind(id); }
+            if (mode != WallMode.Solid && mode != WallMode.OneWay) { return false; }
+            if ((byte)face > (byte)WallFace.MinusY) { return false; }
             if (Entity.FindEntityByID(id) is not Structure wall) { return false; }
             if (wall.Removed) { return false; }
             Bind(wall, mode, face);
@@ -130,8 +192,7 @@ namespace PrimaryPackage.WallCollision {
             foreach (MapEntity entity in MapEntity.MapEntityList) {
                 if (entity is not Structure wall || wall.Removed || !wall.HasBody) { continue; }
                 if (!WallConfiguration.TryRead(wall, out WallMode mode, out WallFace face)) { continue; }
-                if (!WallGeometry.HasWallFixture(wall.Bodies != null && wall.Bodies.Count != 0 ?
-                        wall.Bodies[0] : null, Physics.CollisionWall)) { continue; }
+                if (!WallGeometry.TryAxis(wall.Bodies, Physics.CollisionWall, out _, out _, out _)) { continue; }
                 Bind(wall, mode, face);
                 activated++;
             }
@@ -154,6 +215,10 @@ namespace PrimaryPackage.WallCollision {
                 if (wall == null || wall.Removed) { stale.Add(ordered[i].Id); }
             }
             for (int i = 0; i < stale.Count; i++) { Unbind(stale[i]); }
+            if (Timing.TotalTime < nextCrossingSweep) { return; }
+            nextCrossingSweep = Timing.TotalTime + 0.1;
+            World world = GameMain.World;
+            for (int i = 0; i < ordered.Count; i++) { ordered[i].SweepCrossings(world); }
         }
 
         public static void Reset() {
@@ -161,6 +226,7 @@ namespace PrimaryPackage.WallCollision {
             for (int i = 0; i < ordered.Count; i++) { ordered[i].Release(); }
             ordered.Clear();
             byId.Clear();
+            nextCrossingSweep = 0;
             WallContacts.Clear();
         }
     }
