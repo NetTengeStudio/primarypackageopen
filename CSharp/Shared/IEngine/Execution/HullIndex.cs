@@ -109,10 +109,12 @@ static class HullIndex
     {
         if (!On) { return; }
         Item[] items = ItemRegistry.Items;
-        int n = Math.Min(SweepPerTick, items.Length);
+        int assigned = ItemRegistry.SlotLimit;
+        if (assigned == 0) { sweepCursor = 0; return; }
+        int n = Math.Min(SweepPerTick, assigned);
         for (int i = 0; i < n; i++)
         {
-            if (sweepCursor >= items.Length) { sweepCursor = 0; }
+            if (sweepCursor >= assigned) { sweepCursor = 0; }
             int slot = sweepCursor++;
             if (items[slot] is not { } item) { continue; }
             Ensure(slot);

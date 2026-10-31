@@ -20,6 +20,9 @@ static class ItemRegistry
 
     public static SlotBitSet Active => active;
     public static Item[] Items => items;
+    // Slots in [0, SlotLimit) have been assigned at least once since rebuild.
+    // The array capacity is deliberately larger and does not imply live items.
+    public static int SlotLimit => nextSlot;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void StoreIsActive(Item item, bool value)
