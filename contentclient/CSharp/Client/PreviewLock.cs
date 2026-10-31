@@ -55,6 +55,18 @@ namespace SubSeal.Client
             closePending |= wasProtected != ProtectionActive;
         }
 
+        internal static void Shutdown()
+        {
+            policyKnown = true;
+            protection = false;
+            creating = false;
+            heldLocked = false;
+            refreshPending = false;
+            closePending = false;
+            PreviewSurfacePatches.SetProtection(false);
+            SubmarinePreview.Close();
+        }
+
         internal static bool ConsumeRefresh()
         {
             if (!refreshPending) { return false; }
