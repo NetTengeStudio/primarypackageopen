@@ -37,8 +37,6 @@ namespace SubSeal.Client
             commands.Add();
             channel.Listen();
 
-            PreviewLock.Bind(leases);
-
             capabilities = 0;
             if (EngineSymbols.Resolve() && TryPatch())
             {
