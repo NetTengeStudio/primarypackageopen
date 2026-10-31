@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Configuration>
+  <Settings>
+    <Setting Name="ThoughtsEnabled" Type="bool" Value="true" />
+    <Setting Name="WakeIntroEnabled" Type="bool" Value="true" />
+    <Setting Name="ColdEffects" Type="bool" Value="true" />
+  </Settings>
+</Configuration>

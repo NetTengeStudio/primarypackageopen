@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Items>
+  <Item name="Доска Заказов Станции" description="Терминал для оформления и отслеживания заказов станции. Открывает список доступных заказов и позволяет взять их в работу." identifier="pp_orderboard" category="Machine" Tags="smallitem" cargocontaineridentifier="metalcrate" scale="0.5" impactsoundtag="impact_metal_light" damagedbyexplosions="true">
+    <Price baseprice="450" sold="false">
+      <Price locationtype="city" multiplier="1.0" sold="true" minavailable="1" />
+      <Price locationtype="outpost" multiplier="1.1" sold="true" minavailable="1" />
+    </Price>
+    <Sprite texture="Content/Items/Electricity/signalcomp.png" sourcerect="0,368,144,128" depth="0.8" origin="0.5,0.3" canflipx="false" />
+    <Body width="120" height="75" density="20" />
+    <Holdable selectkey="Select" pickkey="Use" slots="Any,RightHand,LeftHand" msg="ItemMsgDetachWrench" MsgWhenDropped="ItemMsgPickupSelect" PickingTime="5.0" aimpos="65,-10" handle1="0,0" attachable="true" aimable="true" attachedbydefault="true">
+      <RequiredItem items="wrench,deattachtool" excludeditems="multitool" type="Equipped" />
+    </Holdable>
+    <Deconstruct time="10">
+      <Item identifier="plastic" />
+      <Item identifier="copper" />
+      <Item identifier="fpgacircuit" />
+    </Deconstruct>
+    <Fabricate suitablefabricators="fabricator" requiredtime="25" requiresrecipe="true">
+      <RequiredSkill identifier="electrical" level="35" />
+      <RequiredItem identifier="fpgacircuit" />
+      <RequiredItem identifier="plastic" amount="2" />
+      <RequiredItem identifier="copper" amount="2" />
+    </Fabricate>
+    <OrderBoardComponent canbeselected="true" msg="ItemMsgInteractSelect">
+      <GuiFrame relativesize="0.35,0.6" anchor="Center" style="ItemUI" />
+    </OrderBoardComponent>
+  </Item>
+
+  <Item name="Чек" description="Именной чек на оплату выполненного заказа. Обналичивается в банкомате станции." identifier="pp_check" category="Misc" Tags="smallitem,primarypkg_check" cargocontaineridentifier="metalcrate" scale="0.11" maxstacksize="1" impactsoundtag="impact_soft" isshootable="true">
+    <InventoryIcon texture="%ModDir%/Content/Items/Documents/coalitiondoc_inv.png" sourcerect="0,0,256,256" origin="0.5,0.5" />
+    <Sprite texture="%ModDir%/Content/Items/Documents/coalitiondoc.png" sourcerect="0,0,258,348" depth="0.54" origin="0.5,0.5" />
+    <Body width="42" height="56" density="8" />
+    <Holdable slots="Any,RightHand,LeftHand" msg="ItemMsgPickUpSelect" pickkey="Use" PickingTime="0.2" aimpos="65,-10" holdpos="45,-10" handle1="0,-30" holdangle="-10" aimable="true" />
+    <CheckComponent />
+    <Deconstruct time="2" />
+  </Item>
+
+  <Item name="Конверт с наличными" description="Конверт с наградой за выполненный заказ. Обналичивается в банкомате станции." identifier="pp_cashenvelope" category="Misc" Tags="smallitem,primarypkg_cashenvelope" cargocontaineridentifier="metalcrate" scale="0.11" maxstacksize="1" impactsoundtag="impact_soft" isshootable="true">
+    <InventoryIcon texture="%ModDir%/Content/Items/Documents/coalitiondoc_inv.png" sourcerect="0,0,256,256" origin="0.5,0.5" />
+    <Sprite texture="%ModDir%/Content/Items/Documents/coalitiondoc.png" sourcerect="0,0,258,348" depth="0.54" origin="0.5,0.5" />
+    <Body width="42" height="56" density="8" />
+    <Holdable slots="Any,RightHand,LeftHand" msg="ItemMsgPickUpSelect" pickkey="Use" PickingTime="0.2" aimpos="65,-10" holdpos="45,-10" handle1="0,-30" holdangle="-10" aimable="true" />
+    <CashEnvelopeComponent />
+    <Deconstruct time="2" />
+  </Item>
+
+  <Item name="Промаркированный Ящик" description="Ящик с грузом, закреплённый за конкретным заказом станции. Доставьте его на место, указанное в заказе." identifier="pp_ordercrate" tags="crate,allowcleanup,primarypkg_ordercrate" scale="0.5" linkable="true" pickdistance="150" showcontentsintooltip="true" impactsoundtag="impact_metal_heavy">
+    <Price baseprice="50" sold="false">
+      <Price locationtype="city" multiplier="1.0" sold="true" minavailable="2" />
+      <Price locationtype="outpost" multiplier="1.1" sold="true" minavailable="2" />
+    </Price>
+    <Sprite texture="Content/Items/Containers/containers.png" depth="0.54" sourcerect="407,376,152,89" origin="0.5,0.5" />
+    <Body width="150" height="75" density="25" />
+    <Holdable slots="RightHand+LeftHand" holdpos="0,-80" handle1="-30,14" handle2="30,14" aimable="false" msg="ItemMsgPickUpSelect" />
+    <ItemContainer capacity="20" maxstacksize="64" canbeselected="false" hideitems="true" keepopenwhenequipped="true" movableframe="true">
+      <Containable items="smallitem,mediumitem" excludeditems="toolbelt,toolbox,bandolier,cargoscooter,largemobilecontainer" />
+    </ItemContainer>
+    <OrderClaimComponent />
+    <Deconstruct time="5">
+      <Item identifier="aluminium" />
+    </Deconstruct>
+    <Fabricate suitablefabricators="fabricator" requiredtime="10">
+      <RequiredItem identifier="aluminium" />
+      <RequiredItem identifier="plastic" />
+    </Fabricate>
+  </Item>
+
+  <Item name="Стыковочная Зона" description="Отмечает точку стыковки для доставки грузов по заказам станции. Крепится рядом со шлюзом." identifier="pp_dockzone" category="Machine" Tags="smallitem" linkable="true" allowedlinks="door" scale="0.5" impactsoundtag="impact_metal_light" damagedbyexplosions="false">
+    <Price baseprice="600" sold="false">
+      <Price locationtype="city" multiplier="1.0" sold="true" minavailable="1" />
+    </Price>
+    <Sprite texture="Content/Items/Electricity/signalcomp.png" sourcerect="144,368,144,128" depth="0.85" origin="0.5,0.5" canflipx="false" />
+    <Body width="120" height="100" density="20" />
+    <Holdable selectkey="Select" pickkey="Use" slots="Any,RightHand,LeftHand" msg="ItemMsgDetachWrench" MsgWhenDropped="ItemMsgPickupSelect" PickingTime="5.0" aimpos="65,-10" handle1="0,0" attachable="true" aimable="true" attachedbydefault="true">
+      <RequiredItem items="wrench,deattachtool" excludeditems="multitool" type="Equipped" />
+    </Holdable>
+    <Deconstruct time="10">
+      <Item identifier="plastic" />
+      <Item identifier="copper" />
+    </Deconstruct>
+    <DockZoneComponent canbeselected="false">
+      <sound file="%ModDir%/Content/Sounds/Interactions/automatic_stamp.ogg" type="OnUse" range="1200.0" volume="1.0" />
+      <sound file="%ModDir%/Content/Sounds/Interactions/thick_stamp_sub.ogg" type="OnSecondaryUse" range="1200.0" volume="1.0" />
+
+      <sound file="%ModDir%/Content/Sounds/UI/high_tech_confirm.ogg" type="OnBroken" range="1200.0" volume="1.0" />
+      <sound file="%ModDir%/Content/Sounds/UI/twobeep.ogg" type="OnFailure" range="1200.0" volume="1.0" />
+    </DockZoneComponent>
+  </Item>
+
+  <Item name="Чекер Заказов" description="Терминал проверки — подтверждает доставку промаркированных ящиков и закрывает заказ." identifier="pp_orderchecker" category="Machine" Tags="smallitem" cargocontaineridentifier="metalcrate" scale="0.5" impactsoundtag="impact_metal_light" damagedbyexplosions="true">
+    <Price baseprice="450" sold="false">
+      <Price locationtype="city" multiplier="1.0" sold="true" minavailable="1" />
+      <Price locationtype="outpost" multiplier="1.1" sold="true" minavailable="1" />
+    </Price>
+    <Sprite texture="Content/Items/Electricity/signalcomp.png" sourcerect="0,368,144,128" depth="0.8" origin="0.5,0.3" canflipx="false" />
+    <Body width="120" height="75" density="20" />
+    <Holdable selectkey="Select" pickkey="Use" slots="Any,RightHand,LeftHand" msg="ItemMsgDetachWrench" MsgWhenDropped="ItemMsgPickupSelect" PickingTime="5.0" aimpos="65,-10" handle1="0,0" attachable="true" aimable="true" attachedbydefault="true">
+      <RequiredItem items="wrench,deattachtool" excludeditems="multitool" type="Equipped" />
+    </Holdable>
+    <Deconstruct time="10">
+      <Item identifier="plastic" />
+      <Item identifier="copper" />
+      <Item identifier="fpgacircuit" />
+    </Deconstruct>
+    <Fabricate suitablefabricators="fabricator" requiredtime="25" requiresrecipe="true">
+      <RequiredSkill identifier="electrical" level="35" />
+      <RequiredItem identifier="fpgacircuit" />
+      <RequiredItem identifier="plastic" amount="2" />
+      <RequiredItem identifier="copper" amount="2" />
+    </Fabricate>
+    <OrderCheckerComponent canbeselected="true" msg="ItemMsgInteractSelect">
+      <GuiFrame relativesize="0.35,0.55" anchor="Center" style="ItemUI" />
+    </OrderCheckerComponent>
+  </Item>
+</Items>

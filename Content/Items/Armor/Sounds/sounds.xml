@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Override>
+  <sounds>
+    <damagesound file="%ModDir%/Content/Items/Armor/Sounds/armourlightimpact_1.ogg" damagesoundtype="armourlightimpact" />
+    <damagesound file="%ModDir%/Content/Items/Armor/Sounds/armourlightimpact_2.ogg" damagesoundtype="armourlightimpact" />
+    <damagesound file="%ModDir%/Content/Items/Armor/Sounds/armourlightimpact_3.ogg" damagesoundtype="armourlightimpact" />
+    <damagesound file="%ModDir%/Content/Items/Armor/Sounds/armourmeddeflect_1.ogg" damagesoundtype="armourmedimpact" />
+    <damagesound file="%ModDir%/Content/Items/Armor/Sounds/armourmeddeflect_2.ogg" damagesoundtype="armourmedimpact" />
+    <damagesound file="%ModDir%/Content/Items/Armor/Sounds/armourmeddeflect_3.ogg" damagesoundtype="armourmedimpact" />
+    <damagesound file="%ModDir%/Content/Items/Armor/Sounds/armourheavydeflect_1.ogg" damagesoundtype="armourheavyimpact" />
+    <damagesound file="%ModDir%/Content/Items/Armor/Sounds/armourheavydeflect_2.ogg" damagesoundtype="armourheavyimpact" />
+    <damagesound file="%ModDir%/Content/Items/Armor/Sounds/armourheavydeflect_3.ogg" damagesoundtype="armourheavyimpact" />
+    <heavysuitfootstep file="%ModDir%/Content/Items/Armor/Sounds/heavyfootstep.ogg" />
+    <weaponlightdrop file="%ModDir%/Content/Items/Armor/Sounds/weaponlightdrop_1.ogg" />
+    <weaponlightdrop file="%ModDir%/Content/Items/Armor/Sounds/weaponlightdrop_2.ogg" />
+    <weaponlightdrop file="%ModDir%/Content/Items/Armor/Sounds/weaponlightdrop_3.ogg" />
+    <weaponheavydrop file="%ModDir%/Content/Items/Armor/Sounds/weaponheavydrop_1.ogg" />
+    <weaponheavydrop file="%ModDir%/Content/Items/Armor/Sounds/weaponheavydrop_2.ogg" />
+    <weaponheavydrop file="%ModDir%/Content/Items/Armor/Sounds/weaponheavydrop_3.ogg" />
+    <suitfootstep file="%ModDir%/Content/Items/Armor/Sounds/metalstep_1.ogg" />
+    <suitfootstep file="%ModDir%/Content/Items/Armor/Sounds/metalstep_2.ogg" />
+    <suitfootstep file="%ModDir%/Content/Items/Armor/Sounds/metalstep_3.ogg" />
+  </sounds>
+</Override>

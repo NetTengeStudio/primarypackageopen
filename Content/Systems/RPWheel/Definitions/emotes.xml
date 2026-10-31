@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Emotes key="Mouse5">
+  <Emote id="salute"    name="pp_emote.salute"    category="Hands" sound="Content/Sounds/Emotes/salute.ogg" />
+  <Emote id="clap"      name="pp_emote.clap"      category="Hands" sound="Content/Sounds/Emotes/clap.ogg" />
+  <Emote id="snap"      name="pp_emote.snap"      category="Hands" sound="Content/Sounds/Emotes/snap.ogg" />
+  <Emote id="thump"     name="pp_emote.thump"     category="Hands" sound="Content/Sounds/Emotes/thump.ogg" />
+  <Emote id="laugh"     name="pp_emote.laugh"     category="Vocal" sound="Content/Sounds/Emotes/laugh.ogg" />
+  <Emote id="scream"    name="pp_emote.scream"    category="Vocal" sound="Content/Sounds/Emotes/scream.ogg" />
+  <Emote id="cry"       name="pp_emote.cry"       category="Vocal" sound="Content/Sounds/Emotes/cry.ogg" />
+  <Emote id="sigh"      name="pp_emote.sigh"      category="Vocal" sound="Content/Sounds/Emotes/sigh.ogg" />
+  <Emote id="whistle"   name="pp_emote.whistle"   category="Vocal" sound="Content/Sounds/Emotes/whistle.ogg" />
+  <Emote id="cough"     name="pp_emote.cough"     category="Vocal" sound="Content/Sounds/Emotes/cough.ogg" />
+  <Emote id="yawn"      name="pp_emote.yawn"      category="Vocal" sound="Content/Sounds/Emotes/yawn.ogg" />
+  <Emote id="deathgasp" name="pp_emote.deathgasp" category="Vocal" sound="Content/Sounds/Emotes/deathgasp.ogg" />
+</Emotes>

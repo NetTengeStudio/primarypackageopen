@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Items>
+
+  <Item name="" identifier="primarypkg_stamp" category="Misc" Tags="smallitem,primarypkg_stamp" cargocontaineridentifier="metalcrate" scale="0.06" impactsoundtag="impact_metal_light">
+    <Price baseprice="20" sold="false" canbespecial="false" />
+    <PreferredContainer primary="crewcab" secondary="outpostcrewcab" minamount="1" maxamount="1" spawnprobability="0.05" />
+    <InventoryIcon texture="%ModDir%/Content/Items/Stamp/stamp_icon.png" sourcerect="0,0,256,256" origin="0.5,0.5" />
+    <Sprite texture="%ModDir%/Content/Items/Stamp/stamp.png" sourcerect="0,0,216,345" depth="0.55" origin="0.5,0.5" />
+    <Body width="10" height="20" density="15" />
+    <Fabricate suitablefabricators="fabricator" requiredtime="5">
+      <RequiredItem identifier="aluminium" />
+    </Fabricate>
+    <Deconstruct time="5">
+      <RequiredItem identifier="aluminium" />
+    </Deconstruct>
+    <Holdable slots="Any,RightHand,LeftHand" msg="ItemMsgPickUpSelect" pickkey="Use" PickingTime="0.0" aimpos="35,-10" holdpos="25,-10" handle1="0,-40" holdangle="0" aimable="true">
+      <StatusEffect type="OnUse" target="This" holdpos="25,-30" aimpos="35,-30" setvalue="true" />
+      <StatusEffect type="OnUse" target="This" holdpos="25,-10" aimpos="35,-10" delay="0.15" setvalue="true" />
+      <StatusEffect type="OnUse" target="This">
+        <sound file="%ModDir%/Content/Sounds/Interactions/automatic_stamp.ogg" range="800" volume="0.8" />
+        <sound file="%ModDir%/Content/Sounds/Interactions/thick_stamp_sub.ogg" range="800" volume="0.8" />
+      </StatusEffect>
+    </Holdable>
+
+  </Item>
+
+  <Item name="" identifier="primarypkg_stamp_approved" category="Misc" Tags="smallitem,primarypkg_stamp" cargocontaineridentifier="metalcrate" scale="0.06" impactsoundtag="impact_metal_light">
+    <Price baseprice="20" sold="false" canbespecial="false" />
+    <PreferredContainer primary="crewcab" secondary="outpostcrewcab" minamount="1" maxamount="1" spawnprobability="0.05" />
+    <InventoryIcon texture="%ModDir%/Content/Items/Stamp/stamp_ok_icon.png" sourcerect="0,0,256,256" origin="0.5,0.5" />
+    <Sprite texture="%ModDir%/Content/Items/Stamp/stamp_ok.png" sourcerect="0,0,216,345" depth="0.55" origin="0.5,0.5" />
+    <Body width="10" height="20" density="15" />
+    <Fabricate suitablefabricators="fabricator" requiredtime="5">
+      <RequiredItem identifier="aluminium" />
+    </Fabricate>
+    <Deconstruct time="5">
+      <RequiredItem identifier="aluminium" />
+    </Deconstruct>
+    <Holdable slots="Any,RightHand,LeftHand" msg="ItemMsgPickUpSelect" pickkey="Use" PickingTime="0.0" aimpos="35,-10" holdpos="25,-10" handle1="0,-40" holdangle="0" aimable="true">
+      <StatusEffect type="OnUse" target="This" holdpos="25,-30" aimpos="35,-30" setvalue="true" />
+      <StatusEffect type="OnUse" target="This" holdpos="25,-10" aimpos="35,-10" delay="0.15" setvalue="true" />
+      <StatusEffect type="OnUse" target="This">
+        <sound file="%ModDir%/Content/Sounds/Interactions/automatic_stamp.ogg" range="800" volume="0.8" />
+        <sound file="%ModDir%/Content/Sounds/Interactions/thick_stamp_sub.ogg" range="800" volume="0.8" />
+      </StatusEffect>
+    </Holdable>
+
+  </Item>
+
+  <Item name="" identifier="primarypkg_stamp_denied" category="Misc" Tags="smallitem,primarypkg_stamp" cargocontaineridentifier="metalcrate" scale="0.06" impactsoundtag="impact_metal_light">
+    <Price baseprice="20" sold="false" canbespecial="false" />
+    <PreferredContainer primary="crewcab" secondary="outpostcrewcab" minamount="1" maxamount="1" spawnprobability="0.05" />
+    <InventoryIcon texture="%ModDir%/Content/Items/Stamp/stamp_deny_icon.png" sourcerect="0,0,256,256" origin="0.5,0.5" />
+    <Sprite texture="%ModDir%/Content/Items/Stamp/stamp_deny.png" sourcerect="0,0,216,345" depth="0.55" origin="0.5,0.5" />
+    <Body width="10" height="20" density="15" />
+    <Fabricate suitablefabricators="fabricator" requiredtime="5">
+      <RequiredItem identifier="aluminium" />
+    </Fabricate>
+    <Deconstruct time="5">
+      <RequiredItem identifier="aluminium" />
+    </Deconstruct>
+    <Holdable slots="Any,RightHand,LeftHand" msg="ItemMsgPickUpSelect" pickkey="Use" PickingTime="0.0" aimpos="35,-10" holdpos="25,-10" handle1="0,-40" holdangle="0" aimable="true">
+      <StatusEffect type="OnUse" target="This" holdpos="25,-30" aimpos="35,-30" setvalue="true" />
+      <StatusEffect type="OnUse" target="This" holdpos="25,-10" aimpos="35,-10" delay="0.15" setvalue="true" />
+      <StatusEffect type="OnUse" target="This">
+        <sound file="%ModDir%/Content/Sounds/Interactions/automatic_stamp.ogg" range="800" volume="0.8" />
+        <sound file="%ModDir%/Content/Sounds/Interactions/thick_stamp_sub.ogg" range="800" volume="0.8" />
+      </StatusEffect>
+    </Holdable>
+
+  </Item>
+
+  <Item name="" identifier="primarypkg_stamp_engineer" category="Misc" Tags="smallitem,primarypkg_stamp" cargocontaineridentifier="metalcrate" scale="0.06" impactsoundtag="impact_metal_light">
+    <Price baseprice="20" sold="false" canbespecial="false" />
+    <PreferredContainer primary="crewcab" secondary="outpostcrewcab" minamount="1" maxamount="1" spawnprobability="0.05" />
+    <InventoryIcon texture="%ModDir%/Content/Items/Stamp/stamp_icon_engineer.png" sourcerect="0,0,256,256" origin="0.5,0.5" />
+    <Sprite texture="%ModDir%/Content/Items/Stamp/stamp_engineer.png" sourcerect="0,0,216,345" depth="0.55" origin="0.5,0.5" />
+    <Body width="10" height="20" density="15" />
+    <Fabricate suitablefabricators="fabricator" requiredtime="5">
+      <RequiredItem identifier="aluminium" />
+    </Fabricate>
+    <Deconstruct time="5">
+      <RequiredItem identifier="aluminium" />
+    </Deconstruct>
+    <Holdable slots="Any,RightHand,LeftHand" msg="ItemMsgPickUpSelect" pickkey="Use" PickingTime="0.0" aimpos="35,-10" holdpos="25,-10" handle1="0,-40" holdangle="0" aimable="true">
+      <StatusEffect type="OnUse" target="This" holdpos="25,-30" aimpos="35,-30" setvalue="true" />
+      <StatusEffect type="OnUse" target="This" holdpos="25,-10" aimpos="35,-10" delay="0.15" setvalue="true" />
+      <StatusEffect type="OnUse" target="This">
+        <sound file="%ModDir%/Content/Sounds/Interactions/automatic_stamp.ogg" range="800" volume="0.8" />
+        <sound file="%ModDir%/Content/Sounds/Interactions/thick_stamp_sub.ogg" range="800" volume="0.8" />
+      </StatusEffect>
+    </Holdable>
+
+  </Item>
+
+  <Item name="" identifier="primarypkg_stamp_medicaldoctor" category="Misc" Tags="smallitem,primarypkg_stamp" cargocontaineridentifier="metalcrate" scale="0.06" impactsoundtag="impact_metal_light">
+    <Price baseprice="20" sold="false" canbespecial="false" />
+    <PreferredContainer primary="crewcab" secondary="outpostcrewcab" minamount="1" maxamount="1" spawnprobability="0.05" />
+    <InventoryIcon texture="%ModDir%/Content/Items/Stamp/stamp_icon_medicaldoctor.png" sourcerect="0,0,256,256" origin="0.5,0.5" />
+    <Sprite texture="%ModDir%/Content/Items/Stamp/stamp_medicaldoctor.png" sourcerect="0,0,216,345" depth="0.55" origin="0.5,0.5" />
+    <Body width="10" height="20" density="15" />
+    <Fabricate suitablefabricators="fabricator" requiredtime="5">
+      <RequiredItem identifier="aluminium" />
+    </Fabricate>
+    <Deconstruct time="5">
+      <RequiredItem identifier="aluminium" />
+    </Deconstruct>
+    <Holdable slots="Any,RightHand,LeftHand" msg="ItemMsgPickUpSelect" pickkey="Use" PickingTime="0.0" aimpos="35,-10" holdpos="25,-10" handle1="0,-40" holdangle="0" aimable="true">
+      <StatusEffect type="OnUse" target="This" holdpos="25,-30" aimpos="35,-30" setvalue="true" />
+      <StatusEffect type="OnUse" target="This" holdpos="25,-10" aimpos="35,-10" delay="0.15" setvalue="true" />
+      <StatusEffect type="OnUse" target="This">
+        <sound file="%ModDir%/Content/Sounds/Interactions/automatic_stamp.ogg" range="800" volume="0.8" />
+        <sound file="%ModDir%/Content/Sounds/Interactions/thick_stamp_sub.ogg" range="800" volume="0.8" />
+      </StatusEffect>
+    </Holdable>
+
+  </Item>
+
+  <Item name="" identifier="primarypkg_stamp_mechanic" category="Misc" Tags="smallitem,primarypkg_stamp" cargocontaineridentifier="metalcrate" scale="0.06" impactsoundtag="impact_metal_light">
+    <Price baseprice="20" sold="false" canbespecial="false" />
+    <PreferredContainer primary="crewcab" secondary="outpostcrewcab" minamount="1" maxamount="1" spawnprobability="0.05" />
+    <InventoryIcon texture="%ModDir%/Content/Items/Stamp/stamp_icon_mechanic.png" sourcerect="0,0,256,256" origin="0.5,0.5" />
+    <Sprite texture="%ModDir%/Content/Items/Stamp/stamp_mechanic.png" sourcerect="0,0,216,345" depth="0.55" origin="0.5,0.5" />
+    <Body width="10" height="20" density="15" />
+    <Fabricate suitablefabricators="fabricator" requiredtime="5">
+      <RequiredItem identifier="aluminium" />
+    </Fabricate>
+    <Deconstruct time="5">
+      <RequiredItem identifier="aluminium" />
+    </Deconstruct>
+    <Holdable slots="Any,RightHand,LeftHand" msg="ItemMsgPickUpSelect" pickkey="Use" PickingTime="0.0" aimpos="35,-10" holdpos="25,-10" handle1="0,-40" holdangle="0" aimable="true">
+      <StatusEffect type="OnUse" target="This" holdpos="25,-30" aimpos="35,-30" setvalue="true" />
+      <StatusEffect type="OnUse" target="This" holdpos="25,-10" aimpos="35,-10" delay="0.15" setvalue="true" />
+      <StatusEffect type="OnUse" target="This">
+        <sound file="%ModDir%/Content/Sounds/Interactions/automatic_stamp.ogg" range="800" volume="0.8" />
+        <sound file="%ModDir%/Content/Sounds/Interactions/thick_stamp_sub.ogg" range="800" volume="0.8" />
+      </StatusEffect>
+    </Holdable>
+
+  </Item>
+
+  <Item name="" identifier="primarypkg_stamp_securityofficer" category="Misc" Tags="smallitem,primarypkg_stamp" cargocontaineridentifier="metalcrate" scale="0.06" impactsoundtag="impact_metal_light">
+    <Price baseprice="20" sold="false" canbespecial="false" />
+    <PreferredContainer primary="crewcab" secondary="outpostcrewcab" minamount="1" maxamount="1" spawnprobability="0.05" />
+    <InventoryIcon texture="%ModDir%/Content/Items/Stamp/stamp_icon_securityofficer.png" sourcerect="0,0,256,256" origin="0.5,0.5" />
+    <Sprite texture="%ModDir%/Content/Items/Stamp/stamp_securityofficer.png" sourcerect="0,0,216,345" depth="0.55" origin="0.5,0.5" />
+    <Body width="10" height="20" density="15" />
+    <Fabricate suitablefabricators="fabricator" requiredtime="5">
+      <RequiredItem identifier="aluminium" />
+    </Fabricate>
+    <Deconstruct time="5">
+      <RequiredItem identifier="aluminium" />
+    </Deconstruct>
+    <Holdable slots="Any,RightHand,LeftHand" msg="ItemMsgPickUpSelect" pickkey="Use" PickingTime="0.0" aimpos="35,-10" holdpos="25,-10" handle1="0,-40" holdangle="0" aimable="true">
+      <StatusEffect type="OnUse" target="This" holdpos="25,-30" aimpos="35,-30" setvalue="true" />
+      <StatusEffect type="OnUse" target="This" holdpos="25,-10" aimpos="35,-10" delay="0.15" setvalue="true" />
+      <StatusEffect type="OnUse" target="This">
+        <sound file="%ModDir%/Content/Sounds/Interactions/automatic_stamp.ogg" range="800" volume="0.8" />
+        <sound file="%ModDir%/Content/Sounds/Interactions/thick_stamp_sub.ogg" range="800" volume="0.8" />
+      </StatusEffect>
+    </Holdable>
+
+  </Item>
+</Items>

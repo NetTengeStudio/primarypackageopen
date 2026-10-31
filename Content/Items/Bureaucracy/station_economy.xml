@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Override>
+<Items>
+  <Item name="Терминал Баланса Станции" description="Показывает текущий баланс станции и историю поступлений. Не выдаёт наличные — только для проверки." identifier="pp_stationbalance" category="Machine" Tags="smallitem" cargocontaineridentifier="metalcrate" scale="0.5" impactsoundtag="impact_metal_light" damagedbyexplosions="true">
+    <Price baseprice="400" sold="false">
+      <Price locationtype="city" multiplier="1.0" sold="true" minavailable="1" />
+      <Price locationtype="outpost" multiplier="1.1" sold="true" minavailable="1" />
+    </Price>
+    <Sprite texture="Content/Items/Electricity/signalcomp.png" sourcerect="0,368,144,128" depth="0.8" origin="0.5,0.3" canflipx="false" />
+    <Body width="120" height="75" density="20" />
+    <Holdable selectkey="Select" pickkey="Use" slots="Any,RightHand,LeftHand" msg="ItemMsgDetachWrench" MsgWhenDropped="ItemMsgPickupSelect" PickingTime="5.0" aimpos="65,-10" handle1="0,0" attachable="true" aimable="true" attachedbydefault="true">
+      <RequiredItem items="wrench,deattachtool" excludeditems="multitool" type="Equipped" />
+    </Holdable>
+    <Deconstruct time="10">
+      <Item identifier="plastic" />
+      <Item identifier="copper" />
+      <Item identifier="fpgacircuit" />
+    </Deconstruct>
+    <Fabricate suitablefabricators="fabricator" requiredtime="25" requiresrecipe="true">
+      <RequiredSkill identifier="electrical" level="35" />
+      <RequiredItem identifier="fpgacircuit" />
+      <RequiredItem identifier="plastic" amount="2" />
+      <RequiredItem identifier="copper" amount="2" />
+    </Fabricate>
+    <StationBalanceComponent canbeselected="true" msg="ItemMsgInteractSelect">
+      <GuiFrame relativesize="0.4,0.6" anchor="Center" style="ItemUI" />
+    </StationBalanceComponent>
+  </Item>
+
+  <Item name="Банкомат Станции" description="Обналичивает чеки и конверты с наградой за выполненные заказы станции." identifier="pp_stationatm" category="Machine" Tags="smallitem" cargocontaineridentifier="metalcrate" scale="0.5" impactsoundtag="impact_metal_light" damagedbyexplosions="true">
+    <Price baseprice="500" sold="false">
+      <Price locationtype="city" multiplier="1.0" sold="true" minavailable="1" />
+      <Price locationtype="outpost" multiplier="1.15" sold="true" minavailable="1" />
+    </Price>
+    <Sprite texture="Content/Items/Electricity/signalcomp.png" sourcerect="0,368,144,128" depth="0.8" origin="0.5,0.3" canflipx="false" />
+    <Body width="120" height="75" density="20" />
+    <Holdable selectkey="Select" pickkey="Use" slots="Any,RightHand,LeftHand" msg="ItemMsgDetachWrench" MsgWhenDropped="ItemMsgPickupSelect" PickingTime="5.0" aimpos="65,-10" handle1="0,0" attachable="true" aimable="true" attachedbydefault="true">
+      <RequiredItem items="wrench,deattachtool" excludeditems="multitool" type="Equipped" />
+    </Holdable>
+    <Deconstruct time="10">
+      <Item identifier="plastic" />
+      <Item identifier="copper" />
+      <Item identifier="fpgacircuit" />
+    </Deconstruct>
+    <Fabricate suitablefabricators="fabricator" requiredtime="30" requiresrecipe="true">
+      <RequiredSkill identifier="electrical" level="45" />
+      <RequiredItem identifier="fpgacircuit" />
+      <RequiredItem identifier="plastic" amount="2" />
+      <RequiredItem identifier="copper" amount="2" />
+    </Fabricate>
+
+    <ItemContainer capacity="1" canbeselected="false" hideitems="false">
+      <Containable items="primarypkg_check,primarypkg_cashenvelope" />
+    </ItemContainer>
+    <StationAtmComponent canbeselected="true" msg="ItemMsgInteractSelect">
+      <GuiFrame relativesize="0.35,0.62" anchor="Center" style="ItemUI" />
+    </StationAtmComponent>
+  </Item>
+
+  <Item name="Датчик Дохода Станции" description="Электронный компонент, начисляющий станции пассивный доход через равные интервалы времени. Подключается через сигнальную панель." identifier="pp_stationincomesensor" category="Electrical" Tags="smallitem,logic,circuitboxcomponent,signal" maxstacksize="32" maxstacksizecharacterinventory="8" linkable="true" cargocontaineridentifier="metalcrate" scale="0.5" impactsoundtag="impact_metal_light" isshootable="true" GrabWhenSelected="true" signalcomponentcolor="#6ba66c">
+    <Price baseprice="300" sold="false">
+      <Price locationtype="city" multiplier="1.0" sold="true" minavailable="1" />
+      <Price locationtype="outpost" multiplier="1.1" sold="true" minavailable="1" />
+    </Price>
+    <Deconstruct time="10">
+      <Item identifier="fpgacircuit" />
+      <Item identifier="copper" />
+    </Deconstruct>
+    <Fabricate suitablefabricators="fabricator" requiredtime="15" requiresrecipe="true">
+      <RequiredSkill identifier="electrical" level="35" />
+      <RequiredItem identifier="fpgacircuit" />
+      <RequiredItem identifier="copper" amount="2" />
+    </Fabricate>
+    <Sprite texture="Content/Items/Electricity/signalcomp.png" depth="0.8" sourcerect="128,128,32,32" origin="0.5,0.5" canflipx="false" />
+    <InventoryIcon texture="Content/Items/InventoryIconAtlas.png" sourcerect="512,900,63,54" origin="0.5,0.5" />
+    <StationIncomeSensorComponent canbeselected="true" incomeperhour="160" payoutintervalminutes="15" comment="Доход станции: вышка связи" />
+    <Body width="31" height="25" density="15" />
+    <Holdable selectkey="Select" pickkey="Use" slots="Any,RightHand,LeftHand" msg="ItemMsgDetachWrench" MsgWhenDropped="ItemMsgPickupSelect" PickingTime="5.0" aimpos="65,-10" handle1="0,0" attachable="true" aimable="true">
+      <RequiredItem items="wrench,deattachtool" excludeditems="multitool" type="Equipped" />
+    </Holdable>
+    <ConnectionPanel selectkey="Action" canbeselected="true" msg="ItemMsgRewireScrewdriver" hudpriority="10">
+      <GuiFrame relativesize="0.2,0.32" minsize="400,350" maxsize="480,420" anchor="Center" style="ConnectionPanel" />
+      <requireditem items="screwdriver" type="Equipped" />
+      <input name="signal_in" displayname="connection.signalin" />
+    </ConnectionPanel>
+  </Item>
+
+  <Item name="Обменник валют" description="Обменник валют Коалиции. Положите денюжку в слот и выберите нужный обмен." identifier="erc_currencyexchanger" category="Machine" subcategory="generic" tags="erc_currencyexchanger,donttakeitems,dontsellitems" width="238" height="396" texturescale="1.0,1.0" scale="0.5" linkable="true" allowedlinks="locker" damagedbyexplosions="true" explosiondamagemultiplier="0.2">
+    <Price baseprice="600" sold="true">
+      <Price storeidentifier="merchantoutpost" sold="true" multiplier="1.0" minavailable="1" />
+      <Price storeidentifier="merchantcity" sold="true" multiplier="1.0" minavailable="1" />
+    </Price>
+    <Sprite texture="Content/Map/Outposts/Art/MedBayAssets.png" sourcerect="1,497,238,396" depth="0.97" premultiplyalpha="false" origin="0.5,0.5" />
+    <Fabricator canbeselected="true" powerconsumption="0.0" msg="ItemMsgInteractSelect" ShowSortByDropdown="false" ShowAvailableOnlyTickBox="false" ShowCategoryButtons="false">
+      <GuiFrame relativesize="0.4,0.5" style="ItemUI" anchor="Center" />
+      <sound file="%ModDir%/Content/Sounds/Currency/coin_drop_1.ogg" type="OnActive" range="400.0" loop="true" />
+      <StatusEffect type="OnUse" target="This" disabledeltatime="true">
+        <Sound file="%ModDir%/Content/Sounds/Currency/coin_drop_2.ogg" range="500" />
+      </StatusEffect>
+    </Fabricator>
+    <ItemContainer capacity="8" maxstacksize="50" canbeselected="true" hideitems="true" slotsperrow="4" uilabel="" allowuioverlap="true" />
+    <ItemContainer capacity="8" maxstacksize="50" canbeselected="true" hideitems="true" slotsperrow="4" uilabel="" allowuioverlap="true" />
+    <LightComponent range="0.0" lightcolor="255,255,255,111" IsOn="true" castshadows="false" alphablend="false" allowingameediting="false">
+      <sprite texture="Content/Map/Outposts/Art/MedBayAssets.png" sourcerect="241,497,238,396" depth="0.1" origin="0.5,0.5" alpha="1.0" />
+    </LightComponent>
+  </Item>
+
+  <Item name="1 кредит" description="" identifier="money1cr" category="Misc" tags="smallitem,money,coppercoin" maxstacksize="50" impactsoundtag="pp_impact_coin" cargocontaineridentifier="metalcrate" scale="0.4">
+    <Price baseprice="1" sold="false" canbespecial="false">
+      <Price storeidentifier="merchantoutpost" multiplier="2.9" />
+      <Price storeidentifier="merchantcity" multiplier="2.9" />
+      <Price storeidentifier="merchantresearch" multiplier="2.9" />
+      <Price storeidentifier="merchantmilitary" multiplier="2.9" />
+      <Price storeidentifier="merchantmine" multiplier="2.9" />
+      <Price storeidentifier="merchantmedical" multiplier="2.9" />
+      <Price storeidentifier="merchantengineering" multiplier="2.9" />
+    </Price>
+    <InventoryIcon texture="%ModDir%/Content/Items/Bureaucracy/coin_inv.png" sourcerect="0,0,45,45" origin="0.5,0.5" />
+    <ContainedSprite texture="%ModDir%/Content/Items/Bureaucracy/coin_inv.png" sourcerect="0,0,45,45" depth="0.54" allowedcontainertags="human" origin="0.5,0.5" />
+    <Sprite texture="%ModDir%/Content/Items/Bureaucracy/coin.png" sourcerect="0,0,40,7" depth="0.54" origin="0.5,0.5" />
+    <Body width="20" height="5" density="25" />
+    <Holdable selectkey="Select" slots="Any,RightHand,LeftHand" msg="ItemMsgPickUpSelect" holdpos="40,-30" handle1="-24,-8" holdangle="30" />
+    <Deconstruct time="1" />
+    <Fabricate suitablefabricators="erc_currencyexchanger" requiredtime="1.5" amount="5" requiresrecipe="false">
+      <RequiredItem identifier="money5cr" amount="1" />
+    </Fabricate>
+  </Item>
+
+  <Item name="5 кредитов Коалиции" description="" identifier="money5cr" category="Misc" tags="smallitem,money" maxstacksize="20" impactsoundtag="impact_soft" cargocontaineridentifier="metalcrate" scale="0.25">
+    <Price baseprice="5" sold="false" canbespecial="false">
+      <Price storeidentifier="merchantoutpost" multiplier="2.9" />
+      <Price storeidentifier="merchantcity" multiplier="2.9" />
+      <Price storeidentifier="merchantresearch" multiplier="2.9" />
+      <Price storeidentifier="merchantmilitary" multiplier="2.9" />
+      <Price storeidentifier="merchantmine" multiplier="2.9" />
+      <Price storeidentifier="merchantmedical" multiplier="2.9" />
+      <Price storeidentifier="merchantengineering" multiplier="2.9" />
+    </Price>
+    <Sprite texture="%ModDir%/Content/Items/Bureaucracy/money_5cr.png" sourcerect="0,0,128,54" depth="0.55" origin="0.5,0.5" />
+    <Body width="40" height="40" density="12" />
+    <Holdable selectkey="Select" slots="Any,RightHand,LeftHand" msg="ItemMsgPickUpSelect" holdpos="40,-30" handle1="-40,-7" holdangle="30" />
+    <PreferredContainer secondary="idcardcontainer" minamount="8" maxamount="20" spawnprobability="0.7" />
+    <Deconstruct time="1" />
+    <Fabricate suitablefabricators="erc_currencyexchanger" requiredtime="1.5" amount="1" requiresrecipe="false">
+      <RequiredItem identifier="money1cr" amount="5" />
+    </Fabricate>
+    <Fabricate suitablefabricators="erc_currencyexchanger" requiredtime="1.5" amount="2" requiresrecipe="false">
+      <RequiredItem identifier="money10cr" amount="1" />
+    </Fabricate>
+  </Item>
+
+  <Item name="10 кредитов Коалиции" description="" identifier="money10cr" category="Misc" tags="smallitem,money" maxstacksize="20" impactsoundtag="impact_soft" cargocontaineridentifier="metalcrate" scale="0.25">
+    <Price baseprice="10" sold="false" canbespecial="false">
+      <Price storeidentifier="merchantoutpost" multiplier="2.9" />
+      <Price storeidentifier="merchantcity" multiplier="2.9" />
+      <Price storeidentifier="merchantresearch" multiplier="2.9" />
+      <Price storeidentifier="merchantmilitary" multiplier="2.9" />
+      <Price storeidentifier="merchantmine" multiplier="2.9" />
+      <Price storeidentifier="merchantmedical" multiplier="2.9" />
+      <Price storeidentifier="merchantengineering" multiplier="2.9" />
+    </Price>
+    <Sprite texture="%ModDir%/Content/Items/Bureaucracy/money_10cr.png" sourcerect="0,0,128,54" depth="0.55" origin="0.5,0.5" />
+    <Body width="40" height="40" density="12" />
+    <Holdable selectkey="Select" slots="Any,RightHand,LeftHand" msg="ItemMsgPickUpSelect" holdpos="40,-30" handle1="-40,-7" holdangle="30" />
+    <PreferredContainer secondary="outpostcrewcabinet,abandonedcrewcabinet" minamount="0" maxamount="2" spawnprobability="0.2" />
+    <PreferredContainer secondary="idcardcontainer" minamount="4" maxamount="12" spawnprobability="0.8" />
+    <Deconstruct time="1" />
+    <Fabricate suitablefabricators="erc_currencyexchanger" requiredtime="1.5" amount="1" requiresrecipe="false">
+      <RequiredItem identifier="money5cr" amount="2" />
+    </Fabricate>
+    <Fabricate suitablefabricators="erc_currencyexchanger" requiredtime="1.5" amount="5" requiresrecipe="false">
+      <RequiredItem identifier="money50cr" amount="1" />
+    </Fabricate>
+  </Item>
+
+  <Item name="50 кредитов Коалиции" description="" identifier="money50cr" category="Misc" tags="smallitem,money" maxstacksize="20" impactsoundtag="impact_soft" cargocontaineridentifier="metalcrate" scale="0.25">
+    <Price baseprice="50" sold="false" canbespecial="false">
+      <Price storeidentifier="merchantoutpost" multiplier="2.9" />
+      <Price storeidentifier="merchantcity" multiplier="2.9" />
+      <Price storeidentifier="merchantresearch" multiplier="2.9" />
+      <Price storeidentifier="merchantmilitary" multiplier="2.9" />
+      <Price storeidentifier="merchantmine" multiplier="2.9" />
+      <Price storeidentifier="merchantmedical" multiplier="2.9" />
+      <Price storeidentifier="merchantengineering" multiplier="2.9" />
+    </Price>
+    <Sprite texture="%ModDir%/Content/Items/Bureaucracy/money_50cr.png" sourcerect="0,0,128,54" depth="0.55" origin="0.5,0.5" />
+    <Body width="40" height="40" density="12" />
+    <Holdable selectkey="Select" slots="Any,RightHand,LeftHand" msg="ItemMsgPickUpSelect" holdpos="40,-30" handle1="-40,-7" holdangle="30" />
+    <PreferredContainer secondary="outpostcrewcabinet,abandonedcrewcabinet" minamount="0" maxamount="1" spawnprobability="0.1" />
+    <PreferredContainer secondary="idcardcontainer" minamount="2" maxamount="8" spawnprobability="0.5" />
+    <Deconstruct time="1" />
+    <Fabricate suitablefabricators="erc_currencyexchanger" requiredtime="1.5" amount="1" requiresrecipe="false">
+      <RequiredItem identifier="money10cr" amount="5" />
+    </Fabricate>
+    <Fabricate suitablefabricators="erc_currencyexchanger" requiredtime="1.5" amount="2" requiresrecipe="false">
+      <RequiredItem identifier="money100cr" amount="1" />
+    </Fabricate>
+  </Item>
+
+  <Item name="100 кредитов Коалиции" description="" identifier="money100cr" category="Misc" tags="smallitem,money" maxstacksize="20" impactsoundtag="impact_soft" cargocontaineridentifier="metalcrate" scale="0.25">
+    <Price baseprice="100" sold="false" canbespecial="false">
+      <Price storeidentifier="merchantoutpost" multiplier="2.9" />
+      <Price storeidentifier="merchantcity" multiplier="2.9" />
+      <Price storeidentifier="merchantresearch" multiplier="2.9" />
+      <Price storeidentifier="merchantmilitary" multiplier="2.9" />
+      <Price storeidentifier="merchantmine" multiplier="2.9" />
+      <Price storeidentifier="merchantmedical" multiplier="2.9" />
+      <Price storeidentifier="merchantengineering" multiplier="2.9" />
+    </Price>
+    <Sprite texture="%ModDir%/Content/Items/Bureaucracy/money_100cr.png" sourcerect="0,0,128,54" depth="0.55" origin="0.5,0.5" />
+    <Body width="40" height="40" density="12" />
+    <Holdable selectkey="Select" slots="Any,RightHand,LeftHand" msg="ItemMsgPickUpSelect" holdpos="40,-30" handle1="-40,-7" holdangle="30" />
+    <PreferredContainer secondary="outpostcrewcabinet,abandonedcrewcabinet" minamount="0" maxamount="1" spawnprobability="0.05" />
+    <PreferredContainer secondary="idcardcontainer" minamount="1" maxamount="5" spawnprobability="0.3" />
+    <Deconstruct time="3" />
+    <Fabricate suitablefabricators="erc_currencyexchanger" requiredtime="1.5" amount="1" requiresrecipe="false">
+      <RequiredItem identifier="money50cr" amount="2" />
+    </Fabricate>
+    <Fabricate suitablefabricators="erc_currencyexchanger" requiredtime="1.5" amount="5" requiresrecipe="false">
+      <RequiredItem identifier="money500cr" amount="1" />
+    </Fabricate>
+  </Item>
+
+  <Item name="500 кредитов Коалиции" description="" identifier="money500cr" category="Misc" tags="smallitem,money" maxstacksize="20" impactsoundtag="impact_soft" cargocontaineridentifier="metalcrate" scale="0.25">
+    <Price baseprice="500" sold="false" canbespecial="false">
+      <Price storeidentifier="merchantoutpost" multiplier="2.9" />
+      <Price storeidentifier="merchantcity" multiplier="2.9" />
+      <Price storeidentifier="merchantresearch" multiplier="2.9" />
+      <Price storeidentifier="merchantmilitary" multiplier="2.9" />
+      <Price storeidentifier="merchantmine" multiplier="2.9" />
+      <Price storeidentifier="merchantmedical" multiplier="2.9" />
+      <Price storeidentifier="merchantengineering" multiplier="2.9" />
+    </Price>
+    <Sprite texture="%ModDir%/Content/Items/Bureaucracy/money_500cr.png" sourcerect="0,0,128,54" depth="0.55" origin="0.5,0.5" />
+    <Body width="40" height="40" density="12" />
+    <Holdable selectkey="Select" slots="Any,RightHand,LeftHand" msg="ItemMsgPickUpSelect" holdpos="40,-30" handle1="-40,-7" holdangle="30" />
+    <PreferredContainer secondary="outpostcrewcabinet,abandonedcrewcabinet" spawnprobability="0.0" />
+    <PreferredContainer secondary="idcardcontainer" amount="1" spawnprobability="0.1" minleveldifficulty="15" />
+    <Deconstruct time="3" />
+    <Fabricate suitablefabricators="erc_currencyexchanger" requiredtime="1.5" amount="1" requiresrecipe="false">
+      <RequiredItem identifier="money100cr" amount="5" />
+    </Fabricate>
+  </Item>
+
+  <Item name="Конверт с деньгами" description="Запечатанный конверт с фондом зарплаты экипажа. При вскрытии выдаёт именные зарплатные конверты, по одному на каждую живую роль экипажа. Выплачивается один раз за смену." identifier="erc_salaryenvelope" category="Misc" Tags="smallitem,erc_salaryenvelope" cargocontaineridentifier="metalcrate" scale="0.5" impactsoundtag="impact_soft" fireproof="true" waterproof="true">
+    <Price baseprice="50" sold="true">
+      <Price storeidentifier="merchantoutpost" sold="true" multiplier="1.0" minavailable="1" />
+      <Price storeidentifier="merchantcity" sold="true" multiplier="1.0" minavailable="1" />
+    </Price>
+    <Sprite texture="Content/Map/Outposts/Art/FactionItems.png" sourcerect="401,120,49,68" depth="0.8" origin="0.5,0.5" />
+    <BrokenSprite texture="%ModDir%/Content/Items/Bureaucracy/salaryenvelope_broken.png" sourcerect="0,0,49,79" depth="0.8" origin="0.5,0.5" maxcondition="1" />
+    <Body width="45" height="65" density="8" />
+    <MeleeWeapon slots="Any,RightHand+LeftHand" aimpos="40,-30" handle1="-10,0" handle2="-15,10" aimangle="-80" holdangle="30" msg="ItemMsgPickUpSelect">
+      <StatusEffect type="OnSecondaryUse" target="This" Condition="-25.0">
+        <Conditional allowaccess="eq false" />
+      </StatusEffect>
+      <StatusEffect type="OnBroken" target="This" allowaccess="true">
+        <Sound file="Content/Items/Medical/ITEM_proteinBarOpen.ogg" range="350" />
+      </StatusEffect>
+    </MeleeWeapon>
+    <ItemContainer capacity="8" containedstateindicatorslot="0" ShowConditionInContainedStateIndicator="true">
+      <Containable items="erc_salaryenvelope_small">
+        <StatusEffect type="OnContaining" targettype="This" interval="1" allowaccess="false">
+          <Conditional condition="gt 0" />
+        </StatusEffect>
+      </Containable>
+    </ItemContainer>
+    <Deconstruct time="1" />
+  </Item>
+
+  <Item name="Зарплатный конверт" description="Именной конверт с зарплатой за смену." identifier="erc_salaryenvelope_small" category="Misc" Tags="smallitem,erc_salaryenvelope_small" cargocontaineridentifier="metalcrate" scale="0.35" impactsoundtag="impact_soft" fireproof="true" waterproof="true">
+    <Sprite texture="Content/Map/Outposts/Art/FactionItems.png" sourcerect="401,120,49,68" depth="0.8" origin="0.5,0.5" />
+    <Body width="32" height="46" density="8" />
+    <Holdable slots="Any,RightHand,LeftHand" aimpos="40,-30" handle1="-10,0" holdangle="30" msg="ItemMsgPickUpSelect" />
+    <ItemContainer capacity="8" maxstacksize="50" canbeselected="true" containedstateindicatorslot="0">
+      <Containable items="money" />
+    </ItemContainer>
+    <Deconstruct time="1" />
+  </Item>
+</Items>
+</Override>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Afflictions>
+	<Affliction name="" identifier="aar_armored_ceram" description="" type="resistance" isbuff="true" HealableInMedicalClinic="false" limbspecific="false" maxstrength="100" showiconthreshold="1" showinhealthscannerthreshold="500">
+		<Effect minstrength="0" maxstrength="100" resistancefor="gunshotwound,bleeding" minresistance="0.9" maxresistance="0.9" Tag="ceramic">
+			<StatValue stattype="MovementSpeed" minvalue="-0.15" maxvalue="-0.15" />
+		</Effect>
+		<icon texture="%ModDir%/Content/Afflictions/Icons/afflictionsicon_1.png" sourcerect="0,0,128,128" origin="0,0" color="255,255,255,255" />
+	</Affliction>
+	<Affliction name="" identifier="aar_armored_steel" description="" type="resistance" isbuff="true" HealableInMedicalClinic="false" limbspecific="false" maxstrength="100" showiconthreshold="1" showinhealthscannerthreshold="500">
+		<Effect minstrength="0" maxstrength="100" resistancefor="gunshotwound,bleeding" minresistance="0.4" maxresistance="0.7">
+			<StatValue stattype="MovementSpeed" minvalue="-0.3" maxvalue="-0.3" />
+		</Effect>
+		<icon texture="%ModDir%/Content/Afflictions/Icons/afflictionsicon_2.png" sourcerect="0,0,128,128" origin="0,0" color="125,125,255,255" />
+	</Affliction>
+	<Affliction name="" identifier="aar_armored_kevlar" description="" type="resistance" isbuff="true" HealableInMedicalClinic="false" limbspecific="false" maxstrength="100" showiconthreshold="1" showinhealthscannerthreshold="500">
+		<Effect minstrength="0" maxstrength="100" resistancefor="gunshotwound,bleeding,explosiondamage" minresistance="0.1" maxresistance="0.4">
+			<StatValue stattype="MovementSpeed" minvalue="-0.1" maxvalue="-0.1" />
+		</Effect>
+		<icon texture="%ModDir%/Content/Afflictions/Icons/afflictionsicon_3.png" sourcerect="0,0,128,128" origin="0,0" color="125,255,125,255" />
+	</Affliction>
+	<Affliction name="" identifier="aar_armored_proxy" description="" type="resistance" isbuff="true" HealableInMedicalClinic="false" limbspecific="false" maxstrength="100" showiconthreshold="1000" showinhealthscannerthreshold="1000">
+		<Effect minstrength="0" maxstrength="100" strengthchange="-50">
+			<StatusEffect type="OnDamaged" target="Character" setvalue="true">
+				<RequiredAffliction identifier="gunshotwound" />
+				<ReduceAffliction identifier="aar_armored_ceram" strength="20" />
+				<ReduceAffliction identifier="aar_armored_steel" strength="10" />
+				<ReduceAffliction identifier="aar_armored_kevlar" strength="5" />
+				<Sound file="%ModDir%/Content/Afflictions/Sounds/bulletproof_impact.ogg" range="500" selectionmode="Random" />
+				<Sound file="%ModDir%/Content/Afflictions/Sounds/bulletproof_impact.ogg" range="500" frequencymultiplier="0.75" />
+				<Sound file="%ModDir%/Content/Afflictions/Sounds/bulletproof_impact.ogg" range="500" frequencymultiplier="1.25" />
+			</StatusEffect>
+			<StatusEffect target="Character" disabledeltatimer="true" Interval="1" setvalue="true">
+				<Conditional armored_proxy="lte 25" />
+				<ReduceAffliction identifier="aar_armored_ceram" strength="100" />
+				<ReduceAffliction identifier="aar_armored_steel" strength="100" />
+				<ReduceAffliction identifier="aar_armored_kevlar" strength="100" />
+			</StatusEffect>
+		</Effect>
+	</Affliction>
+	<Affliction identifier="aar_pepper" type="invertcontrols" minradialdistort="0.0" maxradialdistort="0.5" maxstrength="125" indicatorlimb="Head" limbspecific="false" affectmachines="false">
+		<Effect minstrength="0" maxstrength="80" mingrainstrength="0.0" maxgrainstrength="8.0" graincolor="255,0,0,255" minscreenblur="0" maxscreenblur="2.5" strengthchange="-0.5" minskillmultiplier="1" maxskillmultiplier="0.25" minspeedmultiplier="1.0" maxspeedmultiplier="0.75" minfacetint="255,0,0,0" maxfacetint="255,0,0,100" minchromaticaberration="4" maxchromaticaberration="5">
+			<StatusEffect type="InWater" Interval="0.5" target="Character">
+				<ReduceAffliction identifier="aar_pepper" strength="1" />
+			</StatusEffect>
+			<StatusEffect target="Character" ObstructVisionAmount="0.01" targetLimbs="Head">
+				<ParticleEmitter distance="6" particle="waterdrop" particlespersecond="1" copyentityangle="true" />
+			</StatusEffect>
+			<StatusEffect target="Character" duration="2">
+				<Conditional aar_pepper="lte 25" />
+				<Conditional pressureProtection="gte 1000" />
+				<RequiredItem items="diving" type="Equipped" />
+				<ReduceAffliction identifier="aar_pepper" strength="1000" />
+			</StatusEffect>
+			<StatusEffect target="Character" duration="1" stackable="false">
+				<Conditional speciesgroup="mudraptor" />
+				<Conditional speciesname="Mudraptor_pet" />
+				<Affliction identifier="organdamage" amount="2.5" />
+			</StatusEffect>
+		</Effect>
+		<Effect minstrength="80" maxstrength="100" mingrainstrength="8.0" maxgrainstrength="10.0" graincolor="255,0,0,255" minradialdistort="0.5" maxradialdistort="0.7" strengthchange="-1" minscreenblur="3" maxscreenblur="5" minskillmultiplier="0.5" maxskillmultiplier="0.25" convulseamount="0.10" minfacetint="255,0,0,100" maxfacetint="255,0,0,100" minspeedmultiplier="1.0" maxspeedmultiplier="0.5" minchromaticaberration="4" maxchromaticaberration="5">
+			<StatusEffect type="InWater" Interval="0.5" target="Character">
+				<ReduceAffliction identifier="aar_pepper" strength="1" />
+			</StatusEffect>
+			<StatusEffect target="Character" ObstructVisionAmount="10" targetLimbs="Head">
+				<ParticleEmitter distance="6" particle="waterdrop" particlespersecond="2" copyentityangle="true" />
+			</StatusEffect>
+			<StatValue stattype="MeleeAttackSpeed" minvalue="-0.0" maxvalue="-0.3" />
+			<StatValue stattype="MeleeAttackMultiplier" minvalue="-0.0" maxvalue="-0.3" />
+			<StatValue stattype="NaturalMeleeAttackMultiplier" minvalue="-0.0" maxvalue="-0.3" />
+			<StatusEffect target="Character" duration="1" stackable="false">
+				<Conditional speciesgroup="mudraptor" />
+				<Conditional speciesname="Mudraptor_pet" />
+				<Affliction identifier="organdamage" amount="5" />
+			</StatusEffect>
+		</Effect>
+		<Effect minstrength="100" maxstrength="125" mingrainstrength="10.0" maxgrainstrength="12.0" graincolor="255,0,0,255" minradialdistort="0.75" maxradialdistort="1.0" strengthchange="-1.25" minskillmultiplier="0.25" maxskillmultiplier="0.0" minscreenblur="5" maxscreenblur="5" convulseamount="0.25" minfacetint="255,0,0,100" maxfacetint="255,0,0,175" minspeedmultiplier="0.5" maxspeedmultiplier="0.25" minchromaticaberration="5" maxchromaticaberration="5">
+			<StatusEffect type="InWater" Interval="0.5" target="Character">
+				<ReduceAffliction identifier="aar_pepper" strength="1" />
+			</StatusEffect>
+			<StatusEffect target="Character" ObstructVisionAmount="10" targetLimbs="Head">
+				<ParticleEmitter distance="6" particle="waterdrop" particlespersecond="4" copyentityangle="true" />
+			</StatusEffect>
+			<StatValue stattype="MeleeAttackSpeed" minvalue="-0.3" maxvalue="-0.5" />
+			<StatValue stattype="MeleeAttackMultiplier" minvalue="-0.3" maxvalue="-0.5" />
+			<StatValue stattype="NaturalMeleeAttackMultiplier" minvalue="-0.3" maxvalue="-0.5" />
+			<StatusEffect target="Character" duration="1" stackable="false">
+				<Conditional speciesgroup="mudraptor" />
+				<Conditional speciesname="Mudraptor_pet" />
+				<Affliction identifier="organdamage" amount="10" />
+			</StatusEffect>
+		</Effect>
+		<PeriodicEffect mininterval="5" maxinterval="10" minstrength="100" maxstrength="125">
+			<StatusEffect target="Character" SpeedMultiplier="0.25" setvalue="true" ObstructVisionAmount="0.01" duration="1.7" LowPassMultiplier="0.2" comparison="and">
+				<Conditional healthpercentage="gt 0" />
+				<Conditional ishuman="true" />
+				<Conditional hasspecifiertag="male" />
+				<Sound file="%ModDir%/Content/Afflictions/Sounds/male_blind_1.ogg" selectionmode="Random" />
+				<Sound file="%ModDir%/Content/Afflictions/Sounds/male_blind_2.ogg" />
+				<Sound file="%ModDir%/Content/Afflictions/Sounds/male_blind_3.ogg" />
+				<Sound file="%ModDir%/Content/Afflictions/Sounds/male_blind_1.ogg" frequencymultiplier="1.2" />
+				<Sound file="%ModDir%/Content/Afflictions/Sounds/male_blind_2.ogg" frequencymultiplier="1.1" />
+				<Sound file="%ModDir%/Content/Afflictions/Sounds/male_blind_3.ogg" frequencymultiplier="0.9" />
+				<Affliction identifier="nausea" strength="0.125" />
+				<TriggerAnimation Type="Walk" path="%ModDir%/Content/Afflictions/Animations/blind.xml" priority="11" />
+				<TriggerAnimation Type="Run" path="%ModDir%/Content/Afflictions/Animations/blind_run.xml" priority="11" />
+			</StatusEffect>
+			<StatusEffect target="Character" SpeedMultiplier="0.25" setvalue="true" ObstructVisionAmount="0.01" duration="1.7" LowPassMultiplier="0.2" comparison="and">
+				<Conditional healthpercentage="gt 0" />
+				<Conditional ishuman="true" />
+				<Conditional hasspecifiertag="female" />
+				<Sound file="%ModDir%/Content/Afflictions/Sounds/female_blind_1.ogg" selectionmode="Random" />
+				<Sound file="%ModDir%/Content/Afflictions/Sounds/female_blind_2.ogg" />
+				<Sound file="%ModDir%/Content/Afflictions/Sounds/female_blind_3.ogg" />
+				<Sound file="%ModDir%/Content/Afflictions/Sounds/female_blind_1.ogg" frequencymultiplier="1.2" />
+				<Sound file="%ModDir%/Content/Afflictions/Sounds/female_blind_2.ogg" frequencymultiplier="1.1" />
+				<Sound file="%ModDir%/Content/Afflictions/Sounds/female_blind_3.ogg" frequencymultiplier="0.9" />
+				<Affliction identifier="nausea" strength="0.125" />
+				<TriggerAnimation Type="Walk" path="%ModDir%/Content/Afflictions/Animations/blind.xml" priority="11" />
+				<TriggerAnimation Type="Run" path="%ModDir%/Content/Afflictions/Animations/blind_run.xml" priority="11" />
+			</StatusEffect>
+			<StatusEffect target="Character" setvalue="true" duration="2" comparison="and">
+				<Conditional healthpercentage="gt 0" immunity="gt 0" sym_unconsciousness="lt 2" />
+				<Conditional ishuman="true" />
+				<Affliction identifier="oxygenlow" strength="0.5" />
+			</StatusEffect>
+		</PeriodicEffect>
+		<icon texture="%ModDir%/Content/Afflictions/Icons/afflictionsicon_5.png" sourcerect="0,0,128,128" origin="0,0" color="125,255,125,255" />
+	</Affliction>
+</Afflictions>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Override>
+  <Style>
+    <Cursor>
+      <Sprite name="Cursor.Pointer" state="Default" texture="%ModDir%/Content/UI/Shared/pp_cursor_atlas.png" sourcerect="387,482,37,49" origin="0,0" compress="false" />
+      <Sprite name="Cursor.Hand" state="Hand" texture="%ModDir%/Content/UI/Shared/pp_cursor_atlas.png" sourcerect="525,476,28,50" origin="0.1,-0.05" compress="false" />
+      <Sprite name="Cursor.Move" state="Move" texture="Content/UI/UIAtlasGeneral.png" sourcerect="604,477,45,45" origin="0.5,0.5" compress="false" />
+      <Sprite name="Cursor.IBeam" state="IBeam" texture="Content/UI/UIAtlasGeneral.png" sourcerect="498,480,22,37" origin="0.5,0.5" compress="false" />
+      <Sprite name="Cursor.Dragging" state="Dragging" texture="%ModDir%/Content/UI/Shared/pp_cursor_atlas.png" sourcerect="559,482,36,45" origin="0.5,0.5" compress="false" />
+      <Sprite name="Cursor.Waiting" state="Waiting" texture="%ModDir%/Content/UI/Shared/pp_cursor_atlas.png" sourcerect="332,479,46,52" origin="0.5,0.5" compress="false" />
+      <Sprite name="Cursor.WaitingBG" state="WaitingBackground" texture="Content/UI/UIAtlasGeneral.png" sourcerect="429,480,39,49" origin="0.17,0.1" compress="false" />
+    </Cursor>
+    <CorporateLawsUI color="255,255,255,255" textcolor="0,0,0,255">
+      <Sprite name="CorporateLawsUI" texture="%ModDir%/Content/UI/Shared/corporate_laws_ui.png" sourcerect="0,0,1582,862" maintainaspectratio="true" tile="false" origin="0.5,0.5" compress="true" />
+    </CorporateLawsUI>
+    <primarypkg_coalitiondocbg color="255,255,255,255" textcolor="45,45,45,255">
+      <Sprite name="primarypkg_coalitiondocbg" texture="%ModDir%/Content/Items/Documents/coalitiondoc_bg.png" size="0.0,0.0" sourcerect="0,0,258,348" slice="24,24,234,324" origin="0.5,0.5" compress="true" />
+    </primarypkg_coalitiondocbg>
+  </Style>
+</Override>

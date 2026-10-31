@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Items>
+  <Item name="СНАРЯЖЕНИЕ СЛУЖБЫ БЕЗОПАСНОСТИ" identifier="spb_securitycabinet" tags="locker,container,securecontainer" linkable="true" spritecolor="255,255,255,255" pickdistance="150" waterproof="true" scale="0.5">
+    <Sprite texture="Content/Items/Containers/containers.png" depth="0.84" sourcerect="348,2,364,373" origin="0.5,0.5" />
+    <ItemContainer capacity="48" slotsperrow="8" canbeselected="true" hideitems="true" msg="ItemMsgInteractSelect">
+      <GuiFrame relativesize="0.35,0.6" anchor="Center" style="ItemUI" />
+      <Containable items="smallitem,mediumitem" excludeditems="storagecontainer" />
+      <SubContainer capacity="8" maxstacksize="1">
+        <SlotIcon texture="Content/UI/CommandUIAtlas.png" sourcerect="639,926,128,80" origin="0.5,0.5" />
+        <Containable items="mobilecontainer" />
+      </SubContainer>
+    </ItemContainer>
+  </Item>
+</Items>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Items>
+  <Item name="" identifier="pp_drill" tags="mediumitem" category="Machine" scale="0.5" linkable="true" allowrotatingineditor="true" damagedbyexplosions="true" explosiondamagemultiplier="0.2">
+    <Sprite texture="Content/Map/Outposts/Art/MiningMachine.png" depth="0.8" sourcerect="1500,640,433,320" origin="0.5,0.5" premultiplyalpha="false" />
+    <Body bodytype="Static" width="433" height="320" density="15" />
+
+    <Powered powerconsumption="200" minvoltage="0.5" isactive="true" />
+
+    <DrillComponent framecount="16" threadperiod="55" threadslope="0.29" scrollstart="88" rotationspeed="4.5" vibrationamount="1.5" spinupduration="20" spindownduration="3" idleheatrate="0.01" drillheatrate="0.055" coolrate="0.015" watercoolmultiplier="2.5" overheatrecoverat="0.5" overheatconditiondamage="1.5" orechance="0.55">
+      <DrillSprite texture="Content/Map/Outposts/Art/MiningMachine.png" sourcerect="1439,32,433,320" origin="0.5,0.5" premultiplyalpha="false" />
+      <LoopSound file="%ModDir%/Content/Items/Drill/pp_drill_loop.ogg" volume="4.0" range="2500" />
+      <OverheatSound file="%ModDir%/Content/Items/Drill/pp_drill_overheat.ogg" volume="1.0" range="2500" />
+      <BreakSound file="%ModDir%/Content/Items/Drill/pp_drill_break.ogg" />
+      <BreakSound file="%ModDir%/Content/Items/Drill/pp_drill_break_5.ogg" />
+      <BreakSound file="%ModDir%/Content/Items/Drill/pp_drill_break_6.ogg" />
+      <BreakSound file="%ModDir%/Content/Items/Drill/pp_drill_break_7.ogg" />
+      <ParticleEmitter particle="pp_drill_sparks" particlespersecond="45" anglemin="-30" anglemax="30" velocitymin="200" velocitymax="500" copyentityangle="true" />
+      <ParticleEmitter particle="pp_drill_smoke" particlespersecond="15" anglemin="-40" anglemax="40" velocitymin="50" velocitymax="150" copyentityangle="true" />
+      <ParticleEmitter particle="pp_drill_heat" particlespersecond="10" anglemin="-20" anglemax="20" velocitymin="30" velocitymax="80" copyentityangle="true" />
+      <Ore identifier="titanite" commonness="10" />
+      <Ore identifier="sphalerite" commonness="9" />
+      <Ore identifier="ilmenite" commonness="8" />
+      <Ore identifier="stannite" commonness="8" />
+      <Ore identifier="quartz" commonness="7" />
+      <Ore identifier="ironore" commonness="7" />
+      <Ore identifier="pyromorphite" commonness="6" />
+      <Ore identifier="hydroxyapatite" commonness="5" />
+      <Ore identifier="amblygonite" commonness="5" />
+      <Ore identifier="brockite" commonness="4" />
+      <Ore identifier="thorianite" commonness="2" />
+      <Ore identifier="uraniumore" commonness="2" />
+      <Ore identifier="diamond" commonness="0.7" />
+      <Ore identifier="piezocrystal" commonness="0.7" />
+    </DrillComponent>
+
+    <RepairTool range="220" barrelpos="95,0" repairthroughwalls="false" repairmultiple="false" hititems="false" targetforce="30" usablein="Both">
+      <StatusEffect type="OnUse" target="Limb">
+        <Affliction identifier="lacerations" strength="10" />
+        <Affliction identifier="bleeding" strength="8" />
+      </StatusEffect>
+      <StatusEffect type="OnUse" target="UseTarget">
+        <Conditional entitytype="eq Character" />
+        <Affliction identifier="stun" strength="0.4" />
+      </StatusEffect>
+    </RepairTool>
+
+    <ConnectionPanel selectkey="Action" canbeselected="true" msg="ItemMsgRewireScrewdriver" hudpriority="10">
+      <GuiFrame relativesize="0.2,0.32" minsize="400,350" maxsize="480,420" anchor="Center" style="ConnectionPanel" />
+      <RequiredItem items="screwdriver" type="Equipped" />
+      <input name="power_in" displayname="connection.powerin" />
+      <input name="toggle" displayname="connection.togglestate" />
+      <input name="set_active" displayname="connection.setstate" />
+    </ConnectionPanel>
+  </Item>
+</Items>

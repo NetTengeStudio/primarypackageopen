@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Override>
+  <Items>
+    <Item name="" identifier="coilgunbolt_blank" nameidentifier="coilgunbolt" variantof="coilgunbolt" hideinmenus="true" sonarsize="0">
+      <Sprite texture="Content/Items/Weapons/weapons_new.png" sourcerect="0,0,1,1" depth="0.55" />
+      <Holdable />
+      <Projectile>
+        <Attack />
+        <StatusEffect />
+        <StatusEffect type="OnNotContained" target="This" stackable="false" delay="0.1">
+          <Remove />
+        </StatusEffect>
+        <StatusEffect />
+      </Projectile>
+    </Item>
+  </Items>
+</Override>

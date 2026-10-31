@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Configuration>
+  <Settings>
+    <Setting Name="RPWheelKey" Type="control" Value="MouseButton5" />
+    <Setting Name="ReloadKey" Type="control" Value="F" />
+    <Setting Name="ZoomInKey" Type="control" Value="None" />
+    <Setting Name="ZoomOutKey" Type="control" Value="None" />
+    <Setting Name="ZoomResetKey" Type="control" Value="None" />
+  </Settings>
+</Configuration>

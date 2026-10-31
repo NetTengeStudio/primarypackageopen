@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Items>
+  <Item name="" identifier="corporatelaws" allowstealingalways="true" category="Misc" subcategory="Bureaucracy" tags="smallitem,document,coalitionlaw" cargocontaineridentifier="metalcrate" scale="0.5" impactsoundtag="impact_soft">
+    <InventoryIcon texture="Content/Map/Outposts/Art/FactionItems.png" sourcerect="214,200,50,50" origin="0.5,0.5" />
+    <Sprite texture="Content/Map/Outposts/Art/FactionItems.png" sourcerect="367,194,12,44" origin="0.5,0.5" depth="0.8" />
+    <Body width="35" height="40" density="8" />
+    <Holdable slots="Any,RightHand,LeftHand" aimable="true" aimpos="45,0" holdpos="35,15" handle1="0,-20" handle2="0,10" msg="ItemMsgPickUpSelect" />
+    <Terminal canbeselected="true" msg="ItemMsgInteractSelect" AllowInGameEditing="false" AutoHideScrollbar="true" readonly="true" autoscrolltobottom="false" linestartsymbol="" marginmultiplier="1.5" drawhudwhenequipped="true">
+      <GuiFrame relativesize="0.5,0.56" anchor="Center" style="CorporateLawsUI" hidedragicons="true" />
+    </Terminal>
+  </Item>
+
+  <Item name="Контроллер Манифеста Экипажа" description="Консоль для перезаписи ролей экипажа. Вставьте ID-карту члена экипажа и назначьте новую роль. Требует капитанскую ID-карту при себе." identifier="erc_crewmanifest" category="Machine" Tags="smallitem" cargocontaineridentifier="metalcrate" width="158" height="283" texturescale="1.0,1.0" scale="0.5" linkable="true" allowedlinks="locker" impactsoundtag="impact_metal_light" damagedbyexplosions="true" damagedbypoisons="false">
+    <Price baseprice="800" sold="false">
+      <Price locationtype="city" multiplier="1.0" sold="true" minavailable="1" />
+      <Price locationtype="outpost" multiplier="1.15" sold="true" minavailable="1" />
+    </Price>
+    <InventoryIcon texture="%ModDir%/Content/Items/Bureaucracy/crewmanifest.png" sourcerect="0,0,158,283" origin="0.5,0.5" />
+    <Sprite texture="%ModDir%/Content/Items/Bureaucracy/crewmanifest.png" sourcerect="0,0,158,283" depth="0.55" origin="0.5,0.5" />
+    <BrokenSprite texture="%ModDir%/Content/Items/Bureaucracy/crewmanifest.png" sourcerect="159,0,158,283" depth="0.55" maxcondition="80" fadein="true" origin="0.5,0.5" />
+    <BrokenSprite texture="%ModDir%/Content/Items/Bureaucracy/crewmanifest.png" sourcerect="319,0,160,283" depth="0.55" maxcondition="0" origin="0.5,0.5" />
+    <Deconstruct time="10">
+      <Item identifier="copper" />
+      <Item identifier="plastic" amount="2" />
+      <Item identifier="fpgacircuit" />
+    </Deconstruct>
+    <Fabricate suitablefabricators="fabricator" requiredtime="25" requiresrecipe="true">
+      <RequiredSkill identifier="electrical" level="40" />
+      <RequiredItem identifier="fpgacircuit" />
+      <RequiredItem identifier="plastic" amount="2" />
+      <RequiredItem identifier="copper" amount="2" />
+    </Fabricate>
+    <ItemContainer capacity="1" hideitems="false" drawinventory="true" itempos="0,40" canbeselected="true" msg="ItemMsgInteractSelect">
+      <Containable items="identitycard" />
+      <GuiFrame relativesize="0.12,0.12" anchor="TopCenter" style="ItemUI" />
+    </ItemContainer>
+    <CrewManifestComponent canbeselected="true" msg="ItemMsgInteractSelect">
+      <GuiFrame relativesize="0.35,0.5" anchor="Center" style="ItemUI" />
+    </CrewManifestComponent>
+  </Item>
+</Items>

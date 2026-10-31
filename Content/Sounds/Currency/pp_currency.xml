@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sounds>
+  <pp_impact_coin file="%ModDir%/Content/Sounds/Currency/coin_drop_1.ogg" range="800" />
+  <pp_impact_coin file="%ModDir%/Content/Sounds/Currency/coin_drop_2.ogg" range="800" />
+  <pp_impact_coin file="%ModDir%/Content/Sounds/Currency/coin_drop_3.ogg" range="800" />
+</sounds>

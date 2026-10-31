@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Override>
+  <Afflictions>
+    <Affliction name="Hhm" identifier="hhm" type="poison" limbspecific="true" activationthreshold="0" karmachangeonapplied="-50" maxstrength="100">
+      <Effect minstrength="1" maxstrength="30" strengthchange="30" minradialdistort="1.0" maxradialdistort="2.0" minfacetint="100,0,0,150" maxfacetint="100,0,0,150"></Effect>
+      <Effect minstrength="31" maxstrength="60" strengthchange="30" minradialdistort="2.0" maxradialdistort="3.0" minfacetint="150,0,0,150" maxfacetint="150,0,0,150">
+        <StatusEffect target="limb">
+          <ParticleEmitter particle="hhm" copyentityangle="true" particleamount="30" scalemin="0.1" scalemax="0.1" />
+        </StatusEffect>
+      </Effect>
+      <Effect minstrength="61" maxstrength="90" strengthchange="30" minradialdistort="4.0" maxradialdistort="5.0" minfacetint="200,0,0,150" maxfacetint="200,0,0,150">
+        <StatusEffect target="limb">
+          <ParticleEmitter particle="hhm" copyentityangle="true" particleamount="30" scalemin="0.2" scalemax="0.2" />
+        </StatusEffect>
+      </Effect>
+      <Effect minstrength="91" maxstrength="100" strengthchange="0" minradialdistort="5.0" maxradialdistort="7.0" minfacetint="255,0,0,150" maxfacetint="255,0,0,150">
+        <StatusEffect target="Character" duration="0"></StatusEffect>
+        <StatusEffect target="limb" SpeedMultiplier="0.3">
+          <Affliction identifier="stun" strength="5" probability="1" />
+          <Explosion range="30.0" shockwave="false" smoke="false" flames="false" sparks="false" force="30.0" severlimbsprobability="0" decal="blood" decalsize="3">
+            <Affliction identifier="stun" strength="1" />
+            <Affliction identifier="explosiondamage" strength="700" probability="1" />
+          </Explosion>
+          <ParticleEmitter particle="bloodsplash" copyentityangle="true" particleamount="30" scalemin="3" scalemax="3" />
+          <ParticleEmitter particle="blood" scalemin="2" scalemax="2" />
+          <ParticleEmitter particle="blooddrop" scalemin="2" scalemax="2" />
+        </StatusEffect>
+        <StatusEffect target="limb" SpeedMultiplier="0.3" setvalue="true">
+          <Affliction identifier="hhm" strength="0" />
+        </StatusEffect>
+      </Effect>
+    </Affliction>
+    <Affliction name="Smash" identifier="Smash" type="damage" limbspecific="true" indicatorlimb="Head" hideiconafterdelay="true" showiconthreshold="1000" maxstrength="100">
+      <Effect minstrength="0" maxstrength="100" strengthchange="-1000">
+        <StatusEffect target="Limb" SpeedMultiplier="0.3" conditionalcomparison="And" CheckConditionalAlways="true">
+          <Affliction identifier="stun" strength="5" probability="1" />
+          <Explosion range="0.1" shockwave="false" smoke="false" flames="false" sparks="false" force="30.0" severlimbsprobability="100000" decal="blood" decalsize="3">
+            <Affliction identifier="stun" strength="1" />
+            <Affliction identifier="explosiondamage" strength="100" probability="1" />
+          </Explosion>
+          <ParticleEmitter particle="bloodsplash" copyentityangle="true" particleamount="30" scalemin="1.5" scalemax="2" />
+          <ParticleEmitter particle="blood" scalemin="1.5" scalemax="2" />
+          <ParticleEmitter particle="blooddrop" scalemin="1.5" scalemax="2" />
+        </StatusEffect>
+        <StatusEffect target="Limb" SpeedMultiplier="0.3" setvalue="true">
+          <Affliction identifier="hhm" strength="0" />
+        </StatusEffect>
+      </Effect>
+      <icon texture="Content/UI/MainIconsAtlas.png" sourcerect="640,639,129,129" color="255,0,0,255" origin="0,0" />
+    </Affliction>
+  </Afflictions>
+</Override>

@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Config>
+  <FromBleeding>
+    <BloodAmountFromBleeding>1</BloodAmountFromBleeding>
+    <LifetimeMultiplier>1</LifetimeMultiplier>
+    <UnconciousPulseSpeed>0.6</UnconciousPulseSpeed>
+    <UnconciousBloodFlow>0.6</UnconciousBloodFlow>
+    <BasicPulseSpeed>7</BasicPulseSpeed>
+    <PulseSteepness>8</PulseSteepness>
+    <MinFlow>0.23</MinFlow>
+    <FlowCutoff>0.28</FlowCutoff>
+    <SeverityFlowFactor>0.08</SeverityFlowFactor>
+    <PulseFlowFactor>5</PulseFlowFactor>
+    <LimbSpeedFlowFactor>0.01</LimbSpeedFlowFactor>
+    <LimbSpeedPosFactor>10</LimbSpeedPosFactor>
+    <RandomPosFactor>10</RandomPosFactor>
+    <DecalCreationInterval>0</DecalCreationInterval>
+  </FromBleeding>
+  <FromImpact>
+    <OfProjectile>
+      <MinBloodFlyDistance>40</MinBloodFlyDistance>
+      <BloodSpeed>80</BloodSpeed>
+    </OfProjectile>
+    <OfMeleeWeapon>
+      <MinBloodFlyDistance>10</MinBloodFlyDistance>
+      <BloodSpeed>20</BloodSpeed>
+    </OfMeleeWeapon>
+    <BloodAmountFromImpact>1</BloodAmountFromImpact>
+    <LifetimeMultiplier>2</LifetimeMultiplier>
+    <BleedingDamageToDecalSize>1.3</BleedingDamageToDecalSize>
+    <MinSplash>0.1</MinSplash>
+    <Cutoff>0.2</Cutoff>
+  </FromImpact>
+  <DecalDrawDepth>0.6</DecalDrawDepth>
+  <GlobalBloodAmount>2</GlobalBloodAmount>
+  <GlobalDecalLifetime>0</GlobalDecalLifetime>
+  <DecalCleaningSpeed>0.1</DecalCleaningSpeed>
+  <VitalityMultiplier>0.9</VitalityMultiplier>
+  <Version>1.1.2</Version>
+</Config>

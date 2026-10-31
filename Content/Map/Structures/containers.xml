@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Override>
+  <Items>
+    <Item name="" identifier="foodandothers1" tags="container,suppliescontainer,lvl1foodandothers" subcategory="Ящики" linkable="true" pickdistance="100" waterproof="true" scale="0.2">
+      <Sprite name="Ящик снабжения" texture="%ModDir%/Content/Map/Structures/containers.png" depth="0.84" sourcerect="0,0,324,357" origin="0.5,0.5" />
+      <ItemContainer capacity="3" slotsperrow="2" canbeselected="true" hideitems="true" msg="ItemMsgInteractSelect">
+        <GuiFrame relativesize="0.16,0.22" anchor="Center" style="ItemUI" />
+        <Containable items="mediumitem,smallitem,foodandothers" excludedidentifiers="mobilecontainer" />
+      </ItemContainer>
+    </Item>
+    <Item name="" identifier="foodandothers2" tags="container,suppliescontainer,lvl1foodandothersbigger" subcategory="Ящики" linkable="true" pickdistance="100" waterproof="true" scale="0.2">
+      <Sprite name="Ящики снабжения" texture="%ModDir%/Content/Map/Structures/containers.png" depth="0.84" sourcerect="339,0,760,649" origin="0.5,0.5" />
+      <ItemContainer capacity="6" slotsperrow="4" canbeselected="true" hideitems="true" msg="ItemMsgInteractSelect">
+        <GuiFrame relativesize="0.18,0.28" anchor="Center" style="ItemUI" />
+        <Containable items="mediumitem,smallitem,foodandothers" excludedidentifiers="mobilecontainer" />
+      </ItemContainer>
+    </Item>
+    <Item name="" identifier="firstaid1" tags="container,suppliescontainer,lvl2medicinecontainer" subcategory="Ящики" linkable="true" pickdistance="100" waterproof="true" scale="0.2">
+      <Sprite name="Аптечка первой помощи" texture="%ModDir%/Content/Map/Structures/containers.png" depth="0.84" sourcerect="1474,3,235,315" origin="0.5,0.5" />
+      <ItemContainer capacity="4" slotsperrow="4" canbeselected="true" hideitems="true" msg="ItemMsgInteractSelect">
+        <GuiFrame relativesize="0.18,0.20" anchor="Center" style="ItemUI" />
+        <Containable items="mediumitem,smallitem,firstaidkit" excludedidentifiers="mobilecontainer" />
+      </ItemContainer>
+    </Item>
+    <Item name="" identifier="firstaid2" tags="container,suppliescontainer,lvl2medicinecontainerbigger" subcategory="Ящики" linkable="true" pickdistance="100" waterproof="true" scale="0.2">
+      <Sprite name="Ящик с медикаментами" texture="%ModDir%/Content/Map/Structures/containers.png" depth="0.84" sourcerect="1113,0,342,462" origin="0.5,0.5" />
+      <ItemContainer capacity="6" slotsperrow="6" canbeselected="true" hideitems="true" msg="ItemMsgInteractSelect">
+        <GuiFrame relativesize="0.3,0.3" anchor="Center" style="ItemUI" />
+        <Containable items="mediumitem,smallitem,firstaidkit" excludedidentifiers="mobilecontainer" />
+      </ItemContainer>
+    </Item>
+    <Item name="" identifier="techincalcrate1" tags="container,suppliescontainer,lvl3techincalcrate" subcategory="Ящики" linkable="true" pickdistance="100" waterproof="true" scale="0.2">
+      <Sprite name="Ящик технического снабжения" texture="%ModDir%/Content/Map/Structures/containers.png" depth="0.84" sourcerect="8,707,822,425" origin="0.5,0.5" />
+      <ItemContainer capacity="5" slotsperrow="5" canbeselected="true" hideitems="true" msg="ItemMsgInteractSelect">
+        <GuiFrame relativesize="0.4,0.3" anchor="Center" style="ItemUI" />
+        <Containable items="mediumitem,smallitem,technical" excludedidentifiers="mobilecontainer" />
+      </ItemContainer>
+    </Item>
+    <Item name="" identifier="clothescrate1" tags="container,suppliescontainer,lvl4clothescrate" subcategory="Ящики" linkable="true" pickdistance="100" waterproof="true" scale="0.2">
+      <Sprite name="Контейнеры с одеждой" texture="%ModDir%/Content/Map/Structures/containers.png" depth="0.84" sourcerect="15,1136,827,523" origin="0.5,0.5" />
+      <ItemContainer capacity="6" slotsperrow="6" canbeselected="true" hideitems="true" msg="ItemMsgInteractSelect">
+        <GuiFrame relativesize="0.3,0.3" anchor="Center" style="ItemUI" />
+        <Containable items="mediumitem,smallitem,clothes" excludedidentifiers="mobilecontainer" />
+      </ItemContainer>
+    </Item>
+    <Item name="" identifier="militarycrate1" tags="container,suppliescontainer,lvl5militarycrate" subcategory="Ящики" linkable="true" pickdistance="100" waterproof="true" scale="0.2">
+      <Sprite name="Ящик с аммуницией" texture="%ModDir%/Content/Map/Structures/containers.png" depth="0.84" sourcerect="35,2231,762,432" origin="0.5,0.5" />
+      <ItemContainer capacity="6" slotsperrow="6" canbeselected="true" hideitems="true" msg="ItemMsgInteractSelect">
+        <GuiFrame relativesize="0.3,0.3" anchor="Center" style="ItemUI" />
+        <Containable items="mediumitem,smallitem,military" excludedidentifiers="mobilecontainer" />
+      </ItemContainer>
+    </Item>
+    <Item name="" identifier="militarycrate2" tags="container,suppliescontainer,lvl5militarycratebigger" subcategory="Ящики" linkable="true" pickdistance="100" waterproof="true" scale="0.2">
+      <Sprite name="Шкаф с аммуницией" texture="%ModDir%/Content/Map/Structures/containers.png" depth="0.84" sourcerect="913,822,679,823" origin="0.5,0.5" />
+      <ItemContainer capacity="6" slotsperrow="6" canbeselected="true" hideitems="true" msg="ItemMsgInteractSelect">
+        <GuiFrame relativesize="0.3,0.3" anchor="Center" style="ItemUI" />
+        <Containable items="mediumitem,smallitem,military" excludedidentifiers="mobilecontainer" />
+      </ItemContainer>
+    </Item>
+  </Items>
+</Override>

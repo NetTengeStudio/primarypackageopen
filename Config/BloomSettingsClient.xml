@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Configuration>
+  <Settings>
+    <Setting Name="BloomEnabled" Type="bool" Value="true" />
+    <Setting Name="BloomIntensity" Type="rangeFloat" Min="0" Max="1" Steps="21" Value="1" />
+    <Setting Name="BloomThreshold" Type="rangeFloat" Min="0" Max="1" Steps="21" Value="0.55" />
+    <Setting Name="BloomKnee" Type="rangeFloat" Min="0" Max="1" Steps="21" Value="0.5" />
+    <Setting Name="BloomMultiplier" Type="rangeFloat" Min="0.1" Max="8" Steps="80" Value="1.2" />
+    <Setting Name="BloomRadius" Type="rangeFloat" Min="0.25" Max="4" Steps="16" Value="4" />
+    <Setting Name="BloomSpread" Type="rangeFloat" Min="0.05" Max="0.95" Steps="19" Value="0.6" />
+    <Setting Name="BloomLevels" Type="rangeInt" Min="1" Max="6" Steps="6" Value="6" />
+    <Setting Name="ExplosionFlash" Type="rangeFloat" Min="0" Max="4" Steps="17" Value="1" />
+    <Setting Name="ExplosionDebris" Type="rangeFloat" Min="0" Max="3" Steps="13" Value="1.5" />
+    <Setting Name="ExplosionShock" Type="rangeFloat" Min="0" Max="3" Steps="13" Value="1" />
+    <Setting Name="BlastSmoke" Type="rangeFloat" Min="0" Max="3" Steps="13" Value="1" />
+  </Settings>
+</Configuration>

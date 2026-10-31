@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Afflictions>
+  <Affliction identifier="pp_heat_cramp" type="pp_heat" limbspecific="false" indicatorlimb="Torso"
+              targets="human" isbuff="false" healableinmedicalclinic="true" maxstrength="100"
+              showiconthreshold="5" showicontoothersthreshold="30" showinhealthscannerthreshold="5"
+              treatmentthreshold="10" karmachangeonapplied="0"
+              iconcolors="225,190,140,255;215,150,90,255">
+    <Effect minstrength="0" maxstrength="50" strengthchange="0"
+            minvitalitydecrease="0" maxvitalitydecrease="4"
+            minspeedmultiplier="1.0" maxspeedmultiplier="0.9" />
+    <Effect minstrength="50" maxstrength="100" strengthchange="0"
+            minvitalitydecrease="4" maxvitalitydecrease="14"
+            minspeedmultiplier="0.9" maxspeedmultiplier="0.74"
+            minskillmultiplier="1.0" maxskillmultiplier="0.8" />
+    <Description textidentifier="pp_heat_cramp.desc" minstrength="0" maxstrength="100" />
+  </Affliction>
+
+  <Affliction identifier="pp_heat_stroke" type="pp_heat" limbspecific="false" indicatorlimb="Head"
+              targets="human" isbuff="false" healableinmedicalclinic="true" maxstrength="100"
+              showiconthreshold="1" showicontoothersthreshold="10" showinhealthscannerthreshold="1"
+              treatmentthreshold="5" karmachangeonapplied="0"
+              causeofdeathdescription="pp_heat.causeofdeath" selfcauseofdeathdescription="pp_heat.selfcauseofdeath"
+              iconcolors="235,160,110,255;205,90,50,255;160,40,25,255">
+    <Effect minstrength="0" maxstrength="40" strengthchange="0"
+            minvitalitydecrease="0" maxvitalitydecrease="10"
+            minspeedmultiplier="1.0" maxspeedmultiplier="0.88"
+            minskillmultiplier="1.0" maxskillmultiplier="0.8" />
+    <Effect minstrength="40" maxstrength="75" strengthchange="0"
+            minvitalitydecrease="10" maxvitalitydecrease="45"
+            minspeedmultiplier="0.88" maxspeedmultiplier="0.6"
+            minskillmultiplier="0.8" maxskillmultiplier="0.5"
+            minscreendistort="0" maxscreendistort="0.25"
+            minscreenblur="0" maxscreenblur="0.4"
+            minradialdistort="0" maxradialdistort="0.12" />
+    <Effect minstrength="75" maxstrength="100" strengthchange="0"
+            minvitalitydecrease="45" maxvitalitydecrease="160"
+            minspeedmultiplier="0.6" maxspeedmultiplier="0.35"
+            minskillmultiplier="0.5" maxskillmultiplier="0.25"
+            minscreendistort="0.25" maxscreendistort="0.55"
+            minscreenblur="0.4" maxscreenblur="0.9"
+            minradialdistort="0.12" maxradialdistort="0.3"
+            minchromaticaberration="0" maxchromaticaberration="0.4" />
+    <Description textidentifier="pp_heat_stroke.desc" minstrength="0" maxstrength="100" />
+  </Affliction>
+
+  <Affliction identifier="pp_chilblains" type="pp_cold" limbspecific="true"
+              targets="human" isbuff="false" healableinmedicalclinic="true" maxstrength="100"
+              showiconthreshold="3" showicontoothersthreshold="25" showinhealthscannerthreshold="3"
+              treatmentthreshold="8" karmachangeonapplied="0"
+              iconcolors="215,175,185,255;190,120,140,255">
+    <Effect minstrength="0" maxstrength="50" strengthchange="-0.05"
+            minvitalitydecrease="0" maxvitalitydecrease="3"
+            minskillmultiplier="1.0" maxskillmultiplier="0.92" />
+    <Effect minstrength="50" maxstrength="100" strengthchange="-0.05"
+            minvitalitydecrease="3" maxvitalitydecrease="12"
+            minspeedmultiplier="1.0" maxspeedmultiplier="0.92"
+            minskillmultiplier="0.92" maxskillmultiplier="0.78" />
+    <Description textidentifier="pp_chilblains.desc" minstrength="0" maxstrength="100" />
+  </Affliction>
+
+  <Affliction identifier="pp_frozen_vessels" type="pp_cold" limbspecific="false" indicatorlimb="Torso"
+              targets="human" isbuff="false" healableinmedicalclinic="true" maxstrength="100"
+              showiconthreshold="1" showicontoothersthreshold="10" showinhealthscannerthreshold="1"
+              treatmentthreshold="4" karmachangeonapplied="0"
+              causeofdeathdescription="pp_cold.causeofdeath" selfcauseofdeathdescription="pp_cold.selfcauseofdeath"
+              iconcolors="170,205,235,255;90,140,205,255;45,80,150,255">
+    <Effect minstrength="0" maxstrength="50" strengthchange="0"
+            minvitalitydecrease="0" maxvitalitydecrease="15"
+            minspeedmultiplier="1.0" maxspeedmultiplier="0.8"
+            minskillmultiplier="1.0" maxskillmultiplier="0.7" />
+    <Effect minstrength="50" maxstrength="100" strengthchange="0"
+            minvitalitydecrease="15" maxvitalitydecrease="140"
+            minspeedmultiplier="0.8" maxspeedmultiplier="0.4"
+            minskillmultiplier="0.7" maxskillmultiplier="0.3"
+            minscreendistort="0" maxscreendistort="0.4"
+            mingrainstrength="0" maxgrainstrength="0.5" />
+    <Description textidentifier="pp_frozen_vessels.desc" minstrength="0" maxstrength="100" />
+  </Affliction>
+
+  <Affliction identifier="pp_warmth" type="pp_buff" limbspecific="false" indicatorlimb="Torso"
+              targets="human" isbuff="true" maxstrength="100"
+              showiconthreshold="1" showicontoothersthreshold="10" showinhealthscannerthreshold="1"
+              karmachangeonapplied="0" iconcolors="255,205,140,255;255,160,80,255">
+    <Effect minstrength="0" maxstrength="100" strengthchange="-1.7"
+            minspeedmultiplier="1.0" maxspeedmultiplier="1.05" />
+    <Description textidentifier="pp_warmth.desc" minstrength="0" maxstrength="100" />
+  </Affliction>
+
+  <Affliction identifier="pp_cell_death" type="pp_cold" limbspecific="false" indicatorlimb="Torso"
+              targets="human" isbuff="false" healableinmedicalclinic="true" maxstrength="100"
+              showiconthreshold="1" showicontoothersthreshold="5" showinhealthscannerthreshold="1"
+              treatmentthreshold="2" karmachangeonapplied="0"
+              causeofdeathdescription="pp_cold.causeofdeath" selfcauseofdeathdescription="pp_cold.selfcauseofdeath"
+              iconcolors="140,150,160,255;80,85,95,255;40,42,48,255">
+    <Effect minstrength="0" maxstrength="30" strengthchange="-0.01"
+            minvitalitydecrease="0" maxvitalitydecrease="25"
+            minspeedmultiplier="1.0" maxspeedmultiplier="0.85"
+            minskillmultiplier="1.0" maxskillmultiplier="0.75" />
+    <Effect minstrength="30" maxstrength="100" strengthchange="0"
+            minvitalitydecrease="25" maxvitalitydecrease="200"
+            minspeedmultiplier="0.85" maxspeedmultiplier="0.3"
+            minskillmultiplier="0.75" maxskillmultiplier="0.2"
+            minscreendistort="0" maxscreendistort="0.5"
+            mingrainstrength="0" maxgrainstrength="0.7" />
+    <Description textidentifier="pp_cell_death.desc" minstrength="0" maxstrength="100" />
+  </Affliction>
+
+  <Affliction identifier="pp_sym_shivers" type="pp_symptom" limbspecific="false" indicatorlimb="Torso"
+              targets="human" isbuff="false" maxstrength="2" showiconthreshold="1"
+              showicontoothersthreshold="1" showinhealthscannerthreshold="1" karmachangeonapplied="0"
+              iconcolors="150,190,220,255">
+    <Effect minstrength="0" maxstrength="2" strengthchange="0" />
+    <Description textidentifier="pp_sym_shivers.desc" minstrength="0" maxstrength="2" />
+  </Affliction>
+
+  <Affliction identifier="pp_sym_numb" type="pp_symptom" limbspecific="false" indicatorlimb="LeftHand"
+              targets="human" isbuff="false" maxstrength="2" showiconthreshold="1"
+              showicontoothersthreshold="1" showinhealthscannerthreshold="1" karmachangeonapplied="0"
+              iconcolors="150,175,200,255">
+    <Effect minstrength="0" maxstrength="2" strengthchange="0" />
+    <Description textidentifier="pp_sym_numb.desc" minstrength="0" maxstrength="2" />
+  </Affliction>
+
+  <Affliction identifier="pp_sym_runny_nose" type="pp_symptom" limbspecific="false" indicatorlimb="Head"
+              targets="human" isbuff="false" maxstrength="2" showiconthreshold="1"
+              showicontoothersthreshold="1" showinhealthscannerthreshold="1" karmachangeonapplied="0"
+              iconcolors="180,200,215,255">
+    <Effect minstrength="0" maxstrength="2" strengthchange="0" />
+    <Description textidentifier="pp_sym_runny_nose.desc" minstrength="0" maxstrength="2" />
+  </Affliction>
+
+  <Affliction identifier="pp_sym_hot" type="pp_symptom" limbspecific="false" indicatorlimb="Head"
+              targets="human" isbuff="false" maxstrength="2" showiconthreshold="1"
+              showicontoothersthreshold="1" showinhealthscannerthreshold="1" karmachangeonapplied="0"
+              iconcolors="225,165,110,255">
+    <Effect minstrength="0" maxstrength="2" strengthchange="0" />
+    <Description textidentifier="pp_sym_hot.desc" minstrength="0" maxstrength="2" />
+  </Affliction>
+
+  <Affliction identifier="pp_sym_pins_needles" type="pp_symptom" limbspecific="false" indicatorlimb="RightHand"
+              targets="human" isbuff="false" maxstrength="2" showiconthreshold="1"
+              showicontoothersthreshold="1" showinhealthscannerthreshold="1" karmachangeonapplied="0"
+              iconcolors="200,190,175,255">
+    <Effect minstrength="0" maxstrength="2" strengthchange="0" />
+    <Description textidentifier="pp_sym_pins_needles.desc" minstrength="0" maxstrength="2" />
+  </Affliction>
+</Afflictions>

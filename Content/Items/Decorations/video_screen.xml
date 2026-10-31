@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Items>
+  <Item name="" identifier="pp_videoscreen" nameidentifier="statusmonitor" tags="videoscreen,electrical" category="Machine,Electrical" scale="0.5" damagedbyexplosions="true" explosiondamagemultiplier="0.2">
+    <Sprite texture="%ModDir%/Content/Items/Decorations/video_screen_black.png" sourcerect="0,0,384,216" depth="0.8" origin="0.5,0.5" />
+    <VideoScreen file="Content/Effects/Video/instruction.webm" duration="145" loopdelay="4" soundrange="600" volume="0.9" screenwidth="384" screenheight="216" powerconsumption="10" minvoltage="0.4" />
+    <LightComponent range="350" lightcolor="180,205,255,255" powerconsumption="2" IsOn="false" castshadows="false" />
+    <ConnectionPanel selectkey="Action" canbeselected="true" msg="ItemMsgRewireScrewdriver" hudpriority="10">
+      <GuiFrame relativesize="0.2,0.32" minsize="400,350" maxsize="480,420" anchor="Center" style="ConnectionPanel" />
+      <RequiredItem items="screwdriver" type="Equipped" />
+      <input name="power" displayname="connection.power" />
+      <input name="toggle" displayname="connection.togglestate" />
+      <input name="set_state" displayname="connection.setstate" />
+    </ConnectionPanel>
+  </Item>
+</Items>

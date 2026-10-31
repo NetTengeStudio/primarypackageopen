@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Afflictions>
+  <Override>
+    <InternalDamage name="" identifier="organdamage" description="" type="organdamage" causeofdeathdescription="" selfcauseofdeathdescription="" limbspecific="false" indicatorlimb="Torso" maxstrength="200" showiconthreshold="10000" showinhealthscannerthreshold="10" affectmachines="false" damageoverlayalpha="0" damageparticles="false" MedicalSkillGain="0.1">
+      <Effect minstrength="0" maxstrength="200" multiplybymaxvitality="true" strengthchange="-0.01" minvitalitydecrease="0" maxvitalitydecrease="2">
+        <StatusEffect type="OnActive" target="Character" interval="1" disabledeltatime="true">
+          <Conditional he-stuffed="gt 0" />
+          <ReduceAffliction identifier="organdamage" amount="0.02" />
+        </StatusEffect>
+      </Effect>
+      <icon texture="Content/UI/MainIconsAtlas.png" sourcerect="128,384,128,128" color="195,136,60,255" origin="0,0" />
+    </InternalDamage>
+  </Override>
+</Afflictions>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Ambient volume="0.5">
+  <Layer file="Content/Sounds/Ambient/cave_ambience.ogg" volume="0.6" loop="true" />
+  <Layer file="Content/Sounds/Ambient/creaks_level_1.ogg" volume="0.8" loop="false" mininterval="25" maxinterval="70" />
+</Ambient>

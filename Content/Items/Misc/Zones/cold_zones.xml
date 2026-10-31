@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Items>
+  <Item name="" identifier="pp_coldsource" category="Misc" tags="pp_zone,pp_coldsource" subcategory="Скрипты и зоны" spritecolor="0,0,0,0" hiddeningame="true" allowrotatingineditor="false">
+    <Sprite texture="Content/Particles/ParticleAtlas.png" sourcerect="128,0,128,128" depth="0.6" origin="0.5,0.5" />
+    <InventoryIcon texture="Content/Particles/ParticleAtlas.png" sourcerect="128,0,128,128" origin="0.5,0.5" />
+    <ColdSourceComponent targettemperature="-25" rate="0.25" />
+  </Item>
+  <Item name="" identifier="pp_heatsource" category="Misc" tags="pp_zone,pp_coldsource" subcategory="Скрипты и зоны" spritecolor="0,0,0,0" hiddeningame="true" allowrotatingineditor="false">
+    <Sprite texture="Content/Particles/ParticleAtlas.png" sourcerect="0,0,128,128" depth="0.6" origin="0.5,0.5" />
+    <InventoryIcon texture="Content/Particles/ParticleAtlas.png" sourcerect="0,0,128,128" origin="0.5,0.5" />
+    <ColdSourceComponent targettemperature="35" rate="0.25" />
+  </Item>
+  <Item name="" identifier="pp_coldzone" category="Misc" tags="pp_zone" subcategory="Скрипты и зоны" resizehorizontal="true" resizevertical="true" spritecolor="0,0,0,0" hiddeningame="true" allowrotatingineditor="false">
+    <Sprite texture="Content/Particles/ParticleAtlas.png" sourcerect="128,0,128,128" depth="0.6" origin="0.5,0.5" />
+    <InventoryIcon texture="Content/Particles/ParticleAtlas.png" sourcerect="128,0,128,128" origin="0.5,0.5" />
+    <ColdZoneComponent targettemperature="-12" rate="0.35" />
+  </Item>
+</Items>

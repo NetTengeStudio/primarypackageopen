@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Items>
+  <Item name="" identifier="primarypkg_coalitiondocument" health="40" category="Misc" Tags="smallitem" cargocontaineridentifier="metalcrate" scale="0.14" impactsoundtag="impact_soft" isshootable="true" damagedbyrepairtools="true" damagedbyprojectiles="true">
+    <Price baseprice="6" sold="false" canbespecial="false" />
+    <PreferredContainer primary="crewcab" secondary="outposttrashcan" minamount="1" maxamount="1" spawnprobability="0.05" />
+    <InventoryIcon texture="%ModDir%/Content/Items/Documents/coalitiondoc_inv.png" sourcerect="0,0,256,256" origin="0.5,0.5" />
+    <Sprite texture="%ModDir%/Content/Items/Documents/coalitiondoc.png" sourcerect="0,0,258,348" depth="0.54" origin="0.5,0.5" />
+    <Body width="52" height="70" density="10.1" />
+    <Fabricate suitablefabricators="fabricator" requiredtime="1">
+      <RequiredItem identifier="carbon" />
+    </Fabricate>
+    <Deconstruct time="2" />
+    <Holdable slots="Any,RightHand,LeftHand" msg="ItemMsgPickUpSelect" pickkey="Use" PickingTime="0.5" aimpos="65,-10" holdpos="45,-10" handle1="0,-35" holdangle="-10" attachable="true" aimable="true">
+      <StatusEffect type="OnFire" target="This" Condition="-5.0" />
+    </Holdable>
+    <ItemLabel scrollable="false" />
+    <Terminal canbeselected="true" msg="ItemMsgInteractSelect" AllowInGameEditing="false" drawhudwhenequipped="true" AutoHideScrollbar="true" linestartsymbol="" marginmultiplier="1.5" textcolor="45,45,45,255">
+      <GuiFrame relativesize="0.3,0.5" anchor="CenterLeft" style="primarypkg_coalitiondocbg" hidedragicons="false" />
+    </Terminal>
+    <DocumentMarkComponent />
+  </Item>
+</Items>

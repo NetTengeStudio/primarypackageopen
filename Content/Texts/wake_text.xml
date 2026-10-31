@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<infotexts language="Russian" nowhitespace="false" translatedname="Russian">
+  <pp_wake.sleeping>Вы спите...</pp_wake.sleeping>
+  <pp_wake.dots>...</pp_wake.dots>
+  <pp_wake.alarm>Вы слышите звук будильника.. Вы снова в этом месте.</pp_wake.alarm>
+</infotexts>

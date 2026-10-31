@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Items>
+  <Override>
+    <Item name="" identifier="bodyarmorlighterc" category="Equipment" tags="mediumitem,clothing" scale="0.5" cargocontaineridentifier="metalcrate" description="" impactsoundtag="impact_soft">
+      <Upgrade gameversion="0.9.3.0" scale="0.35" />
+      <PreferredContainer secondary="secarmcab" />
+      <PreferredContainer secondary="wreckarmcab,abandonedarmcab,outpostarmcab" amount="1" spawnprobability="0.05" />
+      <PreferredContainer primary="armcab" minamount="1" maxamount="2" notcampaign="true" notpvp="true" />
+      <Price baseprice="230">
+        <Price storeidentifier="merchantoutpost" sold="false" multiplier="1.3" />
+        <Price storeidentifier="merchantcity" multiplier="1.2" minavailable="1" sold="false" />
+        <Price storeidentifier="merchantresearch" sold="false" />
+        <Price storeidentifier="merchantmilitary" multiplier="0.9" minavailable="3" />
+        <Price storeidentifier="merchantmine" sold="false" />
+        <Price storeidentifier="merchantarmory" multiplier="0.9" minavailable="3" />
+      </Price>
+      <Deconstruct time="10">
+        <Item identifier="organicfiber" amount="2" />
+      </Deconstruct>
+      <Fabricate suitablefabricators="fabricator" requiredtime="25">
+        <RequiredSkill identifier="weapons" level="30" />
+        <RequiredItem identifier="organicfiber" amount="2" />
+        <RequiredItem identifier="titaniumaluminiumalloy" amount="1" />
+      </Fabricate>
+      <InventoryIcon texture="%ModDir%/Content/Items/Armor/Sheets/bodyarmorlight_2.png" sourcerect="194,22,94,87" origin="0.5,0.5" />
+      <Sprite name="Security Vest Light Item" texture="%ModDir%/Content/Items/Armor/Sheets/bodyarmorlight_2.png" sourcerect="21,13,75,98" scale="0.5" depth="0.6" origin="0.4211636,0.49363777" />
+      <Body width="65" height="80" density="20" />
+      <Wearable slots="Any,OuterClothes" msg="ItemMsgPickUpSelect">
+        <SkillModifier skillidentifier="weapons" skillvalue="5" />
+        <damagemodifier afflictiontypes="burn" armorsector="0.0,360.0" damagemultiplier="0.9" />
+        <damagemodifier afflictionidentifiers="gunshotwound,blunttrauma,lacerations" armorsector="0.0,360.0" damagemultiplier="0.3" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="bitewounds" armorsector="0.0,360.0" damagemultiplier="0.2" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictiontypes="bleeding" armorsector="0.0,360.0" damagemultiplier="0.15" damagesound="LimbArmor" deflectprojectiles="true" />
+ 
+        <damagemodifier afflictionidentifiers="explosiondamage" armorsector="0.0,360.0" damagemultiplier="0.5" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictiontypes="stun" armorsector="0.0,360.0" damagemultiplier="0.75" damagesound="" deflectprojectiles="true" />
+        <sprite name="Security Vest Light Wearable" texture="%ModDir%/Content/Items/Armor/Sheets/bodyarmorlight_2.png" limb="Torso" hidelimb="false" inheritscale="true" scale="1" inheritorigin="false" origin="0.50058734,0.6738529" inheritsourcerect="false" sourcerect="21,13,75,99" />
+      </Wearable>
+      <ItemContainer capacity="1" slotsperrow="3">
+        <SlotIcon slotindex="0" texture="%ModDir%/Content/Items/Armor/Sheets/slot_pouch.png" sourcerect="0,0,64,64" origin="0.5,0.5" />
+        <Containable items="bullet,pistolammoitem,riflemanbonus,sniperbonus,rifleammo,shotgunammo,revolverammo,stungunammo,airgunammo,handcannonammo,44_round,45_round,9mm_round,mg_round,pyroround,underwaterammo,pouch,ammopouch,bandolier,co_bulletpouch,co_bulletpouch_large,co_magazinepouch,co_magazinepouch_large,carrybelt,grenadepouch,utilitypouch,smallcontainer" hide="true">
+          <StatusEffect type="OnRemoved" target="This" stackable="false">
+            <sound file="%ModDir%/Content/Items/Armor/Sounds/backpack_remove_item_1.ogg" range="300" selectionmode="random" />
+            <sound file="%ModDir%/Content/Items/Armor/Sounds/backpack_remove_item_2.ogg" range="300" selectionmode="random" />
+            <sound file="%ModDir%/Content/Items/Armor/Sounds/backpack_remove_item_3.ogg" range="300" selectionmode="random" />
+            <sound file="%ModDir%/Content/Items/Armor/Sounds/backpack_remove_item_4.ogg" range="300" selectionmode="random" />
+          </StatusEffect>
+          <StatusEffect type="OnInserted" target="This" stackable="false">
+            <sound file="%ModDir%/Content/Items/Armor/Sounds/backpack_insert_1.ogg" range="300" selectionmode="random" />
+            <sound file="%ModDir%/Content/Items/Armor/Sounds/backpack_insert_2.ogg" range="300" selectionmode="random" />
+            <sound file="%ModDir%/Content/Items/Armor/Sounds/backpack_insert_3.ogg" range="300" selectionmode="random" />
+            <sound file="%ModDir%/Content/Items/Armor/Sounds/backpack_insert_4.ogg" range="300" selectionmode="random" />
+          </StatusEffect>
+        </Containable>
+        <SubContainer capacity="1" maxstacksize="8">
+          <Containable items="chem,medical,meditem,smallmedicalcontainer,medicalcontainer,medkit,medkitcontainer,medkitcontainerarmy,medkitcontainerscientific,mobilemed,firstaidkit" hide="true" />
+          <SlotIcon texture="%ModDir%/Content/Items/Armor/Sheets/slot_medkit.png" sourcerect="0,0,64,64" origin="0.5,0.5" />
+        </SubContainer>
+        <SubContainer capacity="1" maxstacksize="1">
+          <Containable items="sharptool,knifeitem,divingknife_thermal" hide="true" />
+          <SlotIcon texture="%ModDir%/Content/Items/Armor/Sheets/slot_knife.png" sourcerect="0,0,64,64" origin="0.5,0.5" />
+        </SubContainer>
+        <SubContainer capacity="3">
+          <Containable items="magazine,drum,clip45,smgammo,smgmammo,assaultrifleammo,hmgammo,pistolammo,coalitionassaultrifleammo,kravlerovammo,fnfalrifleammo,scarrifleammo,sigmcxammo" hide="true" />
+          <SlotIcon texture="%ModDir%/Content/UI/Inventory/magazineicons.png" sourcerect="315,19,240,240" origin="0.5,0.5" />
+        </SubContainer>
+        <SubContainer capacity="1" maxstacksize="1">
+          <Containable items="pistolitem" hide="true" />
+          <SlotIcon texture="%ModDir%/Content/UI/Inventory/magazineicons.png" sourcerect="27,705,100,100" origin="0.5,0.5" />
+        </SubContainer>
+      </ItemContainer>
+    </Item>
+    <Item name="" identifier="tacticalvestheavy" category="Equipment" tags="mediumitem,clothing" scale="0.5" cargocontaineridentifier="metalcrate" description="" impactsoundtag="impact_soft">
+      <Upgrade gameversion="0.9.3.0" scale="0.35" />
+      <PreferredContainer secondary="secarmcab" />
+      <PreferredContainer secondary="wreckarmcab,abandonedarmcab,outpostarmcab" amount="1" spawnprobability="0.05" />
+      <PreferredContainer primary="armcab" minamount="1" maxamount="2" notcampaign="true" notpvp="true" />
+      <Price baseprice="630">
+        <Price storeidentifier="merchantoutpost" sold="false" multiplier="1.3" />
+        <Price storeidentifier="merchantcity" multiplier="1.3" minavailable="1" sold="false" />
+        <Price storeidentifier="merchantmilitary" multiplier="0.9" minavailable="2" />
+        <Price storeidentifier="merchantarmory" multiplier="0.9" minavailable="2" />
+      </Price>
+      <Deconstruct time="10">
+        <Item identifier="organicfiber" amount="2" />
+        <RequiredItem identifier="plastic" />
+      </Deconstruct>
+      <Fabricate suitablefabricators="fabricator" requiredtime="25">
+        <RequiredSkill identifier="weapons" level="45" />
+        <RequiredItem identifier="plastic" amount="2" />
+        <RequiredItem identifier="organicfiber" amount="2" />
+        <RequiredItem identifier="titaniumaluminiumalloy" />
+        <RequiredItem identifier="bodyarmorlighterc" amount="1" />
+      </Fabricate>
+      <InventoryIcon texture="%ModDir%/Content/Items/Armor/Definitions/armor_sheet.png" sourcerect="6,15,91,82" origin="0.5,0.5" />
+      <Sprite name="Tactical Security Vest Item" texture="%ModDir%/Content/Items/Armor/Definitions/armor_sheet.png" sourcerect="98,10,80,106" scale="0.5" depth="0.6" origin="0.4211636,0.49363777" />
+      <Body width="65" height="80" density="20" />
+      <Wearable slots="OuterClothes" msg="ItemMsgPickUpSelect">
+        <SkillModifier skillidentifier="weapons" skillvalue="5" />
+        <damagemodifier afflictiontypes="burn" armorsector="0.0,360.0" damagemultiplier="0.6" />
+        <damagemodifier afflictionidentifiers="gunshotwound,blunttrauma,lacerations" armorsector="0.0,360.0" damagemultiplier="0.2" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="bitewounds" armorsector="0.0,360.0" damagemultiplier="0.7" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictiontypes="bleeding" armorsector="0.0,360.0" damagemultiplier="0.15" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="explosiondamage" armorsector="0.0,360.0" damagemultiplier="0.3" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="concussion" armorsector="0.0,360.0" damagemultiplier="0.5" damagesound="" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="incrementalstun" armorsector="0.0,360.0" damagemultiplier="0.4" damagesound="" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="stun" armorsector="0.0,360.0" damagemultiplier="0.65" damagesound="" deflectprojectiles="true" />
+        <damagemodifier afflictiontypes="pp_cold" armorsector="0.0,360.0" damagemultiplier="0.85" />
+        <sprite name="Tactical Security Vest Wearable DLC" texture="%ModDir%/Content/Items/Armor/Definitions/armor_sheet.png" limb="Torso" hidelimb="false" inheritscale="true" scale="1" inheritorigin="false" origin="0.54974407,0.5650718" inheritsourcerect="false" sourcerect="98,10,80,106" />
+        <StatusEffect type="OnWearing" target="Character" SpeedMultiplier="0.8" SetValue="true" />
+      </Wearable>
+      <ItemContainer capacity="2" slotsperrow="2">
+        <Containable items="handheldammo,magazine,drum,clip45,bullet,pistolammoitem,pistolammo,shotgunammo,rifleammo,revolverammo,smgammo,smgmammo,hmgammo,assaultrifleammo,coalitionassaultrifleammo,kravlerovammo,stungunammo,airgunammo,faustammo,riflemanbonus,sniperbonus,38_ammo,45_ammo,57_ammo,919_ammo,939_ammo,545_ammo,556_ammo,762_ammo,44_round,45_round,9mm_round,mg_round,kurz_ammo,pyroround,underwaterammo" hide="true" />
+        <SlotIcon slotindex="0" texture="%ModDir%/Content/UI/Inventory/magazineicons.png" sourcerect="315,19,240,240" origin="0.5,0.5" />
+        <SlotIcon slotindex="1" texture="%ModDir%/Content/UI/Inventory/magazineicons.png" sourcerect="315,19,240,240" origin="0.5,0.5" />
+        <SubContainer capacity="1" maxstacksize="1">
+          <Containable items="pistolitem" hide="true" />
+          <SlotIcon texture="%ModDir%/Content/UI/Inventory/magazineicons.png" sourcerect="27,705,100,100" origin="0.5,0.5" />
+        </SubContainer>
+      </ItemContainer>
+    </Item>
+  </Override>
+</Items>

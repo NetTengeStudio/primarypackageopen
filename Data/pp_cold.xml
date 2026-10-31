@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ColdSystem>
+  <Simulation tickinterval="0.5" basetemperature="20" relaxrate="0.0025" conductance="12" mintemperature="-45" maxtemperature="60" minhullvolume="20000" linkarea="3000" waterheatcapacity="4" />
+  <Network interval="1.0" keepalive="45" />
+  <Characters botsimmune="false" scalefactor="1.0" />
+  <Neurotrauma enabled="true" interval="1.0" watermargin="6" shockperdegree="0.6" shockcap="15" shockmargin="25" shockadapt="0.06" shockcooldown="20" shockaffliction="traumaticshock" />
+  <Hyperthermia enabled="true" identifier="pp_hyperthermia" hotcomfort="33" maxstrength="100" gainperdegree="0.016" recoveryperdegree="0.05" insulationpenalty="0.5" applyinterval="1.0" limb="Torso" />
+  <SuitHeater enabled="true" scaninterval="1.0" batterydrain="0.3" insulationbonus="10" bagbonus="7" handbonus="4" heateritem="pp_compactheater" suittags="diving" />
+  <Frostbite enabled="true" identifier="pp_frostbite" maxstrength="100" ratehypothermic="0.35" ratecritical="1.0" recovery="0.6" necrosisat="75" gangrenerate="0.25" gangreneaffliction="gangrene" insulationshield="0.06" thawinjury="3.0" thawsaferate="0.9" thawinjuryaffliction="burn" />
+  <Reactor enabled="true" accountforrods="true" rodbase="45" rodstep="12" maxtemperature="60" scaninterval="2.0" rescaninterval="20" target="52" rate="0.006" />
+  <ErcHeat scaninterval="2.0">
+    <Source identifier="weldingfueltorcherc" target="38" rate="0.02" stack="1" />
+    <Source identifier="barrel_erc" target="32" rate="0.015" stack="1" />
+    <Source identifier="flare" target="24" rate="0.02" stack="3" />
+  </ErcHeat>
+  <Ignite material="organicfiber" duration="18" damagepersecond="4" pileradius="60" warmthtarget="30" warmthrate="0.02">
+    <Source identifier="weldingfueltorcherc" />
+  </Ignite>
+  <Affliction identifier="pp_hypothermia" maxstrength="100" comfort="12" gainperdegree="0.011" wetmultiplier="2.4" wetrise="0.8" wetdry="0.035" insulationscale="14" shiverresist="0.55" shiverpeak="0.35" shiverfail="0.8" applyinterval="1.0" warmrecoveryperdegree="0.05" limb="Torso" nohulltemperature="12">
+    <Warming identifier="pp_warmth" scale="0.12" />
+    <Warming identifier="pp_elevated_core_temp" scale="0.4" />
+    <Warming identifier="pp_aafn" scale="0.16" />
+    <Warming identifier="pp_grafted_skin" scale="0.3" />
+    <Warming identifier="iced" scale="-0.2" />
+    <Warming identifier="pp_removed_skin" scale="-0.5" />
+  </Affliction>
+  <Stasis enabled="true" interval="1.0" triggertemperature="2" holdrate="4" starterdecay="0.15" stasisaffliction="stasis" starteraffliction="pp_stasis_starter" bagtag="pp_stasisbag" />
+  <Visuals tintcolor="86,148,235" maxtint="0.2" tintuniform="0.32" vignettecolor="16,42,96" maxvignette="0.72" vignettestart="0.3" blinkcolor="0,0,0" criticalzoomamount="0.08" criticalzoomrate="1.4" frostdrift="0.021" maxshake="2.6" shakethreshold="0.14" shiverburstmin="0.5" shiverburstmax="2.1" shiverduty="0.42" breathperiodwarm="5" breathperiodfast="3.2" breathperiodcold="9" breathexhalefraction="0.62" breathtemperature="7" breathfalloff="15" breathrate="9" breathspeed="160" breathtilt="10" breathspread="14" breathgap="7" breathmouthoffset="11" breathmouthdrop="4" breathparticle="pp_coldbreath" breathscale="1" maxblink="0.55" blinkthreshold="0.5" blinkinterval="7.5" blinkduration="0.9" riserate="1.3" fallrate="0.85" interpolationrate="2.2" heartbeatpulse="0.16" heartbeatrate="0.85" heattintcolor="235,130,70" maxheattint="0.22" heatvignettecolor="120,30,12" maxheatvignette="0.6" heatdrift="0.085" paincolor="150,40,40" maxpain="0.45" greycolor="118,122,130" maxgrey="0.34" greystart="0.55" />
+  <Debug mapkey="F6" allowchatkeyoverride="false" coldcolor="86,148,235" neutralcolor="150,152,156" warmcolor="235,165,105" stagenames="норма,озноб,дрожь,переохлаждение,критическое" />
+  <SuitSlot enabled="true" battery="mobilebattery" />
+  <Complications enabled="true" interval="1.0">
+    <Complication identifier="pp_heat_cramp" source="heat" min="0.3" max="1.0" rate="0.6" decay="1.2" cap="100" limb="Torso" />
+    <Complication identifier="pp_heat_stroke" source="heat" min="0.62" max="1.0" rate="0.9" decay="0.55" cap="100" limb="Head" />
+    <Complication identifier="pp_frozen_vessels" source="cold" min="0.86" max="1.0" rate="0.7" decay="0.4" cap="100" limb="Torso" />
+    <Complication identifier="pp_chilblains" source="frostbite" min="0.2" max="0.74" rate="0.35" decay="0.0" cap="60" limb="extremities" />
+    <Complication identifier="pp_cell_death" source="affliction" driver="pp_frozen_vessels" drivermax="100" min="0.45" max="1.0" rate="0.5" decay="0.0" cap="100" limb="Torso" />
+    <Complication identifier="pp_bloodclot" source="frostbite" min="0.5" max="1.0" rate="0.25" decay="0.0" cap="25" limb="extremities" />
+    <Complication identifier="pp_pulmonary_embolism" source="affliction" driver="pp_bloodclot" drivermax="25" min="0.7" max="1.0" rate="0.45" decay="0.0" cap="100" limb="Torso" />
+    <Complication identifier="pp_pulmonary_edema" source="affliction" driver="pp_frozen_vessels" drivermax="100" min="0.25" max="1.0" rate="0.35" decay="0.0" cap="100" limb="Torso" />
+    <Complication identifier="pp_panic" source="heat" min="0.55" max="1.0" rate="6" decay="0.0" cap="100" limb="Head" />
+    <Complication identifier="pp_melted_skin" source="heat" min="0.9" max="1.0" rate="0.15" decay="0.0" cap="20" limb="extremities" />
+    <Complication identifier="pp_removed_skin" source="affliction" driver="pp_frostbite" drivermax="100" min="0.95" max="1.0" rate="0.12" decay="0.0" cap="20" limb="extremities" />
+    <Complication identifier="organdamage" source="affliction" driver="pp_heat_stroke" drivermax="100" min="0.75" max="1.0" rate="0.5" decay="0.0" cap="100" limb="Torso" />
+    <Complication identifier="cerebralhypoxia" source="affliction" driver="pp_heat_stroke" drivermax="100" min="0.75" max="1.0" rate="0.3" decay="0.0" cap="100" limb="Head" />
+    <Complication identifier="organdamage" source="affliction" driver="pp_cell_death" drivermax="100" min="0.3" max="1.0" rate="0.6" decay="0.0" cap="100" limb="Torso" />
+    <Complication identifier="internalbleeding" source="affliction" driver="pp_cell_death" drivermax="100" min="0.05" max="1.0" rate="0.2" decay="0.0" cap="100" limb="Torso" />
+    <Complication identifier="cerebralhypoxia" source="affliction" driver="pp_aafn_overdose" drivermax="100" min="0.5" max="1.0" rate="0.5" decay="0.0" cap="100" limb="Head" />
+    <Complication identifier="pp_aafn_overdose" source="affliction" driver="pp_aafn" drivermax="100" min="0.8" max="1.0" rate="1.2" decay="0.0" cap="100" limb="Torso" />
+    <Complication identifier="spasm" source="affliction" driver="pp_heat_cramp" drivermax="100" min="0.4" max="1.0" rate="3" decay="0.0" cap="20" limb="extremities" />
+    <Complication identifier="infectedwound" source="affliction" driver="pp_chilblains" drivermax="100" min="0.6" max="1.0" rate="0.2" decay="0.0" cap="60" limb="extremities" />
+    <Complication identifier="bloodpressure" source="cold" min="0.7" max="1.0" rate="0.4" decay="0.0" cap="145" limb="Torso" />
+    <Complication identifier="sym_sweating" source="heat" min="0.15" max="1.0" rate="4" decay="4" cap="2" limb="Torso" />
+    <Complication identifier="sym_paleskin" source="cold" min="0.6" max="1.0" rate="4" decay="4" cap="2" limb="Torso" />
+    <Complication identifier="hypoventilation" source="cold" min="0.75" max="1.0" rate="4" decay="4" cap="2" limb="Torso" />
+    <Complication identifier="dyspnea" source="affliction" driver="pp_pulmonary_edema" drivermax="100" min="0.1" max="1.0" rate="4" decay="4" cap="2" limb="Torso" />
+    <Complication identifier="sym_headache" source="heat" min="0.5" max="1.0" rate="4" decay="4" cap="2" limb="Head" />
+    <Complication identifier="sym_lightheadedness" source="affliction" driver="pp_elevated_core_temp" drivermax="50" min="0.6" max="1.0" rate="4" decay="4" cap="2" limb="Head" />
+    <Complication identifier="pp_sym_shivers" source="cold" min="0.1" max="0.62" rate="4" decay="4" cap="2" limb="Torso" />
+    <Complication identifier="pp_sym_numb" source="cold" min="0.5" max="1.0" rate="4" decay="4" cap="2" limb="Torso" />
+    <Complication identifier="pp_sym_runny_nose" source="cold" min="0.06" max="0.5" rate="4" decay="4" cap="2" limb="Head" />
+    <Complication identifier="pp_sym_pins_needles" source="frostbite" min="0.05" max="1.0" rate="4" decay="4" cap="2" limb="Torso" />
+    <Complication identifier="pp_sym_hot" source="heat" min="0.12" max="1.0" rate="4" decay="4" cap="2" limb="Head" />
+  </Complications>
+  <Treatment>
+    <Item identifier="antibloodloss1">
+      <StatusEffect type="OnUse" target="Character">
+        <ReduceAffliction identifier="pp_hypothermia" amount="22" />
+      </StatusEffect>
+    </Item>
+    <Item identifier="stabilozine">
+      <StatusEffect type="OnUse" target="Character">
+        <ReduceAffliction identifier="pp_hypothermia" amount="10" />
+      </StatusEffect>
+    </Item>
+    <Item identifier="pp_towel" drywetness="0.6" />
+  </Treatment>
+</ColdSystem>

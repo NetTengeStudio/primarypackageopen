@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LevelGenerationParameters>
+  <Empty identifier="pureemptylevelcontrolled" type="LocationConnection" biomes="any" commonness="infinity" forcebeaconstation="%ModDir%/Content/Map/BeaconStations/pure_empty_beacon_station.sub" minleveldifficulty="0" maxleveldifficulty="0" startposition="0.5,0.5" endposition="0.5,0.5" createholenexttoend="false" createholetoabyss="false" nolevelgeometry="true" levelobjectamount="0" backgroundcreatureamount="0" minwidth="200000" maxwidth="200000" height="70000" initialdepthmin="0" initialdepthmax="0" sidetunnelcount="0,0" voronoisiteinterval="30000,30000" voronoisitevariance="0,0" cellroundingamount="0.0" cellirregularity="0.0" mainpathvariance="0.0" cavecount="0" itemcount="0" floatingicechunkcount="0" islandcount="0" icespirecount="0" abyssislandcount="0" seafloordepth="0" seafloorvariance="0" mountaincountmin="0" mountaincountmax="0" ruincount="0" minwreckcount="0" maxwreckcount="0" mincorpsecount="0" maxcorpsecount="0" thalamusprobability="0.0" bottomholeprobability="1.0" ambientlightcolor="0,0,0,0" backgroundtexturecolor="0,0,0,0" backgroundcolor="20,40,50,255" walltexturesize="512" walledgetexturewidth="1024" walledgeexpandoutwardsamount="128" walledgeexpandinwardsamount="128">
+    <Wall texture="Content/Map/Biomes/TheGreatSea/LevelWall.png" premultiplyalpha="false" />
+    <WallEdge texture="Content/Map/Biomes/TheGreatSea/LevelWallEdge.png" />
+    <DestructibleWall texture="Content/Map/Biomes/DestructibleWall.png" />
+    <DestructibleWallEdge texture="Content/Map/Biomes/DestructibleWallEdge.png" />
+    <WallDestroyed texture="Content/Map/Biomes/DestroyedWall.png" premultiplyalpha="false" />
+  </Empty>
+</LevelGenerationParameters>

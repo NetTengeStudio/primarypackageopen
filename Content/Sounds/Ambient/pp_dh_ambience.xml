@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Override>
+  <sounds>
+    <waterambiencein file="%ModDir%/Content/Sounds/Ambient/water_ambience_in.ogg" />
+    <waterambiencemoving file="%ModDir%/Content/Sounds/Ambient/water_ambience_moving.ogg" />
+  </sounds>
+</Override>

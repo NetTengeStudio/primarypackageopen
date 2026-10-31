@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Afflictions>
+  <Affliction identifier="primarypkg_damageunique_provider" name="" description="" type="damageunique" limbspecific="false" indicatorlimb="Torso" maxstrength="100" affectmachines="false" hideiconafterdelay="true" activationthreshold="1000" showiconthreshold="1000" showicontoothersthreshold="1000" showinhealthscannerthreshold="1000" TreatmentSuggestionThreshold="1000" healableinmedicalclinic="false" MedicalSkillGain="0">
+    <Effect minstrength="0" maxstrength="100" strengthchange="0" />
+  </Affliction>
+</Afflictions>

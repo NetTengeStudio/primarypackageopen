@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Items>
+  <Item name="" identifier="pp_radiationdustzone" category="Misc" tags="pp_zone" subcategory="Скрипты и зоны" resizehorizontal="true" resizevertical="true" spritecolor="0,0,0,0" hiddeningame="true" allowrotatingineditor="false">
+    <Sprite texture="Content/Particles/ParticleAtlas.png" sourcerect="256,128,128,128" depth="0.6" origin="0.5,0.5" />
+    <InventoryIcon texture="Content/Particles/ParticleAtlas.png" sourcerect="256,128,128,128" origin="0.5,0.5" />
+    <RadiationZoneComponent particleprefab="pp_radiationdust" radiationpersecond="3" graceperiod="0" particlespersecond="30" particlealpha="0.35" particlecolor="210,170,90,255" geigervolume="0.8">
+      <GeigerSound file="%ModDir%/Content/Sounds/Ambient/pp_geigerloop.ogg" />
+    </RadiationZoneComponent>
+  </Item>
+  <Item name="" identifier="pp_lightfogzone" category="Misc" tags="pp_zone" subcategory="Скрипты и зоны" resizehorizontal="true" resizevertical="true" spritecolor="0,0,0,0" hiddeningame="true" allowrotatingineditor="false">
+    <Sprite texture="Content/Particles/ParticleAtlas.png" sourcerect="384,254,128,128" depth="0.6" origin="0.5,0.5" />
+    <InventoryIcon texture="Content/Particles/ParticleAtlas.png" sourcerect="384,254,128,128" origin="0.5,0.5" />
+    <FogZoneComponent particleprefab="pp_fogcloud" density="0.4" fogcolor="170,175,180,255" fogalpha="0.65" cloudscale="1" driftspeed="8" />
+  </Item>
+</Items>

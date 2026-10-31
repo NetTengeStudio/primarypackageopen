@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<override>
+  <style>
+    <Font file="%ModDir%/Content/Fonts/departure_mono.otf">
+      <override language="Traditional Chinese" file="Content/Fonts/NotoSans/NotoSansTC-Medium.otf" dynamicloading="true" iscjk="true" />
+      <override language="Simplified Chinese,Korean" file="Content/Fonts/NotoSans/NotoSansCJKsc-Medium.otf" dynamicloading="true" iscjk="true" />
+      <override language="Japanese" file="Content/Fonts/NotoSans/NotoSansJP-Medium.otf" dynamicloading="true" isjapanese="true" />
+      <Size maxresolution="1024,768" size="11" />
+      <Size maxresolution="1280,800" size="12" />
+      <Size maxresolution="1920,1080" size="14" />
+      <Size maxresolution="2048,1080" size="16" />
+      <Size maxresolution="2560,1600" size="16" />
+      <Size size="1.5vh" />
+    </Font>
+    <UnscaledSmallFont file="%ModDir%/Content/Fonts/departure_mono.otf">
+      <override language="Traditional Chinese" file="Content/Fonts/NotoSans/NotoSansTC-Medium.otf" dynamicloading="true" iscjk="true" />
+      <override language="Simplified Chinese,Korean" file="Content/Fonts/NotoSans/NotoSansCJKsc-Medium.otf" dynamicloading="true" iscjk="true" />
+      <override language="Japanese" file="Content/Fonts/NotoSans/NotoSansJP-Medium.otf" dynamicloading="true" isjapanese="true" />
+      <Size size="24" />
+    </UnscaledSmallFont>
+    <SmallFont file="%ModDir%/Content/Fonts/departure_mono.otf">
+      <override language="Traditional Chinese" file="Content/Fonts/NotoSans/NotoSansTC-Medium.otf" dynamicloading="true" iscjk="true" />
+      <override language="Simplified Chinese,Korean" file="Content/Fonts/NotoSans/NotoSansCJKsc-Medium.otf" dynamicloading="true" iscjk="true" />
+      <override language="Japanese" file="Content/Fonts/NotoSans/NotoSansJP-Medium.otf" dynamicloading="true" isjapanese="true" />
+      <Size maxresolution="1024,768" size="9" />
+      <Size maxresolution="1280,800" size="10" />
+      <Size maxresolution="1920,1080" size="12" />
+      <Size maxresolution="2048,1440" size="14" />
+      <Size maxresolution="2560,1600" size="14" />
+      <Size size="1.2vh" />
+    </SmallFont>
+    <LargeFont file="%ModDir%/Content/Fonts/display.otf" size="28" iscyrillic="false">
+      <override language="Traditional Chinese" file="Content/Fonts/NotoSans/NotoSansTC-Bold.otf" dynamicloading="true" iscjk="true">
+        <Size maxresolution="1024,768" size="20" />
+        <Size maxresolution="1280,800" size="22" />
+        <Size maxresolution="1920,1080" size="25" />
+        <Size maxresolution="2560,1600" size="32" />
+        <Size size="2.3vh" />
+      </override>
+      <override language="Korean,Simplified Chinese" file="Content/Fonts/NotoSans/NotoSansCJKsc-Bold.otf" dynamicloading="true" iscjk="true">
+        <Size maxresolution="1024,768" size="20" />
+        <Size maxresolution="1280,800" size="22" />
+        <Size maxresolution="1920,1080" size="25" />
+        <Size maxresolution="2560,1600" size="32" />
+        <Size size="36" />
+      </override>
+      <override language="Japanese" file="Content/Fonts/NotoSans/NotoSansJP-Bold.otf" dynamicloading="true" isjapanese="true">
+        <Size maxresolution="1024,768" size="20" />
+        <Size maxresolution="1280,800" size="22" />
+        <Size maxresolution="1920,1080" size="25" />
+        <Size maxresolution="2560,1600" size="32" />
+        <Size size="2.3vh" />
+      </override>
+      <override language="Russian" file="%ModDir%/Content/Fonts/display.otf" dynamicloading="true" iscjk="false" iscyrillic="true">
+        <Size maxresolution="1024,768" size="20" />
+        <Size maxresolution="1280,800" size="22" />
+        <Size maxresolution="1920,1080" size="25" />
+        <Size maxresolution="2560,1600" size="32" />
+        <Size size="2.3vh" />
+      </override>
+      <Size maxresolution="1024,768" size="24" />
+      <Size maxresolution="1280,800" size="28" />
+      <Size maxresolution="1920,1080" size="32" />
+      <Size maxresolution="2560,1600" size="40" />
+      <Size size="2.5vh" />
+    </LargeFont>
+    <SubHeading file="%ModDir%/Content/Fonts/big_blue_term_plus.ttf" size="18" forceuppercase="true">
+      <override language="Traditional Chinese" file="Content/Fonts/NotoSans/NotoSansTC-Bold.otf" dynamicloading="true" iscjk="true" />
+      <override language="Simplified Chinese,Korean" file="Content/Fonts/NotoSans/NotoSansCJKsc-Bold.otf" dynamicloading="true" iscjk="true" />
+      <override language="Japanese" file="Content/Fonts/NotoSans/NotoSansJP-Bold.otf" dynamicloading="true" isjapanese="true" />
+      <Size maxresolution="1024,768" size="11" />
+      <Size maxresolution="1280,800" size="13" />
+      <Size maxresolution="1920,1080" size="16" />
+      <Size maxresolution="2048,1440" size="18" />
+      <Size maxresolution="2560,1600" size="20" />
+      <Size size="1.5vh" />
+    </SubHeading>
+    <DigitalFont file="Content/Fonts/Segment7Standard.otf" size="28" forceuppercase="true">
+      <Size maxresolution="1024,768" size="24" />
+      <Size maxresolution="1280,800" size="28" />
+      <Size maxresolution="1920,1080" size="32" />
+      <Size maxresolution="2560,1600" size="40" />
+      <Size size="2.9vh" />
+    </DigitalFont>
+    <HotkeyFont file="%ModDir%/Content/Fonts/departure_mono.otf">
+      <Size maxresolution="1024,768" size="6" />
+      <Size maxresolution="1152,864" size="7" />
+      <Size maxresolution="1366,768" size="8" />
+      <Size maxresolution="1280,960" size="8" />
+      <Size maxresolution="1680,900" size="10" />
+      <Size maxresolution="1680,1050" size="11" />
+      <Size maxresolution="1920,1080" size="12" />
+      <Size maxresolution="2048,1440" size="14" />
+      <Size maxresolution="2560,1600" size="14" />
+      <Size size="1.2vh" />
+    </HotkeyFont>
+    <MonospacedFont file="Content/Fonts/SourceCodePro-Semibold.otf">
+      <Size maxresolution="1024,768" size="12" />
+      <Size maxresolution="1280,800" size="14" />
+      <Size maxresolution="1920,1080" size="16" />
+      <Size maxresolution="2048,1440" size="18" />
+      <Size maxresolution="2560,1600" size="18" />
+      <Size size="1.4vh" />
+    </MonospacedFont>
+  </style>
+</override>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sounds>
+  <footstep_heavy file="%ModDir%/Content/Characters/Abomination/Sounds/footstep_heavy_1.ogg" range="600" />
+  <footstep_heavy file="%ModDir%/Content/Characters/Abomination/Sounds/footstep_heavy_2.ogg" range="600" />
+  <footstep_heavy file="%ModDir%/Content/Characters/Abomination/Sounds/footstep_heavy_3.ogg" range="600" />
+  <footstep_heavy file="%ModDir%/Content/Characters/Abomination/Sounds/footstep_heavy_4.ogg" range="600" />
+</sounds>

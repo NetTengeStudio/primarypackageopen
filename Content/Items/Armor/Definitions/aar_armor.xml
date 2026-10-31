@@ -1,0 +1,2008 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Items>
+  <Override>
+    <Item name="" identifier="aar_bodyarmor" category="Equipment" tags="clothing,mediumitem" scale="0.5" cargocontaineridentifier="metalcrate" description="" impactsoundtag="impact_soft">
+      <Upgrade gameversion="0.9.3.0" scale="0.35" />
+      <PreferredContainer primary="none" amount="3" notcampaign="true" notpvp="true" />
+      <PreferredContainer secondary="wreckarmcab,abandonedarmcab,piratearmcab,outpostarmcab" amount="1" spawnprobability="0.05" />
+      <PreferredContainer secondary="armcab" spawnprobability="0.25" />
+      <Price baseprice="480">
+        <Price storeidentifier="merchantoutpost" sold="false" multiplier="1.3" />
+        <Price storeidentifier="merchantcity" multiplier="1.2" minavailable="1" sold="false" />
+        <Price storeidentifier="merchantresearch" sold="false" />
+        <Price storeidentifier="merchantmilitary" multiplier="0.9" minavailable="2" />
+        <Price storeidentifier="merchantmine" sold="false" />
+        <Price storeidentifier="merchantarmory" multiplier="0.9" minavailable="2" />
+      </Price>
+      <Deconstruct time="40">
+        <Item identifier="ballisticfiber" amount="2" />
+      </Deconstruct>
+      <Fabricate suitablefabricators="repair" requiredtime="30">
+        <RequiredSkill identifier="weapons" level="40" />
+        <RequiredItem identifier="ballisticfiber" amount="3" />
+        <RequiredItem identifier="aluminium" amount="1" />
+      </Fabricate>
+      <InventoryIcon texture="%ModDir%/Content/UI/Inventory/icon_armor.png" name="armor vest icon" sourcerect="146,43,86,86" origin="0.5,0.5" />
+      <Sprite name="armor Vest Item" texture="%ModDir%/Content/UI/Inventory/armor.png" sourcerect="487,35,89,100" depth="0.6" origin="0.5035143,0.5023252" />
+      <Body width="85" height="90" density="25" />
+      <Holdable slots="RightHand+LeftHand" controlpose="true" holdpos="30,-20" handle1="30,-34" handle2="5,-24" setvalue="true" />
+      <Wearable slots="OuterClothes" msg="ItemMsgPickUpSelect">
+        <damagemodifier afflictionidentifiers="blunttrauma,lacerations,gunshotwound" armorsector="0.0,360.0" damagemultiplier="0.5" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="bitewounds,explosiondamage" armorsector="0.0,360.0" damagemultiplier="0.5" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictiontypes="burn" armorsector="0.0,360.0" damagemultiplier="0.9" />
+        <damagemodifier afflictiontypes="bleeding" armorsector="0.0,360.0" damagemultiplier="0.35" damagesound="LimbArmor" deflectprojectiles="true" />
+        <sprite name="Security armor Torso" texture="%ModDir%/Content/UI/Inventory/armor.png" limb="Torso" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        <sprite name="Security armor Left Upper Arm" texture="%ModDir%/Content/UI/Inventory/armor.png" limb="LeftArm" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        <sprite name="Security armor Right Upper Arm" texture="%ModDir%/Content/UI/Inventory/armor.png" limb="RightArm" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        <sprite name="Security armor Left Upper Arm" texture="%ModDir%/Content/UI/Inventory/armor.png" limb="LeftForearm" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        <sprite name="Security armor Right Upper Arm" texture="%ModDir%/Content/UI/Inventory/armor.png" limb="RightForearm" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        <sprite name="Security armor Left Lower Arm" texture="%ModDir%/Content/UI/Inventory/armor.png" limb="LeftHand" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        <sprite name="Security armor Right Lower Arm" texture="%ModDir%/Content/UI/Inventory/armor.png" limb="RightHand" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        <sprite name="Security armor Waist" texture="%ModDir%/Content/UI/Inventory/armor.png" limb="Waist" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        <sprite name="Security armor Right Thigh" texture="%ModDir%/Content/UI/Inventory/armor.png" limb="RightThigh" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        <sprite name="Security armor Left Thigh" texture="%ModDir%/Content/UI/Inventory/armor.png" limb="LeftThigh" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        <sprite name="Security armor Right Leg" texture="%ModDir%/Content/UI/Inventory/armor.png" limb="RightLeg" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        <sprite name="Security armor Left Leg" texture="%ModDir%/Content/UI/Inventory/armor.png" limb="LeftLeg" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        <sprite name="Security armor Left Foot" texture="%ModDir%/Content/UI/Inventory/armor.png" limb="LeftFoot" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,512,256" origin="0.5,0.5" />
+        <sprite name="Security armor Right Foot" texture="%ModDir%/Content/UI/Inventory/armor.png" limb="RightFoot" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,512,256" origin="0.5,0.5" />
+        <StatusEffect type="OnWearing" target="Character" SpeedMultiplier="0.87" setvalue="true" disabledeltatime="true">
+          <Conditional IsBot="false" />
+        </StatusEffect>
+        <StatusEffect type="OnWearing" target="Character" interval="1" disabledeltatimer="true" setvalue="true">
+          <Affliction identifier="aar_armored_proxy" amount="100" />
+        </StatusEffect>
+      </Wearable>
+      <ItemContainer capacity="6" maxstacksize="8" depth="0.54" hideitems="true" autofill="false">
+        <Containable items="smallitem,plate">
+          <StatusEffect type="OnInserted" target="Character" setvalue="true">
+            <Affliction identifier="aar_armored_ceram" amount="100" />
+            <SpawnItem identifiers="aar_armor-handle" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+            <RequiredItem items="aar_ceramic-plate" type="Contained" />
+          </StatusEffect>
+          <StatusEffect type="OnInserted" target="Character" setvalue="true">
+            <Affliction identifier="aar_armored_steel" amount="100" />
+            <SpawnItem identifiers="aar_armor-handle" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+            <RequiredItem items="aar_steel-plate" type="Contained" />
+          </StatusEffect>
+          <StatusEffect type="OnInserted" target="Character" setvalue="true">
+            <Affliction identifier="aar_armored_kevlar" amount="100" />
+            <SpawnItem identifiers="aar_armor-handle" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+            <RequiredItem items="aar_kevlar-plate" type="Contained" />
+          </StatusEffect>
+          <StatusEffect type="OnInserted" target="contained" targetidentifiers="aar_ceramic-plate,aar_steel-plate,aar_kevlar-plate" setvalue="true">
+            <Remove />
+          </StatusEffect>
+        </Containable>
+        <SubContainer capacity="2" maxstacksize="4" depth="0.5">
+          <Containable items="grenade,handgrenade,mediumitem" hideitems="false" excludeditems="plate,storage_clothing,toolbelt,toolbox,bandolier,helmet,clothing,handheldammo,crate,smallitem,gun,gunsmit,mountableweaponh" />
+          <SlotIcon texture="%ModDir%/Content/UI/Inventory/container_indicators_2.png" name="heavybodyarmor icon" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        </SubContainer>
+      </ItemContainer>
+      <CustomInterface canbeselected="false" drawhudwhenequipped="true">
+        <GuiFrame relativesize="0.1,0.08" anchor="right" absoluteoffset="5000,760" />
+        <Button text="aar_text_plate">
+          <StatusEffect type="OnUse" target="character" disabledeltatime="true" conditionalcomparison="and">
+            <Conditional armored_ceram="gte 96" />
+            <ReduceAffliction identifier="aar_armored_ceram" strength="101" />
+            <SpawnItem identifiers="aar_ceramic-plate" spawnposition="SameInventory" />
+            <SpawnItem identifiers="aar_armor-handle-2" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+          </StatusEffect>
+          <StatusEffect type="OnUse" target="character" disabledeltatime="true" conditionalcomparison="and">
+            <Conditional armored_steel="gte 96" />
+            <ReduceAffliction identifier="aar_armored_steel" strength="101" />
+            <SpawnItem identifiers="aar_steel-plate" spawnposition="SameInventory" />
+            <SpawnItem identifiers="aar_armor-handle-2" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+          </StatusEffect>
+          <StatusEffect type="OnUse" target="character" disabledeltatime="true" conditionalcomparison="and">
+            <Conditional armored_kevlar="gte 96" />
+            <ReduceAffliction identifier="aar_armored_kevlar" strength="101" />
+            <SpawnItem identifiers="aar_kevlar-plate" spawnposition="SameInventory" />
+            <SpawnItem identifiers="aar_armor-handle-2" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+          </StatusEffect>
+        </Button>
+      </CustomInterface>
+    </Item>
+    <Item name="" identifier="aar_heavybodyarmor" category="Equipment" tags="clothing,mediumitem" scale="0.5" cargocontaineridentifier="metalcrate" description="" impactsoundtag="impact_soft">
+      <Upgrade gameversion="0.9.3.0" scale="0.35" />
+      <PreferredContainer secondary="wreckarmcab,abandonedarmcab,piratearmcab,outpostarmcab" amount="1" spawnprobability="0.02" />
+      <PreferredContainer secondary="armcab" amount="1" spawnprobability="0.05" />
+      <Price baseprice="780">
+        <Price storeidentifier="merchantoutpost" sold="false" multiplier="1.3" />
+        <Price storeidentifier="merchantcity" multiplier="1.2" minavailable="1" sold="false">
+          <Reputation faction="coalition" min="35" />
+        </Price>
+        <Price storeidentifier="merchantresearch" sold="false" />
+        <Price storeidentifier="merchantmilitary" multiplier="0.9" minavailable="2">
+          <Reputation faction="coalition" min="40" />
+        </Price>
+        <Price storeidentifier="merchantmine" sold="false" />
+        <Price storeidentifier="merchantarmory" multiplier="0.9" minavailable="3" />
+      </Price>
+      <Deconstruct time="60">
+        <Item identifier="ballisticfiber" amount="2" />
+      </Deconstruct>
+      <Fabricate suitablefabricators="repair" requiredtime="45">
+        <RequiredSkill identifier="weapons" level="60" />
+        <RequiredItem identifier="ballisticfiber" amount="4" />
+        <Item identifier="steel" amount="1.5" />
+      </Fabricate>
+      <InventoryIcon texture="%ModDir%/Content/UI/Inventory/icon_armor.png" name="heavy armor vest icon" sourcerect="407,32,83,96" origin="0.5,0.5" />
+      <Sprite name="heavy armor vest item" texture="%ModDir%/Content/UI/Inventory/heavyarmor.png" sourcerect="581,10,87,132" depth="0.6" origin="0.50235826,0.49631476" />
+      <Body width="85" height="90" density="25" />
+      <Holdable slots="RightHand+LeftHand" controlpose="true" holdpos="30,-20" handle1="30,-34" handle2="5,-24" setvalue="true" />
+      <Wearable slots="OuterClothes" msg="ItemMsgPickUpSelect">
+        <damagemodifier afflictionidentifiers="blunttrauma,lacerations,gunshotwound" armorsector="0.0,360.0" damagemultiplier="0.3" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="bitewounds,explosiondamage" armorsector="0.0,360.0" damagemultiplier="0.3" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictiontypes="bleeding" armorsector="0.0,360.0" damagemultiplier="0.2" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictiontypes="stun" armorsector="0.0,360.0" damagemultiplier="0.75" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictiontypes="burn" armorsector="0.0,360.0" damagemultiplier="0.8" />
+        <sprite name="Security armor Torso" texture="%ModDir%/Content/UI/Inventory/heavyarmor.png" limb="Torso" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        <sprite name="Security armor Left Upper Arm" texture="%ModDir%/Content/UI/Inventory/heavyarmor.png" limb="LeftArm" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        <sprite name="Security armor Right Upper Arm" texture="%ModDir%/Content/UI/Inventory/heavyarmor.png" limb="RightArm" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        <sprite name="Security armor Left Upper Arm" texture="%ModDir%/Content/UI/Inventory/heavyarmor.png" limb="LeftForearm" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        <sprite name="Security armor Right Upper Arm" texture="%ModDir%/Content/UI/Inventory/heavyarmor.png" limb="RightForearm" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        <sprite name="Security armor Left Lower Arm" texture="%ModDir%/Content/UI/Inventory/heavyarmor.png" limb="LeftHand" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        <sprite name="Security armor Right Lower Arm" texture="%ModDir%/Content/UI/Inventory/heavyarmor.png" limb="RightHand" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        <sprite name="Security armor Waist" texture="%ModDir%/Content/UI/Inventory/heavyarmor.png" limb="Waist" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        <sprite name="Security armor Right Thigh" texture="%ModDir%/Content/UI/Inventory/heavyarmor.png" limb="RightThigh" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        <sprite name="Security armor Left Thigh" texture="%ModDir%/Content/UI/Inventory/heavyarmor.png" limb="LeftThigh" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        <sprite name="Security armor Right Leg" texture="%ModDir%/Content/UI/Inventory/heavyarmor.png" limb="RightLeg" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        <sprite name="Security armor Left Leg" texture="%ModDir%/Content/UI/Inventory/heavyarmor.png" limb="LeftLeg" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        <sprite name="Security armor Right Foot" texture="%ModDir%/Content/UI/Inventory/heavyarmor.png" limb="RightFoot" hidelimb="false" sound="footstep_armor" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        <sprite name="Security armor Left Foot" texture="%ModDir%/Content/UI/Inventory/heavyarmor.png" limb="LeftFoot" hidelimb="false" sound="footstep_armor" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        <StatValue stattype="FlowResistance" value="0.15" />
+        <StatusEffect type="OnWearing" target="Character" SpeedMultiplier="1.15" setvalue="true" disabledeltatime="true">
+          <TriggerAnimation Type="Walk" path="%ModDir%/Content/Characters/Human/Animations/human_walk_diving_suit_anim.xml" priority="98" />
+          <TriggerAnimation Type="Run" path="%ModDir%/Content/Characters/Human/Animations/human_run_diving_suit_anim.xml" priority="98" />
+          <Conditional IsBot="false" />
+        </StatusEffect>
+        <StatusEffect type="OnWearing" target="Character" interval="1" disabledeltatimer="true" setvalue="true">
+          <Affliction identifier="aar_armored_proxy" amount="100" />
+        </StatusEffect>
+      </Wearable>
+      <ItemContainer capacity="0" slotsperrow="3" maxstacksize="1" depth="0.54" hideitems="true" autofill="false">
+        <SubContainer capacity="3" maxstacksize="1" depth="0.5">
+          <Containable items="magazine,handheldammo" ExcludedIdentifiers="drum" hideitems="false" />
+          <SlotIcon texture="%ModDir%/Content/UI/Inventory/magazineicons.png" name="heavybodyarmor icon" sourcerect="315,19,240,240" origin="0.45,0.5" />
+        </SubContainer>
+        <SubContainer capacity="2" maxstacksize="4" depth="0.5">
+          <Containable items="grenade,handgrenade" hideitems="false" excludeditems="plate,storage_clothing,toolbelt,toolbox,bandolier,helmet,clothing,handheldammo,crate,gun,gunsmit,mountableweaponh" />
+          <SlotIcon texture="%ModDir%/Content/UI/Inventory/container_indicators_2.png" name="heavybodyarmor icon" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        </SubContainer>
+        <SubContainer capacity="1" maxstacksize="1" depth="0.5">
+          <Containable items="bandolier" hideitems="false" />
+          <SlotIcon texture="%ModDir%/Content/UI/Inventory/container_indicators_7.png" name="heavybodyarmor icon" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        </SubContainer>
+        <SubContainer capacity="1" maxstacksize="1">
+          <Containable items="weapon,plate">
+            <StatusEffect type="OnInserted" target="Character" setvalue="true">
+              <Affliction identifier="aar_armored_ceram" amount="100" />
+              <SpawnItem identifiers="aar_armor-handle" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+              <RequiredItem items="aar_ceramic-plate" type="Contained" />
+            </StatusEffect>
+            <StatusEffect type="OnInserted" target="Character" setvalue="true">
+              <Affliction identifier="aar_armored_steel" amount="100" />
+              <SpawnItem identifiers="aar_armor-handle" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+              <RequiredItem items="aar_steel-plate" type="Contained" />
+            </StatusEffect>
+            <StatusEffect type="OnInserted" target="Character" setvalue="true">
+              <Affliction identifier="aar_armored_kevlar" amount="100" />
+              <SpawnItem identifiers="aar_armor-handle" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+              <RequiredItem items="aar_kevlar-plate" type="Contained" />
+            </StatusEffect>
+            <StatusEffect type="OnInserted" target="contained" targetidentifiers="aar_ceramic-plate,aar_steel-plate,aar_kevlar-plate" setvalue="true">
+              <Remove />
+            </StatusEffect>
+          </Containable>
+          <SlotIcon texture="%ModDir%/Content/UI/Inventory/container_indicators.png" name="heavybodyarmor icon" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        </SubContainer>
+      </ItemContainer>
+      <CustomInterface canbeselected="false" drawhudwhenequipped="true">
+        <GuiFrame relativesize="0.1,0.08" anchor="right" absoluteoffset="5000,760" />
+        <Button text="aar_text_plate">
+          <StatusEffect type="OnUse" target="character" disabledeltatime="true" conditionalcomparison="and">
+            <Conditional armored_ceram="gte 96" />
+            <ReduceAffliction identifier="aar_armored_ceram" strength="101" />
+            <SpawnItem identifiers="aar_ceramic-plate" spawnposition="SameInventory" />
+            <SpawnItem identifiers="aar_armor-handle-2" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+          </StatusEffect>
+          <StatusEffect type="OnUse" target="character" disabledeltatime="true" conditionalcomparison="and">
+            <Conditional armored_steel="gte 96" />
+            <ReduceAffliction identifier="aar_armored_steel" strength="101" />
+            <SpawnItem identifiers="aar_steel-plate" spawnposition="SameInventory" />
+            <SpawnItem identifiers="aar_armor-handle-2" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+          </StatusEffect>
+          <StatusEffect type="OnUse" target="character" disabledeltatime="true" conditionalcomparison="and">
+            <Conditional armored_kevlar="gte 96" />
+            <ReduceAffliction identifier="aar_armored_kevlar" strength="101" />
+            <SpawnItem identifiers="aar_kevlar-plate" spawnposition="SameInventory" />
+            <SpawnItem identifiers="aar_armor-handle-2" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+          </StatusEffect>
+        </Button>
+      </CustomInterface>
+    </Item>
+    <Item name="" identifier="aar_hiddenarmor" category="Equipment" tags="clothing,mediumitem" scale="0.55" cargocontaineridentifier="metalcrate" description="" impactsoundtag="impact_soft">
+      <Upgrade gameversion="0.9.3.0" scale="0.35" />
+      <PreferredContainer primary="none" amount="3" notcampaign="true" notpvp="true" />
+      <PreferredContainer secondary="wreckarmcab,abandonedarmcab,piratearmcab,outpostarmcab" amount="1" spawnprobability="0.03" />
+      <PreferredContainer secondary="armcab" spawnprobability="0.10" />
+      <Price baseprice="450">
+        <Price storeidentifier="merchantoutpost" sold="false" multiplier="1.3" />
+        <Price storeidentifier="merchantcity" multiplier="1.2" minavailable="1" sold="false" />
+        <Price storeidentifier="merchantresearch" sold="false" />
+        <Price storeidentifier="merchantmilitary" multiplier="0.9" minavailable="1" />
+        <Price storeidentifier="merchantmine" sold="false" />
+        <Price storeidentifier="merchantarmory" multiplier="0.9" minavailable="1" />
+      </Price>
+      <Deconstruct time="20">
+        <Item identifier="aluminium" amount="1" />
+      </Deconstruct>
+      <Fabricate suitablefabricators="repair" requiredtime="20">
+        <RequiredSkill identifier="weapons" level="30" />
+        <RequiredItem identifier="ballisticfiber" amount="1" />
+        <RequiredItem identifier="aluminium" amount="2" />
+      </Fabricate>
+      <InventoryIcon texture="%ModDir%/Content/UI/Inventory/icon_armor.png" name="hidden vest icon" sourcerect="747,35,81,90" origin="0.5,0.5" />
+      <Sprite name="Hidden Vest Item" texture="%ModDir%/Content/UI/Inventory/hiddenarmor.png" sourcerect="752,44,89,100" depth="0.6" origin="0.5035143,0.5023252" />
+      <Body width="85" height="90" density="25" />
+      <Holdable slots="RightHand+LeftHand" controlpose="true" holdpos="30,-20" handle1="30,-34" handle2="5,-24" setvalue="true" />
+      <Wearable slots="OuterClothes" msg="ItemMsgPickUpSelect">
+        <damagemodifier afflictionidentifiers="blunttrauma,lacerations,gunshotwound" armorsector="0.0,360.0" damagemultiplier="0.75" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="bitewounds,explosiondamage" armorsector="0.0,360.0" damagemultiplier="0.65" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictiontypes="burn" armorsector="0.0,360.0" damagemultiplier="0.95" />
+        <damagemodifier afflictiontypes="bleeding" armorsector="0.0,360.0" damagemultiplier="0.65" damagesound="LimbArmor" deflectprojectiles="true" />
+        <StatusEffect type="OnWearing" target="Character" interval="1" disabledeltatimer="true" setvalue="true">
+          <Affliction identifier="aar_armored_proxy" amount="100" />
+        </StatusEffect>
+      </Wearable>
+      <ItemContainer capacity="4" maxstacksize="8" depth="0.54" hideitems="true" autofill="false">
+        <Containable items="smallitem,plate">
+          <StatusEffect type="OnInserted" target="Character" setvalue="true">
+            <Affliction identifier="aar_armored_ceram" amount="100" />
+            <SpawnItem identifiers="aar_armor-handle" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+            <RequiredItem items="aar_ceramic-plate" type="Contained" />
+          </StatusEffect>
+          <StatusEffect type="OnInserted" target="Character" setvalue="true">
+            <Affliction identifier="aar_armored_steel" amount="100" />
+            <SpawnItem identifiers="aar_armor-handle" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+            <RequiredItem items="aar_steel-plate" type="Contained" />
+          </StatusEffect>
+          <StatusEffect type="OnInserted" target="Character" setvalue="true">
+            <Affliction identifier="aar_armored_kevlar" amount="100" />
+            <SpawnItem identifiers="aar_armor-handle" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+            <RequiredItem items="aar_kevlar-plate" type="Contained" />
+          </StatusEffect>
+          <StatusEffect type="OnInserted" target="contained" targetidentifiers="aar_ceramic-plate,aar_steel-plate,aar_kevlar-plate" setvalue="true">
+            <Remove />
+          </StatusEffect>
+        </Containable>
+      </ItemContainer>
+      <CustomInterface canbeselected="false" drawhudwhenequipped="true">
+        <GuiFrame relativesize="0.1,0.08" anchor="right" absoluteoffset="5000,760" />
+        <Button text="aar_text_plate">
+          <StatusEffect type="OnUse" target="character" disabledeltatime="true" conditionalcomparison="and">
+            <Conditional armored_ceram="gte 96" />
+            <ReduceAffliction identifier="aar_armored_ceram" strength="101" />
+            <SpawnItem identifiers="aar_ceramic-plate" spawnposition="SameInventory" />
+            <SpawnItem identifiers="aar_armor-handle-2" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+          </StatusEffect>
+          <StatusEffect type="OnUse" target="character" disabledeltatime="true" conditionalcomparison="and">
+            <Conditional armored_steel="gte 96" />
+            <ReduceAffliction identifier="aar_armored_steel" strength="101" />
+            <SpawnItem identifiers="aar_steel-plate" spawnposition="SameInventory" />
+            <SpawnItem identifiers="aar_armor-handle-2" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+          </StatusEffect>
+          <StatusEffect type="OnUse" target="character" disabledeltatime="true" conditionalcomparison="and">
+            <Conditional armored_kevlar="gte 96" />
+            <ReduceAffliction identifier="aar_armored_kevlar" strength="101" />
+            <SpawnItem identifiers="aar_kevlar-plate" spawnposition="SameInventory" />
+            <SpawnItem identifiers="aar_armor-handle-2" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+          </StatusEffect>
+        </Button>
+      </CustomInterface>
+    </Item>
+    <Item name="" fallbacknameidentifier="aar_bodyarmor" identifier="aar_piratebodyarmor" category="Equipment" tags="mediumitem,clothing,separatists" scale="0.5" cargocontaineridentifier="metalcrate" description="" impactsoundtag="impact_soft">
+      <Price baseprice="480" sold="false">
+        <Price storeidentifier="merchantoutpost" minavailable="0" maxavailable="2" sold="true">
+          <Reputation faction="separatists" min="30" />
+        </Price>
+        <Price storeidentifier="merchantcity" multiplier="1.2" minavailable="2" maxavailable="5" sold="true">
+          <Reputation faction="separatists" min="30" />
+        </Price>
+        <Price storeidentifier="merchantmilitary" multiplier="1.3" minavailable="4" maxavailable="6" sold="true">
+          <Reputation faction="separatists" min="50" />
+        </Price>
+        <Price storeidentifier="merchantresearch" />
+        <Price storeidentifier="merchantmine" multiplier="0.9" />
+      </Price>
+      <Deconstruct time="40">
+        <Item identifier="ballisticfiber" />
+        <Item identifier="ballisticfiber" />
+      </Deconstruct>
+      <InventoryIcon texture="%ModDir%/Content/UI/Inventory/icon_armor.png" sourcerect="279,38,83,85" origin="0.5,0.5" />
+      <Sprite texture="%ModDir%/Content/UI/Inventory/piratearmor.png" sourcerect="677,55,81,120" depth="0.6" origin="0.5,0.4" />
+      <Body radius="45" height="35" density="30" />
+      <Holdable slots="RightHand+LeftHand" controlpose="true" holdpos="30,-20" handle1="30,-34" handle2="5,-24" setvalue="true" />
+      <Wearable slots="OuterClothes" msg="ItemMsgPickUpSelect">
+        <sprite name="Gear_ChaosArmor4_A2_L1 Torso" texture="%ModDir%/Content/UI/Inventory/piratearmor.png" limb="Torso" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        <sprite name="Gear_ChaosArmor4_A2_L1 Left Lower Arm" texture="%ModDir%/Content/UI/Inventory/piratearmor.png" limb="LeftForearm" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        <sprite name="Gear_ChaosArmor4_A2_L1 Right Lower Arm" texture="%ModDir%/Content/UI/Inventory/piratearmor.png" limb="RightForearm" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        <sprite name="Gear_ChaosArmor4_A2_L1 Left Upper Arm" texture="%ModDir%/Content/UI/Inventory/piratearmor.png" limb="LeftArm" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        <sprite name="Gear_ChaosArmor4_A2_L1 Right Upper Arm" texture="%ModDir%/Content/UI/Inventory/piratearmor.png" limb="RightArm" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        <sprite name="Gear_ChaosArmor4_A2_L1 Waist" texture="%ModDir%/Content/UI/Inventory/piratearmor.png" limb="Waist" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        <sprite name="Gear_ChaosArmor4_A2_L1 Right Thigh" texture="%ModDir%/Content/UI/Inventory/piratearmor.png" limb="RightThigh" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        <sprite name="Gear_ChaosArmor4_A2_L1 Left Thigh" texture="%ModDir%/Content/UI/Inventory/piratearmor.png" limb="LeftThigh" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        <damagemodifier afflictionidentifiers="blunttrauma,lacerations,gunshotwound" armorsector="0.0,360.0" damagemultiplier="0.4" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="bitewounds,explosiondamage" armorsector="0.0,360.0" damagemultiplier="0.4" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictiontypes="bleeding" armorsector="0.0,360.0" damagemultiplier="0.25" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictiontypes="stun" armorsector="0.0,360.0" damagemultiplier="0.85" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictiontypes="burn" armorsector="0.0,360.0" damagemultiplier="0.8" />
+        <StatValue stattype="FlowResistance" value="0.15" />
+        <StatusEffect type="OnWearing" target="Character" SpeedMultiplier="1.15" setvalue="true" disabledeltatime="true">
+          <TriggerAnimation Type="Walk" path="%ModDir%/Content/Characters/Human/Animations/human_walk_diving_suit_anim.xml" priority="98" />
+          <TriggerAnimation Type="Run" path="%ModDir%/Content/Characters/Human/Animations/human_run_diving_suit_anim.xml" priority="98" />
+          <Conditional IsBot="false" />
+        </StatusEffect>
+        <StatusEffect type="OnWearing" target="Character" interval="1" disabledeltatimer="true" setvalue="true">
+          <Affliction identifier="aar_armored_proxy" amount="100" />
+        </StatusEffect>
+      </Wearable>
+      <ItemContainer capacity="3" maxstacksize="6" depth="0.54" hideitems="true" autofill="false">
+        <Containable items="smallitem,plate" excludeditems="toolbelt,toolbox,weapon,gun">
+          <StatusEffect type="OnInserted" target="Character" setvalue="true" conditionalcomparison="and">
+            <Affliction identifier="aar_armored_ceram" amount="100" />
+            <SpawnItem identifiers="aar_armor-handle" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+            <RequiredItem items="aar_ceramic-plate" type="Contained" />
+            <Conditional armored_kevlar="lt 100" />
+            <Conditional armored_steel="lt 100" />
+            <Conditional armored_ceram="lt 100" />
+          </StatusEffect>
+          <StatusEffect type="OnInserted" target="Character" setvalue="true" conditionalcomparison="and">
+            <Affliction identifier="aar_armored_steel" amount="100" />
+            <SpawnItem identifiers="aar_armor-handle" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+            <RequiredItem items="aar_steel-plate" type="Contained" />
+            <Conditional armored_kevlar="lt 100" />
+            <Conditional armored_steel="lt 100" />
+            <Conditional armored_ceram="lt 100" />
+          </StatusEffect>
+          <StatusEffect type="OnInserted" target="Character" setvalue="true" conditionalcomparison="and">
+            <Affliction identifier="aar_armored_kevlar" amount="100" />
+            <SpawnItem identifiers="aar_armor-handle" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+            <RequiredItem items="aar_kevlar-plate" type="Contained" />
+            <Conditional armored_kevlar="lt 100" />
+            <Conditional armored_steel="lt 100" />
+            <Conditional armored_ceram="lt 100" />
+          </StatusEffect>
+          <StatusEffect type="OnInserted" target="contained,character" targetidentifiers="aar_ceramic-plate,aar_steel-plate,aar_kevlar-plate" setvalue="true" conditionalcomparison="and">
+            <Remove />
+            <Conditional armored_kevlar="lt 100" />
+            <Conditional armored_steel="lt 100" />
+            <Conditional armored_ceram="lt 100" />
+          </StatusEffect>
+          <StatusEffect type="OnInserted" target="contained" targetidentifiers="aar_ceramic-plate,aar_steel-plate,aar_kevlar-plate" setvalue="true">
+            <Remove />
+          </StatusEffect>
+        </Containable>
+        <SubContainer capacity="1" maxstacksize="4" depth="0.5">
+          <Containable items="grenade,handgrenade,mediumitem" hideitems="false" excludeditems="plate,storage_clothing,toolbelt,toolbox,bandolier,helmet,clothing,handheldammo,crate,smallitem,gun,gunsmit,mountableweaponh" />
+          <SlotIcon texture="%ModDir%/Content/UI/Inventory/container_indicators_2.png" name="heavybodyarmor icon" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        </SubContainer>
+      </ItemContainer>
+      <CustomInterface canbeselected="false" drawhudwhenequipped="true">
+        <GuiFrame relativesize="0.1,0.08" anchor="right" absoluteoffset="5000,760" />
+        <Button text="aar_text_plate">
+          <StatusEffect type="OnUse" target="character" disabledeltatime="true" conditionalcomparison="and">
+            <Conditional armored_ceram="gte 96" />
+            <ReduceAffliction identifier="aar_armored_ceram" strength="101" />
+            <SpawnItem identifiers="aar_ceramic-plate" spawnposition="SameInventory" />
+            <SpawnItem identifiers="aar_armor-handle-2" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+          </StatusEffect>
+          <StatusEffect type="OnUse" target="character" disabledeltatime="true" conditionalcomparison="and">
+            <Conditional armored_steel="gte 96" />
+            <ReduceAffliction identifier="aar_armored_steel" strength="101" />
+            <SpawnItem identifiers="aar_steel-plate" spawnposition="SameInventory" />
+            <SpawnItem identifiers="aar_armor-handle-2" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+          </StatusEffect>
+          <StatusEffect type="OnUse" target="character" disabledeltatime="true" conditionalcomparison="and">
+            <Conditional armored_kevlar="gte 96" />
+            <ReduceAffliction identifier="aar_armored_kevlar" strength="101" />
+            <SpawnItem identifiers="aar_kevlar-plate" spawnposition="SameInventory" />
+            <SpawnItem identifiers="aar_armor-handle-2" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+          </StatusEffect>
+        </Button>
+      </CustomInterface>
+    </Item>
+    <Item name="" identifier="aar_Lightbodyarmor" category="Equipment" cargocontaineridentifier="metalcrate" tags="mediumitem,clothing" scale="0.5" impactsoundtag="impact_soft">
+      <PreferredContainer primary="none" amount="1" notcampaign="true" notpvp="true" />
+      <PreferredContainer secondary="wreckarmcab,abandonedarmcab,piratearmcab,outpostarmcab" amount="1" spawnprobability="0.1" />
+      <Price baseprice="330">
+        <Price storeidentifier="merchantoutpost" multiplier="1.3" />
+        <Price storeidentifier="merchantcity" multiplier="1.2" minavailable="1" />
+        <Price storeidentifier="merchantresearch" sold="false" />
+        <Price storeidentifier="merchantmilitary" multiplier="0.9" minavailable="3" />
+        <Price storeidentifier="merchantmine" multiplier="0.9" />
+        <Price storeidentifier="merchantarmory" multiplier="0.9" minavailable="3" />
+      </Price>
+      <Deconstruct time="10">
+        <Item identifier="titaniumaluminiumalloy" />
+      </Deconstruct>
+      <Fabricate suitablefabricators="repair" requiredtime="30">
+        <RequiredSkill identifier="weapons" level="40" />
+        <RequiredItem identifier="organicfiber" amount="1" />
+        <RequiredItem identifier="titaniumaluminiumalloy" amount="1" />
+      </Fabricate>
+      <InventoryIcon texture="%ModDir%/Content/UI/Inventory/icon_armor.png" sourcerect="36,44,77,85" origin="0.45,0.45" />
+      <Sprite texture="%ModDir%/Content/UI/Inventory/light_armor.png" sourcerect="622,23,91,109" depth="0.6" origin="0.45,0.45" />
+      <Body width="100" height="50" density="15" friction="0.8" restitution="0.01" />
+      <Holdable slots="RightHand+LeftHand" controlpose="true" holdpos="30,-20" handle1="30,-34" handle2="5,-24" setvalue="true" />
+      <Wearable slots="OuterClothes" msg="ItemMsgPickUpUse" pickkey="Use">
+        <sprite name="Outfit_MTFSecretLabs1_A1_L1 Torso" texture="%ModDir%/Content/UI/Inventory/light_armor.png" limb="Torso" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.45,0.45" />
+        <sprite name="Outfit_MTFSecretLabs1_A1_L1 Right Hand" texture="%ModDir%/Content/UI/Inventory/light_armor.png" limb="RightHand" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.45,0.45" />
+        <sprite name="Outfit_MTFSecretLabs1_A1_L1 Left Hand" texture="%ModDir%/Content/UI/Inventory/light_armor.png" limb="LeftHand" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.45,0.45" />
+        <sprite name="Outfit_MTFSecretLabs1_A1_L1 Left Lower Arm" texture="%ModDir%/Content/UI/Inventory/light_armor.png" limb="LeftForearm" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.45,0.45" />
+        <sprite name="Outfit_MTFSecretLabs1_A1_L1 Right Lower Arm" texture="%ModDir%/Content/UI/Inventory/light_armor.png" limb="RightForearm" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.45,0.45" />
+        <sprite name="Outfit_MTFSecretLabs1_A1_L1 Left Upper Arm" texture="%ModDir%/Content/UI/Inventory/light_armor.png" limb="LeftArm" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.45,0.45" />
+        <sprite name="Outfit_MTFSecretLabs1_A1_L1 Right Upper Arm" texture="%ModDir%/Content/UI/Inventory/light_armor.png" limb="RightArm" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.45,0.45" />
+        <sprite name="Outfit_MTFSecretLabs1_A1_L1 Waist" texture="%ModDir%/Content/UI/Inventory/light_armor.png" limb="Waist" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.45,0.45" />
+        <sprite name="Outfit_MTFSecretLabs1_A1_L1 Right Thigh" texture="%ModDir%/Content/UI/Inventory/light_armor.png" limb="RightThigh" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.45,0.45" />
+        <sprite name="Outfit_MTFSecretLabs1_A1_L1 Left Thigh" texture="%ModDir%/Content/UI/Inventory/light_armor.png" limb="LeftThigh" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.45,0.45" />
+        <sprite name="Outfit_MTFSecretLabs1_A1_L1 Right Leg" texture="%ModDir%/Content/UI/Inventory/light_armor.png" limb="RightLeg" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.45,0.45" />
+        <sprite name="Outfit_MTFSecretLabs1_A1_L1 Left Leg" texture="%ModDir%/Content/UI/Inventory/light_armor.png" limb="LeftLeg" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.45,0.45" />
+        <sprite name="Outfit_MTFSecretLabs1_A1_L1 Right Shoe" texture="%ModDir%/Content/UI/Inventory/light_armor.png" limb="RightFoot" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.45,0.45" />
+        <sprite name="Outfit_MTFSecretLabs1_A1_L1 Left Shoe" texture="%ModDir%/Content/UI/Inventory/light_armor.png" limb="LeftFoot" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.45,0.45" />
+        <SkillModifier skillidentifier="weapons" skillvalue="15" />
+        <damagemodifier afflictionidentifiers="blunttrauma,lacerations,gunshotwound,bitewounds" armorsector="0.0,360.0" damagemultiplier="0.7" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="explosiondamage" armorsector="0.0,360.0" damagemultiplier="0.5" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictiontypes="bleeding" armorsector="0.0,360.0" damagemultiplier="0.5" damagesound="LimbArmor" deflectprojectiles="true" />
+        <StatusEffect type="OnWearing" target="Character,Contained" disabledeltatime="true" comparison="and" setvalue="true">
+          <Conditional hastag="eq mediumitem" />
+        </StatusEffect>
+        <StatusEffect type="OnWearing" target="Character" interval="1" disabledeltatimer="true" setvalue="true">
+          <Affliction identifier="aar_armored_proxy" amount="100" />
+        </StatusEffect>
+      </Wearable>
+      <ItemContainer capacity="8" slotsperrow="4" maxstacksize="32" depth="0.5">
+        <Containable items="handheldammo" hideitems="false" excludeditems="storage_clothing,toolbelt,toolbox,bandolier,mediumitem" />
+        <SlotIcon slotindex="0" texture="Content/UI/StatusMonitorUI.png" sourcerect="256,448,64,64" origin="0.5,0.5" />
+        <SlotIcon slotindex="1" texture="Content/UI/StatusMonitorUI.png" sourcerect="256,448,64,64" origin="0.5,0.5" />
+        <SlotIcon slotindex="2" texture="Content/UI/StatusMonitorUI.png" sourcerect="256,448,64,64" origin="0.5,0.5" />
+        <SlotIcon slotindex="3" texture="Content/UI/StatusMonitorUI.png" sourcerect="256,448,64,64" origin="0.5,0.5" />
+        <SlotIcon slotindex="4" texture="Content/UI/StatusMonitorUI.png" sourcerect="256,448,64,64" origin="0.5,0.5" />
+        <SlotIcon slotindex="5" texture="Content/UI/StatusMonitorUI.png" sourcerect="256,448,64,64" origin="0.5,0.5" />
+        <SlotIcon slotindex="6" texture="Content/UI/StatusMonitorUI.png" sourcerect="256,448,64,64" origin="0.5,0.5" />
+        <SlotIcon slotindex="7" texture="Content/UI/StatusMonitorUI.png" sourcerect="256,448,64,64" origin="0.5,0.5" />
+        <SubContainer capacity="4" maxstacksize="4" depth="0.5">
+          <Containable items="grenade,handgrenade,mediumitem" hideitems="false" excludeditems="plate,storage_clothing,toolbelt,toolbox,bandolier,helmet,clothing,handheldammo,crate,smallitem,gun,gunsmit,mountableweaponh" />
+          <SlotIcon texture="%ModDir%/Content/UI/Inventory/container_indicators_2.png" name="heavybodyarmor icon" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        </SubContainer>
+        <SubContainer capacity="4" maxstacksize="8" depth="0.5">
+          <Containable items="smallitem,plate" hideitems="false" excludeditems="toolbelt,toolbox,weapon,gun">
+            <StatusEffect type="OnInserted" target="Character" setvalue="true">
+              <Affliction identifier="aar_armored_ceram" amount="100" />
+              <SpawnItem identifiers="aar_armor-handle" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+              <RequiredItem items="aar_ceramic-plate" type="Contained" />
+            </StatusEffect>
+            <StatusEffect type="OnInserted" target="Character" setvalue="true">
+              <Affliction identifier="aar_armored_steel" amount="100" />
+              <SpawnItem identifiers="aar_armor-handle" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+              <RequiredItem items="aar_steel-plate" type="Contained" />
+            </StatusEffect>
+            <StatusEffect type="OnInserted" target="Character" setvalue="true">
+              <Affliction identifier="aar_armored_kevlar" amount="100" />
+              <SpawnItem identifiers="aar_armor-handle" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+              <RequiredItem items="aar_kevlar-plate" type="Contained" />
+            </StatusEffect>
+            <StatusEffect type="OnInserted" target="contained" targetidentifiers="aar_ceramic-plate,aar_steel-plate,aar_kevlar-plate" setvalue="true">
+              <Remove />
+            </StatusEffect>
+          </Containable>
+        </SubContainer>
+      </ItemContainer>
+      <CustomInterface canbeselected="false" drawhudwhenequipped="true">
+        <GuiFrame relativesize="0.1,0.08" anchor="right" absoluteoffset="5000,760" />
+        <Button text="aar_text_plate">
+          <StatusEffect type="OnUse" target="character" disabledeltatime="true" conditionalcomparison="and">
+            <Conditional armored_ceram="gte 96" />
+            <ReduceAffliction identifier="aar_armored_ceram" strength="101" />
+            <SpawnItem identifiers="aar_ceramic-plate" spawnposition="SameInventory" />
+            <SpawnItem identifiers="aar_armor-handle-2" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+          </StatusEffect>
+          <StatusEffect type="OnUse" target="character" disabledeltatime="true" conditionalcomparison="and">
+            <Conditional armored_steel="gte 96" />
+            <ReduceAffliction identifier="aar_armored_steel" strength="101" />
+            <SpawnItem identifiers="aar_steel-plate" spawnposition="SameInventory" />
+            <SpawnItem identifiers="aar_armor-handle-2" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+          </StatusEffect>
+          <StatusEffect type="OnUse" target="character" disabledeltatime="true" conditionalcomparison="and">
+            <Conditional armored_kevlar="gte 96" />
+            <ReduceAffliction identifier="aar_armored_kevlar" strength="101" />
+            <SpawnItem identifiers="aar_kevlar-plate" spawnposition="SameInventory" />
+            <SpawnItem identifiers="aar_armor-handle-2" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+          </StatusEffect>
+        </Button>
+      </CustomInterface>
+    </Item>
+    <Item name="" identifier="aar_Lightbodyarmor_sep" category="Equipment" cargocontaineridentifier="metalcrate" tags="mediumitem,clothing" scale="0.55" impactsoundtag="impact_soft">
+      <PreferredContainer primary="none" amount="1" notcampaign="true" notpvp="true" />
+      <PreferredContainer secondary="wreckarmcab,abandonedarmcab,piratearmcab,outpostarmcab" amount="1" spawnprobability="0.1" />
+      <Price baseprice="300">
+        <Price storeidentifier="merchantoutpost" multiplier="1.3" />
+        <Price storeidentifier="merchantcity" multiplier="1.2" minavailable="1" />
+        <Price storeidentifier="merchantresearch" sold="false" />
+        <Price storeidentifier="merchantmilitary" multiplier="0.9" minavailable="1" />
+        <Price storeidentifier="merchantmine" multiplier="0.9" sold="false" />
+        <Price storeidentifier="merchantarmory" multiplier="0.9" minavailable="1" />
+      </Price>
+      <Deconstruct time="10">
+        <Item identifier="steel" />
+      </Deconstruct>
+      <Fabricate suitablefabricators="repair" requiredtime="35">
+        <RequiredSkill identifier="weapons" level="35" />
+        <RequiredItem identifier="organicfiber" amount="1" />
+        <RequiredItem identifier="steel" amount="1" />
+        <RequiredItem identifier="iron" amount="1" />
+      </Fabricate>
+      <InventoryIcon texture="%ModDir%/Content/UI/Inventory/icon_armor.png" name="light pirate" sourcerect="642,37,77,88" origin="0.45,0.45" />
+      <Sprite texture="%ModDir%/Content/UI/Inventory/light_pirate_armor.png" sourcerect="710,46,76,82" depth="0.6" origin="0.45,0.45" />
+      <Body width="100" height="50" density="15" friction="0.8" restitution="0.01" />
+      <Holdable slots="RightHand+LeftHand" controlpose="true" holdpos="30,-20" handle1="30,-34" handle2="5,-24" setvalue="true" />
+      <Wearable slots="OuterClothes" msg="ItemMsgPickUpUse" pickkey="Use">
+        <sprite name="Outfit_MTFSecretLabs1_A1_L1 Torso" texture="%ModDir%/Content/UI/Inventory/light_pirate_armor.png" limb="Torso" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,826,256" origin="0.5,0.5" />
+        <sprite name="Outfit_MTFSecretLabs1_A1_L1 Right Hand" texture="%ModDir%/Content/UI/Inventory/light_pirate_armor.png" limb="RightHand" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.45,0.45" />
+        <sprite name="Outfit_MTFSecretLabs1_A1_L1 Left Hand" texture="%ModDir%/Content/UI/Inventory/light_pirate_armor.png" limb="LeftHand" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.45,0.45" />
+        <sprite name="Outfit_MTFSecretLabs1_A1_L1 Left Lower Arm" texture="%ModDir%/Content/UI/Inventory/light_pirate_armor.png" limb="LeftForearm" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.45,0.45" />
+        <sprite name="Outfit_MTFSecretLabs1_A1_L1 Right Lower Arm" texture="%ModDir%/Content/UI/Inventory/light_pirate_armor.png" limb="RightForearm" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.45,0.45" />
+        <sprite name="Outfit_MTFSecretLabs1_A1_L1 Left Upper Arm" texture="%ModDir%/Content/UI/Inventory/light_pirate_armor.png" limb="LeftArm" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.45,0.45" />
+        <sprite name="Outfit_MTFSecretLabs1_A1_L1 Right Upper Arm" texture="%ModDir%/Content/UI/Inventory/light_pirate_armor.png" limb="RightArm" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.45,0.45" />
+        <sprite name="Outfit_MTFSecretLabs1_A1_L1 Waist" texture="%ModDir%/Content/UI/Inventory/light_pirate_armor.png" limb="Waist" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.45,0.45" />
+        <sprite name="Outfit_MTFSecretLabs1_A1_L1 Right Thigh" texture="%ModDir%/Content/UI/Inventory/light_pirate_armor.png" limb="RightThigh" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.45,0.45" />
+        <sprite name="Outfit_MTFSecretLabs1_A1_L1 Left Thigh" texture="%ModDir%/Content/UI/Inventory/light_pirate_armor.png" limb="LeftThigh" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.45,0.45" />
+        <sprite name="Outfit_MTFSecretLabs1_A1_L1 Right Leg" texture="%ModDir%/Content/UI/Inventory/light_pirate_armor.png" limb="RightLeg" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.45,0.45" />
+        <sprite name="Outfit_MTFSecretLabs1_A1_L1 Left Leg" texture="%ModDir%/Content/UI/Inventory/light_pirate_armor.png" limb="LeftLeg" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.45,0.45" />
+        <sprite name="Outfit_MTFSecretLabs1_A1_L1 Right Shoe" texture="%ModDir%/Content/UI/Inventory/light_pirate_armor.png" limb="RightFoot" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.45,0.45" />
+        <sprite name="Outfit_MTFSecretLabs1_A1_L1 Left Shoe" texture="%ModDir%/Content/UI/Inventory/light_pirate_armor.png" limb="LeftFoot" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.45,0.45" />
+        <SkillModifier skillidentifier="weapons" skillvalue="10" />
+        <damagemodifier afflictionidentifiers="blunttrauma,lacerations,gunshotwound,bitewounds" armorsector="0.0,360.0" damagemultiplier="0.65" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="explosiondamage" armorsector="0.0,360.0" damagemultiplier="0.4" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictiontypes="bleeding" armorsector="0.0,360.0" damagemultiplier="0.4" damagesound="LimbArmor" deflectprojectiles="true" />
+        <StatusEffect type="OnWearing" target="Character,Contained" disabledeltatime="true" comparison="and" setvalue="true">
+          <Conditional hastag="eq mediumitem" />
+        </StatusEffect>
+        <StatusEffect type="OnWearing" target="Character" interval="1" disabledeltatimer="true" setvalue="true">
+          <Affliction identifier="aar_armored_proxy" amount="100" />
+        </StatusEffect>
+        <StatusEffect type="OnWearing" target="Character" SpeedMultiplier="0.925" setvalue="true" disabledeltatime="true">
+          <Conditional IsBot="false" />
+        </StatusEffect>
+      </Wearable>
+      <ItemContainer capacity="6" slotsperrow="4" maxstacksize="32" depth="0.5">
+        <Containable items="handheldammo" hideitems="false" excludeditems="storage_clothing,toolbelt,toolbox,bandolier,mediumitem" />
+        <SlotIcon slotindex="0" texture="Content/UI/StatusMonitorUI.png" sourcerect="256,448,64,64" origin="0.5,0.5" />
+        <SlotIcon slotindex="1" texture="Content/UI/StatusMonitorUI.png" sourcerect="256,448,64,64" origin="0.5,0.5" />
+        <SlotIcon slotindex="2" texture="Content/UI/StatusMonitorUI.png" sourcerect="256,448,64,64" origin="0.5,0.5" />
+        <SlotIcon slotindex="3" texture="Content/UI/StatusMonitorUI.png" sourcerect="256,448,64,64" origin="0.5,0.5" />
+        <SlotIcon slotindex="4" texture="Content/UI/StatusMonitorUI.png" sourcerect="256,448,64,64" origin="0.5,0.5" />
+        <SlotIcon slotindex="5" texture="Content/UI/StatusMonitorUI.png" sourcerect="256,448,64,64" origin="0.5,0.5" />
+        <SubContainer capacity="3" maxstacksize="4" depth="0.5">
+          <Containable items="grenade,handgrenade,mediumitem" hideitems="false" excludeditems="plate,storage_clothing,toolbelt,toolbox,bandolier,helmet,clothing,handheldammo,crate,smallitem,gun,gunsmit,mountableweaponh" />
+          <SlotIcon texture="%ModDir%/Content/UI/Inventory/container_indicators_2.png" name="heavybodyarmor icon" sourcerect="0,0,0,0" origin="0.5,0.5" />
+          <SlotIcon texture="%ModDir%/Content/UI/Inventory/container_indicators_2.png" name="heavybodyarmor icon" sourcerect="0,0,0,0" origin="0.5,0.5" />
+          <SlotIcon texture="%ModDir%/Content/UI/Inventory/container_indicators_2.png" name="heavybodyarmor icon" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        </SubContainer>
+        <SubContainer capacity="3" maxstacksize="8" depth="0.5">
+          <Containable items="smallitem,plate" hideitems="false" excludeditems="toolbelt,toolbox,weapon,gun">
+            <StatusEffect type="OnInserted" target="Character" setvalue="true">
+              <Affliction identifier="aar_armored_ceram" amount="100" />
+              <SpawnItem identifiers="aar_armor-handle" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+              <RequiredItem items="aar_ceramic-plate" type="Contained" />
+            </StatusEffect>
+            <StatusEffect type="OnInserted" target="Character" setvalue="true">
+              <Affliction identifier="aar_armored_steel" amount="100" />
+              <SpawnItem identifiers="aar_armor-handle" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+              <RequiredItem items="aar_steel-plate" type="Contained" />
+            </StatusEffect>
+            <StatusEffect type="OnInserted" target="Character" setvalue="true">
+              <Affliction identifier="aar_armored_kevlar" amount="100" />
+              <SpawnItem identifiers="aar_armor-handle" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+              <RequiredItem items="aar_kevlar-plate" type="Contained" />
+            </StatusEffect>
+            <StatusEffect type="OnInserted" target="contained" targetidentifiers="aar_ceramic-plate,aar_steel-plate,aar_kevlar-plate" setvalue="true">
+              <Remove />
+            </StatusEffect>
+          </Containable>
+        </SubContainer>
+      </ItemContainer>
+      <CustomInterface canbeselected="false" drawhudwhenequipped="true">
+        <GuiFrame relativesize="0.1,0.08" anchor="right" absoluteoffset="5000,760" />
+        <Button text="aar_text_plate">
+          <StatusEffect type="OnUse" target="character" disabledeltatime="true" conditionalcomparison="and">
+            <Conditional armored_ceram="gte 96" />
+            <ReduceAffliction identifier="aar_armored_ceram" strength="101" />
+            <SpawnItem identifiers="aar_ceramic-plate" spawnposition="SameInventory" />
+            <SpawnItem identifiers="aar_armor-handle-2" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+          </StatusEffect>
+          <StatusEffect type="OnUse" target="character" disabledeltatime="true" conditionalcomparison="and">
+            <Conditional armored_steel="gte 96" />
+            <ReduceAffliction identifier="aar_armored_steel" strength="101" />
+            <SpawnItem identifiers="aar_steel-plate" spawnposition="SameInventory" />
+            <SpawnItem identifiers="aar_armor-handle-2" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+          </StatusEffect>
+          <StatusEffect type="OnUse" target="character" disabledeltatime="true" conditionalcomparison="and">
+            <Conditional armored_kevlar="gte 96" />
+            <ReduceAffliction identifier="aar_armored_kevlar" strength="101" />
+            <SpawnItem identifiers="aar_kevlar-plate" spawnposition="SameInventory" />
+            <SpawnItem identifiers="aar_armor-handle-2" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+          </StatusEffect>
+        </Button>
+      </CustomInterface>
+    </Item>
+    <Item name="" identifier="aar_Medicalbodyarmor" category="Equipment" cargocontaineridentifier="metalcrate" tags="mediumitem,clothing" scale="0.5" impactsoundtag="impact_soft">
+      <PreferredContainer primary="none" amount="1" notcampaign="true" notpvp="true" />
+      <PreferredContainer secondary="wreckarmcab,abandonedarmcab,piratearmcab,outpostarmcab" amount="1" spawnprobability="0.1" />
+      <Price baseprice="330">
+        <Price storeidentifier="merchantoutpost" multiplier="1.3" />
+        <Price storeidentifier="merchantcity" multiplier="1.2" minavailable="1" />
+        <Price storeidentifier="merchantresearch" sold="false" />
+        <Price storeidentifier="merchantmilitary" multiplier="0.9" minavailable="3" />
+        <Price storeidentifier="merchantmine" multiplier="0.9" />
+        <Price storeidentifier="merchantarmory" multiplier="0.9" minavailable="3" />
+      </Price>
+      <Deconstruct time="10">
+        <Item identifier="ballisticfiber" />
+      </Deconstruct>
+      <Fabricate suitablefabricators="repair" requiredtime="40">
+        <RequiredSkill identifier="weapons" level="40" />
+        <RequiredSkill identifier="medical" level="40" />
+        <RequiredItem identifier="organicfiber" amount="1" />
+        <RequiredItem identifier="ballisticfiber" amount="1" />
+        <RequiredItem identifier="titaniumaluminiumalloy" amount="1" />
+      </Fabricate>
+      <InventoryIcon texture="%ModDir%/Content/UI/Inventory/icon_armor.png" name="med armor" sourcerect="520,35,80,95" origin="0.45,0.45" />
+      <Sprite texture="%ModDir%/Content/UI/Inventory/medical_armor.png" name="med armor" sourcerect="638,43,83,125" depth="0.6" origin="0.502419,0.5027567" />
+      <Body width="100" height="50" density="15" friction="0.8" restitution="0.01" />
+      <Holdable slots="RightHand+LeftHand" controlpose="true" holdpos="30,-20" handle1="30,-34" handle2="5,-24" setvalue="true" />
+      <Wearable slots="OuterClothes" msg="ItemMsgPickUpUse" pickkey="Use">
+        <sprite name="Outfit_MTFSecretLabs1_A1_L1 Torso" texture="%ModDir%/Content/UI/Inventory/medical_armor.png" limb="Torso" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,731,256" origin="0.45,0.45" />
+        <sprite name="Outfit_MTFSecretLabs1_A1_L1 Right Hand" texture="%ModDir%/Content/UI/Inventory/medical_armor.png" limb="RightHand" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.45,0.45" />
+        <sprite name="Outfit_MTFSecretLabs1_A1_L1 Left Hand" texture="%ModDir%/Content/UI/Inventory/medical_armor.png" limb="LeftHand" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.45,0.45" />
+        <sprite name="Outfit_MTFSecretLabs1_A1_L1 Left Lower Arm" texture="%ModDir%/Content/UI/Inventory/medical_armor.png" limb="LeftForearm" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.45,0.45" />
+        <sprite name="Outfit_MTFSecretLabs1_A1_L1 Right Lower Arm" texture="%ModDir%/Content/UI/Inventory/medical_armor.png" limb="RightForearm" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.45,0.45" />
+        <sprite name="Outfit_MTFSecretLabs1_A1_L1 Left Upper Arm" texture="%ModDir%/Content/UI/Inventory/medical_armor.png" limb="LeftArm" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.45,0.45" />
+        <sprite name="Outfit_MTFSecretLabs1_A1_L1 Right Upper Arm" texture="%ModDir%/Content/UI/Inventory/medical_armor.png" limb="RightArm" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.45,0.45" />
+        <sprite name="Outfit_MTFSecretLabs1_A1_L1 Waist" texture="%ModDir%/Content/UI/Inventory/medical_armor.png" limb="Waist" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.45,0.45" />
+        <sprite name="Outfit_MTFSecretLabs1_A1_L1 Right Thigh" texture="%ModDir%/Content/UI/Inventory/medical_armor.png" limb="RightThigh" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.45,0.45" />
+        <sprite name="Outfit_MTFSecretLabs1_A1_L1 Left Thigh" texture="%ModDir%/Content/UI/Inventory/medical_armor.png" limb="LeftThigh" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.45,0.45" />
+        <sprite name="Outfit_MTFSecretLabs1_A1_L1 Right Leg" texture="%ModDir%/Content/UI/Inventory/medical_armor.png" limb="RightLeg" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.45,0.45" />
+        <sprite name="Outfit_MTFSecretLabs1_A1_L1 Left Leg" texture="%ModDir%/Content/UI/Inventory/medical_armor.png" limb="LeftLeg" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.45,0.45" />
+        <sprite name="Outfit_MTFSecretLabs1_A1_L1 Right Shoe" texture="%ModDir%/Content/UI/Inventory/medical_armor.png" limb="RightFoot" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.45,0.45" />
+        <sprite name="Outfit_MTFSecretLabs1_A1_L1 Left Shoe" texture="%ModDir%/Content/UI/Inventory/medical_armor.png" limb="LeftFoot" hidelimb="false" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.45,0.45" />
+        <SkillModifier skillidentifier="medical" skillvalue="15" />
+        <damagemodifier afflictionidentifiers="blunttrauma,lacerations,gunshotwound,bitewounds" armorsector="0.0,360.0" damagemultiplier="0.6" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="explosiondamage" armorsector="0.0,360.0" damagemultiplier="0.6" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="burn" armorsector="0.0,360.0" damagemultiplier="0.8" />
+        <damagemodifier afflictiontypes="bleeding" armorsector="0.0,360.0" damagemultiplier="0.4" damagesound="LimbArmor" deflectprojectiles="true" />
+        <StatusEffect type="OnWearing" target="Character" SpeedMultiplier="0.93" setvalue="true" disabledeltatime="true">
+          <Conditional IsBot="false" />
+        </StatusEffect>
+        <StatusEffect type="OnWearing" target="Character,Contained" disabledeltatime="true" comparison="and" setvalue="true">
+          <Conditional hastag="eq mediumitem" />
+        </StatusEffect>
+        <StatusEffect type="OnWearing" target="Character" interval="1" disabledeltatimer="true" setvalue="true">
+          <Affliction identifier="aar_armored_proxy" amount="100" />
+        </StatusEffect>
+      </Wearable>
+      <ItemContainer capacity="6" slotsperrow="4" maxstacksize="32" depth="0.5">
+        <Containable items="chem,medical" hideitems="false" excludeditems="storage_clothing,toolbelt,toolbox,bandolier,mediumitem" />
+        <SlotIcon slotindex="0" texture="%ModDir%/Content/UI/Inventory/container_indicators_6.png" name="heavybodyarmor icon" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        <SlotIcon slotindex="1" texture="%ModDir%/Content/UI/Inventory/container_indicators_6.png" name="heavybodyarmor icon" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        <SlotIcon slotindex="2" texture="%ModDir%/Content/UI/Inventory/container_indicators_6.png" name="heavybodyarmor icon" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        <SlotIcon slotindex="3" texture="%ModDir%/Content/UI/Inventory/container_indicators_6.png" name="heavybodyarmor icon" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        <SlotIcon slotindex="4" texture="%ModDir%/Content/UI/Inventory/container_indicators_6.png" name="heavybodyarmor icon" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        <SlotIcon slotindex="5" texture="%ModDir%/Content/UI/Inventory/container_indicators_6.png" name="heavybodyarmor icon" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        <SubContainer capacity="3" maxstacksize="4" depth="0.5">
+          <Containable items="grenade,handgrenade,mediumitem" hideitems="false" excludeditems="plate,storage_clothing,toolbelt,toolbox,bandolier,helmet,clothing,handheldammo,crate,smallitem,gun,gunsmit,mountableweaponh" />
+          <SlotIcon texture="%ModDir%/Content/UI/Inventory/container_indicators_2.png" name="heavybodyarmor icon" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        </SubContainer>
+        <SubContainer capacity="3" maxstacksize="8" depth="0.5">
+          <Containable items="smallitem,plate" hideitems="false" excludeditems="toolbelt,toolbox,weapon,gun">
+            <StatusEffect type="OnInserted" target="Character" setvalue="true">
+              <Affliction identifier="aar_armored_ceram" amount="100" />
+              <SpawnItem identifiers="aar_armor-handle" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+              <RequiredItem items="aar_ceramic-plate" type="Contained" />
+            </StatusEffect>
+            <StatusEffect type="OnInserted" target="Character" setvalue="true">
+              <Affliction identifier="aar_armored_steel" amount="100" />
+              <SpawnItem identifiers="aar_armor-handle" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+              <RequiredItem items="aar_steel-plate" type="Contained" />
+            </StatusEffect>
+            <StatusEffect type="OnInserted" target="Character" setvalue="true">
+              <Affliction identifier="aar_armored_kevlar" amount="100" />
+              <SpawnItem identifiers="aar_armor-handle" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+              <RequiredItem items="aar_kevlar-plate" type="Contained" />
+            </StatusEffect>
+            <StatusEffect type="OnInserted" target="contained" targetidentifiers="aar_ceramic-plate,aar_steel-plate,aar_kevlar-plate" setvalue="true">
+              <Remove />
+            </StatusEffect>
+          </Containable>
+        </SubContainer>
+      </ItemContainer>
+      <CustomInterface canbeselected="false" drawhudwhenequipped="true">
+        <GuiFrame relativesize="0.1,0.08" anchor="right" absoluteoffset="5000,760" />
+        <Button text="aar_text_plate">
+          <StatusEffect type="OnUse" target="character" disabledeltatime="true" conditionalcomparison="and">
+            <Conditional armored_ceram="gte 96" />
+            <ReduceAffliction identifier="aar_armored_ceram" strength="101" />
+            <SpawnItem identifiers="aar_ceramic-plate" spawnposition="SameInventory" />
+            <SpawnItem identifiers="aar_armor-handle-2" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+          </StatusEffect>
+          <StatusEffect type="OnUse" target="character" disabledeltatime="true" conditionalcomparison="and">
+            <Conditional armored_steel="gte 96" />
+            <ReduceAffliction identifier="aar_armored_steel" strength="101" />
+            <SpawnItem identifiers="aar_steel-plate" spawnposition="SameInventory" />
+            <SpawnItem identifiers="aar_armor-handle-2" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+          </StatusEffect>
+          <StatusEffect type="OnUse" target="character" disabledeltatime="true" conditionalcomparison="and">
+            <Conditional armored_kevlar="gte 96" />
+            <ReduceAffliction identifier="aar_armored_kevlar" strength="101" />
+            <SpawnItem identifiers="aar_kevlar-plate" spawnposition="SameInventory" />
+            <SpawnItem identifiers="aar_armor-handle-2" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+          </StatusEffect>
+        </Button>
+      </CustomInterface>
+    </Item>
+    <Item name="" identifier="aar_ballistichelmet1" aliases="aar_ballistichelmet" category="Equipment" tags="mediumitem,helmet" cargocontaineridentifier="metalcrate" description="" impactsoundtag="impact_metal_heavy" scale="0.35">
+      <Upgrade gameversion="0.9.6.0" scale="0.325" />
+      <PreferredContainer primary="none" amount="1" notcampaign="true" notpvp="true" />
+      <PreferredContainer secondary="wreckarmcab,abandonedarmcab,piratearmcab,outpostarmcab" amount="1" spawnprobability="0.05" />
+      <PreferredContainer secondary="armcab" spawnprobability="0.02" />
+      <Price baseprice="320">
+        <Price storeidentifier="merchantoutpost" sold="false" multiplier="1.3" />
+        <Price storeidentifier="merchantcity" multiplier="1.2" minavailable="1" sold="false" />
+        <Price storeidentifier="merchantresearch" sold="false" />
+        <Price storeidentifier="merchantmilitary" multiplier="0.9" minavailable="3" />
+        <Price storeidentifier="merchantmine" sold="false" />
+        <Price storeidentifier="merchantarmory" multiplier="0.9" minavailable="3" />
+      </Price>
+      <Deconstruct time="10">
+        <Item identifier="ballisticfiber" />
+      </Deconstruct>
+      <Fabricate suitablefabricators="repair" requiredtime="20">
+        <RequiredSkill identifier="weapons" level="30" />
+        <RequiredItem identifier="ballisticfiber" amount="2" />
+        <RequiredItem identifier="titaniumaluminiumalloy" amount="1" />
+      </Fabricate>
+      <Sprite name="Ballistic Helmet 1" texture="%ModDir%/Content/UI/Inventory/headgears.png" sourcerect="188,0,85,86" depth="0.6" origin="0.5,0.5" />
+      <Body radius="30" density="25" />
+      <Wearable slots="Head+HealthInterface" armorvalue="20.0" msg="ItemMsgPickUpSelect">
+        <damagemodifier afflictionidentifiers="lacerations,gunshotwound" armorsector="0.0,360.0" damagemultiplier="0.2" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="aar_pepper" armorsector="0.0,360.0" damagemultiplier="0" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="bitewounds, blunttrauma" armorsector="0.0,360.0" damagemultiplier="0.3" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="explosiondamage" armorsector="0.0,360.0" damagemultiplier="0.7" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictiontypes="bleeding" armorsector="0.0,360.0" damagemultiplier="0.1" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="concussion" armorsector="0.0,360.0" damagemultiplier="0.0" damagesound="" deflectprojectiles="true" />
+        <sprite name="Ballistic Helmet 1 Wearable" texture="%ModDir%/Content/UI/Inventory/headgears.png" limb="Head" inheritlimbdepth="true" inheritscale="true" ignorelimbscale="true" scale="0.7" hidewearablesoftype="Hair" sourcerect="188,0,85,86" origin="0.49670944,0.5487734" />
+        <StatusEffect type="OnWearing" target="Character" ObstructVisionAmount="0.01" HideFace="true" interval="1" duration="1.1" disabledeltatime="true" />
+        <CustomInterface canbeselected="false" drawhudwhenequipped="true">
+          <GuiFrame relativesize="0.07,0.08" anchor="CenterRight" pivot="CenterRight" relativeoffset="0.006,-1.06" style="ItemUI" />
+          <Button text="aar_visor_open">
+            <StatusEffect type="OnUse" targettype="This" interval="1" delay="1" stackable="false" duration="1">
+              <SpawnItem identifiers="aar_ballistichelmet1-open" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+              <Remove />
+            </StatusEffect>
+            <StatusEffect type="OnUse" targettype="This" interval="2" stackable="false">
+              <SpawnItem identifiers="aar_helmet-handle-up" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+            </StatusEffect>
+            <StatusEffect type="OnUse" targettype="This" interval="2" duration="2" noninteractable="true" AllowAccess="false" oneshot="true" stackable="false" />
+            <StatusEffect type="Always" targettype="This" oneshot="true" noninteractable="false" AllowAccess="true" stackable="false" />
+          </Button>
+        </CustomInterface>
+      </Wearable>
+      <Holdable slots="RightHand,LeftHand" controlpose="true" holdpos="30,-20" handle1="0,0" setvalue="true" />
+    </Item>
+    <Item name="" identifier="aar_ballistichelmet1-open" aliases="aar_ballistichelmet" category="Equipment" tags="mediumitem,helmet" Equip="true" cargocontaineridentifier="metalcrate" description="" impactsoundtag="impact_metal_heavy" scale="0.35">
+      <Upgrade gameversion="0.9.6.0" scale="0.325" />
+      <Price baseprice="320" sold="false">
+        <Price storeidentifier="merchantoutpost" sold="false" multiplier="1.3" />
+        <Price storeidentifier="merchantcity" multiplier="1.2" minavailable="1" sold="false" />
+        <Price storeidentifier="merchantresearch" sold="false" />
+        <Price storeidentifier="merchantmilitary" multiplier="0.9" minavailable="3" />
+        <Price storeidentifier="merchantmine" sold="false" />
+        <Price storeidentifier="merchantarmory" multiplier="0.9" sold="false" minavailable="3" />
+      </Price>
+      <Deconstruct time="10">
+        <Item identifier="ballisticfiber" />
+      </Deconstruct>
+      <Sprite name="Ballistic Helmet 1 open" texture="%ModDir%/Content/UI/Inventory/headgears.png" sourcerect="134,246,85,86" depth="0.6" origin="0.46705884,0.6" />
+      <Body radius="30" density="25" />
+      <Wearable slots="Head" armorvalue="10.0" msg="ItemMsgPickUpSelect">
+        <damagemodifier afflictionidentifiers="lacerations,gunshotwound" armorsector="0.0,360.0" damagemultiplier="0.5" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="bitewounds, blunttrauma" armorsector="0.0,360.0" damagemultiplier="0.6" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictiontypes="bleeding" armorsector="0.0,360.0" damagemultiplier="0.4" damagesound="LimbArmor" deflectprojectiles="true" />
+        <sprite name="Ballistic Helmet 1 Wearable" texture="%ModDir%/Content/UI/Inventory/headgears.png" limb="Head" inheritlimbdepth="true" inheritscale="true" ignorelimbscale="true" scale="0.7" hidewearablesoftype="Hair" sourcerect="134,246,85,86" origin="0.4665971,0.68536925" />
+        <CustomInterface canbeselected="false" drawhudwhenequipped="true">
+          <GuiFrame relativesize="0.07,0.08" anchor="CenterRight" pivot="CenterRight" relativeoffset="0.006,-1.06" />
+          <Button text="aar_visor_close">
+            <StatusEffect type="OnUse" targettype="This" interval="2" delay="1" stackable="false" duration="1">
+              <SpawnItem identifiers="aar_ballistichelmet1" spawnposition="SameInventory" Equip="true" SpawnIfInventoryFull="true" />
+              <Remove />
+            </StatusEffect>
+            <StatusEffect type="OnUse" targettype="This" interval="2" stackable="false">
+              <SpawnItem identifiers="aar_helmet-handle-down" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+            </StatusEffect>
+            <StatusEffect type="OnUse" targettype="This" interval="2" duration="2" noninteractable="true" AllowAccess="false" oneshot="true" stackable="false" />
+            <StatusEffect type="Always" targettype="This" oneshot="true" noninteractable="false" AllowAccess="true" stackable="false" />
+          </Button>
+        </CustomInterface>
+      </Wearable>
+      <Holdable slots="RightHand,LeftHand" controlpose="true" holdpos="30,-20" handle1="0,0" setvalue="true" />
+    </Item>
+    <Item name="" identifier="aar_ballistichelmet2" category="Equipment" tags="mediumitem,helmet" cargocontaineridentifier="metalcrate" description="" impactsoundtag="impact_metal_heavy" scale="0.4">
+      <PreferredContainer primary="none" amount="1" notcampaign="true" notpvp="true" />
+      <PreferredContainer secondary="wreckarmcab,abandonedarmcab,piratearmcab,outpostarmcab" amount="1" spawnprobability="0.05" />
+      <PreferredContainer secondary="armcab" spawnprobability="0.02" />
+      <Price baseprice="320">
+        <Price storeidentifier="merchantoutpost" sold="false" multiplier="1.3" />
+        <Price storeidentifier="merchantcity" multiplier="1.2" minavailable="1" sold="false" />
+        <Price storeidentifier="merchantresearch" sold="false" />
+        <Price storeidentifier="merchantmilitary" multiplier="0.9" minavailable="3" />
+        <Price storeidentifier="merchantmine" sold="false" />
+        <Price storeidentifier="merchantarmory" multiplier="0.9" minavailable="3" />
+      </Price>
+      <Deconstruct time="10">
+        <Item identifier="ballisticfiber" />
+      </Deconstruct>
+      <Fabricate suitablefabricators="repair" requiredtime="20">
+        <RequiredSkill identifier="weapons" level="30" />
+        <RequiredItem identifier="ballisticfiber" amount="2" />
+        <RequiredItem identifier="organicfiber" amount="1" />
+      </Fabricate>
+      <Sprite name="Ballistic Helmet 2" texture="%ModDir%/Content/UI/Inventory/headgears.png" sourcerect="9,0,85,86" depth="0.6" origin="0.5,0.5" />
+      <Body radius="30" density="25" />
+      <Wearable slots="Head+HealthInterface" armorvalue="20.0" msg="ItemMsgPickUpSelect">
+        <damagemodifier afflictionidentifiers="blunttrauma,lacerations,gunshotwound" armorsector="0.0,360.0" damagemultiplier="0.5" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="aar_pepper" armorsector="0.0,360.0" damagemultiplier="0" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="explosiondamage" armorsector="0.0,360.0" damagemultiplier="0.6" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="bitewounds" armorsector="0.0,360.0" damagemultiplier="0.5" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictiontypes="bleeding" armorsector="0.0,360.0" damagemultiplier="0.3" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="concussion" armorsector="0.0,360.0" damagemultiplier="0.0" damagesound="" deflectprojectiles="true" />
+        <SkillModifier skillidentifier="weapons" skillvalue="10" />
+        <sprite name="Ballistic Helmet 2 Wearable" texture="%ModDir%/Content/UI/Inventory/headgears.png" limb="Head" hidewearablesoftype="Hair" inheritlimbdepth="true" inheritscale="true" ignorelimbscale="true" scale="0.7" sourcerect="9,0,85,86" origin="0.50035435,0.58344555" />
+        <StatusEffect type="OnWearing" target="Character" HideFace="true" interval="1" duration="1.1" disabledeltatime="true" />
+        <CustomInterface canbeselected="false" drawhudwhenequipped="true">
+          <GuiFrame relativesize="0.07,0.08" anchor="CenterRight" pivot="CenterRight" relativeoffset="0.006,-1.06" style="ItemUI" />
+          <Button text="aar_visor_open">
+            <StatusEffect type="OnUse" targettype="This" interval="1" delay="1" stackable="false" duration="1">
+              <SpawnItem identifiers="aar_ballistichelmet2-open" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+              <Remove />
+            </StatusEffect>
+            <StatusEffect type="OnUse" targettype="This" interval="2" stackable="false">
+              <SpawnItem identifiers="aar_helmet-handle-up" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+            </StatusEffect>
+            <StatusEffect type="OnUse" targettype="This" interval="2" duration="2" noninteractable="true" AllowAccess="false" oneshot="true" stackable="false" />
+            <StatusEffect type="Always" targettype="This" oneshot="true" noninteractable="false" AllowAccess="true" stackable="false" />
+          </Button>
+        </CustomInterface>
+      </Wearable>
+      <Holdable slots="RightHand,LeftHand" controlpose="true" holdpos="30,-20" handle1="0,0" setvalue="true" />
+    </Item>
+    <Item name="" identifier="aar_ballistichelmet2-open" category="Equipment" tags="mediumitem,helmet" Equip="true" cargocontaineridentifier="metalcrate" description="" impactsoundtag="impact_metal_heavy" scale="0.4">
+      <Price baseprice="320">
+        <Price storeidentifier="merchantoutpost" sold="false" multiplier="1.3" />
+        <Price storeidentifier="merchantcity" multiplier="1.2" minavailable="1" sold="false" />
+        <Price storeidentifier="merchantresearch" sold="false" />
+        <Price storeidentifier="merchantmilitary" multiplier="0.9" sold="false" minavailable="3" />
+        <Price storeidentifier="merchantmine" sold="false" />
+        <Price storeidentifier="merchantarmory" multiplier="0.9" sold="false" minavailable="3" />
+      </Price>
+      <Deconstruct time="10">
+        <Item identifier="ballisticfiber" />
+      </Deconstruct>
+      <Sprite name="Ballistic Helmet 2 open" texture="%ModDir%/Content/UI/Inventory/headgears.png" sourcerect="373,364,85,86" depth="0.6" origin="0.5,0.5" />
+      <Body radius="30" density="25" />
+      <Wearable slots="Head" armorvalue="10.0" msg="ItemMsgPickUpSelect">
+        <damagemodifier afflictionidentifiers="blunttrauma,lacerations,gunshotwound" armorsector="0.0,360.0" damagemultiplier="0.5" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="explosiondamage" armorsector="0.0,360.0" damagemultiplier="0.6" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="bitewounds" armorsector="0.0,360.0" damagemultiplier="0.5" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictiontypes="bleeding" armorsector="0.0,360.0" damagemultiplier="0.5" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="concussion" armorsector="0.0,360.0" damagemultiplier="0.0" damagesound="" deflectprojectiles="true" />
+        <sprite name="Ballistic Helmet 2 Wearable open" texture="%ModDir%/Content/UI/Inventory/headgears.png" limb="Head" hidewearablesoftype="Hair" inheritlimbdepth="true" inheritscale="true" ignorelimbscale="true" scale="0.7" sourcerect="373,364,85,86" origin="0.50035435,0.58344555" />
+        <StatusEffect type="OnWearing" target="Character" HideFace="false" disabledeltatime="true" />
+        <CustomInterface canbeselected="false" drawhudwhenequipped="true">
+          <GuiFrame relativesize="0.07,0.08" anchor="CenterRight" pivot="CenterRight" relativeoffset="0.006,-1.06" />
+          <Button text="aar_visor_close">
+            <StatusEffect type="OnUse" targettype="This" interval="1" delay="1" stackable="false" duration="1">
+              <SpawnItem identifiers="aar_ballistichelmet2" spawnposition="SameInventory" Equip="true" SpawnIfInventoryFull="true" />
+              <Remove />
+            </StatusEffect>
+            <StatusEffect type="OnUse" targettype="This" interval="2" stackable="false">
+              <SpawnItem identifiers="aar_helmet-handle-down" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+            </StatusEffect>
+            <StatusEffect type="OnUse" targettype="This" interval="2" duration="2" noninteractable="true" AllowAccess="false" oneshot="true" stackable="false" />
+            <StatusEffect type="Always" targettype="This" oneshot="true" noninteractable="false" AllowAccess="true" stackable="false" />
+          </Button>
+        </CustomInterface>
+      </Wearable>
+      <Holdable slots="RightHand,LeftHand" controlpose="true" holdpos="30,-20" handle1="0,0" setvalue="true" />
+    </Item>
+    <Item name="" identifier="aar_ballistichelmet3" category="Equipment" tags="mediumitem,helmet" cargocontaineridentifier="metalcrate" description="" impactsoundtag="impact_metal_heavy" scale="0.4">
+      <PreferredContainer secondary="wreckarmcab,abandonedarmcab,piratearmcab,outpostarmcab" amount="1" spawnprobability="0.05" />
+      <PreferredContainer secondary="armcab" spawnprobability="0.02" />
+      <Price baseprice="320">
+        <Price storeidentifier="merchantoutpost" sold="false" multiplier="1.3" />
+        <Price storeidentifier="merchantcity" multiplier="1.2" minavailable="1" sold="false" />
+        <Price storeidentifier="merchantresearch" sold="false" />
+        <Price storeidentifier="merchantmilitary" multiplier="0.9" minavailable="3" />
+        <Price storeidentifier="merchantmine" sold="false" />
+        <Price storeidentifier="merchantarmory" multiplier="0.9" minavailable="3" />
+      </Price>
+      <Deconstruct time="10">
+        <Item identifier="ballisticfiber" />
+      </Deconstruct>
+      <Fabricate suitablefabricators="repair" requiredtime="20">
+        <RequiredSkill identifier="weapons" level="30" />
+        <RequiredItem identifier="ballisticfiber" amount="2" />
+        <RequiredItem identifier="plastic" amount="1" />
+      </Fabricate>
+      <Sprite name="Ballistic Helmet 3" texture="%ModDir%/Content/UI/Inventory/headgears.png" sourcerect="97,0,87,88" depth="0.6" origin="0.50192267,0.49881566" />
+      <Body radius="30" density="25" />
+      <Wearable slots="Head+HealthInterface" armorvalue="20.0" msg="ItemMsgPickUpSelect">
+        <damagemodifier afflictionidentifiers="blunttrauma,lacerations,bitewounds" armorsector="0.0,360.0" damagemultiplier="0.1" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="aar_pepper" armorsector="0.0,360.0" damagemultiplier="0" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="gunshotwound" armorsector="0.0,360.0" damagemultiplier="0.35" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="explosiondamage" armorsector="0.0,360.0" damagemultiplier="0.5" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictiontypes="bleeding" armorsector="0.0,360.0" damagemultiplier="0.1" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="concussion" armorsector="0.0,360.0" damagemultiplier="0.0" damagesound="" deflectprojectiles="true" />
+        <sprite name="Ballistic Helmet 3 Wearable" texture="%ModDir%/Content/UI/Inventory/headgears.png" limb="Head" hidewearablesoftype="Hair" inheritlimbdepth="true" inheritscale="true" ignorelimbscale="true" scale="0.7" sourcerect="97,0,87,88" origin="0.4972225,0.5525556" />
+        <StatusEffect type="OnWearing" target="Character" ObstructVisionAmount="0.01" HideFace="true" interval="1" duration="1.1" disabledeltatime="true" />
+        <CustomInterface canbeselected="false" drawhudwhenequipped="true">
+          <GuiFrame relativesize="0.07,0.08" anchor="CenterRight" pivot="CenterRight" relativeoffset="0.006,-1.06" style="ItemUI" />
+          <Button text="aar_visor_open">
+            <StatusEffect type="OnUse" targettype="This" interval="1" delay="1" stackable="false" duration="1">
+              <SpawnItem identifiers="aar_ballistichelmet3-open" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+              <Remove />
+            </StatusEffect>
+            <StatusEffect type="OnUse" targettype="This" interval="2" stackable="false">
+              <SpawnItem identifiers="aar_helmet-handle-up" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+            </StatusEffect>
+            <StatusEffect type="OnUse" targettype="This" interval="2" duration="2" noninteractable="true" AllowAccess="false" oneshot="true" stackable="false" />
+            <StatusEffect type="Always" targettype="This" oneshot="true" noninteractable="false" AllowAccess="true" stackable="false" />
+          </Button>
+        </CustomInterface>
+      </Wearable>
+      <Holdable slots="RightHand,LeftHand" controlpose="true" holdpos="30,-20" handle1="0,0" setvalue="true" />
+    </Item>
+    <Item name="" identifier="aar_ballistichelmet3-open" aliases="aar_ballistichelmet" category="Equipment" tags="mediumitem,helmet" Equip="true" cargocontaineridentifier="metalcrate" description="" impactsoundtag="impact_metal_heavy" scale="0.4">
+      <Upgrade gameversion="0.9.6.0" scale="0.325" />
+      <Price baseprice="320" sold="false">
+        <Price storeidentifier="merchantoutpost" sold="false" multiplier="1.3" />
+        <Price storeidentifier="merchantcity" multiplier="1.2" minavailable="1" sold="false" />
+        <Price storeidentifier="merchantresearch" sold="false" />
+        <Price storeidentifier="merchantmilitary" multiplier="0.9" sold="false" minavailable="3" />
+        <Price storeidentifier="merchantmine" sold="false" />
+        <Price storeidentifier="merchantarmory" multiplier="0.9" sold="false" minavailable="3" />
+      </Price>
+      <Deconstruct time="10">
+        <Item identifier="ballisticfiber" />
+      </Deconstruct>
+      <Sprite name="Ballistic Helmet 3 open" texture="%ModDir%/Content/UI/Inventory/headgears.png" sourcerect="13,247,91,94" depth="0.6" origin="0.50192267,0.49881566" />
+      <Body radius="30" density="25" />
+      <Wearable slots="Head" armorvalue="10.0" msg="ItemMsgPickUpSelect">
+        <damagemodifier afflictionidentifiers="lacerations,gunshotwound" armorsector="0.0,360.0" damagemultiplier="0.5" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="bitewounds, blunttrauma" armorsector="0.0,360.0" damagemultiplier="0.6" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictiontypes="bleeding" armorsector="0.0,360.0" damagemultiplier="0.4" damagesound="LimbArmor" deflectprojectiles="true" />
+        <sprite name="Ballistic Helmet 3 Wearable open" texture="%ModDir%/Content/UI/Inventory/headgears.png" limb="Head" inheritlimbdepth="true" inheritscale="true" ignorelimbscale="true" scale="0.7" hidewearablesoftype="Hair" sourcerect="13,247,91,94" origin="0.4626374,0.6021277" />
+        <CustomInterface canbeselected="false" drawhudwhenequipped="true">
+          <GuiFrame relativesize="0.07,0.08" anchor="CenterRight" pivot="CenterRight" relativeoffset="0.006,-1.06" />
+          <Button text="aar_visor_close">
+            <StatusEffect type="OnUse" targettype="This" interval="2" delay="1" stackable="false" duration="1">
+              <SpawnItem identifiers="aar_ballistichelmet3" spawnposition="SameInventory" Equip="true" SpawnIfInventoryFull="true" />
+              <Remove />
+            </StatusEffect>
+            <StatusEffect type="OnUse" targettype="This" interval="2" stackable="false">
+              <SpawnItem identifiers="aar_helmet-handle-down" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+            </StatusEffect>
+            <StatusEffect type="OnUse" targettype="This" interval="2" duration="2" noninteractable="true" AllowAccess="false" oneshot="true" stackable="false" />
+            <StatusEffect type="Always" targettype="This" oneshot="true" noninteractable="false" AllowAccess="true" stackable="false" />
+          </Button>
+        </CustomInterface>
+      </Wearable>
+      <Holdable slots="RightHand,LeftHand" controlpose="true" holdpos="30,-20" handle1="0,0" setvalue="true" />
+    </Item>
+    <Item name="" fallbacknameidentifier="aar_ballistichelmet1" identifier="aar_piratehelmet" aliases="aar_ballistichelmet" category="Equipment" tags="mediumitem,separatists,helmet" cargocontaineridentifier="metalcrate" description="" impactsoundtag="impact_metal_heavy" scale="0.4">
+      <Price baseprice="290" sold="false">
+        <Price storeidentifier="merchantoutpost" minavailable="1" maxavailable="2" sold="true">
+          <Reputation faction="separatists" min="45" />
+        </Price>
+        <Price storeidentifier="merchantcity" multiplier="1.2" minavailable="1" maxavailable="2" sold="true">
+          <Reputation faction="separatists" min="45" />
+        </Price>
+        <Price storeidentifier="merchantmilitary" multiplier="1.3" minavailable="1" maxavailable="2" sold="true">
+          <Reputation faction="separatists" min="45" />
+        </Price>
+        <Price storeidentifier="merchantresearch" />
+        <Price storeidentifier="merchantmine" multiplier="0.9" />
+      </Price>
+      <Deconstruct time="10">
+        <Item identifier="ballisticfiber" amount="2" />
+      </Deconstruct>
+      <Sprite name="Pirate Helmet" texture="%ModDir%/Content/UI/Inventory/headgears.png" sourcerect="283,0,86,85" depth="0.6" origin="0.4961613,0.5534929" />
+      <Body radius="30" density="30" />
+      <Wearable slots="Head+HealthInterface" armorvalue="20.0" ObstructVisionAmount="0.01" msg="ItemMsgPickUpSelect">
+        <damagemodifier afflictionidentifiers="lacerations,gunshotwound" armorsector="0.0,360.0" damagemultiplier="0.25" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="aar_pepper" armorsector="0.0,360.0" damagemultiplier="0" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="bitewounds, blunttrauma" armorsector="0.0,360.0" damagemultiplier="0.3" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="explosiondamage" armorsector="0.0,360.0" damagemultiplier="0.5" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictiontypes="bleeding" armorsector="0.0,360.0" damagemultiplier="0.1" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="concussion" armorsector="0.0,360.0" damagemultiplier="0.0" damagesound="" deflectprojectiles="true" />
+        <SkillModifier skillidentifier="weapons" skillvalue="5" />
+        <sprite name="Pirate Helmet 1 Wearable" texture="%ModDir%/Content/UI/Inventory/headgears.png" limb="Head" inheritlimbdepth="true" inheritscale="true" ignorelimbscale="true" scale="0.7" hidewearablesoftype="Hair" sourcerect="283,0,86,85" origin="0.44978398,0.5514886" />
+        <StatusEffect type="OnWearing" target="Character" ObstructVisionAmount="0.01" HideFace="true" interval="1" duration="1.1" disabledeltatime="true" />
+        <CustomInterface canbeselected="false" drawhudwhenequipped="true">
+          <GuiFrame relativesize="0.07,0.08" anchor="CenterRight" pivot="CenterRight" relativeoffset="0.006,-1.06" style="ItemUI" />
+          <Button text="aar_visor_open">
+            <StatusEffect type="OnUse" targettype="This" interval="1" delay="1" stackable="false" duration="1">
+              <SpawnItem identifiers="aar_piratehelmet1-open" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+              <Remove />
+            </StatusEffect>
+            <StatusEffect type="OnUse" targettype="This" interval="2" stackable="false">
+              <SpawnItem identifiers="aar_helmet-handle-up" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+            </StatusEffect>
+            <StatusEffect type="OnUse" targettype="This" interval="2" duration="2" noninteractable="true" AllowAccess="false" oneshot="true" stackable="false" />
+            <StatusEffect type="Always" targettype="This" oneshot="true" noninteractable="false" AllowAccess="true" stackable="false" />
+          </Button>
+        </CustomInterface>
+      </Wearable>
+      <Holdable slots="RightHand,LeftHand" controlpose="true" holdpos="30,-20" handle1="0,0" setvalue="true" />
+    </Item>
+    <Item name="" identifier="aar_piratehelmet1-open" aliases="aar_ballistichelmet" category="Equipment" tags="mediumitem,separatists,helmet" Equip="true" cargocontaineridentifier="metalcrate" description="" impactsoundtag="impact_metal_heavy" scale="0.4">
+      <Upgrade gameversion="0.9.6.0" scale="0.325" />
+      <Price baseprice="350" sold="false">
+        <Price storeidentifier="merchantoutpost" sold="false" />
+        <Price storeidentifier="merchantcity" multiplier="1.2" minavailable="1" sold="false" />
+        <Price storeidentifier="merchantmilitary" multiplier="1.3" sold="false" />
+        <Price storeidentifier="merchantresearch" sold="false" />
+        <Price storeidentifier="merchantmine" multiplier="0.9" sold="false" />
+      </Price>
+      <Deconstruct time="10">
+        <Item identifier="ballisticfiber" />
+      </Deconstruct>
+      <Sprite name="Pirate Helmet 1 open" texture="%ModDir%/Content/UI/Inventory/headgears.png" sourcerect="13,371,100,91" depth="0.6" origin="0.54840004,0.6543358" />
+      <Body radius="30" density="30" />
+      <Wearable slots="Head" armorvalue="10.0" msg="ItemMsgPickUpSelect">
+        <damagemodifier afflictionidentifiers="lacerations,gunshotwound" armorsector="0.0,360.0" damagemultiplier="0.5" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="bitewounds, blunttrauma" armorsector="0.0,360.0" damagemultiplier="0.6" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictiontypes="bleeding" armorsector="0.0,360.0" damagemultiplier="0.4" damagesound="LimbArmor" deflectprojectiles="true" />
+        <sprite name="Pirate Helmet 1 Wearable open" texture="%ModDir%/Content/UI/Inventory/headgears.png" limb="Head" inheritlimbdepth="true" inheritscale="true" ignorelimbscale="true" scale="0.7" hidewearablesoftype="Hair" sourcerect="13,371,100,91" origin="0.50179505,0.7522899" />
+        <CustomInterface canbeselected="false" drawhudwhenequipped="true">
+          <GuiFrame relativesize="0.07,0.08" anchor="CenterRight" pivot="CenterRight" relativeoffset="0.006,-1.06" />
+          <Button text="aar_visor_close">
+            <StatusEffect type="OnUse" targettype="This" interval="2" delay="1" stackable="false" duration="1">
+              <SpawnItem identifiers="aar_piratehelmet" spawnposition="SameInventory" Equip="true" SpawnIfInventoryFull="true" />
+              <Remove />
+            </StatusEffect>
+            <StatusEffect type="OnUse" targettype="This" interval="2" duration="2" noninteractable="true" AllowAccess="false" oneshot="true" stackable="false" />
+            <StatusEffect type="Always" targettype="This" oneshot="true" noninteractable="false" AllowAccess="true" stackable="false" />
+            <StatusEffect type="OnUse" targettype="This" interval="2" stackable="false">
+              <SpawnItem identifiers="aar_helmet-handle-down" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+            </StatusEffect>
+          </Button>
+        </CustomInterface>
+      </Wearable>
+      <Holdable slots="RightHand,LeftHand" controlpose="true" holdpos="30,-20" handle1="0,0" setvalue="true" />
+    </Item>
+    <Item name="" identifier="aar_piratehelmet3" aliases="aar_ballistichelmet" category="Equipment" tags="mediumitem,separatists,helmet" cargocontaineridentifier="metalcrate" description="" impactsoundtag="impact_metal_heavy" scale="0.4">
+      <Price baseprice="205" sold="false">
+        <Price storeidentifier="merchantoutpost" minavailable="1" maxavailable="2" sold="true">
+          <Reputation faction="separatists" min="30" />
+        </Price>
+        <Price storeidentifier="merchantcity" multiplier="1.4" minavailable="1" maxavailable="2" sold="true">
+          <Reputation faction="separatists" min="30" />
+        </Price>
+        <Price storeidentifier="merchantmilitary" multiplier="1.1" minavailable="1" maxavailable="2" sold="true">
+          <Reputation faction="separatists" min="30" />
+        </Price>
+        <Price storeidentifier="merchantresearch" />
+        <Price storeidentifier="merchantmine" multiplier="0.9" />
+      </Price>
+      <Deconstruct time="10">
+        <Item identifier="ballisticfiber" />
+      </Deconstruct>
+      <Sprite name="Pirate Helmet 2" texture="%ModDir%/Content/UI/Inventory/headgears.png" sourcerect="4,119,86,91" depth="0.6" origin="0.49477702,0.49842563" />
+      <Body radius="30" density="30" />
+      <Wearable slots="Head+HealthInterface" armorvalue="20.0" msg="ItemMsgPickUpSelect">
+        <damagemodifier afflictionidentifiers="lacerations,gunshotwound" armorsector="0.0,360.0" damagemultiplier="0.45" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="aar_pepper" armorsector="0.0,360.0" damagemultiplier="0" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="bitewounds, blunttrauma" armorsector="0.0,360.0" damagemultiplier="0.5" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="explosiondamage" armorsector="0.0,360.0" damagemultiplier="0.7" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictiontypes="bleeding" armorsector="0.0,360.0" damagemultiplier="0.4" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="concussion" armorsector="0.0,360.0" damagemultiplier="0.0" damagesound="" deflectprojectiles="true" />
+        <SkillModifier skillidentifier="weapons" skillvalue="5" />
+        <sprite name="Pirate Helmet 2 Wearable open" texture="%ModDir%/Content/UI/Inventory/headgears.png" limb="Head" inheritlimbdepth="true" inheritscale="true" ignorelimbscale="true" scale="0.7" hidewearablesoftype="Hair" sourcerect="4,119,86,91" origin="0.49509433,0.4955401" />
+        <StatusEffect type="OnWearing" target="Character" HideFace="true" interval="1" duration="1.1" disabledeltatime="true" />
+        <CustomInterface canbeselected="false" drawhudwhenequipped="true">
+          <GuiFrame relativesize="0.07,0.08" anchor="CenterRight" pivot="CenterRight" relativeoffset="0.006,-1.06" style="ItemUI" />
+          <Button text="aar_visor_open">
+            <StatusEffect type="OnUse" targettype="This" interval="1" delay="1" stackable="false" duration="1">
+              <SpawnItem identifiers="aar_piratehelmet3-open" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+              <Remove />
+            </StatusEffect>
+            <StatusEffect type="OnUse" targettype="This" interval="2" stackable="false">
+              <SpawnItem identifiers="aar_helmet-handle-up" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+            </StatusEffect>
+            <StatusEffect type="OnUse" targettype="This" interval="2" duration="2" noninteractable="true" AllowAccess="false" oneshot="true" stackable="false" />
+            <StatusEffect type="Always" targettype="This" oneshot="true" noninteractable="false" AllowAccess="true" stackable="false" />
+          </Button>
+        </CustomInterface>
+      </Wearable>
+      <Holdable slots="RightHand,LeftHand" controlpose="true" holdpos="30,-20" handle1="0,0" setvalue="true" />
+    </Item>
+    <Item name="" identifier="aar_piratehelmet3-open" aliases="aar_ballistichelmet" category="Equipment" tags="mediumitem,separatists,helmet" Equip="true" cargocontaineridentifier="metalcrate" description="" impactsoundtag="impact_metal_heavy" scale="0.4">
+      <Price baseprice="205" sold="false">
+        <Price storeidentifier="merchantoutpost" sold="false" minavailable="1" maxavailable="2">
+          <Reputation faction="separatists" min="30" />
+        </Price>
+        <Price storeidentifier="merchantcity" multiplier="1.4" minavailable="1" maxavailable="2" sold="false">
+          <Reputation faction="separatists" min="30" />
+        </Price>
+        <Price storeidentifier="merchantmilitary" multiplier="1.1" minavailable="1" maxavailable="2" sold="false">
+          <Reputation faction="separatists" min="30" />
+        </Price>
+        <Price storeidentifier="merchantresearch" sold="false" />
+        <Price storeidentifier="merchantmine" multiplier="0.9" sold="false" />
+      </Price>
+      <Deconstruct time="10">
+        <Item identifier="ballisticfiber" />
+      </Deconstruct>
+      <Sprite name="Pirate Helmet 3 open" texture="%ModDir%/Content/UI/Inventory/headgears.png" sourcerect="373,455,86,91" depth="0.6" origin="0.49477702,0.49842563" />
+      <Body radius="30" density="30" />
+      <Wearable slots="Head" armorvalue="12.0" msg="ItemMsgPickUpSelect">
+        <damagemodifier afflictionidentifiers="lacerations,gunshotwound" armorsector="0.0,360.0" damagemultiplier="0.45" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="bitewounds, blunttrauma" armorsector="0.0,360.0" damagemultiplier="0.5" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="explosiondamage" armorsector="0.0,360.0" damagemultiplier="0.7" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictiontypes="bleeding" armorsector="0.0,360.0" damagemultiplier="0.4" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="concussion" armorsector="0.0,360.0" damagemultiplier="0.0" damagesound="" deflectprojectiles="true" />
+        <sprite name="Pirate Helmet 3 Wearable open" texture="%ModDir%/Content/UI/Inventory/headgears.png" limb="Head" inheritlimbdepth="true" inheritscale="true" ignorelimbscale="true" scale="0.7" hidewearablesoftype="Hair" sourcerect="373,455,86,91" origin="0.49829465,0.49655014" />
+        <StatusEffect type="OnWearing" target="Character" HideFace="false" disabledeltatime="true" />
+        <CustomInterface canbeselected="false" drawhudwhenequipped="true">
+          <GuiFrame relativesize="0.1,0.1" anchor="CenterRight" pivot="CenterRight" relativeoffset="0.006,-1.06" style="ItemUI" />
+          <Button text="aar_visor_close">
+            <StatusEffect type="OnUse" targettype="This" interval="1" delay="1" duration="1" stackable="false">
+              <SpawnItem identifiers="aar_piratehelmet3" spawnposition="SameInventory" Equip="true" SpawnIfInventoryFull="true" />
+              <Remove />
+            </StatusEffect>
+            <StatusEffect type="OnUse" targettype="This" interval="2" stackable="false">
+              <SpawnItem identifiers="aar_helmet-handle-down" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+            </StatusEffect>
+            <StatusEffect type="OnUse" targettype="This" interval="2" duration="2" noninteractable="true" AllowAccess="false" oneshot="true" stackable="false" />
+            <StatusEffect type="Always" targettype="This" oneshot="true" noninteractable="false" AllowAccess="true" stackable="false" />
+          </Button>
+        </CustomInterface>
+      </Wearable>
+      <Holdable slots="RightHand,LeftHand" controlpose="true" holdpos="30,-20" handle1="0,0" setvalue="true" />
+    </Item>
+    <Item name="" identifier="aar_piratehelmet2" aliases="aar_ballistichelmet" category="Equipment" tags="mediumitem,separatists,mobileradio" cargocontaineridentifier="metalcrate" description="" impactsoundtag="impact_metal_heavy" scale="0.4">
+      <Price baseprice="350">
+        <Price storeidentifier="merchantoutpost" minavailable="1" maxavailable="2" sold="false">
+          <Reputation faction="separatists" min="45" />
+        </Price>
+        <Price storeidentifier="merchantcity" multiplier="1.2" minavailable="1" maxavailable="2" sold="false">
+          <Reputation faction="separatists" min="45" />
+        </Price>
+        <Price storeidentifier="merchantmilitary" multiplier="1.3" minavailable="1" maxavailable="2" sold="false">
+          <Reputation faction="separatists" min="45" />
+        </Price>
+        <Price storeidentifier="merchantresearch" sold="false" />
+        <Price storeidentifier="merchantmine" multiplier="0.9" sold="false" />
+      </Price>
+      <Deconstruct time="10">
+        <Item identifier="ballisticfiber" />
+      </Deconstruct>
+      <Sprite name="Pirate Helmet 2" texture="%ModDir%/Content/UI/Inventory/headgears.png" sourcerect="282,101,86,85" depth="0.6" origin="0.4961613,0.5534929" />
+      <Body radius="30" density="30" />
+      <Wearable slots="Head+HealthInterface" armorvalue="20.0" msg="ItemMsgPickUpSelect">
+        <damagemodifier afflictionidentifiers="lacerations,gunshotwound" armorsector="0.0,360.0" damagemultiplier="0.1" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="aar_pepper" armorsector="0.0,360.0" damagemultiplier="0" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="explosiondamage" armorsector="0.0,360.0" damagemultiplier="0.3" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="bitewounds, blunttrauma" armorsector="0.0,360.0" damagemultiplier="0.5" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictiontypes="bleeding" armorsector="0.0,360.0" damagemultiplier="0.3" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="concussion" armorsector="0.0,360.0" damagemultiplier="0.0" damagesound="" deflectprojectiles="true" />
+        <SkillModifier skillidentifier="weapons" skillvalue="5" />
+        <sprite name="Pirate Helmet 2 Wearable" texture="%ModDir%/Content/UI/Inventory/headgears.png" limb="Head" inheritlimbdepth="true" inheritscale="true" ignorelimbscale="true" scale="0.65" hidewearablesoftype="Hair" sourcerect="282,101,86,85" origin="0.44978398,0.5514886" />
+        <StatusEffect type="OnWearing" target="Character" ObstructVisionAmount="10" HideFace="true" interval="1" duration="1.1" disabledeltatime="true" />
+        <CustomInterface canbeselected="false" drawhudwhenequipped="true">
+          <GuiFrame relativesize="0.1,0.1" anchor="CenterRight" pivot="CenterRight" relativeoffset="0.006,-1.06" style="ItemUI" />
+          <Button text="aar_visor_open">
+            <StatusEffect type="OnUse" targettype="This" interval="1" delay="1" stackable="false" duration="1">
+              <SpawnItem identifiers="aar_piratehelmet2-open" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+              <Remove />
+            </StatusEffect>
+            <StatusEffect type="OnUse" targettype="This" interval="2" stackable="false">
+              <SpawnItem identifiers="aar_helmet-handle-up" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+            </StatusEffect>
+            <StatusEffect type="OnUse" targettype="This" interval="2" duration="2" noninteractable="true" AllowAccess="false" oneshot="true" stackable="false" />
+            <StatusEffect type="Always" targettype="This" oneshot="true" noninteractable="false" AllowAccess="true" stackable="false" />
+          </Button>
+        </CustomInterface>
+      </Wearable>
+      <Holdable slots="RightHand,LeftHand" controlpose="true" holdpos="30,-20" handle1="0,0" setvalue="true" />
+    </Item>
+    <Item name="" identifier="aar_piratehelmet2-open" aliases="aar_ballistichelmet" category="Equipment" tags="mediumitem,separatists,mobileradio" Equip="true" cargocontaineridentifier="metalcrate" description="" impactsoundtag="impact_metal_heavy" scale="0.4">
+      <Upgrade gameversion="0.9.6.0" scale="0.325" />
+      <Price baseprice="350" sold="false">
+        <Price storeidentifier="merchantoutpost" sold="false" />
+        <Price storeidentifier="merchantcity" multiplier="1.2" minavailable="1" sold="false" />
+        <Price storeidentifier="merchantmilitary" multiplier="1.3" sold="false" />
+        <Price storeidentifier="merchantresearch" sold="false" />
+        <Price storeidentifier="merchantmine" multiplier="0.9" sold="false" />
+      </Price>
+      <Deconstruct time="10">
+        <Item identifier="ballisticfiber" />
+      </Deconstruct>
+      <Sprite name="Pirate Helmet 2 open" texture="%ModDir%/Content/UI/Inventory/headgears.png" sourcerect="134,372,101,90" depth="0.6" origin="0.49837998,0.64953446" />
+      <Body radius="30" density="30" />
+      <Wearable slots="Head" armorvalue="10.0" msg="ItemMsgPickUpSelect">
+        <damagemodifier afflictionidentifiers="lacerations,gunshotwound" armorsector="0.0,360.0" damagemultiplier="0.5" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="bitewounds, blunttrauma" armorsector="0.0,360.0" damagemultiplier="0.6" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictiontypes="bleeding" armorsector="0.0,360.0" damagemultiplier="0.4" damagesound="LimbArmor" deflectprojectiles="true" />
+        <sprite name="Pirate Helmet 2 Wearable open" texture="%ModDir%/Content/UI/Inventory/headgears.png" limb="Head" inheritlimbdepth="true" inheritscale="true" ignorelimbscale="true" scale="0.65" hidewearablesoftype="Hair" sourcerect="134,372,101,90" origin="0.5041115,0.7459052" />
+        <CustomInterface canbeselected="false" drawhudwhenequipped="true">
+          <GuiFrame relativesize="0.07,0.08" anchor="CenterRight" pivot="CenterRight" relativeoffset="0.006,-1.06" />
+          <Button text="aar_visor_close">
+            <StatusEffect type="OnUse" targettype="This" interval="2" delay="1" stackable="false" duration="1">
+              <SpawnItem identifiers="aar_piratehelmet2" spawnposition="SameInventory" Equip="true" SpawnIfInventoryFull="true" />
+              <Remove />
+            </StatusEffect>
+            <StatusEffect type="OnUse" targettype="This" interval="2" duration="2" noninteractable="true" AllowAccess="false" oneshot="true" stackable="false" />
+            <StatusEffect type="Always" targettype="This" oneshot="true" noninteractable="false" AllowAccess="true" stackable="false" />
+            <StatusEffect type="OnUse" targettype="This" interval="2" stackable="false">
+              <SpawnItem identifiers="aar_helmet-handle-down" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+            </StatusEffect>
+          </Button>
+        </CustomInterface>
+      </Wearable>
+      <Holdable slots="RightHand,LeftHand" controlpose="true" holdpos="30,-20" handle1="0,0" setvalue="true" />
+    </Item>
+    <Item name="" identifier="aar_ballistichelmet4" aliases="aar_ballistichelmet" category="Equipment" tags="mediumitem,helmet,diving" cargocontaineridentifier="metalcrate" description="" impactsoundtag="impact_metal_heavy" scale="0.35">
+      <Upgrade gameversion="0.9.6.0" scale="0.325" />
+      <PreferredContainer secondary="wreckarmcab,abandonedarmcab,piratearmcab,outpostarmcab" amount="1" spawnprobability="0.01" />
+      <PreferredContainer secondary="armcab" spawnprobability="0.01" />
+      <Price baseprice="1200" minleveldifficulty="65">
+        <Price storeidentifier="merchantoutpost" sold="false" multiplier="1.3" />
+        <Price storeidentifier="merchantcity" multiplier="1.2" minavailable="1" sold="false" />
+        <Price storeidentifier="merchantresearch" sold="false" />
+        <Price storeidentifier="merchantmilitary" multiplier="1.2">
+          <Reputation faction="coalition" min="50" />
+        </Price>
+        <Price storeidentifier="merchantmine" sold="false" />
+        <Price storeidentifier="merchantarmory" multiplier="0.9" sold="false" minavailable="2">
+          <Reputation faction="coalition" min="50" />
+        </Price>
+      </Price>
+      <Deconstruct time="25">
+        <Item identifier="aar_nvg-anim" />
+        <Item identifier="aar_ballistichelmet5" />
+      </Deconstruct>
+      <Fabricate suitablefabricators="repair" requiredtime="40" requiresrecipe="true">
+        <RequiredSkill identifier="weapons" level="55" />
+        <RequiredItem identifier="titaniumaluminiumalloy" amount="1" />
+        <RequiredItem identifier="aar_ballistichelmet5" amount="1" />
+        <RequiredItem identifier="divingmask" amount="1" />
+        <RequiredItem identifier="aar_nvg-anim" amount="1" />
+      </Fabricate>
+      <Sprite name="Ballistic Helmet 4" texture="%ModDir%/Content/UI/Inventory/headgears.png" sourcerect="383,0,99,92" depth="0.6" origin="0.5,0.5" />
+      <Body radius="30" density="30" />
+      <Turret HudTint="15,15,35,45" drawhudwhenequipped="true">
+        <StatusEffect type="OnActive" target="this" HudTint="0,0,0,0" disabledeltatime="true" setvalue="true">
+          <Conditional hasstatustag="neq powered" />
+        </StatusEffect>
+        <StatusEffect type="OnActive" target="this" HudTint="15,15,35,45" disabledeltatime="true" setvalue="true">
+          <Conditional hasstatustag="powered" />
+        </StatusEffect>
+      </Turret>
+      <Wearable slots="Head+HealthInterface" armorvalue="30.0" msg="ItemMsgPickUpSelect">
+        <damagemodifier afflictionidentifiers="lacerations,gunshotwound" armorsector="0.0,360.0" damagemultiplier="0.1" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="aar_pepper" armorsector="0.0,360.0" damagemultiplier="0" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="bitewounds, blunttrauma" armorsector="0.0,360.0" damagemultiplier="0.2" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="explosiondamage" armorsector="0.0,360.0" damagemultiplier="0.3" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictiontypes="bleeding" armorsector="0.0,360.0" damagemultiplier="0.05" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="concussion" armorsector="0.0,360.0" damagemultiplier="0.0" damagesound="" deflectprojectiles="true" />
+        <sprite name="Ballistic Helmet 4 Wearable" texture="%ModDir%/Content/UI/Inventory/headgears.png" limb="Head" inheritlimbdepth="true" inheritscale="true" ignorelimbscale="true" scale="0.65" hidewearablesoftype="Hair" sourcerect="383,0,99,92" origin="0.49670944,0.5487734" maxcondition="100">
+          <LightComponent LightColor="200,200,255,255" range="10000" flicker="0.2" flickerspeed="0.1" IsOn="true" castshadows="false" powerconsumption="1">
+            <LightTexture texture="Content/Lights/visioncircle.png" origin="0.5,0.5" />
+            <StatusEffect type="OnWearing" target="This,Character" Voltage="1.0" setvalue="true" comparison="and">
+              <Sound file="%ModDir%/Content/Items/Armor/Sounds/thermal_on.ogg" range="150" loop="true" volume="0.1" />
+              <Conditional IsDead="false" targetcontainer="true" />
+              <Conditional hasstatustag="powered" />
+              <Conditional IsLocalPlayer="true" targetcontainer="true" />
+            </StatusEffect>
+          </LightComponent>
+          <LightComponent LightColor="200,200,255,255" range="10000" flicker="0.2" flickerspeed="0.1" IsOn="true" castshadows="false" powerconsumption="1">
+            <LightTexture texture="Content/Lights/visioncircle.png" origin="0.5,0.5" />
+            <StatusEffect type="OnWearing" target="This,Character" Voltage="1.0" setvalue="true" comparison="and">
+              <Sound file="%ModDir%/Content/Items/Armor/Sounds/thermal_on.ogg" range="150" loop="true" volume="0.05" />
+              <Conditional IsDead="false" targetcontainer="true" />
+              <Conditional hasstatustag="powered" />
+              <Conditional IsLocalPlayer="true" targetcontainer="true" />
+            </StatusEffect>
+          </LightComponent>
+        </sprite>
+        <StatusEffect type="OnWearing" target="Character" ObstructVisionAmount="10" setvalue="true" interval="1" duration="1.1" disabledeltatime="true" />
+        <StatusEffect type="OnWearing" target="Character" UseHullOxygen="false" OxygenAvailable="1000.0" comparison="and">
+          <RequiredItem items="oxygensource" type="Contained" />
+        </StatusEffect>
+        <StatusEffect type="OnWearing" target="Character" UseHullOxygen="true" comparison="and">
+          <Conditional HullOxygenPercentage="gt 50" />
+          <RequiredItem items="oxygensource" type="Contained" />
+        </StatusEffect>
+        <StatusEffect type="OnWearing" target="Contained" Condition="-0.3" comparison="and" targetslot="0">
+          <Conditional targetcontainer="true" targetgrandparent="true" IsDead="false" />
+          <Conditional targetcontainer="true" targetgrandparent="true" DecreasedOxygenConsumption="lt 99" />
+          <Conditional targetcontainer="true" targetgrandparent="true" HullOxygenPercentage="lt 50" />
+          <Conditional targetcontainer="true" targetgrandparent="true" NeedsAir="true" />
+          <Conditional InWater="false" />
+          <RequiredItem items="oxygensource" type="Contained" />
+        </StatusEffect>
+        <StatusEffect type="OnWearing" target="Contained" Condition="-0.3" comparison="and" targetslot="0">
+          <Conditional targetcontainer="true" targetgrandparent="true" IsDead="false" />
+          <Conditional targetcontainer="true" targetgrandparent="true" DecreasedOxygenConsumption="lt 99" />
+          <Conditional targetcontainer="true" targetgrandparent="true" NeedsAir="true" />
+          <Conditional InWater="true" />
+          <RequiredItem items="oxygensource" type="Contained" />
+        </StatusEffect>
+        <StatusEffect type="OnWearing" target="Contained" Condition="-0.2">
+          <Conditional hasstatustag="powered" targetcontainer="true" />
+        </StatusEffect>
+      </Wearable>
+      <ItemContainer capacity="1" slotsperrow="1" maxstacksize="1" hideitems="true" containedstateindicatorstyle="tank" containedstateindicatorslot="0">
+        <SlotIcon slotindex="0" texture="Content/UI/StatusMonitorUI.png" sourcerect="64,448,64,64" origin="0.5,0.5" />
+        <Containable items="oxygensource,weldingtoolfuel" excludeditems="oxygenitetank" />
+        <Containable items="oxygensource" />
+        <Containable items="oxygenitetank">
+          <StatusEffect type="OnWearing" target="Character" SpeedMultiplier="1.2" setvalue="true" comparison="and">
+            <Conditional IsDead="false" />
+            <Conditional DecreasedOxygenConsumption="lt 99" />
+            <Conditional NeedsAir="true" />
+          </StatusEffect>
+        </Containable>
+        <Containable items="weldingfueltank" blameequipperfordeath="true">
+          <StatusEffect type="OnWearing" target="Contained" Condition="-0.5" comparison="and">
+            <Conditional TargetContainer="true" TargetGrandparent="true" IsDead="false" />
+            <Conditional TargetContainer="true" TargetGrandparent="true" DecreasedOxygenConsumption="lt 99" />
+            <Conditional TargetContainer="true" TargetGrandparent="true" NeedsAir="true" />
+          </StatusEffect>
+          <StatusEffect type="OnWearing" target="Character" OxygenAvailable="-100.0" Oxygen="-5.0" comparison="and">
+            <Conditional IsDead="false" />
+            <Conditional DecreasedOxygenConsumption="lt 99" />
+            <Conditional NeedsAir="true" />
+          </StatusEffect>
+        </Containable>
+        <Containable items="incendiumfueltank" blameequipperfordeath="true">
+          <StatusEffect type="OnWearing" target="Contained" Condition="-0.5" comparison="and">
+            <Conditional TargetContainer="true" TargetGrandparent="true" IsDead="false" />
+            <Conditional TargetContainer="true" TargetGrandparent="true" DecreasedOxygenConsumption="lt 99" />
+            <Conditional TargetContainer="true" TargetGrandparent="true" NeedsAir="true" />
+          </StatusEffect>
+          <StatusEffect type="OnWearing" target="Character" OxygenAvailable="-100.0" comparison="and" targetlimb="Torso">
+            <Affliction identifier="burn" amount="20.0" />
+            <Conditional IsDead="false" />
+            <Conditional DecreasedOxygenConsumption="lt 99" />
+            <Conditional NeedsAir="true" />
+          </StatusEffect>
+          <StatusEffect type="OnInserted" target="This" Condition="50" setvalue="true">
+            <RequiredItem items="oxygensource" type="Contained" />
+          </StatusEffect>
+          <StatusEffect type="OnRemoved" target="This" Condition="100" setvalue="true">
+            <RequiredItem items="oxygensource" type="Contained" />
+          </StatusEffect>
+        </Containable>
+        <SubContainer capacity="1" maxstacksize="1" hideitems="true" containedstateindicatorstyle="battery">
+          <Containable items="mobilebattery" />
+          <SlotIcon slotindex="0" texture="Content/UI/StatusMonitorUI.png" sourcerect="128,448,64,64" origin="0.5,0.5" />
+        </SubContainer>
+      </ItemContainer>
+      <CustomInterface canbeselected="true" drawhudwhenequipped="true">
+        <GuiFrame relativesize="0.08,0.08" anchor="Left" absoluteoffset="25,98" style="ItemUI" />
+        <TickBox text="aar_nvg_toggle">
+          <StatusEffect type="OnUse" target="This" tags="powered" duration="0.2">
+            <RequiredItem items="mobilebattery" type="Contained" />
+          </StatusEffect>
+        </TickBox>
+      </CustomInterface>
+      <Holdable slots="RightHand,LeftHand" controlpose="true" holdpos="30,-20" handle1="0,0" setvalue="true" />
+    </Item>
+    <Item name="" identifier="aar_ballistichelmet5" aliases="aar_ballistichelmet" category="Equipment" tags="mediumitem,helmet" cargocontaineridentifier="metalcrate" description="" impactsoundtag="impact_metal_heavy" scale="0.35">
+      <Upgrade gameversion="0.9.6.0" scale="0.325" />
+      <PreferredContainer secondary="wreckarmcab,abandonedarmcab,piratearmcab,outpostarmcab" amount="1" spawnprobability="0.025" />
+      <PreferredContainer secondary="armcab" spawnprobability="0.025" />
+      <Price baseprice="750" minleveldifficulty="45">
+        <Price storeidentifier="merchantoutpost" sold="false" multiplier="1.3" />
+        <Price storeidentifier="merchantcity" multiplier="1.2" minavailable="1">
+          <Reputation faction="coalition" min="35" />
+        </Price>
+        <Price storeidentifier="merchantresearch" sold="false" />
+        <Price storeidentifier="merchantmilitary" multiplier="1.2">
+          <Reputation faction="coalition" min="35" />
+        </Price>
+        <Price storeidentifier="merchantmine" sold="false" />
+        <Price storeidentifier="merchantarmory" multiplier="0.9" minavailable="1">
+          <Reputation faction="coalition" min="35" />
+        </Price>
+      </Price>
+      <Deconstruct time="15">
+        <Item identifier="titaniumaluminiumalloy" />
+        <Item identifier="aar_ballistichelmet2" />
+      </Deconstruct>
+      <Fabricate suitablefabricators="repair" requiredtime="45">
+        <RequiredSkill identifier="weapons" level="60" />
+        <RequiredItem identifier="titaniumaluminiumalloy" amount="1" />
+        <RequiredItem identifier="ballisticfiber" amount="1" />
+        <RequiredItem identifier="aar_ballistichelmet2" amount="1" />
+        <RequiredItem identifier="fulgurium" amount="1" />
+      </Fabricate>
+      <Sprite name="Ballistic Helmet 5" texture="%ModDir%/Content/UI/Inventory/headgears.png" sourcerect="384,104,99,94" depth="0.6" origin="0.5005281,0.47936887" />
+      <Body radius="30" density="30" />
+      <Wearable slots="Head+HealthInterface" armorvalue="20.0" msg="ItemMsgPickUpSelect">
+        <damagemodifier afflictionidentifiers="lacerations,gunshotwound" armorsector="0.0,360.0" damagemultiplier="0.15" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="aar_pepper" armorsector="0.0,360.0" damagemultiplier="0" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="bitewounds, blunttrauma" armorsector="0.0,360.0" damagemultiplier="0.25" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="explosiondamage" armorsector="0.0,360.0" damagemultiplier="0.35" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictiontypes="bleeding" armorsector="0.0,360.0" damagemultiplier="0.1" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="concussion" armorsector="0.0,360.0" damagemultiplier="0.0" damagesound="" deflectprojectiles="true" />
+        <sprite name="Ballistic Helmet 5 Wearable" texture="%ModDir%/Content/UI/Inventory/headgears.png" limb="Head" inheritlimbdepth="true" inheritscale="true" ignorelimbscale="true" scale="0.65" hidewearablesoftype="Hair" sourcerect="384,104,99,94" origin="0.49330878,0.5297912" maxcondition="100" />
+        <StatusEffect type="OnWearing" target="Character" ObstructVisionAmount="0.8" interval="1" duration="1.1" setvalue="true" disabledeltatime="true" />
+        <CustomInterface canbeselected="false" drawhudwhenequipped="true">
+          <GuiFrame relativesize="0.07,0.08" anchor="CenterRight" pivot="CenterRight" relativeoffset="0.006,-1.06" style="ItemUI" />
+          <Button text="aar_visor_open">
+            <StatusEffect type="OnUse" targettype="This" interval="1" delay="1" stackable="false" duration="1">
+              <SpawnItem identifiers="aar_ballistichelmet5-open" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+              <Remove />
+            </StatusEffect>
+            <StatusEffect type="OnUse" targettype="This" interval="2" stackable="false">
+              <SpawnItem identifiers="aar_helmet-handle-up" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+            </StatusEffect>
+            <StatusEffect type="OnUse" targettype="This" interval="2" duration="2" noninteractable="true" AllowAccess="false" oneshot="true" stackable="false" />
+            <StatusEffect type="Always" targettype="This" oneshot="true" noninteractable="false" AllowAccess="true" stackable="false" />
+          </Button>
+        </CustomInterface>
+      </Wearable>
+      <Holdable slots="RightHand,LeftHand" controlpose="true" holdpos="30,-20" handle1="0,0" setvalue="true" />
+    </Item>
+    <Item name="" identifier="aar_ballistichelmet5-open" aliases="aar_ballistichelmet" category="Equipment" tags="mediumitem,helmet" Equip="true" cargocontaineridentifier="metalcrate" description="" impactsoundtag="impact_metal_heavy" scale="0.35">
+      <Upgrade gameversion="0.9.6.0" scale="0.325" />
+      <Deconstruct time="15">
+        <Item identifier="titaniumaluminiumalloy" />
+        <Item identifier="aar_ballistichelmet2" />
+      </Deconstruct>
+      <Sprite name="Ballistic Helmet 5 open" texture="%ModDir%/Content/UI/Inventory/headgears.png" sourcerect="473,488,99,94" depth="0.6" origin="0.5005281,0.47936887" />
+      <Body radius="30" density="30" />
+      <Wearable slots="Head" armorvalue="12.0" msg="ItemMsgPickUpSelect">
+        <damagemodifier afflictionidentifiers="lacerations,gunshotwound" armorsector="0.0,360.0" damagemultiplier="0.35" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="bitewounds, blunttrauma" armorsector="0.0,360.0" damagemultiplier="0.45" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="explosiondamage" armorsector="0.0,360.0" damagemultiplier="0.55" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictiontypes="bleeding" armorsector="0.0,360.0" damagemultiplier="0.3" damagesound="LimbArmor" deflectprojectiles="true" />
+        <sprite name="Ballistic Helmet 5 Wearable open" texture="%ModDir%/Content/UI/Inventory/headgears.png" limb="Head" inheritlimbdepth="true" inheritscale="true" ignorelimbscale="true" scale="0.65" hidewearablesoftype="Hair" sourcerect="473,488,99,94" origin="0.49330878,0.5297912" />
+        <CustomInterface canbeselected="false" drawhudwhenequipped="true">
+          <GuiFrame relativesize="0.07,0.08" anchor="CenterRight" pivot="CenterRight" relativeoffset="0.006,-1.06" />
+          <Button text="aar_visor_close">
+            <StatusEffect type="OnUse" targettype="This" interval="1" delay="1" duration="1" stackable="false">
+              <SpawnItem identifiers="aar_ballistichelmet5" spawnposition="SameInventory" Equip="true" SpawnIfInventoryFull="true" />
+              <Remove />
+            </StatusEffect>
+            <StatusEffect type="OnUse" targettype="This" interval="2" stackable="false">
+              <SpawnItem identifiers="aar_helmet-handle-down" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+            </StatusEffect>
+            <StatusEffect type="OnUse" targettype="This" interval="2" duration="2" noninteractable="true" AllowAccess="false" oneshot="true" stackable="false" />
+            <StatusEffect type="Always" targettype="This" oneshot="true" noninteractable="false" AllowAccess="true" stackable="false" />
+          </Button>
+        </CustomInterface>
+      </Wearable>
+      <Holdable slots="RightHand,LeftHand" controlpose="true" holdpos="30,-20" handle1="0,0" setvalue="true" />
+    </Item>
+    <Item name="" identifier="aar_ballistichelmet7" aliases="aar_ballistichelmet" category="Equipment" tags="mediumitem,helmet,geneticdevice" InvulnerableToDamage="true" cargocontaineridentifier="metalcrate" description="" impactsoundtag="impact_metal_heavy" scale="0.35">
+      <Upgrade gameversion="0.9.6.0" scale="0.325" />
+      <PreferredContainer secondary="wreckarmcab,abandonedarmcab,piratearmcab,outpostarmcab" amount="1" spawnprobability="0.02" />
+      <PreferredContainer secondary="armcab" spawnprobability="0.02" />
+      <Price baseprice="800" minleveldifficulty="35">
+        <Price storeidentifier="merchantoutpost" sold="false" multiplier="1.3" />
+        <Price storeidentifier="merchantcity" multiplier="1.2" minavailable="1">
+          <Reputation faction="coalition" min="45" />
+        </Price>
+        <Price storeidentifier="merchantresearch" sold="false" />
+        <Price storeidentifier="merchantmilitary" multiplier="1.2">
+          <Reputation faction="coalition" min="35" />
+        </Price>
+        <Price storeidentifier="merchantmine" sold="false" />
+        <Price storeidentifier="merchantarmory" multiplier="0.9" minavailable="2">
+          <Reputation faction="coalition" min="35" />
+        </Price>
+      </Price>
+      <Deconstruct time="25">
+        <Item identifier="flashlight" />
+        <Item identifier="aar_ballistichelmet2" />
+        <Item identifier="advancedgenesplicer" />
+      </Deconstruct>
+      <Fabricate suitablefabricators="repair" requiredtime="30" requiresrecipe="true">
+        <RequiredSkill identifier="weapons" level="30" />
+        <RequiredSkill identifier="medicine" level="30" />
+        <RequiredItem identifier="ballisticfiber" amount="1" />
+        <RequiredItem identifier="advancedgenesplicer" amount="1" />
+        <RequiredItem identifier="aar_ballistichelmet2" amount="1" />
+        <RequiredItem identifier="flashlight" amount="1" />
+      </Fabricate>
+      <Sprite name="Ballistic Helmet 7" texture="%ModDir%/Content/UI/Inventory/headgears.png" sourcerect="8,489,99,92" depth="0.6" origin="0.5,0.5" />
+      <Body radius="30" density="30" />
+      <Turret HudTint="15,15,35,45" drawhudwhenequipped="true">
+        <StatusEffect type="OnActive" target="this" HudTint="0,0,0,0" disabledeltatime="true" setvalue="true">
+          <Conditional hasstatustag="neq powered" />
+        </StatusEffect>
+        <StatusEffect type="OnActive" target="this" HudTint="15,15,35,45" disabledeltatime="true" setvalue="true">
+          <Conditional hasstatustag="powered" />
+        </StatusEffect>
+      </Turret>
+      <Wearable slots="Head+HealthInterface" armorvalue="25.0" msg="ItemMsgPickUpSelect">
+        <damagemodifier afflictionidentifiers="lacerations,gunshotwound" armorsector="0.0,360.0" damagemultiplier="0.40" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="aar_pepper" armorsector="0.0,360.0" damagemultiplier="0" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="bitewounds, blunttrauma" armorsector="0.0,360.0" damagemultiplier="0.40" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="explosiondamage" armorsector="0.0,360.0" damagemultiplier="0.6" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictiontypes="bleeding" armorsector="0.0,360.0" damagemultiplier="0.15" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="concussion" armorsector="0.0,360.0" damagemultiplier="0.0" damagesound="" deflectprojectiles="true" />
+        <sprite name="Ballistic Helmet 7 Wearable" texture="%ModDir%/Content/UI/Inventory/headgears.png" limb="Head" inheritlimbdepth="true" inheritscale="true" ignorelimbscale="true" scale="0.7" hidewearablesoftype="Hair,beard" sourcerect="8,489,99,92" origin="0.49670944,0.5487734" maxcondition="100">
+          <LightComponent IsOn="true" range="750" LightColor="255,255,255,155" powerconsumption="10" CastShadows="true" ignorecontinuoustoggle="true">
+            <LightTexture texture="Content/Lights/lightcone.png" origin="0.0, 0.5" size="1,0.65" />
+            <StatusEffect type="OnActive" target="This" IsOn="true">
+              <Conditional HasStatusTag="neq on" />
+            </StatusEffect>
+          </LightComponent>
+        </sprite>
+        <StatusEffect type="OnWearing" target="Character" ObstructVisionAmount="0.01" setvalue="true" interval="1" duration="1.1" disabledeltatime="true" />
+        <StatusEffect type="OnWearing" target="Contained,this" targetslot="0" Condition="-0.1">
+          <Conditional HasStatusTag="on" />
+          <RequiredItem items="mobilebattery" hide="true" type="Contained" />
+        </StatusEffect>
+        <StatusEffect type="OnWearing" target="This" interval="0.5" IsOn="true">
+          <Conditional HasStatusTag="on" />
+        </StatusEffect>
+        <StatusEffect type="OnWearing" target="This" interval="0.5" IsOn="false">
+          <Conditional HasStatusTag="neq on" />
+        </StatusEffect>
+        <LightComponent IsOn="true" range="1500" LightColor="255,0,0,255" powerconsumption="10" ignorecontinuoustoggle="true">
+          <LightTexture texture="%ModDir%/Content/Items/Weapons/Shared/laserlight.png" origin="0, 0.5" size="1.0,0.5" alpha="1.0" />
+        </LightComponent>
+      </Wearable>
+      <CustomInterface canbeselected="true" drawhudwhenequipped="true">
+        <GuiFrame relativesize="0.08,0.08" anchor="Left" absoluteoffset="25,98" style="ItemUI" />
+        <TickBox text="Light">
+          <StatusEffect type="OnUse" target="This" tags="on" duration="0.05" disabledeltatime="true" />
+        </TickBox>
+      </CustomInterface>
+      <Holdable slots="Any" controlpose="true" holdpos="30,-20" handle1="0,0" setvalue="true" />
+      <ItemContainer capacity="1" slotsperrow="1" maxstacksize="1" hideitems="true" containedstateindicatorslot="0" containedstateindicatorstyle="battery" autoinject="true" autoinjectthreshold="Infinity" allowswappingcontaineditems="false">
+        <SlotIcon slotindex="0" texture="Content/UI/StatusMonitorUI.png" sourcerect="128,448,64,64" origin="0.5,0.5" />
+        <SlotIcon slotindex="1" texture="%ModDir%/Content/UI/Inventory/container_indicators_7.png" name="heavybodyarmor icon" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        <SlotIcon slotindex="2" texture="%ModDir%/Content/UI/Inventory/container_indicators_7.png" name="heavybodyarmor icon" sourcerect="0,0,0,0" origin="0.5,0.5" />
+        <Containable items="mobilebattery" hide="true">
+          <StatusEffect type="OnContaining" targettype="This" Voltage="1.0" Interval="1" duration="1.05" setvalue="true" />
+        </Containable>
+        <SubContainer capacity="2" maxstacksize="1">
+          <Containable items="geneticmaterial" />
+        </SubContainer>
+      </ItemContainer>
+    </Item>
+    <Item name="" identifier="aar_ballistichelmet6" aliases="aar_ballistichelmet" category="Equipment" tags="mediumitem,helmet,clownmask" cargocontaineridentifier="metalcrate" description="" impactsoundtag="impact_metal_heavy" scale="0.35">
+      <Upgrade gameversion="0.9.6.0" scale="0.325" />
+      <PreferredContainer secondary="wreckarmcab,abandonedarmcab,piratearmcab,outpostarmcab" amount="1" spawnprobability="0.025" />
+      <PreferredContainer secondary="armcab" spawnprobability="0.025" />
+      <Price baseprice="400" minleveldifficulty="25">
+        <Price storeidentifier="merchantoutpost" minavailable="1" maxavailable="2" sold="false">
+          <Reputation faction="clowns" min="35" />
+        </Price>
+        <Price storeidentifier="merchantcity" multiplier="1.2" minavailable="1" maxavailable="2">
+          <Reputation faction="clowns" min="35" />
+        </Price>
+        <Price storeidentifier="merchantmilitary" multiplier="1.3" minavailable="1" maxavailable="2">
+          <Reputation faction="clowns" min="35" />
+        </Price>
+        <Price storeidentifier="merchantresearch" sold="false" />
+        <Price storeidentifier="merchantmine" multiplier="0.9" sold="false" />
+      </Price>
+      <Deconstruct time="10">
+        <Item identifier="ballisticfiber" />
+        <Item identifier="clownmask" />
+      </Deconstruct>
+      <Fabricate suitablefabricators="repair" requiredtime="20">
+        <RequiredSkill identifier="weapons" level="30" />
+        <RequiredItem identifier="ballisticfiber" amount="2" />
+        <RequiredItem identifier="clownmask" amount="1" />
+      </Fabricate>
+      <Sprite name="Ballistic Helmet 6" texture="%ModDir%/Content/UI/Inventory/headgears.png" sourcerect="98,98,89,86" depth="0.6" origin="0.5,0.5" />
+      <Body radius="30" density="25" />
+      <Wearable slots="Head+HealthInterface" armorvalue="20.0" msg="ItemMsgPickUpSelect">
+        <damagemodifier afflictionidentifiers="lacerations,gunshotwound" armorsector="0.0,360.0" damagemultiplier="0.3" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="aar_pepper" armorsector="0.0,360.0" damagemultiplier="0" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="bitewounds, blunttrauma" armorsector="0.0,360.0" damagemultiplier="0.4" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="explosiondamage" armorsector="0.0,360.0" damagemultiplier="0.6" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictiontypes="bleeding" armorsector="0.0,360.0" damagemultiplier="0.05" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="concussion" armorsector="0.0,360.0" damagemultiplier="0.0" damagesound="" deflectprojectiles="true" />
+        <sprite name="Ballistic Helmet 6 Wearable" texture="%ModDir%/Content/UI/Inventory/headgears.png" limb="Head" inheritlimbdepth="true" inheritscale="true" ignorelimbscale="true" scale="0.7" hidewearablesoftype="Hair" sourcerect="98,98,89,86" origin="0.47640452,0.5453489" />
+        <StatusEffect type="OnWearing" target="Character" ObstructVisionAmount="0.01" HideFace="true" interval="1" duration="1.1" disabledeltatime="true" />
+        <CustomInterface canbeselected="true" ElementStates="true,0,100" drawhudwhenequipped="true">
+          <GuiFrame relativesize="0.135,0.2" anchor="CenterRight" pivot="CenterRight" relativeoffset="0.006,-1.06" style="ItemUI" />
+          <Button text="aar_visor_open">
+            <StatusEffect type="OnUse" targettype="This" interval="1" delay="1" stackable="false" duration="1">
+              <SpawnItem identifiers="aar_ballistichelmet6-open" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+              <DropContainedItems />
+              <Remove />
+            </StatusEffect>
+            <StatusEffect type="OnUse" targettype="This" interval="2" stackable="false">
+              <SpawnItem identifiers="aar_helmet-handle-up" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+            </StatusEffect>
+            <StatusEffect type="OnUse" targettype="This" interval="2" duration="2" noninteractable="true" AllowAccess="false" oneshot="true" stackable="false" />
+            <StatusEffect type="Always" targettype="This" oneshot="true" noninteractable="false" AllowAccess="true" stackable="false" />
+          </Button>
+        </CustomInterface>
+        <Throwable characterusable="false" slots="RightHand+LeftHand" throwforce="2.5" aimpos="35,-10" holdpos="30,-20" handle1="0,0" msg="ItemMsgPickUpSelect">
+          <Attack structuredamage="0" penetration="0" severlimbsprobability="0">
+            <Affliction identifier="blunttrauma" strength="10" />
+            <Affliction identifier="stun" strength="1" />
+          </Attack>
+        </Throwable>
+      </Wearable>
+    </Item>
+    <Item name="" identifier="aar_ballistichelmet6-open" aliases="aar_ballistichelmet" category="Equipment" tags="mediumitem,helmet" Equip="true" cargocontaineridentifier="metalcrate" description="" impactsoundtag="impact_metal_heavy" scale="0.35">
+      <Upgrade gameversion="0.9.6.0" scale="0.325" />
+      <Price baseprice="320" sold="false">
+        <Price storeidentifier="merchantoutpost" sold="false" multiplier="1.3" />
+        <Price storeidentifier="merchantcity" multiplier="1.2" minavailable="1" sold="false" />
+        <Price storeidentifier="merchantresearch" sold="false" />
+        <Price storeidentifier="merchantmilitary" multiplier="0.9" sold="false" minavailable="3" />
+        <Price storeidentifier="merchantmine" sold="false" />
+        <Price storeidentifier="merchantarmory" multiplier="0.9" sold="false" minavailable="3" />
+      </Price>
+      <Deconstruct time="10">
+        <Item identifier="ballisticfiber" />
+        <Item identifier="clownmask" />
+      </Deconstruct>
+      <Sprite name="Ballistic Helmet 6 open" texture="%ModDir%/Content/UI/Inventory/headgears.png" sourcerect="245,236,90,87" depth="0.6" origin="0.49173906,0.50062054" />
+      <Body radius="30" density="25" />
+      <Wearable slots="Head" armorvalue="10.0" msg="ItemMsgPickUpSelect">
+        <damagemodifier afflictionidentifiers="lacerations,gunshotwound" armorsector="0.0,360.0" damagemultiplier="0.5" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictionidentifiers="bitewounds, blunttrauma" armorsector="0.0,360.0" damagemultiplier="0.6" damagesound="LimbArmor" deflectprojectiles="true" />
+        <damagemodifier afflictiontypes="bleeding" armorsector="0.0,360.0" damagemultiplier="0.4" damagesound="LimbArmor" deflectprojectiles="true" />
+        <sprite name="Ballistic Helmet 6 Wearable" texture="%ModDir%/Content/UI/Inventory/headgears.png" limb="Head" inheritlimbdepth="true" inheritscale="true" ignorelimbscale="true" scale="0.7" hidewearablesoftype="Hair" sourcerect="245,236,90,87" origin="0.47014672,0.619755" />
+        <CustomInterface canbeselected="false" drawhudwhenequipped="true">
+          <GuiFrame relativesize="0.135,0.2" anchor="CenterRight" pivot="CenterRight" relativeoffset="0.006,-1.06" />
+          <Button text="aar_visor_close">
+            <StatusEffect type="OnUse" targettype="This" interval="2" delay="1" stackable="false" duration="1">
+              <SpawnItem identifiers="aar_ballistichelmet6" spawnposition="SameInventory" Equip="true" SpawnIfInventoryFull="true" />
+              <DropContainedItems />
+              <Remove />
+            </StatusEffect>
+            <StatusEffect type="OnUse" targettype="This" interval="2" stackable="false">
+              <SpawnItem identifiers="aar_helmet-handle-down" spawnposition="SameInventory" SpawnIfInventoryFull="true" />
+            </StatusEffect>
+            <StatusEffect type="OnUse" targettype="This" interval="2" duration="2" noninteractable="true" AllowAccess="false" oneshot="true" stackable="false" />
+            <StatusEffect type="Always" targettype="This" oneshot="true" noninteractable="false" AllowAccess="true" stackable="false" />
+          </Button>
+        </CustomInterface>
+      </Wearable>
+      <Holdable slots="RightHand,LeftHand" controlpose="true" holdpos="30,-20" handle1="0,0" setvalue="true" />
+    </Item>
+    <Item name="" identifier="aar_nvg-anim" scale="0.4" category="Equipment" tags="smallitem" description="" cargocontaineridentifier="metalcrate" impactsoundtag="impact_metal_light">
+      <PreferredContainer secondary="outpostsecarmcab" amount="1" spawnprobability="0.25" />
+      <PreferredContainer secondary="wrecksecarmcab,abandonedsecarmcab,piratesecarmcab" amount="1" spawnprobability="0.1" />
+      <PreferredContainer secondary="armcab" spawnprobability="0.05" />
+      <Price baseprice="352" minleveldifficulty="20">
+        <Price storeidentifier="merchantoutpost" multiplier="1.3" sold="false" />
+        <Price storeidentifier="merchantcity" multiplier="1.2" minavailable="1" />
+        <Price storeidentifier="merchantresearch" multiplier="1.3" sold="false" />
+        <Price storeidentifier="merchantmilitary" multiplier="1.1" minavailable="1" />
+        <Price storeidentifier="merchantmine" multiplier="1.1" sold="false" />
+        <Price storeidentifier="merchantarmory" multiplier="0.9" sold="false" />
+      </Price>
+      <InventoryIcon name="NVG" texture="%ModDir%/Content/UI/Inventory/headgears.png" limb="Head" depth="0.1" hidelimb="false" inheritlimbdepth="true" inheritscale="true" ignorelimbscale="true" hideotherwearables="false" scale="0.66" sourcerect="468,259,104,71" origin="0.49680504,0.49730295" />
+      <Sprite name="NVG" texture="%ModDir%/Content/UI/Inventory/headgears.png" limb="Head" depth="0.1" hidelimb="false" inheritlimbdepth="true" inheritscale="true" ignorelimbscale="true" hideotherwearables="false" scale="0.66" sourcerect="468,259,104,71" origin="0.33365387,0.49859157" />
+      <Body radius="20" height="20" density="15" />
+      <Deconstruct time="5">
+        <Item identifier="fpgacircuit" />
+        <Item identifier="plastic" />
+      </Deconstruct>
+      <Fabricate suitablefabricators="repair" requiredtime="30">
+        <RequiredSkill identifier="electrical" level="45" />
+        <RequiredSkill identifier="weapons" level="25" />
+        <RequiredItem identifier="plastic" />
+        <RequiredItem identifier="fulgurium" />
+        <RequiredItem identifier="silicon" />
+        <RequiredItem identifier="fpgacircuit" amount="2" />
+        <RequiredItem identifier="zinc" amount="1" />
+        <RequiredItem identifier="headset" amount="1" />
+      </Fabricate>
+      <Wearable limbtype="Head" slots="Any,HealthInterface" msg="ItemMsgPickUpSelect" displaycontainedstatus="true">
+        <StatusEffect type="OnWearing" target="Contained" Condition="-0.2">
+          <Conditional hasstatustag="powered" targetcontainer="true" />
+        </StatusEffect>
+        <sprite name="NVG" texture="%ModDir%/Content/UI/Inventory/headgears.png" limb="Head" depth="0.1" hidelimb="false" inheritlimbdepth="true" inheritscale="true" ignorelimbscale="true" hideotherwearables="false" scale="0.66" sourcerect="468,259,104,71" origin="0.33365387,0.49859157">
+          <LightComponent LightColor="200,200,255,255" range="10000" flicker="0.2" flickerspeed="0.1" IsOn="true" castshadows="false" powerconsumption="1">
+            <LightTexture texture="Content/Lights/pointlight_bounce.png" origin="0.5,0.5" />
+            <StatusEffect type="OnWearing" target="This" Voltage="1.0" setvalue="true" comparison="and">
+              <Sound file="%ModDir%/Content/Items/Armor/Sounds/thermal_on.ogg" range="150" loop="true" volume="0.1" />
+              <Conditional IsDead="false" targetcontainer="true" />
+              <Conditional hasstatustag="powered" />
+              <Conditional IsLocalPlayer="true" targetcontainer="true" />
+              <IsActive targetcontaineditem="true" condition="gte 5.0" />
+            </StatusEffect>
+            <StatusEffect type="OnWearing" target="This,character" ObstructVisionAmount="0.01" interval="1" duration="1.1" setvalue="true" comparison="and">
+              <Conditional hasstatustag="powered" />
+            </StatusEffect>
+          </LightComponent>
+        </sprite>
+        <StatusHUD drawhudwhenequipped="true" range="3000" overlaycolor="0,35,100,0" thermalgoggles="false" showdeadcharacters="false" showtexts="false" />
+      </Wearable>
+      <ItemContainer capacity="1" maxstacksize="1" hideitems="true" containedstateindicatorslot="0" containedstateindicatorstyle="battery">
+        <Containable items="mobilebattery" />
+        <SlotIcon slotindex="0" texture="Content/UI/StatusMonitorUI.png" sourcerect="128,448,64,64" origin="0.5,0.5" />
+      </ItemContainer>
+      <CustomInterface canbeselected="true" drawhudwhenequipped="true">
+        <GuiFrame relativesize="0.08,0.08" anchor="Left" absoluteoffset="20,98" />
+        <TickBox text="aar_nvg_toggle">
+          <StatusEffect type="OnUse" target="This" tags="powered" interval="0.3" duration="0.35">
+            <RequiredItem items="mobilebattery" type="Contained" />
+          </StatusEffect>
+        </TickBox>
+      </CustomInterface>
+    </Item>
+    <Item name=" " identifier="aar_helmet-handle-down" maxstacksize="1" scale="0.5" category="Weapon" NonInteractable="True" hideinmenus="true" tags="smallitem">
+      <Sprite texture="Content/Items/Weapons/weapons_new.png" sourcerect="1950,282,17,6" depth="0.55" origin="0.5,0.5" />
+      <Body width="5" height="5" density="25" />
+      <Holdable canBeCombined="true" slots="LeftHand" msg="ItemMsgPickUpSelect">
+        <StatusEffect type="Always" target="This" oneshot="true" holdpos="15,25" handle2="0,0" aimpos="20,20" />
+        <StatusEffect type="Always" target="This" oneshot="true" holdpos="20,10" handle2="0,0" aimpos="20,10" delay="0.75">
+          <Sound file="%ModDir%/Content/Items/Armor/Sounds/up.ogg" frequencymultiplier="1.25" range="400" />
+        </StatusEffect>
+        <StatusEffect type="Always" target="This" delay="1.25">
+          <Remove />
+        </StatusEffect>
+      </Holdable>
+    </Item>
+    <Item name=" " identifier="aar_helmet-handle-up" maxstacksize="1" scale="0.5" category="Weapon" NonInteractable="True" hideinmenus="true" tags="smallitem">
+      <Sprite texture="Content/Items/Weapons/weapons_new.png" sourcerect="1950,282,17,6" depth="0.55" origin="0.5,0.5" />
+      <Body width="5" height="5" density="25" />
+      <Holdable canBeCombined="true" slots="LeftHand" msg="ItemMsgPickUpSelect">
+        <StatusEffect type="Always" target="This,Character" oneshot="true" holdpos="15,25" handle2="0,0" aimpos="20,20" delay="0.75">
+          <Sound file="%ModDir%/Content/Items/Armor/Sounds/up.ogg" frequencymultiplier="1.2" range="400" />
+        </StatusEffect>
+        <StatusEffect type="Always" target="This" oneshot="true" holdpos="20,10" handle2="0,0" aimpos="20,10" />
+        <StatusEffect type="Always" target="This" delay="1.2">
+          <Remove />
+        </StatusEffect>
+      </Holdable>
+    </Item>
+    <Item name=" " identifier="aar_armor-handle" maxstacksize="1" scale="0.5" category="Weapon" NonInteractable="True" hideinmenus="true" tags="smallitem">
+      <Sprite texture="Content/Items/Weapons/weapons_new.png" sourcerect="1950,282,17,6" depth="0.55" origin="0.5,0.5" />
+      <Body width="5" height="5" density="25" />
+      <Holdable canBeCombined="true" slots="LeftHand" msg="ItemMsgPickUpSelect">
+        <StatusEffect type="Always" target="This" oneshot="true" holdpos="15,-15" handle2="0,0" aimpos="15,-15" />
+        <StatusEffect type="Always" target="This" oneshot="true" holdpos="15,-20" handle2="0,0" aimpos="15,-20" delay="0.75">
+          <Sound file="%ModDir%/Content/Items/Armor/Sounds/plateinsert.ogg" range="600" volume="0.4" />
+        </StatusEffect>
+        <StatusEffect type="Always" target="This" delay="1.25">
+          <Remove />
+        </StatusEffect>
+      </Holdable>
+    </Item>
+    <Item name=" " identifier="aar_armor-handle-2" maxstacksize="1" scale="0.5" category="Weapon" NonInteractable="True" hideinmenus="true" tags="smallitem">
+      <Sprite texture="Content/Items/Weapons/weapons_new.png" sourcerect="1950,282,17,6" depth="0.55" origin="0.5,0.5" />
+      <Body width="5" height="5" density="25" />
+      <Holdable canBeCombined="true" slots="LeftHand" msg="ItemMsgPickUpSelect">
+        <StatusEffect type="Always" target="This" oneshot="true" holdpos="15,-20" handle2="0,0" aimpos="15,-20" />
+        <StatusEffect type="Always" target="This" oneshot="true" holdpos="15,-15" handle2="0,0" aimpos="15,-15" delay="0.75">
+          <Sound file="%ModDir%/Content/Items/Armor/Sounds/plateinsert.ogg" range="600" volume="0.4" frequencymultiplier="1.5" />
+        </StatusEffect>
+        <StatusEffect type="Always" target="This" delay="1.25">
+          <Remove />
+        </StatusEffect>
+      </Holdable>
+    </Item>
+    <Item name="" identifier="aar_thermalgoggles" scale="0.4" category="Equipment" InvulnerableToDamage="true" tags="smallitem" allowasextracargo="true" cargocontaineridentifier="metalcrate" description="" impactsoundtag="impact_metal_light">
+      <PreferredContainer primary="engcab" />
+      <Price baseprice="350" sold="false">
+        <Price storeidentifier="merchantoutpost" multiplier="1.3" />
+        <Price storeidentifier="merchantcity" multiplier="1.2" />
+        <Price storeidentifier="merchantresearch" />
+        <Price storeidentifier="merchantmilitary" multiplier="1.25" />
+        <Price storeidentifier="merchantmine" />
+      </Price>
+      <Deconstruct time="20">
+        <Item identifier="copper" />
+        <Item identifier="plastic" amount="2" />
+        <Item identifier="fulgurium" />
+      </Deconstruct>
+      <Fabricate suitablefabricators="fabricator" requiredtime="40" requiresrecipe="true">
+        <RequiredSkill identifier="electrical" level="50" />
+        <RequiredItem identifier="fpgacircuit" />
+        <RequiredItem identifier="plastic" />
+        <RequiredItem identifier="fulgurium" />
+      </Fabricate>
+      <InventoryIcon name="Thermal" texture="%ModDir%/Content/UI/Inventory/headgears.png" limb="Head" depth="0.1" hidelimb="false" inheritlimbdepth="true" inheritscale="true" ignorelimbscale="true" hideotherwearables="false" scale="0.66" sourcerect="348,262,104,71" origin="0.49680504,0.49730295" />
+      <Sprite name="Thermal" texture="%ModDir%/Content/UI/Inventory/headgears.png" limb="Head" depth="0.1" hidelimb="false" inheritlimbdepth="true" inheritscale="true" ignorelimbscale="true" hideotherwearables="false" scale="0.66" sourcerect="348,262,104,71" origin="0.33365387,0.49859157" />
+      <Body width="70" height="24" density="15" />
+      <Wearable limbtype="Headset" slots="Any,HealthInterface" msg="ItemMsgPickUpSelect">
+        <sprite name="Thermal wearable" texture="%ModDir%/Content/UI/Inventory/headgears.png" limb="Head" depth="0.1" hidelimb="false" inheritlimbdepth="true" inheritscale="true" ignorelimbscale="true" hideotherwearables="false" scale="0.66" sourcerect="348,262,104,71" origin="0.33365387,0.49859157" />
+        <StatusEffect type="OnWearing" target="This,Character,Contained" Condition="-0.5" thermalgoggles="true" overlaycolor="255,255,255,255" ObstructVisionAmount="10" conditionalcomparison="and">
+          <RequiredItem items="mobilebattery" type="Contained" />
+          <Conditional hasstatustag="on" />
+          <Sound file="%ModDir%/Content/Items/Armor/Sounds/thermal_on.ogg" range="150" loop="true" volume="0.2" />
+        </StatusEffect>
+        <StatusEffect type="OnWearing" target="This" thermalgoggles="false" overlaycolor="0,0,0,0" interval="0.25" setvalue="true" conditionalcomparison="and">
+          <Conditional hasstatustag="neq on" />
+        </StatusEffect>
+      </Wearable>
+      <ItemContainer capacity="1" maxstacksize="1" hideitems="true" containedstateindicatorslot="0" containedstateindicatorstyle="battery">
+        <Containable items="mobilebattery" />
+        <SlotIcon slotindex="0" texture="Content/UI/StatusMonitorUI.png" sourcerect="128,448,64,64" origin="0.5,0.5" />
+      </ItemContainer>
+      <CustomInterface canbeselected="true" drawhudwhenequipped="true">
+        <GuiFrame relativesize="0.08,0.08" anchor="Left" absoluteoffset="20,98" />
+        <TickBox text="aar_thermal_toggle">
+          <StatusEffect type="OnUse" target="This" tags="on" duration="0.30" interval="0.25" disabledeltatime="true">
+            <RequiredItem items="mobilebattery" type="Contained" />
+          </StatusEffect>
+        </TickBox>
+      </CustomInterface>
+      <StatusHUD drawhudwhenequipped="true" range="1000" thermalgoggles="false" overlaycolor="0,0,0,0" showdeadcharacters="false" showtexts="false" />
+      <Turret HudTint="0,0,0,0" drawhudwhenequipped="true">
+        <StatusEffect type="OnActive" target="this" HudTint="0,0,0,225" disabledeltatime="true" setvalue="true">
+          <RequiredItem items="mobilebattery" type="Contained" />
+          <Conditional hasstatustag="on" />
+        </StatusEffect>
+        <StatusEffect type="OnActive" target="this" HudTint="0,0,0,0" disabledeltatime="true" setvalue="true">
+          <RequiredItem items="mobilebattery" type="Contained" />
+          <Conditional hasstatustag="neq on" />
+        </StatusEffect>
+      </Turret>
+    </Item>
+    <Item name="" identifier="aar_ceramic-plate" category="Equipment" tags="mediumitem,plate" maxstacksize="3" maxstacksizecharacterinventory="1" cargocontaineridentifier="metalcrate" description="" impactsoundtag="impact_soft" scale="0.4">
+      <Upgrade gameversion="0.9.3.0" />
+      <PreferredContainer secondary="wreckarmcab,abandonedarmcab,piratearmcab,outpostarmcab" amount="1" spawnprobability="0.05" />
+      <Price baseprice="350">
+        <Price storeidentifier="merchantoutpost" sold="false" multiplier="1.3" />
+        <Price storeidentifier="merchantcity" multiplier="1.2" sold="false" />
+        <Price storeidentifier="merchantresearch" sold="false" />
+        <Price storeidentifier="merchantmilitary" multiplier="1" />
+        <Price storeidentifier="merchantmine" sold="false" />
+        <Price storeidentifier="merchantarmory" multiplier="1.25" />
+      </Price>
+      <Deconstruct time="10">
+        <Item identifier="silicon" amount="1" />
+      </Deconstruct>
+      <Fabricate suitablefabricators="repair" requiresrecipe="true" requiredtime="40">
+        <RequiredSkill identifier="weapons" level="45" />
+        <Item identifier="ballisticfiber" amount="1" />
+        <Item identifier="silicon" amount="2" />
+      </Fabricate>
+      <InventoryIcon texture="%ModDir%/Content/UI/Inventory/ammunition.png" name="ceramic icon" sourcerect="278,984,102,102" origin="0.5,0.5" />
+      <Sprite texture="%ModDir%/Content/UI/Inventory/ammunition.png" name="ceramic" sourcerect="626,1022,77,49" origin="0.5,0.5" depth="0.6" />
+      <Body width="88" height="24" density="10" />
+      <Pickable slots="Any" msg="ItemMsgPickUpSelect" />
+    </Item>
+    <Item name="" identifier="aar_steel-plate" category="Equipment" tags="mediumitem,plate" maxstacksize="3" maxstacksizecharacterinventory="1" cargocontaineridentifier="metalcrate" description="" impactsoundtag="impact_soft" scale="0.4">
+      <Upgrade gameversion="0.9.3.0" />
+      <PreferredContainer secondary="wreckarmcab,abandonedarmcab,piratearmcab,outpostarmcab" amount="1" spawnprobability="0.05" />
+      <Price baseprice="400">
+        <Price storeidentifier="merchantoutpost" sold="false" multiplier="1.3" />
+        <Price storeidentifier="merchantcity" multiplier="1.2" sold="false" />
+        <Price storeidentifier="merchantresearch" sold="false" />
+        <Price storeidentifier="merchantmilitary" multiplier="1" />
+        <Price storeidentifier="merchantmine" sold="false" />
+        <Price storeidentifier="merchantarmory" multiplier="1.25" />
+      </Price>
+      <Deconstruct time="10">
+        <Item identifier="steel" amount="1" />
+      </Deconstruct>
+      <Fabricate suitablefabricators="repair" requiresrecipe="true" requiredtime="45">
+        <RequiredSkill identifier="weapons" level="55" />
+        <Item identifier="steel" amount="2" />
+        <Item identifier="titanium" amount="1" />
+      </Fabricate>
+      <InventoryIcon texture="%ModDir%/Content/UI/Inventory/ammunition.png" name="steel icon" sourcerect="396,989,90,90" origin="0.5,0.5" />
+      <Sprite texture="%ModDir%/Content/UI/Inventory/ammunition.png" name="steel" sourcerect="536,1021,75,46" origin="0.5,0.5" depth="0.6" />
+      <Body width="88" height="24" density="10" />
+      <Pickable slots="Any" msg="ItemMsgPickUpSelect" />
+    </Item>
+    <Item name="" identifier="aar_kevlar-plate" category="Equipment" tags="mediumitem,plate" maxstacksize="3" maxstacksizecharacterinventory="1" cargocontaineridentifier="metalcrate" description="" impactsoundtag="impact_soft" scale="0.4">
+      <Upgrade gameversion="0.9.3.0" />
+      <PreferredContainer secondary="wreckarmcab,abandonedarmcab,piratearmcab,outpostarmcab" amount="1" spawnprobability="0.05" />
+      <Price baseprice="200">
+        <Price storeidentifier="merchantoutpost" sold="false" multiplier="1.3" />
+        <Price storeidentifier="merchantcity" multiplier="1.2" sold="false" />
+        <Price storeidentifier="merchantresearch" sold="false" />
+        <Price storeidentifier="merchantmilitary" multiplier="1" />
+        <Price storeidentifier="merchantmine" sold="false" />
+        <Price storeidentifier="merchantarmory" multiplier="1.25" />
+      </Price>
+      <Deconstruct time="10">
+        <Item identifier="silicon" amount="1" />
+      </Deconstruct>
+      <Fabricate suitablefabricators="repair" requiresrecipe="true" requiredtime="30">
+        <RequiredSkill identifier="weapons" level="25" />
+        <Item identifier="organicfiber" amount="3" />
+        <Item identifier="rubber" amount="2" />
+      </Fabricate>
+      <InventoryIcon texture="%ModDir%/Content/UI/Inventory/ammunition.png" name="kevlar icon" sourcerect="162,985,107,101" origin="0.5,0.5" />
+      <Sprite texture="%ModDir%/Content/UI/Inventory/ammunition.png" name="kevlar" sourcerect="723,1027,78,45" origin="0.5,0.5" depth="0.6" />
+      <Body width="88" height="24" density="10" />
+      <Pickable slots="Any" msg="ItemMsgPickUpSelect" />
+    </Item>
+    <Item name="" identifier="aar_ceramic-plate-blueprint" category="Misc" Tags="smallitem" cargocontaineridentifier="metalcrate" scale="0.5" impactsoundtag="impact_soft">
+      <Price baseprice="400" minavailable="1" maxavailable="1" sold="false">
+        <Price storeidentifier="merchantoutpost" sold="true">
+          <Reputation faction="separatists" min="40" />
+        </Price>
+        <Price storeidentifier="merchantcity" sold="true">
+          <Reputation faction="separatists" min="40" />
+        </Price>
+        <Price storeidentifier="merchantmilitary" sold="true">
+          <Reputation faction="separatists" min="40" />
+        </Price>
+      </Price>
+      <PreferredContainer secondary="abandonedengcab,pirateengcab,wreckengcab" amount="1" spawnprobability="0.03" />
+      <InventoryIcon texture="Content/Items/InventoryIconAtlas2.png" sourcerect="512,576,64,64" origin="0.5,0.5" />
+      <Sprite texture="Content/Items/Alien/AlienRuins_Items_02.png" sourcerect="0,1744,112,32" depth="0.6" origin="0.5,0.5" />
+      <Body width="110" height="30" density="8" />
+      <Holdable slots="Any,RightHand+LeftHand" aimable="false" aimpos="40,-20" handle1="5,0" aimangle="260" swingamount="0,3" swingspeed="0.5" swingwhenaiming="true" msg="ItemMsgPickUpSelect">
+        <StatusEffect type="OnSecondaryUse" target="This" Condition="-33" />
+        <StatusEffect type="OnSecondaryUse" target="This,Character" unlockrecipe="aar_ceramic-plate" disabledeltatime="true">
+          <Conditional Condition="lte 0" />
+          <RemoveItem />
+        </StatusEffect>
+      </Holdable>
+    </Item>
+    <Item name="" identifier="aar_steel-plate-blueprint" category="Misc" Tags="smallitem" cargocontaineridentifier="metalcrate" scale="0.5" impactsoundtag="impact_soft">
+      <Price baseprice="400" minavailable="1" maxavailable="1" sold="false">
+        <Price storeidentifier="merchantoutpost" sold="true">
+          <Reputation faction="separatists" min="40" />
+        </Price>
+        <Price storeidentifier="merchantcity" sold="true">
+          <Reputation faction="separatists" min="40" />
+        </Price>
+        <Price storeidentifier="merchantmilitary" sold="true">
+          <Reputation faction="separatists" min="40" />
+        </Price>
+      </Price>
+      <PreferredContainer secondary="abandonedengcab,pirateengcab,wreckengcab" amount="1" spawnprobability="0.03" />
+      <InventoryIcon texture="Content/Items/InventoryIconAtlas2.png" sourcerect="512,576,64,64" origin="0.5,0.5" />
+      <Sprite texture="Content/Items/Alien/AlienRuins_Items_02.png" sourcerect="0,1744,112,32" depth="0.6" origin="0.5,0.5" />
+      <Body width="110" height="30" density="8" />
+      <Holdable slots="Any,RightHand+LeftHand" aimable="false" aimpos="40,-20" handle1="5,0" aimangle="260" swingamount="0,3" swingspeed="0.5" swingwhenaiming="true" msg="ItemMsgPickUpSelect">
+        <StatusEffect type="OnSecondaryUse" target="This" Condition="-33" />
+        <StatusEffect type="OnSecondaryUse" target="This,Character" unlockrecipe="aar_steel-plate" disabledeltatime="true">
+          <Conditional Condition="lte 0" />
+          <RemoveItem />
+        </StatusEffect>
+      </Holdable>
+    </Item>
+    <Item name="" identifier="aar_kevlar-plate-blueprint" category="Misc" Tags="smallitem" cargocontaineridentifier="metalcrate" scale="0.5" impactsoundtag="impact_soft">
+      <Price baseprice="400" minavailable="1" maxavailable="1" sold="false">
+        <Price storeidentifier="merchantoutpost" sold="true">
+          <Reputation faction="separatists" min="40" />
+        </Price>
+        <Price storeidentifier="merchantcity" sold="true">
+          <Reputation faction="separatists" min="40" />
+        </Price>
+        <Price storeidentifier="merchantmilitary" sold="true">
+          <Reputation faction="separatists" min="40" />
+        </Price>
+      </Price>
+      <PreferredContainer secondary="abandonedengcab,pirateengcab,wreckengcab" amount="1" spawnprobability="0.03" />
+      <InventoryIcon texture="Content/Items/InventoryIconAtlas2.png" sourcerect="512,576,64,64" origin="0.5,0.5" />
+      <Sprite texture="Content/Items/Alien/AlienRuins_Items_02.png" sourcerect="0,1744,112,32" depth="0.6" origin="0.5,0.5" />
+      <Body width="110" height="30" density="8" />
+      <Holdable slots="Any,RightHand+LeftHand" aimable="false" aimpos="40,-20" handle1="5,0" aimangle="260" swingamount="0,3" swingspeed="0.5" swingwhenaiming="true" msg="ItemMsgPickUpSelect">
+        <StatusEffect type="OnSecondaryUse" target="This" Condition="-33" />
+        <StatusEffect type="OnSecondaryUse" target="This,Character" unlockrecipe="aar_kevlar-plate" disabledeltatime="true">
+          <Conditional Condition="lte 0" />
+          <RemoveItem />
+        </StatusEffect>
+      </Holdable>
+    </Item>
+  </Override>
+</Items>

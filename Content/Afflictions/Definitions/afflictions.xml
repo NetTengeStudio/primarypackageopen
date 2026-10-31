@@ -1,0 +1,111 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Afflictions>
+	<Affliction identifier="primarypkg_pda-buff" isbuff="true" duration="0.05" maxstrength="1" showiconthreshold="1" iconcolors="33,75,78;126,211,224;126,211,224;227,247,249">
+		<Effect minstrength="0" maxstrength="1">
+			<StatValue stattype="RangedSpreadReduction" value="0.01" />
+		</Effect>
+	</Affliction>
+	<Affliction identifier="primarypkg_aaac_disable_interact" type="buff" limbspecific="false" affectmachines="false" maxstrength="1000" showiconthreshold="1000" showinhealthscannerthreshold="1000">
+		<Effect minstrength="0" maxstrength="1000" strengthchange="0" />
+	</Affliction>
+	<Affliction name="" identifier="primarypkg_spit" description="" healableinmedicalclinic="false" type="gaze" isbuff="false" targets="human" limbspecific="true" showiconthreshold="1000" showinhealthscannerthreshold="100" maxstrength="1">
+		<Effect minstrength="0" maxstrength="1" strengthchange="-10">
+			<StatusEffect target="Character" targetLimbs="Head" stackable="false" delay="1" comparison="and">
+				<ParticleEmitter particleamount="7" distance="0" angle="-10" particle="waterdrop" velocitymin="400" velocitymax="500" copyentityangle="true" />
+				<Remove />
+				<Conditional healthpercentage="gt 66" />
+				<Sound file="%ModDir%/Content/Sounds/Interactions/spit.ogg" range="500" selectionmode="Random" />
+				<Sound file="%ModDir%/Content/Sounds/Interactions/spit_1.ogg" range="500" />
+				<Sound file="%ModDir%/Content/Sounds/Interactions/spit_2.ogg" range="500" />
+				<Conditional HideFace="eq False" />
+			</StatusEffect>
+			<StatusEffect target="Character" targetLimbs="Head" stackable="false" delay="1" comparison="and">
+				<ParticleEmitter particleamount="8" angle="-10" scalemultiplier="0.25,0.25" distance="0" particle="bloodsplash" velocitymin="300" velocitymax="400" copyentityangle="true" />
+				<ParticleEmitter particleamount="2" angle="-10" distance="0" particle="waterdrop" velocitymin="400" velocitymax="500" copyentityangle="true" />
+				<Remove />
+				<Conditional healthpercentage="lte 66" />
+				<Conditional healthpercentage="gt 33" />
+				<Sound file="%ModDir%/Content/Sounds/Interactions/spit.ogg" range="500" frequencymultiplier="0.75" selectionmode="Random" />
+				<Sound file="%ModDir%/Content/Sounds/Interactions/spit_1.ogg" range="500" frequencymultiplier="0.75" />
+				<Sound file="%ModDir%/Content/Sounds/Interactions/spit_2.ogg" range="500" frequencymultiplier="0.75" />
+				<Explosion range="0.0" structuredamage="0" itemdamage="0" force="0.0" severlimbsprobability="0.0" decal="blood" decalsize="0.25" shockwave="false" underwaterbubble="false" />
+				<Conditional HideFace="eq False" />
+			</StatusEffect>
+			<StatusEffect target="Character" targetLimbs="Head" stackable="false" delay="1" comparison="and">
+				<ParticleEmitter particleamount="4" angle="-10" scalemultiplier="0.35,0.35" distance="0" particle="bloodsplash" velocitymin="200" velocitymax="300" copyentityangle="true" />
+				<ParticleEmitter particleamount="4" angle="-10" scalemultiplier="0.4,0.4" distance="0" particle="heavygib" velocitymin="200" velocitymax="300" copyentityangle="true" />
+				<ParticleEmitter particleamount="1" angle="-10" distance="0" particle="waterdrop" velocitymin="400" velocitymax="500" copyentityangle="true" />
+				<Remove />
+				<Conditional healthpercentage="lte 33" />
+				<Sound file="%ModDir%/Content/Sounds/Interactions/spit.ogg" range="500" frequencymultiplier="0.75" selectionmode="Random" />
+				<Sound file="%ModDir%/Content/Sounds/Interactions/spit_1.ogg" range="500" frequencymultiplier="0.75" />
+				<Sound file="%ModDir%/Content/Sounds/Interactions/spit_2.ogg" range="500" frequencymultiplier="0.75" />
+				<Explosion range="0.0" structuredamage="0" itemdamage="0" force="0.0" severlimbsprobability="0.0" decal="blood" decalsize="0.25" shockwave="false" underwaterbubble="false" />
+				<Conditional HideFace="eq False" />
+			</StatusEffect>
+		</Effect>
+	</Affliction>
+	<Affliction name="" identifier="primarypkg_spasm-shout" description="" healableinmedicalclinic="false" type="gaze" isbuff="false" targets="human" limbspecific="true" showiconthreshold="1000" showinhealthscannerthreshold="100" maxstrength="2">
+		<Effect minstrength="0" maxstrength="1" convulseamount="0.25" strengthchange="-0.75" />
+		<Effect minstrength="1" maxstrength="2" convulseamount="0.25" strengthchange="-0.75">
+			<StatusEffect target="Character" duration="0.5" stackable="false" comparison="and">
+				<Conditional hasspecifiertag="male" />
+				<Sound file="%ModDir%/Content/Sounds/Interactions/shout_1.ogg" frequencymultiplier="0.9" Range="1500" selectionmode="Random" />
+				<Sound file="%ModDir%/Content/Sounds/Interactions/shout_1.ogg" frequencymultiplier="0.95" Range="1500" />
+				<Sound file="%ModDir%/Content/Sounds/Interactions/shout_1.ogg" frequencymultiplier="1.0" Range="1500" />
+				<Sound file="%ModDir%/Content/Sounds/Interactions/shout_1.ogg" frequencymultiplier="1.05" Range="1500" />
+				<Sound file="%ModDir%/Content/Sounds/Interactions/shout_1.ogg" frequencymultiplier="1.1" Range="1500" />
+				<Sound file="%ModDir%/Content/Sounds/Interactions/shout_2.ogg" frequencymultiplier="0.9" Range="1500" />
+				<Sound file="%ModDir%/Content/Sounds/Interactions/shout_2.ogg" frequencymultiplier="0.95" Range="1500" />
+				<Sound file="%ModDir%/Content/Sounds/Interactions/shout_2.ogg" frequencymultiplier="1.0" Range="1500" />
+				<Sound file="%ModDir%/Content/Sounds/Interactions/shout_2.ogg" frequencymultiplier="1.05" Range="1500" />
+				<Sound file="%ModDir%/Content/Sounds/Interactions/shout_2.ogg" frequencymultiplier="1.1" Range="1500" />
+				<Sound file="%ModDir%/Content/Sounds/Interactions/shout_3.ogg" frequencymultiplier="0.9" Range="1500" />
+				<Sound file="%ModDir%/Content/Sounds/Interactions/shout_3.ogg" frequencymultiplier="0.95" Range="1500" />
+				<Sound file="%ModDir%/Content/Sounds/Interactions/shout_3.ogg" frequencymultiplier="1.0" Range="1500" />
+				<Sound file="%ModDir%/Content/Sounds/Interactions/shout_3.ogg" frequencymultiplier="1.05" Range="1500" />
+				<Sound file="%ModDir%/Content/Sounds/Interactions/shout_3.ogg" frequencymultiplier="1.1" Range="1500" />
+			</StatusEffect>
+			<StatusEffect target="Character" duration="0.5" stackable="false" comparison="and">
+				<Conditional hasspecifiertag="female" />
+				<Sound file="%ModDir%/Content/Sounds/Interactions/woman_agony_1.ogg" frequencymultiplier="0.9" Range="1500" selectionmode="Random" />
+				<Sound file="%ModDir%/Content/Sounds/Interactions/woman_agony_1.ogg" frequencymultiplier="0.95" Range="1500" />
+				<Sound file="%ModDir%/Content/Sounds/Interactions/woman_agony_1.ogg" frequencymultiplier="1.0" Range="1500" />
+				<Sound file="%ModDir%/Content/Sounds/Interactions/woman_agony_1.ogg" frequencymultiplier="1.05" Range="1500" />
+				<Sound file="%ModDir%/Content/Sounds/Interactions/woman_agony_1.ogg" frequencymultiplier="1.1" Range="1500" />
+				<Sound file="%ModDir%/Content/Sounds/Interactions/woman_agony_2.ogg" frequencymultiplier="0.9" Range="1500" />
+				<Sound file="%ModDir%/Content/Sounds/Interactions/woman_agony_2.ogg" frequencymultiplier="0.95" Range="1500" />
+				<Sound file="%ModDir%/Content/Sounds/Interactions/woman_agony_2.ogg" frequencymultiplier="1.0" Range="1500" />
+				<Sound file="%ModDir%/Content/Sounds/Interactions/woman_agony_2.ogg" frequencymultiplier="1.05" Range="1500" />
+				<Sound file="%ModDir%/Content/Sounds/Interactions/woman_agony_2.ogg" frequencymultiplier="1.1" Range="1500" />
+				<Sound file="%ModDir%/Content/Sounds/Interactions/woman_agony_3.ogg" frequencymultiplier="0.9" Range="1500" />
+				<Sound file="%ModDir%/Content/Sounds/Interactions/woman_agony_3.ogg" frequencymultiplier="0.95" Range="1500" />
+				<Sound file="%ModDir%/Content/Sounds/Interactions/woman_agony_3.ogg" frequencymultiplier="1.0" Range="1500" />
+				<Sound file="%ModDir%/Content/Sounds/Interactions/woman_agony_3.ogg" frequencymultiplier="1.05" Range="1500" />
+				<Sound file="%ModDir%/Content/Sounds/Interactions/woman_agony_3.ogg" frequencymultiplier="1.1" Range="1500" />
+			</StatusEffect>
+		</Effect>
+	</Affliction>
+	<Affliction name="" identifier="primarypkg_blind_anim_2" description="" type="none" limbspecific="false" maxstrength="0.1" showiconthreshold="1000" showicontoothersthreshold="1000">
+		<Effect minstrength="0" maxstrength="0.1" strengthchange="-0.1" mingrainstrength="0.0" maxgrainstrength="10" />
+	</Affliction>
+	<Affliction name="" identifier="primarypkg_call" showiconthreshold="1000" duration="13">
+		<Effect>
+			<StatusEffect target="Character" comparison="and" checkconditionalalways="true">
+				<Conditional HasStatusTag="hasphone" />
+				<Conditional isLocalPlayer="true" />
+				<Sound file="%ModDir%/Content/Sounds/Interactions/hold.ogg" dontmuffle="true" loop="true" />
+			</StatusEffect>
+		</Effect>
+	</Affliction>
+
+	<Affliction name="" identifier="scp_ae035damage" description="" type="poison" causeofdeathdescription="" selfcauseofdeathdescription="" limbspecific="false" indicatorlimb="Torso" karmachangeonapplied="-100" maxstrength="100">
+		<Effect minstrength="0" maxstrength="100" minvitalitydecrease="0" maxvitalitydecrease="25" strengthchange="-0.25" minscreenblur="0" maxscreenblur="0.35">
+			<StatusEffect target="Character" interval="1">
+				<Affliction identifier="organdamage" amount="0.5" />
+			</StatusEffect>
+		</Effect>
+		<icon texture="%ModDir%/Content/Afflictions/Icons/afflictions.png" sourcerect="910,0,128,128" color="60,60,60,255" origin="0,0" />
+	</Affliction>
+
+</Afflictions>

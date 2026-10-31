@@ -1,0 +1,939 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Override>
+  <Items>
+    <Item name="" identifier="PDA-anim" category="Equipment" scale="0.25" linkable="true" HideConditionBar="true" Tags="smallitem,pdaitem,mobileradio" impactsoundtag="impact_metal_light" cargocontaineridentifier="metalcrate">
+      <PreferredContainer primary="crewcab" />
+      <Price baseprice="250">
+        <Price storeidentifier="merchantoutpost" minavailable="2" />
+        <Price storeidentifier="merchantcity" minavailable="3" />
+        <Price storeidentifier="merchantresearch" minavailable="2" />
+        <Price storeidentifier="merchantmilitary" minavailable="2" />
+        <Price storeidentifier="merchantmine" minavailable="3" />
+      </Price>
+      <Deconstruct time="5">
+        <Item identifier="plastic" />
+      </Deconstruct>
+      <Fabricate suitablefabricators="fabricator" requiredtime="20">
+        <RequiredItem identifier="fpgacircuit" amount="1" />
+        <RequiredItem identifier="plastic" amount="1" />
+        <RequiredItem identifier="lightcomponent" />
+      </Fabricate>
+      <PreferredContainer primary="engcab,reactorcab" />
+      <PreferredContainer secondary="wreckengcab,abandonedengcab,pirateengcab,outpostengcab,beaconengcab" amount="1" spawnprobability="0.05" />
+      <InventoryIcon texture="%ModDir%/Content/Items/PDA/Sprites/pdabasic.png" sourcerect="9,4,101,101" origin="0.5,0.5" />
+      <Sprite texture="%ModDir%/Content/Items/PDA/Sprites/pdabasic.png" depth="0.57" sourcerect="151,0,50,108" origin="0.5,0.5" />
+      <Body radius="16" height="30" density="10.05" />
+      <WifiComponent range="100000.0" LinkToChat="true" MinChatMessageInterval="0.0" Channel="1111" AllowInGameEditing="true" AllowCrossTeamCommunication="true">
+        <RequiredItem items="mobilebattery" type="Contained" />
+      </WifiComponent>
+      <Holdable canBeCombined="true" attachable="false" slots="RightHand,LeftHand,Any" cameraaimoffset="425" aimable="true" aimpos="45,0" holdpos="35,15" handle1="0,-45" handle2="0,-20" msg="ItemMsgPickUpSelect">
+        <StatusEffect AllowWhenBroken="true" type="OnActive" target="Contained,this,Character" targetslot="0" Condition="-0.001" interval="1" duration="1.1" stackable="false" drawhudwhenequipped="true">
+          <RequiredItem items="mobilebattery" hide="true" type="Contained" />
+          <Conditional Voltage="gt 0" />
+          <Affliction identifier="primarypkg_pda-buff" strength="1000" />
+        </StatusEffect>
+        <StatusEffect AllowWhenBroken="true" type="OnBroken" Condition="100" targettype="This" stackable="true">
+          <sound file="%ModDir%/Content/Sounds/Interactions/hold.ogg" range="1000.0" volume="0.5" />
+        </StatusEffect>
+        <StatusEffect AllowWhenBroken="true" type="OnActive" targettype="This" interval="5" drawhudwhenequipped="false" setvalue="true">
+          <Conditional Voltage="eq 0" />
+        </StatusEffect>
+        <StatusEffect AllowWhenBroken="true" type="OnActive" target="this,Contained" Condition="0" setvalue="true" targetslot="1" interval="2" stackable="false" drawhudwhenequipped="false">
+          <Conditional targetcontainer="true" Voltage="eq 0" />
+        </StatusEffect>
+        <StatusEffect AllowWhenBroken="true" type="OnActive" interval="5" duration="5.1" targettype="Contained" targetidentifiers="pda_screen" IsOn="true" setvalue="true" />
+        <LightComponent IsOn="false" range="267" LightColor="200,200,255,100" powerconsumption="10" CastShadows="true" ignorecontinuoustoggle="true">
+          <LightTexture texture="Content/Lights/lightcone.png" origin="0.0,0.5" size="0.5,0.65" />
+        </LightComponent>
+      </Holdable>
+      <CustomInterface canbeselected="true" drawhudwhenequipped="false" ElementStates="false">
+        <GuiFrame relativesize="0.175,0.175" anchor="Left" absoluteoffset="1000,-1000" />
+        <TickBox text="Manual_Button_FlashLight">
+          <StatusEffect AllowWhenBroken="true" type="OnUse" target="Contained,this" targetslot="0" Condition="-0.02" IsOn="true" LightColor="200,200,255,100" BlinkFrequency="-1000" tag="on" interval="0.5" duration="0.55" stackable="false" comparison="and">
+            <RequiredItem items="mobilebattery" hide="true" type="Contained" />
+            <Conditional IsOn="False" />
+            <sound file="%ModDir%/Content/Items/PDA/Sounds/pdabeep.ogg" range="500.0" volume="1" />
+          </StatusEffect>
+          <StatusEffect AllowWhenBroken="true" type="OnSecondaryUse" target="This" IsOn="False" interval="1" duration="0.1" disabledeltatime="true" comparison="and">
+            <sound file="%ModDir%/Content/Items/PDA/Sounds/pdabeep_alt.ogg" range="500.0" volume="1" />
+            <RequiredItem items="mobilebattery" hide="true" type="Contained" />
+            <Conditional IsOn="true" />
+          </StatusEffect>
+        </TickBox>
+        <Button text="primarypkg_pda_messages">
+          <StatusEffect type="OnUse" targettype="This" OpenSignal="true" stackable="false" />
+        </Button>
+        <Terminal canbeselected="true" msg="ItemMsgInteractSelect" TextColor="255,255,255,255" UseMonospaceFont="true" LineStartSymbol="" AllowInGameEditing="false">
+          <GuiFrame relativesize="0.3,0.35" anchor="Center" absoluteoffset="1000,-50" />
+        </Terminal>
+      </CustomInterface>
+      <ItemContainer capacity="1" slotsperrow="1" maxstacksize="1" hideitems="true" containedstateindicatorslot="0" containedstateindicatorstyle="battery" autoinject="false" allowswappingcontaineditems="true">
+        <SlotIcon slotindex="0" texture="Content/UI/StatusMonitorUI.png" sourcerect="128,448,64,64" origin="0.5,0.5" />
+        <Containable items="mobilebattery" hide="true">
+          <StatusEffect AllowWhenBroken="true" type="OnContaining" targettype="This" Voltage="1.0" duration="5.1" interval="5" setvalue="true" />
+          <StatusEffect AllowWhenBroken="true" type="OnInserted" targettype="This" setvalue="true">
+            <sound file="%ModDir%/Content/Items/PDA/Sounds/pdapower.ogg" range="300.0" drawhudwhenequipped="true" volume="1" />
+          </StatusEffect>
+          <StatusEffect AllowWhenBroken="true" type="OnRemoved" targettype="This" drawhudwhenequipped="false" setvalue="true">
+            <sound file="%ModDir%/Content/Items/PDA/Sounds/pdaalarm.ogg" range="300.0" volume="1" />
+          </StatusEffect>
+        </Containable>
+      </ItemContainer>
+      <ItemContainer capacity="1" slotsperrow="1" maxstacksize="1" hideitems="false" spawnwithid="pda_screen" containedstateindicatorslot="0" containedstateindicatorstyle="battery" autoinject="false" allowswappingcontaineditems="true">
+        <SlotIcon slotindex="0" texture="Content/UI/StatusMonitorUI.png" sourcerect="128,448,64,64" origin="0.5,0.5" />
+        <Containable items="pda_screen" hide="false">
+          <StatusEffect AllowWhenBroken="true" type="OnContaining" interval="2" duration="2.1" targettype="Contained,This" targetslot="0" IsOn="false" setvalue="true">
+            <Conditional Voltage="eq 0" />
+          </StatusEffect>
+        </Containable>
+      </ItemContainer>
+      <PowerContainer capacity="1" Charge="0" maxrechargespeed="0" maxoutput="250" canbeselected="false" />
+      <PdaMessengerComponent canbeselected="true" msg="ItemMsgInteractSelect" drawhudwhenequipped="true" SrpTag="SRPsecurity">
+        <GuiFrame relativesize="0.5,0.62" minsize="620,480" anchor="Center" />
+      </PdaMessengerComponent>
+    </Item>
+
+    <Item name="" identifier="PDA-better-anim" category="Equipment" HideConditionBar="true" scale="0.25" linkable="true" Tags="smallitem,pdaitem,mobileradio" impactsoundtag="impact_metal_light" cargocontaineridentifier="metalcrate">
+      <Price baseprice="550">
+        <Price storeidentifier="merchantoutpost" minavailable="1" sold="false" />
+        <Price storeidentifier="merchantcity" minavailable="1" />
+        <Price storeidentifier="merchantresearch" minavailable="1" />
+        <Price storeidentifier="merchantmilitary" minavailable="1" />
+        <Price storeidentifier="merchantmine" minavailable="1" sold="false" />
+      </Price>
+      <Deconstruct time="10">
+        <Item identifier="fpgacircuit" />
+        <Item identifier="PDA-anim" />
+        <Item identifier="sonarbeacon" />
+      </Deconstruct>
+      <Fabricate suitablefabricators="fabricator" requiredtime="40">
+        <RequiredSkill identifier="mechanical" level="35" />
+        <RequiredSkill identifier="electrical" level="35" />
+        <RequiredItem identifier="PDA-anim" amount="1" />
+        <RequiredItem identifier="flashlight" amount="1" />
+        <RequiredItem identifier="terminal" amount="1" />
+        <RequiredItem identifier="sonarbeacon" amount="1" />
+        <RequiredItem identifier="redwire" amount="2" />
+      </Fabricate>
+      <PreferredContainer secondary="wreckengcab,abandonedengcab,pirateengcab,outpostengcab,beaconengcab" amount="1" spawnprobability="0.025" />
+      <InventoryIcon texture="%ModDir%/Content/Items/PDA/Sprites/pdacaptain.png" sourcerect="9,4,101,101" origin="0.5,0.5" />
+      <Sprite texture="%ModDir%/Content/Items/PDA/Sprites/pdacaptain.png" depth="0.57" sourcerect="151,0,50,108" origin="0.5,0.5" />
+      <Body radius="16" height="30" density="10.05" />
+      <WifiComponent range="100000.0" LinkToChat="true" MinChatMessageInterval="0.0" Channel="1111" AllowInGameEditing="true" AllowCrossTeamCommunication="true">
+        <RequiredItem items="mobilebattery" type="Contained" />
+      </WifiComponent>
+      <Holdable canBeCombined="true" attachable="false" slots="RightHand,LeftHand,Any" cameraaimoffset="475" aimable="true" aimpos="45,0" holdpos="35,15" handle1="0,-45" handle2="0,-20" msg="ItemMsgPickUpSelect">
+        <StatusEffect AllowWhenBroken="true" type="OnActive" target="Contained,this,Character" targetslot="0" interval="1" duration="1.1" Condition="-0.001" stackable="false" drawhudwhenequipped="true">
+          <RequiredItem items="mobilebattery" hide="true" type="Contained" />
+          <Conditional Voltage="gt 0" />
+          <Affliction identifier="primarypkg_pda-buff" strength="1000" />
+        </StatusEffect>
+        <StatusEffect AllowWhenBroken="true" type="OnBroken" Condition="100" targettype="This" stackable="true">
+          <sound file="%ModDir%/Content/Sounds/Interactions/hold.ogg" range="1000.0" volume="0.5" />
+        </StatusEffect>
+        <StatusEffect AllowWhenBroken="true" type="OnActive" targettype="This" interval="5" drawhudwhenequipped="false" setvalue="true">
+          <Conditional Voltage="eq 0" />
+        </StatusEffect>
+        <StatusEffect AllowWhenBroken="true" type="OnActive" target="this,Contained" Condition="0" setvalue="true" targetslot="1" interval="2" stackable="false" drawhudwhenequipped="false">
+          <Conditional targetcontainer="true" Voltage="eq 0" />
+        </StatusEffect>
+        <StatusEffect AllowWhenBroken="true" type="OnActive" interval="5" duration="5.1" targettype="Contained" targetidentifiers="pda_screen" IsOn="true" setvalue="true" />
+        <LightComponent IsOn="false" range="267" LightColor="200,200,255,155" powerconsumption="10" CastShadows="true" ignorecontinuoustoggle="true">
+          <LightTexture texture="Content/Lights/lightcone.png" origin="0.0,0.5" size="0.5,0.65" />
+        </LightComponent>
+      </Holdable>
+      <CustomInterface canbeselected="true" drawhudwhenequipped="false" ElementStates="false">
+        <GuiFrame relativesize="0.175,0.175" anchor="Left" absoluteoffset="1000,-1000" />
+        <TickBox text="Manual_Button_FlashLight">
+          <StatusEffect AllowWhenBroken="true" type="OnUse" target="Contained,this" targetslot="0" Condition="-0.02" IsOn="true" LightColor="200,255,200,155" BlinkFrequency="-1000" tag="on" interval="0.5" duration="0.55" stackable="false" comparison="and">
+            <RequiredItem items="mobilebattery" hide="true" type="Contained" />
+            <Conditional IsOn="False" />
+            <sound file="%ModDir%/Content/Items/PDA/Sounds/pdabeep.ogg" range="500.0" volume="1" />
+          </StatusEffect>
+          <StatusEffect AllowWhenBroken="true" type="OnSecondaryUse" target="This" IsOn="False" interval="1" duration="0.1" disabledeltatime="true" comparison="and">
+            <sound file="%ModDir%/Content/Items/PDA/Sounds/pdabeep_alt.ogg" range="500.0" volume="1" />
+            <RequiredItem items="mobilebattery" hide="true" type="Contained" />
+            <Conditional IsOn="true" />
+          </StatusEffect>
+        </TickBox>
+        <Button text="primarypkg_pda_messages">
+          <StatusEffect type="OnUse" targettype="This" OpenSignal="true" stackable="false" />
+        </Button>
+        <Terminal canbeselected="true" msg="ItemMsgInteractSelect" TextColor="155,255,155,255" UseMonospaceFont="true" LineStartSymbol="" AllowInGameEditing="false">
+          <GuiFrame relativesize="0.3,0.35" anchor="Center" absoluteoffset="1000,-50" />
+        </Terminal>
+      </CustomInterface>
+      <ItemContainer capacity="1" slotsperrow="1" maxstacksize="1" hideitems="true" containedstateindicatorslot="0" containedstateindicatorstyle="battery" autoinject="false" allowswappingcontaineditems="true">
+        <SlotIcon slotindex="0" texture="Content/UI/StatusMonitorUI.png" sourcerect="128,448,64,64" origin="0.5,0.5" />
+        <Containable items="mobilebattery" hide="true">
+          <StatusEffect AllowWhenBroken="true" type="OnContaining" targettype="This" Voltage="1.0" duration="5.1" interval="5" setvalue="true" />
+          <StatusEffect AllowWhenBroken="true" type="OnInserted" targettype="This" setvalue="true">
+            <sound file="%ModDir%/Content/Items/PDA/Sounds/pdapower.ogg" range="300.0" drawhudwhenequipped="true" volume="1" />
+          </StatusEffect>
+          <StatusEffect AllowWhenBroken="true" type="OnRemoved" targettype="This" drawhudwhenequipped="false" setvalue="true">
+            <sound file="%ModDir%/Content/Items/PDA/Sounds/pdaalarm.ogg" range="300.0" volume="1" />
+          </StatusEffect>
+        </Containable>
+      </ItemContainer>
+      <ItemContainer capacity="1" slotsperrow="1" maxstacksize="1" hideitems="false" spawnwithid="pda_screen" containedstateindicatorslot="0" containedstateindicatorstyle="battery" autoinject="false" allowswappingcontaineditems="true">
+        <SlotIcon slotindex="0" texture="Content/UI/StatusMonitorUI.png" sourcerect="128,448,64,64" origin="0.5,0.5" />
+        <Containable items="pda_screen" hide="false">
+          <StatusEffect AllowWhenBroken="true" type="OnContaining" interval="2" duration="2.1" targettype="Contained,This" targetslot="0" IsOn="false" setvalue="true">
+            <Conditional Voltage="eq 0" />
+          </StatusEffect>
+        </Containable>
+      </ItemContainer>
+      <PowerContainer capacity="1" Charge="0" maxrechargespeed="0" maxoutput="250" canbeselected="false" />
+      <PdaMessengerComponent canbeselected="true" msg="ItemMsgInteractSelect" drawhudwhenequipped="true" SrpTag="SRPcaptain">
+        <GuiFrame relativesize="0.5,0.62" minsize="620,480" anchor="Center" />
+      </PdaMessengerComponent>
+    </Item>
+
+    <Item name="" identifier="PDA-medic-anim" category="Equipment" scale="0.25" linkable="true" HideConditionBar="true" Tags="smallitem,pdaitem,mobileradio,medical" impactsoundtag="impact_metal_light" cargocontaineridentifier="metalcrate">
+      <Price baseprice="750">
+        <Price storeidentifier="merchantoutpost" minavailable="1" sold="false" />
+        <Price storeidentifier="merchantcity" minavailable="1" sold="false" />
+        <Price storeidentifier="merchantresearch" minavailable="0" maxavailable="1" />
+        <Price storeidentifier="merchantmilitary" minavailable="1" sold="false" />
+        <Price storeidentifier="merchantmine" minavailable="1" sold="false" />
+      </Price>
+      <Deconstruct time="10">
+        <Item identifier="healthscanner" />
+        <Item identifier="PDA-better-anim" />
+      </Deconstruct>
+      <Fabricate suitablefabricators="fabricator" requiredtime="45">
+        <RequiredSkill identifier="mechanical" level="40" />
+        <RequiredSkill identifier="electrical" level="40" />
+        <RequiredSkill identifier="medical" level="50" />
+        <RequiredItem identifier="PDA-better-anim" amount="1" />
+        <RequiredItem identifier="healthscanner" amount="1" />
+        <RequiredItem identifier="titanium" amount="1" />
+        <RequiredItem identifier="sprayer" />
+        <RequiredItem identifier="skillbookeuropanmedicine" />
+      </Fabricate>
+      <PreferredContainer secondary="wreckengcab,abandonedengcab,pirateengcab,outpostengcab,beaconengcab" amount="1" spawnprobability="0.01" />
+      <InventoryIcon texture="%ModDir%/Content/Items/PDA/Sprites/pdamedical.png" sourcerect="9,4,101,101" origin="0.5,0.5" />
+      <Sprite texture="%ModDir%/Content/Items/PDA/Sprites/pdamedical.png" depth="0.57" sourcerect="151,0,50,108" origin="0.5,0.5" />
+      <Body radius="16" height="30" density="10.05" />
+      <WifiComponent range="100000.0" LinkToChat="true" MinChatMessageInterval="0.0" Channel="1111" AllowInGameEditing="true" AllowCrossTeamCommunication="true">
+        <RequiredItem items="mobilebattery" type="Contained" />
+      </WifiComponent>
+      <Holdable canBeCombined="true" attachable="false" slots="RightHand,LeftHand,Any" cameraaimoffset="500" aimable="true" aimpos="45,0" holdpos="35,15" handle1="0,-45" handle2="0,-20" msg="ItemMsgPickUpSelect">
+        <StatusEffect AllowWhenBroken="true" type="OnActive" target="Contained,this,Character" targetslot="0" interval="1" duration="1.1" Condition="-0.001" stackable="false" drawhudwhenequipped="true">
+          <RequiredItem items="mobilebattery" hide="true" type="Contained" />
+          <Conditional Voltage="gt 0" />
+          <Affliction identifier="primarypkg_pda-buff" strength="1000" />
+        </StatusEffect>
+        <StatusEffect AllowWhenBroken="true" type="OnBroken" Condition="100" targettype="This" stackable="true">
+          <sound file="%ModDir%/Content/Sounds/Interactions/hold.ogg" range="1000.0" volume="0.5" />
+        </StatusEffect>
+        <StatusEffect AllowWhenBroken="true" type="OnActive" targettype="This" interval="5" drawhudwhenequipped="false" setvalue="true">
+          <Conditional Voltage="eq 0" />
+        </StatusEffect>
+        <StatusEffect AllowWhenBroken="true" type="OnActive" target="this,Contained" Condition="0" setvalue="true" targetslot="1" interval="2" stackable="false" drawhudwhenequipped="false">
+          <Conditional targetcontainer="true" Voltage="eq 0" />
+        </StatusEffect>
+        <StatusEffect AllowWhenBroken="true" type="OnActive" interval="5" duration="5.1" targettype="Contained" targetidentifiers="pda_screen" IsOn="true" setvalue="true" />
+        <LightComponent IsOn="false" range="267" LightColor="255,200,200,155" powerconsumption="10" CastShadows="true" ignorecontinuoustoggle="true">
+          <LightTexture texture="Content/Lights/lightcone.png" origin="0.0,0.5" size="0.5,0.65" />
+        </LightComponent>
+      </Holdable>
+      <CustomInterface canbeselected="true" drawhudwhenequipped="false" ElementStates="false">
+        <GuiFrame relativesize="0.175,0.175" anchor="Left" absoluteoffset="1000,-1000" />
+        <TickBox text="Manual_Button_FlashLight">
+          <StatusEffect AllowWhenBroken="true" type="OnUse" target="Contained,this" targetslot="0" Condition="-0.02" IsOn="true" LightColor="255,200,200,155" BlinkFrequency="-1000" tag="on" interval="0.5" duration="0.55" stackable="false" comparison="and">
+            <RequiredItem items="mobilebattery" hide="true" type="Contained" />
+            <Conditional IsOn="False" />
+            <sound file="%ModDir%/Content/Items/PDA/Sounds/pdabeep.ogg" range="500.0" volume="1" />
+          </StatusEffect>
+          <StatusEffect AllowWhenBroken="true" type="OnSecondaryUse" target="This" IsOn="False" interval="1" duration="0.1" disabledeltatime="true" comparison="and">
+            <sound file="%ModDir%/Content/Items/PDA/Sounds/pdabeep_alt.ogg" range="500.0" volume="1" />
+            <RequiredItem items="mobilebattery" hide="true" type="Contained" />
+            <Conditional IsOn="true" />
+          </StatusEffect>
+        </TickBox>
+        <Button text="primarypkg_pda_messages">
+          <StatusEffect type="OnUse" targettype="This" OpenSignal="true" stackable="false" />
+        </Button>
+        <Terminal canbeselected="true" msg="ItemMsgInteractSelect" TextColor="255,155,155,255" UseMonospaceFont="true" LineStartSymbol="" AllowInGameEditing="false">
+          <GuiFrame relativesize="0.3,0.35" anchor="Center" absoluteoffset="1000,-50" />
+        </Terminal>
+      </CustomInterface>
+      <ItemContainer capacity="1" slotsperrow="1" maxstacksize="1" hideitems="true" containedstateindicatorslot="0" containedstateindicatorstyle="battery" autoinject="false" allowswappingcontaineditems="true">
+        <SlotIcon slotindex="0" texture="Content/UI/StatusMonitorUI.png" sourcerect="128,448,64,64" origin="0.5,0.5" />
+        <Containable items="mobilebattery" hide="true">
+          <StatusEffect AllowWhenBroken="true" type="OnContaining" targettype="This" Voltage="1.0" duration="5.1" interval="5" setvalue="true" />
+          <StatusEffect AllowWhenBroken="true" type="OnInserted" targettype="This" setvalue="true">
+            <sound file="%ModDir%/Content/Items/PDA/Sounds/pdapower.ogg" range="300.0" drawhudwhenequipped="true" volume="1" />
+          </StatusEffect>
+          <StatusEffect AllowWhenBroken="true" type="OnRemoved" targettype="This" drawhudwhenequipped="false" setvalue="true">
+            <sound file="%ModDir%/Content/Items/PDA/Sounds/pdaalarm.ogg" range="300.0" volume="1" />
+          </StatusEffect>
+        </Containable>
+      </ItemContainer>
+      <ItemContainer capacity="1" slotsperrow="1" maxstacksize="1" hideitems="false" spawnwithid="pda_screen" containedstateindicatorslot="0" containedstateindicatorstyle="battery" autoinject="false" allowswappingcontaineditems="true">
+        <SlotIcon slotindex="0" texture="Content/UI/StatusMonitorUI.png" sourcerect="128,448,64,64" origin="0.5,0.5" />
+        <Containable items="pda_screen" hide="false">
+          <StatusEffect AllowWhenBroken="true" type="OnContaining" interval="2" duration="2.1" targettype="Contained,This" targetslot="0" IsOn="false" setvalue="true">
+            <Conditional Voltage="eq 0" />
+          </StatusEffect>
+        </Containable>
+      </ItemContainer>
+      <PowerContainer capacity="1" Charge="0" maxrechargespeed="0" maxoutput="250" canbeselected="false" />
+      <PdaMessengerComponent canbeselected="true" msg="ItemMsgInteractSelect" drawhudwhenequipped="true" SrpTag="SRPmedic">
+        <GuiFrame relativesize="0.5,0.62" minsize="620,480" anchor="Center" />
+      </PdaMessengerComponent>
+    </Item>
+
+    <Item name="" identifier="PDA-mech-anim" category="Equipment" scale="0.25" linkable="true" HideConditionBar="true" Tags="smallitem,pdaitem,mobileradio" impactsoundtag="impact_metal_light" cargocontaineridentifier="metalcrate">
+      <Price baseprice="750">
+        <Price storeidentifier="merchantoutpost" minavailable="1" sold="false" />
+        <Price storeidentifier="merchantcity" minavailable="1" />
+        <Price storeidentifier="merchantresearch" minavailable="1" sold="false" />
+        <Price storeidentifier="merchantmilitary" minavailable="1" />
+        <Price storeidentifier="merchantmine" minavailable="1" />
+      </Price>
+      <Deconstruct time="10">
+        <Item identifier="wificomponent" />
+        <Item identifier="PDA-better-anim" />
+        <Item identifier="handheldstatusmonitor" />
+      </Deconstruct>
+      <Fabricate suitablefabricators="fabricator" requiredtime="50">
+        <RequiredSkill identifier="mechanical" level="60" />
+        <RequiredSkill identifier="electrical" level="35" />
+        <RequiredItem identifier="skillbookhandyseaman" amount="1" />
+        <RequiredItem identifier="PDA-better-anim" amount="1" />
+        <RequiredItem identifier="handheldstatusmonitor" amount="1" />
+        <RequiredItem identifier="wificomponent" amount="2" />
+      </Fabricate>
+      <PreferredContainer secondary="wreckengcab,abandonedengcab,pirateengcab,outpostengcab,beaconengcab" amount="1" spawnprobability="0.025" />
+      <InventoryIcon texture="%ModDir%/Content/Items/PDA/Sprites/pdamechanical.png" sourcerect="9,4,101,101" origin="0.5,0.5" />
+      <Sprite texture="%ModDir%/Content/Items/PDA/Sprites/pdamechanical.png" depth="0.57" sourcerect="151,0,50,108" origin="0.5,0.5" />
+      <Body radius="16" height="30" density="10.05" />
+      <WifiComponent range="100000.0" LinkToChat="true" MinChatMessageInterval="0.0" Channel="1111" AllowInGameEditing="true" AllowCrossTeamCommunication="true">
+        <RequiredItem items="mobilebattery" type="Contained" />
+      </WifiComponent>
+      <Holdable canBeCombined="true" attachable="false" slots="RightHand,LeftHand,Any" cameraaimoffset="500" aimable="true" aimpos="45,0" holdpos="35,15" handle1="0,-45" handle2="0,-20" msg="ItemMsgPickUpSelect">
+        <StatusEffect AllowWhenBroken="true" type="OnActive" target="Contained,this,Character" targetslot="0" interval="1" duration="1.1" Condition="-0.001" stackable="false" drawhudwhenequipped="true">
+          <RequiredItem items="mobilebattery" hide="true" type="Contained" />
+          <Conditional Voltage="gt 0" />
+          <Affliction identifier="primarypkg_pda-buff" strength="1000" />
+        </StatusEffect>
+        <StatusEffect AllowWhenBroken="true" type="OnBroken" Condition="100" targettype="This" stackable="true">
+          <sound file="%ModDir%/Content/Sounds/Interactions/hold.ogg" range="1000.0" volume="0.5" />
+        </StatusEffect>
+        <StatusEffect AllowWhenBroken="true" type="OnActive" targettype="This" interval="5" drawhudwhenequipped="false" setvalue="true">
+          <Conditional Voltage="eq 0" />
+        </StatusEffect>
+        <StatusEffect AllowWhenBroken="true" type="OnActive" target="this,Contained" Condition="0" setvalue="true" targetslot="1" interval="2" stackable="false" drawhudwhenequipped="false">
+          <Conditional targetcontainer="true" Voltage="eq 0" />
+        </StatusEffect>
+        <StatusEffect AllowWhenBroken="true" type="OnActive" interval="5" duration="5.1" targettype="Contained" targetidentifiers="pda_screen" IsOn="true" setvalue="true" />
+        <LightComponent IsOn="false" range="267" LightColor="200,200,255,155" powerconsumption="10" CastShadows="true" ignorecontinuoustoggle="true">
+          <LightTexture texture="Content/Lights/lightcone.png" origin="0.0,0.5" size="0.5,0.65" />
+        </LightComponent>
+      </Holdable>
+      <CustomInterface canbeselected="true" drawhudwhenequipped="false" ElementStates="false">
+        <GuiFrame relativesize="0.175,0.175" anchor="Left" absoluteoffset="1000,-1000" />
+        <TickBox text="Manual_Button_FlashLight">
+          <StatusEffect AllowWhenBroken="true" type="OnUse" target="Contained,this" targetslot="0" Condition="-0.02" IsOn="true" LightColor="200,200,255,155" BlinkFrequency="-1000" tag="on" interval="0.5" duration="0.55" stackable="false" comparison="and">
+            <RequiredItem items="mobilebattery" hide="true" type="Contained" />
+            <Conditional IsOn="False" />
+            <sound file="%ModDir%/Content/Items/PDA/Sounds/pdabeep.ogg" range="500.0" volume="1" />
+          </StatusEffect>
+          <StatusEffect AllowWhenBroken="true" type="OnSecondaryUse" target="This" IsOn="False" interval="1" duration="0.1" disabledeltatime="true" comparison="and">
+            <sound file="%ModDir%/Content/Items/PDA/Sounds/pdabeep_alt.ogg" range="500.0" volume="1" />
+            <RequiredItem items="mobilebattery" hide="true" type="Contained" />
+            <Conditional IsOn="true" />
+          </StatusEffect>
+        </TickBox>
+        <Button text="primarypkg_pda_messages">
+          <StatusEffect type="OnUse" targettype="This" OpenSignal="true" stackable="false" />
+        </Button>
+        <Terminal canbeselected="true" msg="ItemMsgInteractSelect" TextColor="155,155,255,255" UseMonospaceFont="true" LineStartSymbol="" AllowInGameEditing="false">
+          <GuiFrame relativesize="0.3,0.35" anchor="Center" absoluteoffset="1000,-50" />
+        </Terminal>
+      </CustomInterface>
+      <ItemContainer capacity="1" slotsperrow="1" maxstacksize="1" hideitems="true" containedstateindicatorslot="0" containedstateindicatorstyle="battery" autoinject="false" allowswappingcontaineditems="true">
+        <SlotIcon slotindex="0" texture="Content/UI/StatusMonitorUI.png" sourcerect="128,448,64,64" origin="0.5,0.5" />
+        <Containable items="mobilebattery" hide="true">
+          <StatusEffect AllowWhenBroken="true" type="OnContaining" targettype="This" Voltage="1.0" duration="5.1" interval="5" setvalue="true" />
+          <StatusEffect AllowWhenBroken="true" type="OnInserted" targettype="This" setvalue="true">
+            <sound file="%ModDir%/Content/Items/PDA/Sounds/pdapower.ogg" range="300.0" drawhudwhenequipped="true" volume="1" />
+          </StatusEffect>
+          <StatusEffect AllowWhenBroken="true" type="OnRemoved" targettype="This" drawhudwhenequipped="false" setvalue="true">
+            <sound file="%ModDir%/Content/Items/PDA/Sounds/pdaalarm.ogg" range="300.0" volume="1" />
+          </StatusEffect>
+        </Containable>
+      </ItemContainer>
+      <ItemContainer capacity="1" slotsperrow="1" maxstacksize="1" hideitems="false" spawnwithid="pda_screen" containedstateindicatorslot="0" containedstateindicatorstyle="battery" autoinject="false" allowswappingcontaineditems="true">
+        <SlotIcon slotindex="0" texture="Content/UI/StatusMonitorUI.png" sourcerect="128,448,64,64" origin="0.5,0.5" />
+        <Containable items="pda_screen" hide="false">
+          <StatusEffect AllowWhenBroken="true" type="OnContaining" interval="2" duration="2.1" targettype="Contained,This" targetslot="0" IsOn="false" setvalue="true">
+            <Conditional Voltage="eq 0" />
+          </StatusEffect>
+        </Containable>
+      </ItemContainer>
+      <PowerContainer capacity="1" Charge="0" maxrechargespeed="0" maxoutput="250" canbeselected="false" />
+      <PdaMessengerComponent canbeselected="true" msg="ItemMsgInteractSelect" drawhudwhenequipped="true" SrpTag="SRPmechanic">
+        <GuiFrame relativesize="0.5,0.62" minsize="620,480" anchor="Center" />
+      </PdaMessengerComponent>
+    </Item>
+
+    <Item name="" identifier="PDA-eng-anim" category="Equipment" scale="0.25" linkable="true" HideConditionBar="true" Tags="smallitem,pdaitem,mobileradio" impactsoundtag="impact_metal_light" cargocontaineridentifier="metalcrate">
+      <Price baseprice="750">
+        <Price storeidentifier="merchantoutpost" minavailable="1" sold="false" />
+        <Price storeidentifier="merchantcity" minavailable="1" />
+        <Price storeidentifier="merchantresearch" minavailable="1" sold="false" />
+        <Price storeidentifier="merchantmilitary" minavailable="1" sold="false" />
+        <Price storeidentifier="merchantmine" minavailable="1" />
+      </Price>
+      <Deconstruct time="10">
+        <Item identifier="wificomponent" />
+        <Item identifier="PDA-better-anim" />
+        <Item identifier="reactorpda" />
+      </Deconstruct>
+      <Fabricate suitablefabricators="fabricator" requiredtime="55">
+        <RequiredSkill identifier="mechanical" level="30" />
+        <RequiredSkill identifier="electrical" level="60" />
+        <RequiredItem identifier="fulgurium" amount="1" />
+        <RequiredItem identifier="PDA-better-anim" amount="1" />
+        <RequiredItem identifier="reactorpda" amount="1" />
+        <RequiredItem identifier="wificomponent" amount="2" />
+      </Fabricate>
+      <PreferredContainer secondary="wreckengcab,abandonedengcab,pirateengcab,outpostengcab,beaconengcab" amount="1" spawnprobability="0.025" />
+      <InventoryIcon texture="%ModDir%/Content/Items/PDA/Sprites/pdaengineering.png" sourcerect="9,4,101,101" origin="0.5,0.5" />
+      <Sprite texture="%ModDir%/Content/Items/PDA/Sprites/pdaengineering.png" depth="0.57" sourcerect="136,0,64,108" origin="0.58613825,0.49987695" />
+      <Body radius="16" height="30" density="10.05" />
+      <WifiComponent range="100000.0" LinkToChat="true" MinChatMessageInterval="0.0" Channel="1111" AllowInGameEditing="true" AllowCrossTeamCommunication="true">
+        <RequiredItem items="mobilebattery" type="Contained" />
+      </WifiComponent>
+      <Holdable canBeCombined="true" attachable="false" slots="RightHand,LeftHand,Any" cameraaimoffset="500" aimable="true" aimpos="45,0" holdpos="35,15" handle1="0,-45" handle2="0,-20" msg="ItemMsgPickUpSelect">
+        <StatusEffect AllowWhenBroken="true" type="OnActive" target="Contained,this,Character" targetslot="0" interval="1" duration="1.1" Condition="-0.001" stackable="false" drawhudwhenequipped="true">
+          <RequiredItem items="mobilebattery" hide="true" type="Contained" />
+          <Conditional Voltage="gt 0" />
+          <Affliction identifier="primarypkg_pda-buff" strength="1000" />
+        </StatusEffect>
+        <StatusEffect AllowWhenBroken="true" type="OnBroken" Condition="100" targettype="This" stackable="true">
+          <sound file="%ModDir%/Content/Sounds/Interactions/hold.ogg" range="1000.0" volume="0.5" />
+        </StatusEffect>
+        <StatusEffect AllowWhenBroken="true" type="OnActive" targettype="This" interval="5" drawhudwhenequipped="false" setvalue="true">
+          <Conditional Voltage="eq 0" />
+        </StatusEffect>
+        <StatusEffect AllowWhenBroken="true" type="OnActive" target="this,Contained" Condition="0" setvalue="true" targetslot="1" interval="2" stackable="false" drawhudwhenequipped="false">
+          <Conditional targetcontainer="true" Voltage="eq 0" />
+        </StatusEffect>
+        <StatusEffect AllowWhenBroken="true" type="OnActive" interval="5" duration="5.1" targettype="Contained" targetidentifiers="pda_screen" IsOn="true" setvalue="true" />
+        <LightComponent IsOn="false" range="267" LightColor="200,200,255,155" powerconsumption="10" CastShadows="true" ignorecontinuoustoggle="true">
+          <LightTexture texture="Content/Lights/lightcone.png" origin="0.0,0.5" size="0.5,0.65" />
+        </LightComponent>
+      </Holdable>
+      <CustomInterface canbeselected="true" drawhudwhenequipped="false" ElementStates="false">
+        <GuiFrame relativesize="0.175,0.175" anchor="Left" absoluteoffset="1000,-1000" />
+        <TickBox text="Manual_Button_FlashLight">
+          <StatusEffect AllowWhenBroken="true" type="OnUse" target="Contained,this" targetslot="0" Condition="-0.02" IsOn="true" LightColor="255,255,200,155" BlinkFrequency="-1000" tag="on" interval="0.5" duration="0.55" stackable="false" comparison="and">
+            <RequiredItem items="mobilebattery" hide="true" type="Contained" />
+            <Conditional IsOn="False" />
+            <sound file="%ModDir%/Content/Items/PDA/Sounds/pdabeep.ogg" range="500.0" volume="1" />
+          </StatusEffect>
+          <StatusEffect AllowWhenBroken="true" type="OnSecondaryUse" target="This" IsOn="False" interval="1" duration="0.1" disabledeltatime="true" comparison="and">
+            <sound file="%ModDir%/Content/Items/PDA/Sounds/pdabeep_alt.ogg" range="500.0" volume="1" />
+            <RequiredItem items="mobilebattery" hide="true" type="Contained" />
+            <Conditional IsOn="true" />
+          </StatusEffect>
+        </TickBox>
+        <Button text="primarypkg_pda_messages">
+          <StatusEffect type="OnUse" targettype="This" OpenSignal="true" stackable="false" />
+        </Button>
+        <Terminal canbeselected="true" msg="ItemMsgInteractSelect" TextColor="255,255,155,255" UseMonospaceFont="true" LineStartSymbol="" AllowInGameEditing="false">
+          <GuiFrame relativesize="0.3,0.35" anchor="Center" absoluteoffset="1000,-50" />
+        </Terminal>
+      </CustomInterface>
+      <ItemContainer capacity="1" slotsperrow="1" maxstacksize="1" hideitems="true" containedstateindicatorslot="0" containedstateindicatorstyle="battery" autoinject="false" allowswappingcontaineditems="true">
+        <SlotIcon slotindex="0" texture="Content/UI/StatusMonitorUI.png" sourcerect="128,448,64,64" origin="0.5,0.5" />
+        <Containable items="mobilebattery" hide="true">
+          <StatusEffect AllowWhenBroken="true" type="OnContaining" targettype="This" Voltage="1.0" duration="5.1" interval="5" setvalue="true" />
+          <StatusEffect AllowWhenBroken="true" type="OnInserted" targettype="This" setvalue="true">
+            <sound file="%ModDir%/Content/Items/PDA/Sounds/pdapower.ogg" range="300.0" drawhudwhenequipped="true" volume="1" />
+          </StatusEffect>
+          <StatusEffect AllowWhenBroken="true" type="OnRemoved" targettype="This" drawhudwhenequipped="false" setvalue="true">
+            <sound file="%ModDir%/Content/Items/PDA/Sounds/pdaalarm.ogg" range="300.0" volume="1" />
+          </StatusEffect>
+        </Containable>
+      </ItemContainer>
+      <ItemContainer capacity="1" slotsperrow="1" maxstacksize="1" hideitems="false" spawnwithid="pda_screen" containedstateindicatorslot="0" containedstateindicatorstyle="battery" autoinject="false" allowswappingcontaineditems="true">
+        <SlotIcon slotindex="0" texture="Content/UI/StatusMonitorUI.png" sourcerect="128,448,64,64" origin="0.5,0.5" />
+        <Containable items="pda_screen" hide="false">
+          <StatusEffect AllowWhenBroken="true" type="OnContaining" interval="2" duration="2.1" targettype="Contained,This" targetslot="0" IsOn="false" setvalue="true">
+            <Conditional Voltage="eq 0" />
+          </StatusEffect>
+        </Containable>
+      </ItemContainer>
+      <PowerContainer capacity="1" Charge="0" maxrechargespeed="0" maxoutput="250" canbeselected="false" />
+      <PdaMessengerComponent canbeselected="true" msg="ItemMsgInteractSelect" drawhudwhenequipped="true" SrpTag="SRPengineer">
+        <GuiFrame relativesize="0.5,0.62" minsize="620,480" anchor="Center" />
+      </PdaMessengerComponent>
+    </Item>
+
+    <Item name="" identifier="pda_radial" Category="Hidden" Tags="effect,radial" InvulnerableToDamage="true" maxstacksize="1" cargocontaineridentifier="metalcrate" scale="0.5" spritecolor="255,255,255,0" noninteractable="false" hideinmenus="true">
+      <Sprite texture="Content/Items/Tools/tools.png" depth="0.55" sourcerect="0,0,1,1" />
+      <Body radius="1" density="10" />
+      <Holdable handle1="0,0" slots="Any" msg="ItemMsgPickUpSelect">
+        <StatusEffect type="OnNotContained" target="This">
+          <Remove />
+        </StatusEffect>
+      </Holdable>
+      <LightComponent lightcolor="1.0,1.0,0.75,0.65" range="500.0" IsOn="true" castshadows="true" powerconsumption="0">
+        <LightTexture texture="Content/Lights/pointlight_falloff.png" origin="0.5,0.5" />
+      </LightComponent>
+    </Item>
+
+    <Item name="" identifier="pda_radial1" Category="Hidden" Tags="effect,radial" InvulnerableToDamage="true" maxstacksize="1" cargocontaineridentifier="metalcrate" scale="0.5" spritecolor="255,255,255,0" noninteractable="false" hideinmenus="true">
+      <Sprite texture="Content/Items/Tools/tools.png" depth="0.55" sourcerect="0,0,1,1" />
+      <Body radius="1" density="10" />
+      <Holdable handle1="0,0" slots="Any" msg="ItemMsgPickUpSelect">
+        <StatusEffect type="OnNotContained" target="This">
+          <Remove />
+        </StatusEffect>
+        <LightComponent lightcolor="1.0,1.0,0.75,0.65" range="500.0" IsOn="true" castshadows="true" powerconsumption="0">
+          <LightTexture texture="%ModDir%/Content/Items/Weapons/Shared/pdalaser_light.png" origin="0, 0.5" size="1.0,0.75" alpha="1.0" />
+        </LightComponent>
+      </Holdable>
+    </Item>
+
+    <Item name="" identifier="PDA-officer-anim" category="Equipment" HideConditionBar="true" scale="0.25" linkable="true" Tags="smallitem,pdaitem,mobileradio" impactsoundtag="impact_metal_light" cargocontaineridentifier="metalcrate">
+      <Price baseprice="1000">
+        <Price storeidentifier="merchantoutpost" minavailable="1" sold="false" />
+        <Price storeidentifier="merchantcity" minavailable="1" sold="false" />
+        <Price storeidentifier="merchantresearch" minavailable="1" sold="false" />
+        <Price storeidentifier="merchantmilitary" minavailable="1" />
+        <Price storeidentifier="merchantmine" minavailable="1" sold="false" />
+      </Price>
+      <Deconstruct time="10">
+        <Item identifier="stungun" />
+        <Item identifier="PDA-better-anim" />
+        <Item identifier="thorium" />
+      </Deconstruct>
+      <Fabricate suitablefabricators="fabricator" requiredtime="50">
+        <RequiredSkill identifier="weapons" level="60" />
+        <RequiredItem identifier="PDA-better-anim" amount="1" />
+        <RequiredItem identifier="stungun" amount="1" />
+        <RequiredItem identifier="stunbaton" amount="1" />
+        <RequiredItem identifier="fulgurium" amount="1" />
+        <RequiredItem identifier="thorium" amount="2" />
+      </Fabricate>
+      <PreferredContainer secondary="wreckengcab,abandonedengcab,pirateengcab,outpostengcab,beaconengcab" amount="1" spawnprobability="0.005" />
+      <InventoryIcon texture="%ModDir%/Content/Items/PDA/Sprites/pdaofficer.png" sourcerect="9,2,114,115" origin="0.5,0.5" />
+      <Sprite texture="%ModDir%/Content/Items/PDA/Sprites/pdaofficer.png" depth="0.57" sourcerect="151,0,50,120" origin="0.5026246,0.5341848" />
+      <Body radius="16" height="30" density="10.05" />
+      <WifiComponent range="100000.0" LinkToChat="true" MinChatMessageInterval="0.0" Channel="1111" AllowInGameEditing="true" AllowCrossTeamCommunication="true">
+        <RequiredItem items="mobilebattery" type="Contained" />
+      </WifiComponent>
+      <Holdable canBeCombined="true" attachable="false" slots="RightHand,LeftHand,Any" cameraaimoffset="475" aimable="true" aimpos="45,0" holdpos="35,15" handle1="0,-45" handle2="0,-20" msg="ItemMsgPickUpSelect">
+        <StatusEffect AllowWhenBroken="true" type="OnActive" target="Contained,this,Character" targetslot="0" Condition="-0.001" stackable="false" drawhudwhenequipped="true">
+          <RequiredItem items="mobilebattery" hide="true" type="Contained" />
+          <Conditional Voltage="gt 0" />
+          <Affliction identifier="primarypkg_pda-buff" strength="1000" />
+        </StatusEffect>
+        <StatusEffect AllowWhenBroken="true" type="OnBroken" Condition="100" targettype="This" stackable="true">
+          <sound file="%ModDir%/Content/Sounds/Interactions/hold.ogg" range="1000.0" volume="0.5" />
+        </StatusEffect>
+        <StatusEffect AllowWhenBroken="true" type="OnActive" targettype="This" interval="5" drawhudwhenequipped="false" setvalue="true">
+          <Conditional Voltage="eq 0" />
+        </StatusEffect>
+        <StatusEffect AllowWhenBroken="true" type="OnActive" target="this,Contained" Condition="0" setvalue="true" targetslot="1" interval="2" stackable="false" drawhudwhenequipped="false">
+          <Conditional targetcontainer="true" Voltage="eq 0" />
+        </StatusEffect>
+        <StatusEffect AllowWhenBroken="true" type="OnActive" interval="5" duration="5.1" targettype="Contained" targetidentifiers="pda_screen" IsOn="true" setvalue="true" />
+        <LightComponent IsOn="false" range="267" LightColor="255,255,200,155" powerconsumption="10" CastShadows="true" ignorecontinuoustoggle="true">
+          <LightTexture texture="Content/Lights/lightcone.png" origin="0.0,0.5" size="0.5,0.65" />
+        </LightComponent>
+      </Holdable>
+      <CustomInterface canbeselected="true" drawhudwhenequipped="false" ElementStates="false">
+        <GuiFrame relativesize="0.175,0.175" anchor="Left" absoluteoffset="1000,-1000" />
+        <TickBox text="Manual_Button_FlashLight">
+          <StatusEffect AllowWhenBroken="true" type="OnUse" target="Contained,this" targetslot="0" Condition="-0.02" IsOn="true" LightColor="200,255,200,155" BlinkFrequency="-1000" tag="on" interval="0.5" duration="0.55" stackable="false" comparison="and">
+            <RequiredItem items="mobilebattery" hide="true" type="Contained" />
+            <Conditional IsOn="False" />
+            <sound file="%ModDir%/Content/Items/PDA/Sounds/pdabeep.ogg" range="500.0" volume="1" />
+          </StatusEffect>
+          <StatusEffect AllowWhenBroken="true" type="OnSecondaryUse" target="This" IsOn="False" interval="1" duration="0.1" disabledeltatime="true" comparison="and">
+            <sound file="%ModDir%/Content/Items/PDA/Sounds/pdabeep_alt.ogg" range="500.0" volume="1" />
+            <RequiredItem items="mobilebattery" hide="true" type="Contained" />
+            <Conditional IsOn="true" />
+          </StatusEffect>
+        </TickBox>
+        <Button text="primarypkg_pda_messages">
+          <StatusEffect type="OnUse" targettype="This" OpenSignal="true" stackable="false" />
+        </Button>
+        <Terminal canbeselected="true" msg="ItemMsgInteractSelect" TextColor="255,255,36,255" UseMonospaceFont="true" LineStartSymbol="" AllowInGameEditing="false">
+          <GuiFrame relativesize="0.3,0.35" anchor="Center" absoluteoffset="1000,-50" />
+        </Terminal>
+      </CustomInterface>
+      <ItemContainer capacity="1" slotsperrow="1" maxstacksize="1" hideitems="true" containedstateindicatorslot="0" containedstateindicatorstyle="battery" autoinject="false" allowswappingcontaineditems="true">
+        <SlotIcon slotindex="0" texture="Content/UI/StatusMonitorUI.png" sourcerect="128,448,64,64" origin="0.5,0.5" />
+        <Containable items="mobilebattery" hide="true">
+          <StatusEffect AllowWhenBroken="true" type="OnContaining" targettype="This" Voltage="1.0" duration="5.1" interval="5" setvalue="true" />
+          <StatusEffect AllowWhenBroken="true" type="OnInserted" targettype="This" setvalue="true">
+            <sound file="%ModDir%/Content/Items/PDA/Sounds/pdapower.ogg" range="300.0" drawhudwhenequipped="true" volume="1" />
+          </StatusEffect>
+          <StatusEffect AllowWhenBroken="true" type="OnRemoved" targettype="This" drawhudwhenequipped="false" setvalue="true">
+            <sound file="%ModDir%/Content/Items/PDA/Sounds/pdaalarm.ogg" range="300.0" volume="1" />
+          </StatusEffect>
+        </Containable>
+      </ItemContainer>
+      <ItemContainer capacity="1" slotsperrow="1" maxstacksize="1" hideitems="false" spawnwithid="pda_screen" containedstateindicatorslot="0" containedstateindicatorstyle="battery" autoinject="false" allowswappingcontaineditems="true">
+        <SlotIcon slotindex="0" texture="Content/UI/StatusMonitorUI.png" sourcerect="128,448,64,64" origin="0.5,0.5" />
+        <Containable items="pda_screen" hide="false">
+          <StatusEffect AllowWhenBroken="true" type="OnContaining" interval="2" duration="2.1" targettype="Contained,This" targetslot="0" IsOn="false" setvalue="true">
+            <Conditional Voltage="eq 0" />
+          </StatusEffect>
+        </Containable>
+      </ItemContainer>
+      <PowerContainer capacity="1" Charge="0" maxrechargespeed="0" maxoutput="250" canbeselected="false" />
+      <PdaMessengerComponent canbeselected="true" msg="ItemMsgInteractSelect" drawhudwhenequipped="true" SrpTag="SRPsecurity">
+        <GuiFrame relativesize="0.5,0.62" minsize="620,480" anchor="Center" />
+      </PdaMessengerComponent>
+    </Item>
+
+    <Item name="" identifier="pda_screen" Category="Hidden" Tags="effect,radial" InvulnerableToDamage="true" maxstacksize="1" cargocontaineridentifier="metalcrate" scale="0.5" spritecolor="255,255,255,0" noninteractable="false" hideinmenus="true">
+      <Sprite texture="Content/Items/Tools/tools.png" depth="0.55" sourcerect="0,0,1,1" />
+      <Body radius="1" density="10" />
+      <Holdable handle1="0,0" slots="Any" msg="ItemMsgPickUpSelect">
+        <StatusEffect type="OnNotContained" target="This">
+          <Remove />
+        </StatusEffect>
+      </Holdable>
+      <LightComponent lightcolor="1.0,1.0,1.0,1.00" range="15.0" IsOn="true" castshadows="false" powerconsumption="0">
+        <LightTexture texture="Content/Lights/pointlight_bright.png" origin="0.5,0.55" />
+      </LightComponent>
+    </Item>
+
+    <Item name=" " identifier="Dynamo-handle" maxstacksize="1" scale="0.5" category="Weapon" NonInteractable="True" hideinmenus="true" tags="smallitem,Berettareloading">
+      <Sprite texture="Content/Items/Weapons/weapons_new.png" sourcerect="1950,282,17,6" depth="0.55" origin="0.5,0.5" />
+      <Body width="5" height="5" density="25" />
+      <Holdable canBeCombined="true" slots="LeftHand" msg="ItemMsgPickUpSelect">
+        <StatusEffect type="Always" target="This" delay="0.01" handle2="-20,-20" holdpos="45,15" aimpos="45,0" />
+        <StatusEffect type="Always" target="This" delay="0.7" handle2="-15,0" holdpos="45,15" aimpos="45,0" />
+        <StatusEffect type="Always" target="This" delay="0.9" handle2="-17,-5" holdpos="45,15" aimpos="45,0" />
+        <StatusEffect type="Always" target="This" delay="1.5" handle2="-20,-10" holdpos="45,15" aimangle="-25" aimpos="45,0" />
+        <StatusEffect type="Always" target="This" delay="1">
+          <Remove />
+        </StatusEffect>
+      </Holdable>
+    </Item>
+
+    <Item name="" identifier="idcard" category="Equipment" condition="50" scale="0.3" linkable="true" HideConditionBar="true" Tags="smallitem,identitycard" cargocontaineridentifier="metalcrate">
+      <PreferredContainer primary="crewcab" />
+      <Price baseprice="10">
+        <Price storeidentifier="merchantoutpost" minavailable="4" />
+        <Price storeidentifier="merchantcity" minavailable="6" />
+      </Price>
+      <Sprite texture="%ModDir%/Content/Items/PDA/Sprites/pdaid_card.png" depth="0.5" sourcerect="0,1,67,55" origin="0.5,0.5" />
+      <BrokenSprite texture="%ModDir%/Content/Items/PDA/Sprites/pdaid_card.png" name="PDAIdCardBroken" depth="0.5" sourcerect="73,1,67,55" maxcondition="50" origin="0.5,0.5" />
+      <Body width="16" height="12" density="10.05" />
+      <IdCard slots="Card,Any" msg="ItemMsgPickUpSelect">
+        <CustomInterface canbeselected="false" drawhudwhenequipped="false" allowuioverlap="true" draggable="false">
+          <GuiFrame relativesize="0.1,0.15" anchor="BottomRight" absoluteoffset="0,200" />
+          <Button text="Spit">
+            <StatusEffect type="OnUse" target="This,Character" disabledeltatime="true" delay="0.5">
+              <Affliction identifier="primarypkg_spit" amount="100" />
+            </StatusEffect>
+          </Button>
+          <Button text="Shout">
+            <StatusEffect type="OnUse" target="This,Character" disabledeltatime="true">
+              <Affliction identifier="primarypkg_spasm-shout" amount="100" />
+            </StatusEffect>
+          </Button>
+          <Button text="Vomit">
+            <StatusEffect type="OnUse" target="This,Character" disabledeltatime="false" interval="2" stackable="false">
+              <SpawnItem identifier="vomit-proxy" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+              <Conditional lockhands="false" />
+            </StatusEffect>
+          </Button>
+          <Button text="Interaction">
+            <StatusEffect AllowWhenBroken="true" type="OnUse" target="This,Character" disabledeltatime="true">
+              <SpawnItem identifier="cursor-anim" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+              <Conditional lockhands="false" />
+            </StatusEffect>
+            <StatusEffect AllowWhenBroken="true" type="OnUse" target="This,Character" disabledeltatime="true">
+              <SpawnItem identifier="cursor-anim1" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+              <Conditional lockhands="false" />
+            </StatusEffect>
+          </Button>
+        </CustomInterface>
+      </IdCard>
+      <ItemContainer capacity="1" maxstacksize="1" containedstateindicatorslot="1" hideitems="true">
+        <Containable items="donorCard" />
+        <SubContainer capacity="1" maxstacksize="1" hideitems="true">
+          <Containable items="pdaitem">
+            <StatusEffect AllowWhenBroken="true" type="OnInserted" target="This" Condition="50" setvalue="true">
+              <sound file="%ModDir%/Content/Items/PDA/Sounds/pdapower.ogg" range="250.0" />
+            </StatusEffect>
+            <StatusEffect AllowWhenBroken="true" type="OnRemoved" target="This" Condition="100" setvalue="true">
+              <sound file="%ModDir%/Content/Items/PDA/Sounds/pdaholster.ogg" range="250.0" />
+            </StatusEffect>
+          </Containable>
+          <SlotIcon slotindex="0" texture="%ModDir%/Content/Items/PDA/Sprites/pdacard_slot.png" origin="0.5,0.5" />
+        </SubContainer>
+        <SubContainer capacity="1" maxstacksize="1" containedstateindicatorslot="1" hideitems="true">
+          <Containable items="actor-menu-proxy">
+            <StatusEffect AllowWhenBroken="true" type="OnInserted" target="This" drawhudwhenequipped="true" setvalue="true" />
+            <StatusEffect AllowWhenBroken="true" type="OnRemoved" target="This" drawhudwhenequipped="false" setvalue="true" />
+          </Containable>
+        </SubContainer>
+      </ItemContainer>
+    </Item>
+
+    <Item name=" " identifier="pda-handle" maxstacksize="1" scale="0.5" category="Weapon" NonInteractable="True" hideinmenus="true" tags="smallitem,Glockreloading">
+      <Sprite texture="Content/Items/Weapons/weapons_new.png" sourcerect="1950,282,17,6" depth="0.55" origin="0.5,0.5" />
+      <Body width="5" height="5" density="25" />
+      <Holdable canBeCombined="true" slots="LeftHand" handle2="-45,-20" holdpos="50,10" aimpos="55,0" msg="ItemMsgPickUpSelect">
+        <StatusEffect AllowWhenBroken="true" type="Always" target="This" delay="0.3" handle2="-45,-20" holdpos="55,10" aimpos="60,0" oneshot="true" />
+        <StatusEffect AllowWhenBroken="true" type="Always" target="This" delay="0.6" handle2="-45,-20" holdpos="50,10" aimpos="55,0" oneshot="true" />
+        <StatusEffect AllowWhenBroken="true" type="Always" target="This" delay="0.9" handle2="-45,-20" holdpos="55,10" aimpos="60,0" oneshot="true" />
+        <StatusEffect AllowWhenBroken="true" type="Always" target="This" delay="1.2" handle2="-45,-20" holdpos="50,10" aimpos="55,0" oneshot="true" />
+        <StatusEffect AllowWhenBroken="true" type="Always" target="This" delay="1.5">
+          <Remove />
+        </StatusEffect>
+      </Holdable>
+    </Item>
+
+    <Item name="" identifier="PDA-anim-craft-proxy" category="Equipment" scale="0.0" InvulnerableToDamage="true" Tags="fabricator" cargocontaineridentifier="metalcrate">
+      <Sprite texture="Content/Items/idcard.png" depth="0.5" sourcerect="0,0,0,1000" />
+      <Body radius="16" height="30" density="10.05" />
+      <Holdable canBeCombined="true" slots="LeftHand" aimpos="45,0" holdpos="35,15" handle1="0,-45" handle2="0,-30" msg="ItemMsgPickUpSelect">
+        <StatusEffect AllowWhenBroken="true" type="OnDeath" target="This" oneshot="true">
+          <Remove />
+        </StatusEffect>
+        <StatusEffect AllowWhenBroken="true" type="Always" target="This,Character" interval="1" oneshot="true">
+          <Conditional targetcontainer="true" speciesname="neq human" />
+          <Conditional pda-buff="eq 0" />
+          <Remove />
+        </StatusEffect>
+        <StatusEffect AllowWhenBroken="true" type="Always" target="This" oneshot="true">
+          <sound file="%ModDir%/Content/Items/PDA/Sounds/pdabeep.ogg" range="500.0" volume="1" />
+        </StatusEffect>
+      </Holdable>
+      <Fabricator FabricationSpeed="0" powerconsumption="10000.0" ShowAvailableOnlyTickBox="false" CreateButtonText="" canbeselected="true" drawhudwhenequipped="true" msg="ItemMsgInteractSelect">
+        <GuiFrame relativesize="0.35,0.4" anchor="Center" absoluteoffset="-1000,-500" />
+        <sound file="Content/Items/Fabricators/Fabricator.ogg" type="OnActive" range="0" volumeproperty="RelativeVoltage" loop="true" />
+      </Fabricator>
+      <ItemContainer drawhudwhenequipped="true" capacity="5" slotsperrow="5" uilabel="" ShowContainedStateIndicator="false" spawnwithid="pda-proxy-fabricator-blank,pda-proxy-fabricator-blank,pda-proxy-fabricator-blank,pda-proxy-fabricator-blank" allowuioverlap="true">
+        <Containable items="pda-proxy-fabricator-blank" hide="true"></Containable>
+      </ItemContainer>
+      <ItemContainer drawhudwhenequipped="true" capacity="1" maxstacksize="1" AllowAccess="true" ShowContainedStateIndicator="false" hideitems="true" allowuioverlap="true" autoinject="false" allowswappingcontaineditems="true">
+        <SlotIcon slotindex="0" texture="Content/UI/StatusMonitorUI.png" sourcerect="128,448,64,64" origin="0.5,0.5" />
+        <Containable items="none" hide="true" />
+      </ItemContainer>
+    </Item>
+
+    <Item name="" identifier="PDA-anim-craft-proxy-officer" category="Equipment" scale="0.0" InvulnerableToDamage="true" Tags="repair" cargocontaineridentifier="metalcrate">
+      <Sprite texture="Content/Items/idcard.png" depth="0.5" sourcerect="0,0,0,1000" />
+      <Body radius="16" height="30" density="10.05" />
+      <Holdable canBeCombined="true" slots="LeftHand" aimpos="45,0" holdpos="35,15" handle1="0,-45" handle2="0,-30" msg="ItemMsgPickUpSelect">
+        <StatusEffect AllowWhenBroken="true" type="OnDeath" target="This" oneshot="true">
+          <Remove />
+        </StatusEffect>
+        <StatusEffect AllowWhenBroken="true" type="Always" target="This,Character" interval="1" oneshot="true">
+          <Conditional targetcontainer="true" speciesname="neq human" />
+          <Conditional pda-buff="eq 0" />
+          <Remove />
+        </StatusEffect>
+        <StatusEffect AllowWhenBroken="true" type="Always" target="This" oneshot="true">
+          <sound file="%ModDir%/Content/Items/PDA/Sounds/pdabeep.ogg" range="500.0" volume="1" />
+        </StatusEffect>
+      </Holdable>
+      <Fabricator FabricationSpeed="0" powerconsumption="10000.0" ShowAvailableOnlyTickBox="false" CreateButtonText="" canbeselected="true" drawhudwhenequipped="true" msg="ItemMsgInteractSelect">
+        <GuiFrame relativesize="0.35,0.4" anchor="Center" absoluteoffset="-1000,-500" />
+        <sound file="Content/Items/Fabricators/Fabricator.ogg" type="OnActive" range="0" volumeproperty="RelativeVoltage" loop="true" />
+      </Fabricator>
+      <ItemContainer drawhudwhenequipped="true" capacity="8" slotsperrow="8" uilabel="" ShowContainedStateIndicator="false" allowuioverlap="true">
+        <Containable items="pda-proxy-fabricator-blank" hide="true"></Containable>
+      </ItemContainer>
+      <ItemContainer drawhudwhenequipped="true" capacity="1" maxstacksize="1" AllowAccess="true" ShowContainedStateIndicator="false" hideitems="true" allowuioverlap="true" autoinject="false" allowswappingcontaineditems="true">
+        <SlotIcon slotindex="0" texture="Content/UI/StatusMonitorUI.png" sourcerect="128,448,64,64" origin="0.5,0.5" />
+        <Containable items="none" hide="true" />
+      </ItemContainer>
+    </Item>
+
+    <Item name="" identifier="PDA-anim-eng-craft-proxy" category="Equipment" scale="0.0" InvulnerableToDamage="true" Tags="fabricator" cargocontaineridentifier="metalcrate">
+      <Sprite texture="Content/Items/idcard.png" depth="0.5" sourcerect="0,0,0,1000" />
+      <Body radius="16" height="30" density="10.05" />
+      <Holdable canBeCombined="true" slots="LeftHand" aimpos="45,0" holdpos="35,15" handle1="0,-45" handle2="0,-30" msg="ItemMsgPickUpSelect">
+        <StatusEffect AllowWhenBroken="true" type="OnDeath" target="This" oneshot="true">
+          <Remove />
+        </StatusEffect>
+        <StatusEffect AllowWhenBroken="true" type="Always" target="This,Character" interval="1" oneshot="true">
+          <Conditional targetcontainer="true" speciesname="neq human" />
+          <Conditional pda-buff="eq 0" />
+          <Remove />
+        </StatusEffect>
+        <StatusEffect AllowWhenBroken="true" type="Always" target="This" oneshot="true">
+          <sound file="%ModDir%/Content/Items/PDA/Sounds/pdabeep.ogg" range="500.0" volume="1" />
+        </StatusEffect>
+      </Holdable>
+      <Fabricator FabricationSpeed="0" powerconsumption="10000.0" ShowAvailableOnlyTickBox="false" CreateButtonText="" canbeselected="true" drawhudwhenequipped="true" msg="ItemMsgInteractSelect">
+        <GuiFrame relativesize="0.35,0.4" anchor="Center" absoluteoffset="-1000,-500" />
+        <sound file="Content/Items/Fabricators/Fabricator.ogg" type="OnActive" range="0" volumeproperty="RelativeVoltage" loop="true" />
+      </Fabricator>
+      <ItemContainer drawhudwhenequipped="true" capacity="5" slotsperrow="5" uilabel="" ShowContainedStateIndicator="false" spawnwithid="pda-proxy-fabricator-blank,pda-proxy-fabricator-blank" allowuioverlap="true">
+        <Containable items="pda-proxy-fabricator-blank" hide="true"></Containable>
+      </ItemContainer>
+      <ItemContainer drawhudwhenequipped="true" capacity="1" maxstacksize="1" AllowAccess="true" ShowContainedStateIndicator="false" hideitems="true" allowuioverlap="true" autoinject="false" allowswappingcontaineditems="true">
+        <SlotIcon slotindex="0" texture="Content/UI/StatusMonitorUI.png" sourcerect="128,448,64,64" origin="0.5,0.5" />
+        <Containable items="none" hide="true" />
+      </ItemContainer>
+    </Item>
+
+    <Item name=" " identifier="pda-proxy-fabricator-blank" maxstacksize="1" scale="0.00" HideConditionBar="true" hideinmenus="true" noninteractable="false" condition="200" category="Weapon" tags="smallitem">
+      <Sprite texture="%ModDir%/Content/Items/PDA/Sprites/pdabasic.png" origin="0.5,0.5" sourcerect="0,0,0,0" />
+      <Body width="5" height="5" density="25" />
+      <Holdable canBeCombined="true" slots="Any" aimpos="45,0" holdpos="35,15" handle1="0,-45" handle2="0,-30" msg="ItemMsgPickUpSelect" />
+    </Item>
+
+    <Item name="" identifier="PDA-anim-craft-proxy-better" category="Equipment" scale="0.0" InvulnerableToDamage="true" Tags="fabricator" cargocontaineridentifier="metalcrate">
+      <Sprite texture="Content/Items/idcard.png" depth="0.5" sourcerect="0,0,0,1000" />
+      <Body radius="16" height="30" density="10.05" />
+      <Holdable canBeCombined="true" slots="LeftHand" aimpos="45,0" holdpos="35,15" handle1="0,-45" handle2="0,-30" msg="ItemMsgPickUpSelect">
+        <StatusEffect AllowWhenBroken="true" type="OnDeath" target="This" oneshot="true">
+          <Remove />
+        </StatusEffect>
+        <StatusEffect AllowWhenBroken="true" type="Always" target="This,Character" interval="1" oneshot="true">
+          <Conditional targetcontainer="true" speciesname="neq human" />
+          <Conditional pda-buff="eq 0" />
+          <Remove />
+        </StatusEffect>
+        <StatusEffect AllowWhenBroken="true" type="Always" target="This" oneshot="true">
+          <sound file="%ModDir%/Content/Items/PDA/Sounds/pdabeep.ogg" range="500.0" volume="1" />
+        </StatusEffect>
+      </Holdable>
+      <Fabricator FabricationSpeed="0" powerconsumption="10000.0" ShowAvailableOnlyTickBox="false" CreateButtonText="" canbeselected="true" drawhudwhenequipped="true" msg="ItemMsgInteractSelect">
+        <GuiFrame relativesize="0.35,0.4" anchor="Center" absoluteoffset="-1000,-500" />
+        <sound file="Content/Items/Fabricators/Fabricator.ogg" type="OnActive" range="0" volumeproperty="RelativeVoltage" loop="true" />
+      </Fabricator>
+      <ItemContainer drawhudwhenequipped="true" capacity="5" slotsperrow="5" uilabel="" spawnwithid="pda-proxy-fabricator-blank,pda-proxy-fabricator-blank,pda-proxy-fabricator-blank" ShowContainedStateIndicator="false" allowuioverlap="true">
+        <Containable items="pda-proxy-fabricator-blank" hide="true"></Containable>
+      </ItemContainer>
+      <ItemContainer drawhudwhenequipped="true" capacity="1" maxstacksize="1" AllowAccess="true" ShowContainedStateIndicator="false" hideitems="true" allowuioverlap="true" autoinject="false" allowswappingcontaineditems="true">
+        <SlotIcon slotindex="0" texture="Content/UI/StatusMonitorUI.png" sourcerect="128,448,64,64" origin="0.5,0.5" />
+        <Containable items="none" hide="true" />
+      </ItemContainer>
+    </Item>
+
+    <Item name="" identifier="PDA-anim-craft-proxy-mech" category="Equipment" scale="0.0" InvulnerableToDamage="true" Tags="fabricator" cargocontaineridentifier="metalcrate">
+      <Sprite texture="Content/Items/idcard.png" depth="0.5" sourcerect="0,0,0,1000" />
+      <Body radius="16" height="30" density="10.05" />
+      <Holdable canBeCombined="true" slots="LeftHand" aimpos="45,0" holdpos="35,15" handle1="0,-45" handle2="0,-30" msg="ItemMsgPickUpSelect">
+        <StatusEffect AllowWhenBroken="true" type="OnDeath" target="This" oneshot="true">
+          <Remove />
+        </StatusEffect>
+        <StatusEffect AllowWhenBroken="true" type="Always" target="This,Character" interval="1" oneshot="true">
+          <Conditional targetcontainer="true" speciesname="neq human" />
+          <Conditional pda-buff="eq 0" />
+          <Remove />
+        </StatusEffect>
+        <StatusEffect AllowWhenBroken="true" type="Always" target="This" oneshot="true">
+          <sound file="%ModDir%/Content/Items/PDA/Sounds/pdabeep.ogg" range="500.0" volume="1" />
+        </StatusEffect>
+      </Holdable>
+      <Fabricator FabricationSpeed="0" powerconsumption="10000.0" ShowAvailableOnlyTickBox="false" CreateButtonText="" canbeselected="true" drawhudwhenequipped="true" msg="ItemMsgInteractSelect">
+        <GuiFrame relativesize="0.35,0.4" anchor="Center" absoluteoffset="-1000,-500" />
+        <sound file="Content/Items/Fabricators/Fabricator.ogg" type="OnActive" range="0" volumeproperty="RelativeVoltage" loop="true" />
+      </Fabricator>
+      <ItemContainer drawhudwhenequipped="true" capacity="5" slotsperrow="5" uilabel="" ShowContainedStateIndicator="false" allowuioverlap="true">
+        <Containable items="pda-proxy-fabricator-blank" hide="true"></Containable>
+      </ItemContainer>
+      <ItemContainer drawhudwhenequipped="true" capacity="1" maxstacksize="1" AllowAccess="true" ShowContainedStateIndicator="false" hideitems="true" allowuioverlap="true" autoinject="false" allowswappingcontaineditems="true">
+        <SlotIcon slotindex="0" texture="Content/UI/StatusMonitorUI.png" sourcerect="128,448,64,64" origin="0.5,0.5" />
+        <Containable items="none" hide="true" />
+      </ItemContainer>
+    </Item>
+
+    <Item name="" identifier="PDA-anim-craft-proxy-medic" category="Equipment" scale="0.0" InvulnerableToDamage="true" Tags="medicalfabricator" cargocontaineridentifier="metalcrate">
+      <Sprite texture="Content/Items/idcard.png" depth="0.5" sourcerect="0,0,0,1000" />
+      <Body radius="16" height="30" density="10.05" />
+      <Holdable canBeCombined="true" slots="LeftHand" aimpos="45,0" holdpos="35,15" handle1="0,-45" handle2="0,-30" msg="ItemMsgPickUpSelect">
+        <StatusEffect AllowWhenBroken="true" type="OnDeath" target="This" oneshot="true">
+          <Remove />
+        </StatusEffect>
+        <StatusEffect AllowWhenBroken="true" type="Always" target="This,Character" interval="1" oneshot="true">
+          <Conditional targetcontainer="true" speciesname="neq human" />
+          <Conditional pda-buff="eq 0" />
+          <Remove />
+        </StatusEffect>
+        <StatusEffect AllowWhenBroken="true" type="Always" target="This" oneshot="true">
+          <sound file="%ModDir%/Content/Items/PDA/Sounds/pdabeep.ogg" range="500.0" volume="1" />
+        </StatusEffect>
+      </Holdable>
+      <Fabricator FabricationSpeed="0" powerconsumption="10000.0" ShowAvailableOnlyTickBox="false" CreateButtonText="" canbeselected="true" drawhudwhenequipped="true" msg="ItemMsgInteractSelect">
+        <GuiFrame relativesize="0.35,0.4" anchor="Center" absoluteoffset="-1000,-500" />
+        <sound file="Content/Items/Fabricators/Fabricator.ogg" type="OnActive" range="0" volumeproperty="RelativeVoltage" loop="true" />
+      </Fabricator>
+      <ItemContainer drawhudwhenequipped="true" capacity="5" slotsperrow="5" uilabel="" ShowContainedStateIndicator="false" allowuioverlap="true">
+        <Containable items="pda-proxy-fabricator-blank" hide="true"></Containable>
+      </ItemContainer>
+      <ItemContainer drawhudwhenequipped="true" capacity="1" maxstacksize="1" AllowAccess="true" ShowContainedStateIndicator="false" hideitems="true" allowuioverlap="true" autoinject="false" allowswappingcontaineditems="true">
+        <SlotIcon slotindex="0" texture="Content/UI/StatusMonitorUI.png" sourcerect="128,448,64,64" origin="0.5,0.5" />
+        <Containable items="none" hide="true" />
+      </ItemContainer>
+    </Item>
+
+    <Item name="" identifier="PDA-anim-decon-proxy" category="Equipment" scale="0.0" InvulnerableToDamage="true" cargocontaineridentifier="metalcrate">
+      <Sprite texture="Content/Items/idcard.png" depth="0.5" sourcerect="0,0,0,1000" />
+      <Body radius="16" height="30" density="10.05" />
+      <Holdable canBeCombined="true" slots="LeftHand" aimpos="45,0" holdpos="35,15" handle1="0,-45" handle2="0,-30" msg="ItemMsgPickUpSelect">
+        <StatusEffect AllowWhenBroken="true" type="OnDeath" target="This" oneshot="true">
+          <Remove />
+        </StatusEffect>
+        <StatusEffect AllowWhenBroken="true" type="Always" target="This,Character" interval="1" oneshot="true">
+          <Conditional targetcontainer="true" speciesname="neq human" />
+          <Conditional pda-buff="eq 0" />
+          <Remove />
+        </StatusEffect>
+        <StatusEffect AllowWhenBroken="true" type="Always" target="This" drawhudwhenequipped="true" oneshot="true">
+          <sound file="%ModDir%/Content/Items/PDA/Sounds/pdabeep.ogg" range="500.0" volume="1" />
+        </StatusEffect>
+      </Holdable>
+      <RemoteController target="deconstructor" onlyinownsub="true" msg="ItemMsgInteractSelect" AllowInGameEditing="true" drawhudwhenequipped="false" />
+    </Item>
+
+    <Item name="" identifier="PDA-anim-fab-proxy" category="Equipment" scale="0.0" InvulnerableToDamage="true" cargocontaineridentifier="metalcrate">
+      <Sprite texture="Content/Items/idcard.png" depth="0.5" sourcerect="0,0,0,1000" />
+      <Body radius="16" height="30" density="10.05" />
+      <Holdable canBeCombined="true" slots="LeftHand" aimpos="45,0" holdpos="35,15" handle1="0,-45" handle2="0,-30" msg="ItemMsgPickUpSelect">
+        <StatusEffect AllowWhenBroken="true" type="OnDeath" target="This" oneshot="true">
+          <Remove />
+        </StatusEffect>
+        <StatusEffect AllowWhenBroken="true" type="Always" target="This,Character" interval="1" oneshot="true">
+          <Conditional targetcontainer="true" speciesname="neq human" />
+          <Conditional pda-buff="eq 0" />
+          <Remove />
+        </StatusEffect>
+        <StatusEffect AllowWhenBroken="true" type="Always" target="This" drawhudwhenequipped="true" oneshot="true">
+          <sound file="%ModDir%/Content/Items/PDA/Sounds/pdabeep.ogg" range="500.0" volume="1" />
+        </StatusEffect>
+      </Holdable>
+      <RemoteController target="fabricator" onlyinownsub="true" msg="ItemMsgInteractSelect" AllowInGameEditing="true" drawhudwhenequipped="false" />
+    </Item>
+
+    <Item name="" identifier="PDA-anim-reactor-proxy" category="Equipment" scale="0.0" InvulnerableToDamage="true" cargocontaineridentifier="metalcrate">
+      <Sprite texture="Content/Items/idcard.png" depth="0.5" sourcerect="0,0,0,1000" />
+      <Body radius="16" height="30" density="10.05" />
+      <Holdable canBeCombined="true" slots="LeftHand" aimpos="45,0" holdpos="35,15" handle1="0,-45" handle2="0,-30" msg="ItemMsgPickUpSelect">
+        <StatusEffect AllowWhenBroken="true" type="OnDeath" target="This" oneshot="true">
+          <Remove />
+        </StatusEffect>
+        <StatusEffect AllowWhenBroken="true" type="Always" target="This,Character" interval="1" oneshot="true">
+          <Conditional targetcontainer="true" speciesname="neq human" />
+          <Conditional pda-buff="eq 0" />
+          <Remove />
+        </StatusEffect>
+        <StatusEffect AllowWhenBroken="true" type="Always" target="This" drawhudwhenequipped="true" oneshot="true">
+          <sound file="%ModDir%/Content/Items/PDA/Sounds/pdabeep.ogg" range="500.0" volume="1" />
+        </StatusEffect>
+      </Holdable>
+      <RemoteController target="reactor" onlyinownsub="true" msg="ItemMsgInteractSelect" AllowInGameEditing="false" drawhudwhenequipped="true" />
+    </Item>
+  </Items>
+</Override>

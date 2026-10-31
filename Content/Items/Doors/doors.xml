@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Items>
+  <Item name="" identifier="ekdockyard_heavydoorvanilla" tags="door,weldable" subcategory="ekr_dockyard_r" scale="0.5" health="450" requirebodyinsidetrigger="false" damagedbyrepairtools="true" damagedbymonsters="true" damagedbyprojectiles="true" damagedbymeleeweapons="true" damagedbyexplosions="true" explosiondamagemultiplier="0.1" allowrotatingineditor="false" allowedlinks="structure,item" linkable="true" ondamagedthreshold="2">
+    <InventoryIcon texture="%ModDir%/Content/Items/Doors/door_vanillaheavy.png" sourcerect="1,0,200,416" origin="0.5,0.5" />
+    <Sprite texture="%ModDir%/Content/Items/Doors/door_vanillaheavy.png" sourcerect="208,0,104,416" depth="0.51" origin="0.5,0.5" />
+    <DecorativeSprite texture="%ModDir%/Content/Items/Doors/door_vanillaheavy.png" sourcerect="320,0,96,416" depth="0.89" origin="0.5,0.5" />
+    <Door canbepicked="true" canbeselected="true" pickkey="Action" msg="ItemMsgForceOpenCrowbar" PickingTime="20.0" openingspeed="1.0" closingspeed="1.0" shadowscale="0.7,1">
+      <RequiredItem items="crowbar" type="Equipped" />
+      <Sprite texture="%ModDir%/Content/Items/Doors/door_vanillaheavy.png" sourcerect="0,0,200,416" depth="0.05" origin="0.5,0.0" />
+      <WeldedSprite texture="%ModDir%/Content/Items/Doors/door_maintenancepanels_1break.png" sourcerect="512,0,96,416" depth="0.0" origin="0.5,0.5" />
+      <BrokenSprite texture="%ModDir%/Content/Items/Doors/door_maintenancepanels_1break.png" sourcerect="416,448,224,432" depth="0.509" origin="0.5,0.0" scale="true" />
+      <sound file="%ModDir%/Content/Items/Doors/blastdoor_1_move.ogg" type="OnUse" range="500.0" />
+      <sound file="Content/Items/Tools/Crowbar.ogg" type="OnPicked" range="4000.0" />
+      <sound file="Content/Items/Door/Duct1.ogg" type="OnFailure" selectionmode="Random" range="300" />
+      <sound file="Content/Items/Door/Duct2.ogg" type="OnFailure" range="300" />
+      <sound file="Content/Items/Door/DoorBreak1.ogg" type="OnBroken" selectionmode="Random" range="3000" />
+      <sound file="Content/Items/Door/DoorBreak2.ogg" type="OnBroken" range="3000" />
+      <StatusEffect type="OnDamaged" target="This">
+        <sound file="Content/Sounds/Damage/StructureCrunch1.ogg" selectionmode="Random" range="800" />
+        <sound file="Content/Sounds/Damage/StructureCrunch2.ogg" range="800" />
+        <sound file="Content/Sounds/Damage/StructureCrunch3.ogg" range="800" />
+        <sound file="Content/Sounds/Damage/StructureCrunch4.ogg" range="800" />
+        <sound file="Content/Sounds/Damage/StructureCrunch5.ogg" range="800" />
+      </StatusEffect>
+    </Door>
+    <AiTarget sightrange="3000.0" static="True" />
+    <Repairable selectkey="Action" header="mechanicalrepairsheader" fixDurationHighSkill="20" fixDurationLowSkill="40" msg="ItemMsgRepairWrench" hudpriority="10">
+      <GuiFrame relativesize="0.2,0.16" minsize="400,180" maxsize="480,216" anchor="Center" relativeoffset="0.0,0.27" style="ItemUI" />
+      <RequiredSkill identifier="mechanical" level="45" />
+      <RequiredItem items="wrench" type="equipped" />
+    </Repairable>
+    <ConnectionPanel selectkey="Action" canbeselected="true" msg="ItemMsgRewireScrewdriver" hudpriority="10">
+      <GuiFrame relativesize="0.2,0.32" minsize="400,350" maxsize="480,420" anchor="Center" style="ConnectionPanel" />
+      <RequiredItem items="screwdriver" type="Equipped" />
+      <input name="toggle" displayname="connection.togglestate" />
+      <input name="set_state" displayname="connection.setstate" />
+      <output name="state_out" displayname="connection.stateout" fallbackdisplayname="connection.signalout" />
+      <output name="condition_out" displayname="connection.conditionout" />
+    </ConnectionPanel>
+  </Item>
+  <Item name="" identifier="ekdockyard_heavydoorvanillawbuttons" tags="door,weldable" subcategory="ekr_dockyard_r" scale="0.5" health="450" requirebodyinsidetrigger="false" damagedbyrepairtools="true" damagedbymonsters="true" damagedbyprojectiles="true" damagedbymeleeweapons="true" damagedbyexplosions="true" explosiondamagemultiplier="0.1" allowrotatingineditor="false" allowedlinks="structure,item" linkable="true" ondamagedthreshold="2">
+    <InventoryIcon texture="%ModDir%/Content/Items/Doors/door_vanillaheavy.png" sourcerect="1,0,200,416" origin="0.5,0.5" />
+    <Sprite texture="%ModDir%/Content/Items/Doors/door_vanillaheavy.png" sourcerect="208,0,104,416" depth="0.51" origin="0.5,0.5" />
+    <DecorativeSprite texture="%ModDir%/Content/Items/Doors/door_vanillaheavy.png" sourcerect="320,0,96,416" depth="0.89" origin="0.5,0.5" />
+    <Door canbepicked="true" canbeselected="true" pickkey="Action" msg="ItemMsgForceOpenCrowbar" PickingTime="20.0" openingspeed="1.0" closingspeed="1.0" shadowscale="0.7,1" hasintegratedbuttons="true">
+      <RequiredItem items="crowbar" type="Equipped" optional="true" />
+      <Requireditem items="idcard" type="Picked" optional="true" />
+      <Sprite texture="%ModDir%/Content/Items/Doors/door_vanillaheavy.png" sourcerect="0,0,200,416" depth="0.05" origin="0.5,0.0" />
+      <WeldedSprite texture="%ModDir%/Content/Items/Doors/door_maintenancepanels_1break.png" sourcerect="512,0,96,416" depth="0.0" origin="0.5,0.5" />
+      <BrokenSprite texture="%ModDir%/Content/Items/Doors/door_maintenancepanels_1break.png" sourcerect="416,448,224,432" depth="0.509" origin="0.5,0.0" scale="true" />
+      <sound file="%ModDir%/Content/Items/Doors/blastdoor_1_move.ogg" type="OnUse" range="500.0" />
+      <sound file="Content/Items/Tools/Crowbar.ogg" type="OnPicked" range="4000.0" />
+      <sound file="Content/Items/Door/Duct1.ogg" type="OnFailure" selectionmode="Random" range="300" />
+      <sound file="Content/Items/Door/Duct2.ogg" type="OnFailure" range="300" />
+      <sound file="Content/Items/Door/DoorBreak1.ogg" type="OnBroken" selectionmode="Random" range="3000" />
+      <sound file="Content/Items/Door/DoorBreak2.ogg" type="OnBroken" range="3000" />
+      <StatusEffect type="OnDamaged" target="This">
+        <sound file="Content/Sounds/Damage/StructureCrunch1.ogg" selectionmode="Random" range="800" />
+        <sound file="Content/Sounds/Damage/StructureCrunch2.ogg" range="800" />
+        <sound file="Content/Sounds/Damage/StructureCrunch3.ogg" range="800" />
+        <sound file="Content/Sounds/Damage/StructureCrunch4.ogg" range="800" />
+        <sound file="Content/Sounds/Damage/StructureCrunch5.ogg" range="800" />
+      </StatusEffect>
+    </Door>
+    <DecorativeSprite texture="Content/Items/Button/button.png" sourcerect="26,70,38,51" depth="0.885" origin="3.5,0.78" />
+    <DecorativeSprite texture="Content/Items/Button/button.png" sourcerect="26,70,38,51" depth="0.885" origin="-2.5,0.78" />
+    <trigger x="-90" y="-140" width="284" height="85" />
+    <AiTarget sightrange="3000.0" static="True" />
+    <Repairable selectkey="Action" header="mechanicalrepairsheader" fixDurationHighSkill="20" fixDurationLowSkill="40" msg="ItemMsgRepairWrench" hudpriority="10">
+      <GuiFrame relativesize="0.2,0.16" minsize="400,180" maxsize="480,216" anchor="Center" relativeoffset="0.0,0.27" style="ItemUI" />
+      <RequiredSkill identifier="mechanical" level="45" />
+      <RequiredItem items="wrench" type="equipped" />
+    </Repairable>
+    <ConnectionPanel selectkey="Action" canbeselected="true" msg="ItemMsgRewireScrewdriver" hudpriority="10">
+      <GuiFrame relativesize="0.2,0.32" minsize="400,350" maxsize="480,420" anchor="Center" style="ConnectionPanel" />
+      <RequiredItem items="screwdriver" type="Equipped" />
+      <input name="toggle" displayname="connection.togglestate" />
+      <input name="set_state" displayname="connection.setstate" />
+      <output name="state_out" displayname="connection.stateout" fallbackdisplayname="connection.signalout" />
+      <output name="condition_out" displayname="connection.conditionout" />
+    </ConnectionPanel>
+  </Item>
+  <Item name="" identifier="ekdockyard_blastdoor" tags="door,weldable" scale="0.5" health="350" subcategory="ekr_dockyard_r" requirebodyinsidetrigger="false" damagedbyrepairtools="true" damagedbymonsters="true" damagedbyexplosions="true" damagedbyprojectiles="true" damagedbymeleeweapons="true" ShowNameInHealthBar="false" explosiondamagemultiplier="0.1" allowrotatingineditor="false" allowedlinks="structure,item" ondamagedthreshold="2" linkable="true">
+    <InventoryIcon texture="%ModDir%/Content/Items/Doors/door_custom_1.png" sourcerect="96,416,88,416" origin="0.5,0.5" />
+    <Sprite texture="%ModDir%/Content/Items/Doors/door_custom_1.png" sourcerect="0,416,88,416" depth="0.51" origin="0.5,0.5" />
+    <DecorativeSprite texture="%ModDir%/Content/Items/Doors/door_custom_1.png" sourcerect="192,416,88,416" depth="0.89" origin="0.5,0.5" />
+    <Door canbepicked="true" canbeselected="true" pickkey="Action" msg="ItemMsgForceOpenCrowbar" PickingTime="20.0" openingspeed="1.0" closingspeed="1.0" shadowscale="0.7,1">
+      <RequiredItem items="crowbar" type="Equipped" />
+      <Sprite texture="%ModDir%/Content/Items/Doors/door_custom_1.png" sourcerect="96,416,88,416" depth="0.05" origin="0.5,0.0" />
+      <WeldedSprite texture="%ModDir%/Content/Items/Doors/door_maintenancepanels_1break.png" sourcerect="512,0,96,416" depth="0.0" origin="0.5,0.5" />
+      <BrokenSprite texture="%ModDir%/Content/Items/Doors/door_maintenancepanels_1break.png" sourcerect="416,448,224,432" depth="0.509" origin="0.5,0.0" scale="true" />
+      <sound file="%ModDir%/Content/Items/Doors/blastdoor_1_move.ogg" type="OnUse" range="500.0" />
+      <sound file="Content/Items/Tools/Crowbar.ogg" type="OnPicked" range="4000.0" />
+      <sound file="Content/Items/Door/Duct1.ogg" type="OnFailure" selectionmode="Random" range="300" />
+      <sound file="Content/Items/Door/Duct2.ogg" type="OnFailure" range="300" />
+      <sound file="Content/Items/Door/DoorBreak1.ogg" type="OnBroken" selectionmode="Random" range="3000" />
+      <sound file="Content/Items/Door/DoorBreak2.ogg" type="OnBroken" range="3000" />
+      <StatusEffect type="OnDamaged" target="This">
+        <sound file="Content/Sounds/Damage/StructureCrunch1.ogg" selectionmode="Random" range="800" />
+        <sound file="Content/Sounds/Damage/StructureCrunch2.ogg" range="800" />
+        <sound file="Content/Sounds/Damage/StructureCrunch3.ogg" range="800" />
+        <sound file="Content/Sounds/Damage/StructureCrunch4.ogg" range="800" />
+        <sound file="Content/Sounds/Damage/StructureCrunch5.ogg" range="800" />
+      </StatusEffect>
+    </Door>
+    <AiTarget sightrange="3000.0" static="True" />
+    <Repairable selectkey="Action" header="mechanicalrepairsheader" fixDurationHighSkill="20" fixDurationLowSkill="40" msg="ItemMsgRepairWrench" hudpriority="10">
+      <GuiFrame relativesize="0.2,0.16" minsize="400,180" maxsize="480,216" anchor="Center" relativeoffset="0.0,0.27" style="ItemUI" />
+      <RequiredSkill identifier="mechanical" level="45" />
+      <RequiredItem items="wrench" type="equipped" />
+    </Repairable>
+    <ConnectionPanel selectkey="Action" canbeselected="true" msg="ItemMsgRewireScrewdriver" hudpriority="10">
+      <GuiFrame relativesize="0.2,0.32" minsize="400,350" maxsize="480,420" anchor="Center" style="ConnectionPanel" />
+      <RequiredItem items="screwdriver" type="Equipped" />
+      <input name="toggle" displayname="connection.togglestate" />
+      <input name="set_state" displayname="connection.setstate" />
+      <output name="state_out" displayname="connection.stateout" fallbackdisplayname="connection.signalout" />
+      <output name="condition_out" displayname="connection.conditionout" />
+    </ConnectionPanel>
+  </Item>
+  <Item name="" identifier="ekdockyard_blastdoorwbuttons" tags="door,weldable" subcategory="ekr_dockyard_r" scale="0.5" health="350" requirebodyinsidetrigger="false" damagedbyrepairtools="true" damagedbymonsters="true" damagedbyexplosions="true" damagedbyprojectiles="true" damagedbymeleeweapons="true" ShowNameInHealthBar="false" explosiondamagemultiplier="0.1" allowrotatingineditor="false" allowedlinks="structure,item" ondamagedthreshold="2" linkable="true">
+    <InventoryIcon texture="%ModDir%/Content/Items/Doors/door_custom_1.png" sourcerect="96,416,88,416" origin="0.5,0.5" />
+    <Sprite texture="%ModDir%/Content/Items/Doors/door_custom_1.png" sourcerect="0,416,88,416" depth="0.51" origin="0.5,0.5" />
+    <DecorativeSprite texture="%ModDir%/Content/Items/Doors/door_custom_1.png" sourcerect="192,416,88,416" depth="0.89" origin="0.5,0.5" />
+    <Door canbepicked="true" canbeselected="true" pickkey="Action" msg="ItemMsgForceOpenCrowbar" PickingTime="20.0" openingspeed="1.0" closingspeed="1.0" shadowscale="0.7,1" hasintegratedbuttons="true">
+      <RequiredItem items="crowbar" type="Equipped" optional="true" />
+      <Requireditem items="idcard" type="Picked" optional="true" />
+      <Sprite texture="%ModDir%/Content/Items/Doors/door_custom_1.png" sourcerect="96,416,88,416" depth="0.05" origin="0.5,0.0" />
+      <WeldedSprite texture="%ModDir%/Content/Items/Doors/door_maintenancepanels_1break.png" sourcerect="512,0,96,416" depth="0.0" origin="0.5,0.5" />
+      <BrokenSprite texture="%ModDir%/Content/Items/Doors/door_maintenancepanels_1break.png" sourcerect="416,448,224,432" depth="0.509" origin="0.5,0.0" scale="true" />
+      <sound file="%ModDir%/Content/Items/Doors/blastdoor_1_move.ogg" type="OnUse" range="500.0" />
+      <sound file="Content/Items/Tools/Crowbar.ogg" type="OnPicked" range="4000.0" />
+      <sound file="Content/Items/Door/Duct1.ogg" type="OnFailure" selectionmode="Random" range="300" />
+      <sound file="Content/Items/Door/Duct2.ogg" type="OnFailure" range="300" />
+      <sound file="Content/Items/Door/DoorBreak1.ogg" type="OnBroken" selectionmode="Random" range="3000" />
+      <sound file="Content/Items/Door/DoorBreak2.ogg" type="OnBroken" range="3000" />
+      <StatusEffect type="OnDamaged" target="This">
+        <sound file="Content/Sounds/Damage/StructureCrunch1.ogg" selectionmode="Random" range="800" />
+        <sound file="Content/Sounds/Damage/StructureCrunch2.ogg" range="800" />
+        <sound file="Content/Sounds/Damage/StructureCrunch3.ogg" range="800" />
+        <sound file="Content/Sounds/Damage/StructureCrunch4.ogg" range="800" />
+        <sound file="Content/Sounds/Damage/StructureCrunch5.ogg" range="800" />
+      </StatusEffect>
+    </Door>
+    <DecorativeSprite texture="Content/Items/Button/button.png" sourcerect="26,70,38,51" depth="0.885" origin="2.2,0.78" />
+    <DecorativeSprite texture="Content/Items/Button/button.png" sourcerect="26,70,38,51" depth="0.885" origin="-1.2,0.78" />
+    <trigger x="-55" y="-140" width="198" height="85" />
+    <AiTarget sightrange="3000.0" static="True" />
+    <Repairable selectkey="Action" header="mechanicalrepairsheader" fixDurationHighSkill="20" fixDurationLowSkill="40" msg="ItemMsgRepairWrench" hudpriority="10">
+      <GuiFrame relativesize="0.2,0.16" minsize="400,180" maxsize="480,216" anchor="Center" relativeoffset="0.0,0.27" style="ItemUI" />
+      <RequiredSkill identifier="mechanical" level="40" />
+      <RequiredItem items="wrench" type="equipped" />
+    </Repairable>
+    <ConnectionPanel selectkey="Action" canbeselected="true" msg="ItemMsgRewireScrewdriver" hudpriority="10">
+      <GuiFrame relativesize="0.2,0.32" minsize="400,350" maxsize="480,420" anchor="Center" style="ConnectionPanel" />
+      <RequiredItem items="screwdriver" type="Equipped" />
+      <input name="toggle" displayname="connection.togglestate" />
+      <input name="set_state" displayname="connection.setstate" />
+      <output name="state_out" displayname="connection.stateout" fallbackdisplayname="connection.signalout" />
+      <output name="condition_out" displayname="connection.conditionout" />
+    </ConnectionPanel>
+  </Item>
+  <Item name="" identifier="ekdockyard_blasthatch" allowedlinks="gap,hull,structure,item" linkable="true" tags="door,weldable" subcategory="ekr_dockyard_r" scale="0.5" health="350" requirebodyinsidetrigger="false" damagedbyrepairtools="true" damagedbymonsters="true" damagedbyprojectiles="true" damagedbymeleeweapons="true" damagedbyexplosions="true" ShowNameInHealthBar="false" explosiondamagemultiplier="0.1" ondamagedthreshold="2" allowrotatingineditor="false">
+    <InventoryIcon texture="%ModDir%/Content/Items/Doors/door_custom_1.png" sourcerect="352,0,384,80" origin="0.5,0.5" />
+    <Sprite texture="%ModDir%/Content/Items/Doors/door_custom_1.png" sourcerect="352,88,384,104" depth="0.7" origin="0.5,0.5" />
+    <Door canbeselected="true" canbepicked="true" horizontal="true" pickkey="Action" msg="ItemMsgForceOpenCrowbar" PickingTime="20.0" openingspeed="1.0" closingspeed="1.0" shadowscale="1,0.8">
+      <RequiredItem items="crowbar" type="Equipped" />
+      <Sprite texture="%ModDir%/Content/Items/Doors/door_custom_1.png" sourcerect="352,0,384,80" depth="0.05" origin="0.0,0.5" />
+      <WeldedSprite texture="%ModDir%/Content/Items/Doors/door_maintenancepanels_1break.png" sourcerect="0,96,384,96" depth="0.0" origin="0.5,0.5" />
+      <BrokenSprite texture="%ModDir%/Content/Items/Doors/door_maintenancepanels_1break.png" sourcerect="0,416,384,160" depth="0.509" origin="0.0,0.5" scale="true" />
+      <sound file="%ModDir%/Content/Items/Doors/blastdoor_1_move.ogg" type="OnUse" range="500.0" />
+      <sound file="Content/Items/Tools/Crowbar.ogg" type="OnPicked" range="4000.0" />
+      <sound file="Content/Items/Door/Duct1.ogg" type="OnFailure" selectionmode="Random" range="300" />
+      <sound file="Content/Items/Door/Duct2.ogg" type="OnFailure" range="300" />
+      <sound file="Content/Items/Door/DoorBreak1.ogg" type="OnBroken" selectionmode="Random" range="3000" />
+      <sound file="Content/Items/Door/DoorBreak2.ogg" type="OnBroken" range="3000" />
+      <StatusEffect type="OnDamaged" target="This">
+        <sound file="Content/Sounds/Damage/StructureCrunch1.ogg" selectionmode="Random" range="800" />
+        <sound file="Content/Sounds/Damage/StructureCrunch2.ogg" range="800" />
+        <sound file="Content/Sounds/Damage/StructureCrunch3.ogg" range="800" />
+        <sound file="Content/Sounds/Damage/StructureCrunch4.ogg" range="800" />
+        <sound file="Content/Sounds/Damage/StructureCrunch5.ogg" range="800" />
+      </StatusEffect>
+    </Door>
+    <AiTarget sightrange="1500.0" static="True" />
+    <Repairable selectkey="Action" header="mechanicalrepairsheader" fixDurationHighSkill="20" fixDurationLowSkill="40" msg="ItemMsgRepairWrench" hudpriority="10">
+      <GuiFrame relativesize="0.2,0.16" minsize="400,180" maxsize="480,216" anchor="Center" relativeoffset="0.0,0.27" style="ItemUI" />
+      <RequiredSkill identifier="mechanical" level="45" />
+      <RequiredItem items="wrench" type="equipped" />
+    </Repairable>
+    <ConnectionPanel selectkey="Action" canbeselected="true" msg="ItemMsgRewireScrewdriver" hudpriority="10">
+      <GuiFrame relativesize="0.2,0.32" minsize="400,350" maxsize="480,420" anchor="Center" style="ConnectionPanel" />
+      <RequiredItem items="screwdriver" type="Equipped" />
+      <input name="toggle" displayname="connection.togglestate" />
+      <input name="set_state" displayname="connection.setstate" />
+      <output name="state_out" displayname="connection.stateout" fallbackdisplayname="connection.signalout" />
+      <output name="condition_out" displayname="connection.conditionout" />
+    </ConnectionPanel>
+  </Item>
+  <Item name="" identifier="ekdockyard_blasthatchwbuttons" allowedlinks="gap,hull,structure,item" linkable="true" tags="door,weldable" subcategory="ekr_dockyard_r" scale="0.5" health="350" requirebodyinsidetrigger="false" damagedbyrepairtools="true" damagedbymonsters="true" damagedbyprojectiles="true" damagedbymeleeweapons="true" damagedbyexplosions="true" ShowNameInHealthBar="false" explosiondamagemultiplier="0.1" ondamagedthreshold="2" allowrotatingineditor="false">
+    <InventoryIcon texture="%ModDir%/Content/Items/Doors/door_custom_1.png" sourcerect="352,0,384,80" origin="0.5,0.5" />
+    <Sprite texture="%ModDir%/Content/Items/Doors/door_custom_1.png" sourcerect="352,88,384,104" depth="0.7" origin="0.5,0.5" />
+    <Door canbeselected="true" canbepicked="true" horizontal="true" pickkey="Action" msg="ItemMsgForceOpenCrowbar" PickingTime="20.0" openingspeed="1.0" closingspeed="1.0" shadowscale="1,0.8" hasintegratedbuttons="true">
+      <RequiredItem items="crowbar" type="Equipped" optional="true" />
+      <Requireditem items="idcard" type="Picked" optional="true" />
+      <Sprite texture="%ModDir%/Content/Items/Doors/door_custom_1.png" sourcerect="352,0,384,80" depth="0.05" origin="0.0,0.5" />
+      <WeldedSprite texture="%ModDir%/Content/Items/Doors/door_maintenancepanels_1break.png" sourcerect="0,96,384,96" depth="0.0" origin="0.5,0.5" />
+      <BrokenSprite texture="%ModDir%/Content/Items/Doors/door_maintenancepanels_1break.png" sourcerect="0,416,384,160" depth="0.509" origin="0.0,0.5" scale="true" />
+      <sound file="%ModDir%/Content/Items/Doors/blastdoor_1_move.ogg" type="OnUse" range="500.0" />
+      <sound file="Content/Items/Tools/Crowbar.ogg" type="OnPicked" range="4000.0" />
+      <sound file="Content/Items/Door/Duct1.ogg" type="OnFailure" selectionmode="Random" range="300" />
+      <sound file="Content/Items/Door/Duct2.ogg" type="OnFailure" range="300" />
+      <sound file="Content/Items/Door/DoorBreak1.ogg" type="OnBroken" selectionmode="Random" range="3000" />
+      <sound file="Content/Items/Door/DoorBreak2.ogg" type="OnBroken" range="3000" />
+      <StatusEffect type="OnDamaged" target="This">
+        <sound file="Content/Sounds/Damage/StructureCrunch1.ogg" selectionmode="Random" range="800" />
+        <sound file="Content/Sounds/Damage/StructureCrunch2.ogg" range="800" />
+        <sound file="Content/Sounds/Damage/StructureCrunch3.ogg" range="800" />
+        <sound file="Content/Sounds/Damage/StructureCrunch4.ogg" range="800" />
+        <sound file="Content/Sounds/Damage/StructureCrunch5.ogg" range="800" />
+      </StatusEffect>
+    </Door>
+    <DecorativeSprite texture="Content/Items/Button/button.png" sourcerect="26,70,38,51" depth="0.745" origin="-1.7,1.8" />
+    <DecorativeSprite texture="Content/Items/Button/button.png" sourcerect="26,70,38,51" depth="0.745" origin="-1.7,-0.9" />
+    <trigger x="233" y="51" width="70" height="206" />
+    <AiTarget sightrange="1500.0" static="True" />
+    <Repairable selectkey="Action" header="mechanicalrepairsheader" fixDurationHighSkill="20" fixDurationLowSkill="40" msg="ItemMsgRepairWrench" hudpriority="10">
+      <GuiFrame relativesize="0.2,0.16" minsize="400,180" maxsize="480,216" anchor="Center" relativeoffset="0.0,0.27" style="ItemUI" />
+      <RequiredSkill identifier="mechanical" level="45" />
+      <RequiredItem items="wrench" type="equipped" />
+    </Repairable>
+    <ConnectionPanel selectkey="Action" canbeselected="true" msg="ItemMsgRewireScrewdriver" hudpriority="10">
+      <GuiFrame relativesize="0.2,0.32" minsize="400,350" maxsize="480,420" anchor="Center" style="ConnectionPanel" />
+      <RequiredItem items="screwdriver" type="Equipped" />
+      <input name="toggle" displayname="connection.togglestate" />
+      <input name="set_state" displayname="connection.setstate" />
+      <output name="state_out" displayname="connection.stateout" fallbackdisplayname="connection.signalout" />
+      <output name="condition_out" displayname="connection.conditionout" />
+    </ConnectionPanel>
+  </Item>
+</Items>
