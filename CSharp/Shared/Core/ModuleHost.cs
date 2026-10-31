@@ -12,6 +12,12 @@ public interface IModule {
     void Release();
 }
 
+// Modules requiring a frame tick use a single engine hook owned by ModuleHost.
+// This avoids each module installing its own GameSession.Update patch.
+public interface IFrameModule {
+    void FrameUpdate(float deltaTime);
+}
+
 public interface ILoadCompleted {
     void LoadCompleted();
 }
@@ -20,6 +26,7 @@ public static class ModuleHost {
     private static readonly List<IModule> modules = new List<IModule>();
 
     private static Harmony harmony;
+    private static readonly List<IFrameModule> frameModules = new List<IFrameModule>();
 
     public static Harmony Instance => harmony;
 
@@ -45,6 +52,11 @@ public static class ModuleHost {
         } catch (Exception error) {
             ModLog.Error($"round start hook is missing: {error.Message}");
         }
+        Guard("shared GameSession.Update", () => {
+            var update = AccessTools.Method(typeof(GameSession), nameof(GameSession.Update));
+            if (update == null) { throw new MissingMethodException("GameSession.Update"); }
+            harmony.Patch(update, postfix: Bind(typeof(ModuleHost), nameof(FrameUpdatePostfix)));
+        });
 #if CLIENT
         Guard("GUI.Draw", () => HudFrame.Attach(harmony));
 #endif
@@ -53,6 +65,7 @@ public static class ModuleHost {
             try {
                 set[i].Attach(harmony);
                 modules.Add(set[i]);
+                if (set[i] is IFrameModule frameModule) { frameModules.Add(frameModule); }
             } catch (Exception error) {
                 ModLog.Error($"{Name(set[i])} does not attach: {error.Message}");
                 Retreat(set[i]);
@@ -65,6 +78,7 @@ public static class ModuleHost {
         harmony = null;
         for (int i = modules.Count - 1; i >= 0; i--) { Retreat(modules[i]); }
         modules.Clear();
+        frameModules.Clear();
 #if CLIENT
         HudFrame.Release();
 #endif
@@ -77,6 +91,17 @@ public static class ModuleHost {
                 ready.LoadCompleted();
             } catch (Exception error) {
                 ModLog.Error($"{Name(modules[i])} does not finish loading: {error.Message}");
+            }
+        }
+    }
+
+    public static void FrameUpdatePostfix(float deltaTime) {
+        for (int i = 0; i < frameModules.Count; i++) {
+            IFrameModule module = frameModules[i];
+            try {
+                module.FrameUpdate(deltaTime);
+            } catch (Exception error) {
+                ModLog.Once($"{module.GetType().Name} frame update failed: {error.Message}");
             }
         }
     }
