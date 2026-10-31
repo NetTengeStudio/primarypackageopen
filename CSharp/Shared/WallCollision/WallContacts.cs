@@ -7,14 +7,14 @@ using FarseerPhysics.Dynamics.Contacts;
 
 namespace PrimaryPackage.WallCollision {
     public sealed class WallGate {
-        internal WallGate(Body body, WallRule rule) {
+        internal WallGate(Body body, WallGateState state) {
             Body = body;
-            Rule = rule;
+            State = state;
         }
 
         internal Body Body { get; }
-        internal WallRule Rule { get; }
-        internal bool Passable(Body other) => Rule.AllowCrossing(other);
+        internal WallGateState State { get; }
+        internal bool Passable(Body other) => State.AllowCrossing(other);
     }
 
     public static class WallContacts {
