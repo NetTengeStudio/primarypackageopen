@@ -22,6 +22,15 @@ namespace PrimaryPackage.WallCollision {
         private static readonly Dictionary<Body, WallGate> mutable = new Dictionary<Body, WallGate>(64);
         private static Dictionary<Body, WallGate> snapshot = new Dictionary<Body, WallGate>(0);
         private static World bound;
+        private static int batchDepth;
+        private static bool dirty;
+
+        public static void BeginBatch() => batchDepth++;
+
+        public static void EndBatch() {
+            if (batchDepth == 0) { return; }
+            if (--batchDepth == 0 && dirty) { Publish(); }
+        }
 
         public static int Count => mutable.Count;
         public static World BoundWorld => bound;
@@ -59,6 +68,8 @@ namespace PrimaryPackage.WallCollision {
         }
 
         private static void Publish() {
+            if (batchDepth != 0) { dirty = true; return; }
+            dirty = false;
             Volatile.Write(ref snapshot, new Dictionary<Body, WallGate>(mutable));
         }
 
