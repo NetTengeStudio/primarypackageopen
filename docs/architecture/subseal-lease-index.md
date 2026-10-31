@@ -82,3 +82,9 @@ Before reconstruction, `SessionKeys.Establish` called `Drop(connection)` **befor
 The ECDH derivation now occurs first; only after successful key derivation is the old session securely wiped and the new one published. The parser also checks that the SubjectPublicKeyInfo input was fully consumed, and the temporary raw ECDH secret is cleared in `finally`, including on key-derivation failure. `LeaseChannel` continues to revoke existing leases after a successfully replaced session, as before.
 
 Test: valid session followed by invalid point, malformed/trailing SPKI and unsupported curve must leave the original key/session unchanged. A successful second Hello must install a different key and wipe the prior key. Repeat with live leases and deferred transfers. **NOT_RUN**.
+
+## Untrusted control-message exception boundary
+
+`LeaseChannel.Listen` now contains malformed or truncated Hello/LeaseAck decoding within the message callback. Previously an exception from `ReadByte`, `ReadBytes`, `ReadVariableUInt32`, or `ReadUInt32` could unwind the LuaCs network receiver. The boundary rejects the specific control frame, emits a rate-limited diagnostic through `Diagnostics.Note`, and leaves other network subscribers unaffected. Valid message paths and wire formats are unchanged.
+
+Test truncated 0-3 byte ACKs, invalid variable-length Hello keys, oversized length claims, malformed ECDH and repeated spam under the existing handshake limiter. **NOT_RUN**.

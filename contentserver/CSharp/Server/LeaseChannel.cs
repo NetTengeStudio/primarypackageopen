@@ -34,17 +34,27 @@ namespace SubSeal.Server
         {
             LuaCsSetup.Instance.Networking.Receive(Protocol.ChannelToServer, (IReadMessage message, Client client) =>
             {
-                if (client?.Connection is null) { return; }
+                if (client?.Connection is null || message == null) { return; }
 
-                switch (message.ReadByte())
+                // Messages on this channel originate from untrusted clients.
+                // A truncated or malformed control frame must not unwind the
+                // game's network dispatcher or disable other subscribers.
+                try
                 {
-                    case Protocol.ToServerHello:
-                        if (handshakeLimit.IsLimitReached(client)) { return; }
-                        ReadHello(message, client);
-                        break;
-                    case Protocol.ToServerLeaseAck:
-                        ReadLeaseAck(message, client);
-                        break;
+                    switch (message.ReadByte())
+                    {
+                        case Protocol.ToServerHello:
+                            if (handshakeLimit.IsLimitReached(client)) { return; }
+                            ReadHello(message, client);
+                            break;
+                        case Protocol.ToServerLeaseAck:
+                            ReadLeaseAck(message, client);
+                            break;
+                    }
+                }
+                catch (Exception error)
+                {
+                    Diagnostics.Note($"SubSeal rejected malformed control frame from {client.Name}: {error.GetType().Name}");
                 }
             });
         }
