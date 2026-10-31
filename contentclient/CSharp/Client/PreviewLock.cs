@@ -71,24 +71,10 @@ namespace SubSeal.Client
             // The visual lock must NOT depend on whether this client has the .sub file,
             // has already loaded its XML, or possesses a content lease. Those states
             // describe file availability, not whether the server permits a preview.
-            // The current wire policy only advertises a global protection bit, so
-            // conservatively mask server-supplied submarines, including active ones.
-            // Clients may modify this code; server file admission remains authoritative.
-            if (GameMain.Client.ServerSubmarines is not null)
-            {
-                foreach (SubmarineInfo candidate in GameMain.Client.ServerSubmarines)
-                {
-                    if (ReferenceEquals(candidate, info)) { return true; }
-                    if (candidate is null) { continue; }
-                    if (string.Equals(candidate.Name, info.Name, StringComparison.OrdinalIgnoreCase))
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            // GameSession may hold a different SubmarineInfo instance.
-            // Fail closed for network submarine previews when protected mode is active.
+            // The wire protocol currently advertises a global protected-preview
+            // policy, not a per-submarine allowlist. Mask all network previews
+            // including active/previously decrypted submarine files.
+            // This presentation policy is not a security boundary.
             return true;
         }
 
