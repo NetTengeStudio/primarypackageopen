@@ -21,6 +21,8 @@ namespace SubSeal.Client
         private byte capabilities;
         private double nextHelloAt;
         private object clientIdentity;
+        private object peerIdentity;
+        private object connectionIdentity;
         private bool active;
 
         public void PreInitPatching() { }
@@ -50,17 +52,23 @@ namespace SubSeal.Client
 
         public void OnUpdate(double fixedDeltaTime)
         {
-            object client = GameMain.Client;
-            if (!ReferenceEquals(client, clientIdentity))
+            GameClient client = GameMain.Client;
+            object peer = client?.ClientPeer;
+            object connection = client?.ClientPeer?.ServerConnection;
+            if (!ReferenceEquals(client, clientIdentity) ||
+                !ReferenceEquals(peer, peerIdentity) ||
+                !ReferenceEquals(connection, connectionIdentity))
             {
                 clientIdentity = client;
+                peerIdentity = peer;
+                connectionIdentity = connection;
                 nextHelloAt = 0.0;
                 sessionKey.Discard();
                 leases.ReleaseAll();
                 PreviewLock.Clear();
             }
 
-            if (client is not null && !sessionKey.Established && Timing.TotalTime >= nextHelloAt)
+            if (connection is not null && !sessionKey.Established && Timing.TotalTime >= nextHelloAt)
             {
                 nextHelloAt = Timing.TotalTime + HelloRetrySeconds;
                 channel.SendHello(capabilities);
@@ -250,6 +258,8 @@ namespace SubSeal.Client
                 leases?.ReleaseAll();
                 sessionKey?.Discard();
                 clientIdentity = null;
+                peerIdentity = null;
+                connectionIdentity = null;
                 PreviewLock.Shutdown();
                 OpenPatches.Bind(null);
                 Artifacts.DiscardAll();
