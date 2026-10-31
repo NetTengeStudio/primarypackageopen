@@ -127,6 +127,7 @@ namespace PrimaryPackage.WallCollision {
         private static readonly List<WallRule> ordered = new List<WallRule>(16);
         private static readonly Dictionary<ushort, WallRule> byId = new Dictionary<ushort, WallRule>(16);
         private static readonly List<ushort> stale = new List<ushort>(8);
+        private static readonly HashSet<Structure> prepared = new HashSet<Structure>();
         private static double nextCrossingSweep;
         private static double nextPrune;
 
@@ -186,14 +187,26 @@ namespace PrimaryPackage.WallCollision {
             rule.Rebind();
         }
 
+        public static void RegisterPrepared(Structure wall) {
+            if (wall != null && !wall.Removed && WallConfiguration.TryRead(wall, out _, out _)) {
+                prepared.Add(wall);
+            }
+        }
+
+        public static void UnregisterPrepared(Structure wall) {
+            if (wall == null) { return; }
+            prepared.Remove(wall);
+            if (Ready) { Unbind(wall.ID); }
+        }
+
         public static int ActivatePrepared() {
             if (Ready) { return ordered.Count; }
             Ready = true;
             int activated = 0;
             WallContacts.BeginBatch();
             try {
-                foreach (MapEntity entity in MapEntity.MapEntityList) {
-                    if (entity is not Structure wall || wall.Removed || !wall.HasBody) { continue; }
+                foreach (Structure wall in prepared) {
+                    if (wall.Removed || !wall.HasBody) { continue; }
                     if (!WallConfiguration.TryRead(wall, out WallMode mode, out WallFace face)) { continue; }
                     if (!WallGeometry.TryAxis(wall.Bodies, Physics.CollisionWall, out _, out _, out _)) { continue; }
                     Bind(wall, mode, face);
