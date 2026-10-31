@@ -15,6 +15,9 @@ namespace SubSeal.Server
             internal byte[] Key;
             internal byte Capabilities;
             internal byte SessionId;
+            internal byte[] ClientPublicKey;
+            internal byte[] ServerPublicKey;
+            internal byte[] Salt;
         }
 
         private readonly Dictionary<NetworkConnection, Session> sessions = new Dictionary<NetworkConnection, Session>();
@@ -22,9 +25,20 @@ namespace SubSeal.Server
         internal Session Find(NetworkConnection connection)
             => connection is not null && sessions.TryGetValue(connection, out Session session) ? session : null;
 
-        internal Session Establish(NetworkConnection connection, byte sessionId, byte capabilities, ReadOnlySpan<byte> clientPublicKey, Span<byte> serverPublicKey, out int serverPublicKeyLength, Span<byte> salt)
+        internal Session Establish(NetworkConnection connection, byte sessionId, byte capabilities, ReadOnlySpan<byte> clientPublicKey, Span<byte> serverPublicKey, out int serverPublicKeyLength, Span<byte> salt, out bool reused)
         {
             serverPublicKeyLength = 0;
+            reused = false;
+            if (sessions.TryGetValue(connection, out Session previous) &&
+                previous.SessionId == sessionId && previous.Capabilities == capabilities &&
+                clientPublicKey.SequenceEqual(previous.ClientPublicKey))
+            {
+                previous.ServerPublicKey.AsSpan().CopyTo(serverPublicKey);
+                previous.Salt.AsSpan().CopyTo(salt);
+                serverPublicKeyLength = previous.ServerPublicKey.Length;
+                reused = true;
+                return previous;
+            }
             Drop(connection);
 
             using ECDiffieHellman local = ECDiffieHellman.Create(ECCurve.NamedCurves.nistP256);
@@ -59,7 +73,10 @@ namespace SubSeal.Server
             {
                 Key = TransferSeal.DeriveSessionKey(shared, salt, sessionId),
                 Capabilities = capabilities,
-                SessionId = sessionId
+                SessionId = sessionId,
+                ClientPublicKey = clientPublicKey.ToArray(),
+                ServerPublicKey = serverPublicKey.Slice(0, serverPublicKeyLength).ToArray(),
+                Salt = salt.ToArray()
             };
             CryptographicOperations.ZeroMemory(shared);
 
