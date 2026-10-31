@@ -115,7 +115,18 @@ namespace PrimaryPackage.WallCollision
                 Reply("ec_init: команда работает только в локальном редакторе подлодок.", Color.Yellow);
                 return;
             }
-            if (MapEntity.SelectedList.Count != 1 || MapEntity.SelectedList[0] is not Structure wall || !ValidWall(wall))
+            // MapEntity.SelectedList is a HashSet<MapEntity> in the client,
+            // not an indexable list; require exactly one selection.
+            Structure wall = null;
+            if (MapEntity.SelectedList.Count == 1)
+            {
+                foreach (MapEntity selected in MapEntity.SelectedList)
+                {
+                    wall = selected as Structure;
+                    break;
+                }
+            }
+            if (!ValidWall(wall))
             {
                 Reply("ec_init: выделите одну физическую стену (не декорацию и не платформу).", Color.Yellow);
                 return;
