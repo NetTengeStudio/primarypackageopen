@@ -1,4 +1,5 @@
 using Barotrauma;
+using System;
 
 namespace SubSeal.Client
 {
@@ -16,6 +17,7 @@ namespace SubSeal.Client
 
         public static bool BeforePreviewCreate(SubmarineInfo submarineInfo, ref PreviewLoadState __state)
         {
+            if (submarineInfo is null) { __state = default; return false; }
             __state.Locked = PreviewLock.ShowLocked(submarineInfo);
             PreviewLock.BeginCreate(__state.Locked);
             ResidentAsset.EvictPreviewed();
@@ -42,6 +44,13 @@ namespace SubSeal.Client
             PreviewLock.EndCreate();
             if (__state.Locked || !__state.Rehydrated) { return; }
             ResidentAsset.HoldPreviewed(submarineInfo);
+        }
+
+        public static void AfterPreviewCreateFailure(Exception __exception)
+        {
+            if (__exception is null) { return; }
+            PreviewLock.Release();
+            ResidentAsset.EvictPreviewed();
         }
 
         public static void AfterPreviewClose()
