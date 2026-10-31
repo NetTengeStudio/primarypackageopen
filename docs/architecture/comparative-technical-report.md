@@ -69,3 +69,13 @@ No numerical CPU, network throughput, memory or frame-time speedups are asserted
 - Add reproducible baseline and post-change profiles before declaring a measurable win or merging.
 
 **Decision:** retain this PR in draft until assembly, functional and performance acceptance passes. Large additional rewrites without an executable baseline risk regressions and are not justified solely by predicted complexity.
+
+## 2026-10-31 continuation: transfer-lease ownership and staged wall activation
+
+**contentserver:** Introduced per-connection lease ownership, exact-file pending indices and an armed-retry candidate set. `Outstanding` and `FindPending` now use O(1) average dictionary lookups instead of global O(L) scans, revocation visits only that connection's K leases, and retries use O(A+T) scheduling on A armed leases and T active transfers rather than scanning all L leases and up to T transfers for each retry. Wire protocol, cryptographic formats, grant ACKs, permissions and default fail-closed settings are unchanged. See `subseal-lease-index.md`.
+
+**Wall geometry:** Explicit world-to-Farseer simulation coordinate conversion now occurs at `WallGeometry.TryFaceFromWorldPoint`. Previously `Character.WorldPosition` and `Body.Position` were compared as though measured in the same coordinate system, potentially selecting the wrong one-way face.
+
+**Prepared wall lifecycle:** Added `WallPreparations` and editor `ec_init` with per-structure `pp_ecface` XML metadata. `ec_ready` performs an explicit server-authoritative activation and one network snapshot. Unlike the previous branch, `ec 1/2/off` commands now require prior `ec_ready` in that round; this is an intentional behavior change to satisfy the requested inactive-until-ready contract. See `wall-collision-preparation.md`.
+
+**Unverified integration risks:** Harmony `Structure.Load`/`Save` postfixes, selected-wall editor command path, the dedicated-server round lifecycle, and the transfer-lease state transitions require builds and live tests. No measured performance improvement or actual gameplay test is available, so the PR remains draft.
