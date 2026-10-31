@@ -3,14 +3,14 @@ namespace PrimaryPackage.WallCollision {
         public const string StateId = "PP_WallCollisionState";
         public const string RequestId = "PP_WallCollisionRequest";
 
-        public static ushort Revision { get; private set; }
+        public static uint Revision { get; private set; }
 
-        public static ushort Advance() {
-            Revision = unchecked((ushort)(Revision + 1));
+        public static uint Advance() {
+            Revision = unchecked(Revision + 1u);
             return Revision;
         }
 
-        public static void Accept(ushort revision) => Revision = revision;
+        public static void Accept(uint revision) => Revision = revision;
     }
 
     public enum WallMode : byte {
