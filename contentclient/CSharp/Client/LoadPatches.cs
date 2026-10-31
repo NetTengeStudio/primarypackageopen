@@ -31,8 +31,10 @@ namespace SubSeal.Client
                 return true;
             }
 
+            // Ordinary, unprotected previews must remain usable even if no
+            // in-memory sealed payload needed rehydration.
             __state.Rehydrated = ResidentAsset.Rehydrate(submarineInfo);
-            return __state.Rehydrated;
+            return true;
         }
 
         public static void AfterPreviewCreate(SubmarineInfo submarineInfo, PreviewLoadState __state)
