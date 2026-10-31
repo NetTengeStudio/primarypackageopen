@@ -95,3 +95,15 @@ No numerical CPU, network throughput, memory or frame-time speedups are asserted
 **Prepared walls added mid-round:** Newly loaded XML-marked structures now activate and publish a network delta if `ec_ready` was already executed, without introducing a per-frame scan.
 
 **Verification:** Branch commits persisted; game builds, gameplay/physics and actual performance measurements remain **NOT_RUN**. CI runner availability is **BLOCKED**. Do not merge without an executing test pipeline and live host/dedicated validation.
+
+## 2026-10-31 continuation: bounded spatial work, preview policy and cold synchronization
+
+**IEngine scheduler:** `SpatialCore` replaced duplicate append-only `eventAwake` entries with one indexed, reschedulable binary-heap deadline per item slot. Wake renewal/expiry/removal is O(log N), memory is O(distinct pending slots), and queued status is observable as `wakePending`. `Tests/IEngineCore` compiles the actual queue code and checks 100,000 repeat wakes on one slot, heap ordering, slot reuse and a 50,000-operation randomized reference comparison.
+
+**Spatial topology storage:** full rebuild loops now operate on `ItemRegistry.SlotLimit`, not the preallocated `Items.Length` (initially 8192). Reset ranges still cover the previous generation after compaction. `HullIndex.Rebuild` and `Mismatches` likewise avoid unused capacity. Spatial cell buckets are retired when empty; a capped 256-entry pool reuses their lists. This eliminates accumulation of historical empty coordinate keys during travel or repeated topology rebuilds.
+
+**Client SubSeal preview:** `PreviewLock` previously returned unlocked for any loaded XML even if it was a reduced sealed skeleton and the client had no matching lease key, because the key checks were unreachable. The pure `PreviewDecision` state evaluator now locks reduced, sealed and unauthorized metadata, and treats unreadable sealed files conservatively. Its complete loaded/absent/reduced/key policy table is linked to the existing `Tests/SubSealCore` regression runner.
+
+**Cold replication:** full-state chunks no longer cause immediate success on the first packet. A completion marker is sent only after the server queues all full chunks; the client tracks distinct successfully matched hull IDs for both updated and older servers, and requires coverage of the current local hull graph before declaring `synced`. Local graph version changes invalidate synchronization and trigger another request. Delta packet layout is unchanged. Snapshot epoch IDs, cross-generation replay barriers and comprehensive network jitter tests remain outstanding.
+
+**Build and benchmark state:** GitHub Actions found the new workflow configurations but latest jobs fail before any runner is assigned (no steps executed). Both `SubSealCore` and `IEngineCore` are still **BLOCKED**, not FAIL on C# assertions and not PASS. Client/server game builds, interactive Farseer physics verification and performance benchmarks remain **NOT_RUN**. No quantified speedups are claimed.
