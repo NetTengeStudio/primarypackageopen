@@ -6,7 +6,7 @@ using FarseerPhysics;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
 using PrimaryPackage.Core;
-using Vec2 = System.Numerics.Vector2;
+using Vec2 = Microsoft.Xna.Framework.Vector2;
 
 
 namespace PrimaryPackage.Emotions {

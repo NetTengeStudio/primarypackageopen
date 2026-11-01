@@ -1,4 +1,8 @@
+#if PRIMARY_PACKAGE_OFFLINE_TESTS
 using Vec2 = System.Numerics.Vector2;
+#else
+using Vec2 = Microsoft.Xna.Framework.Vector2;
+#endif
 using System;
 
 namespace PrimaryPackage.Emotions {

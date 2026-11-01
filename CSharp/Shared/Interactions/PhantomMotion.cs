@@ -1,5 +1,9 @@
 using System;
-using System.Numerics;
+#if PRIMARY_PACKAGE_OFFLINE_TESTS
+using Vector2 = System.Numerics.Vector2;
+#else
+using Vector2 = Microsoft.Xna.Framework.Vector2;
+#endif
 
 namespace PrimaryPackage.Interactions;
 

@@ -6,7 +6,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PrimaryPackage.Core;
 using PrimaryPackage.GUI;
-using Numerics = System.Numerics;
 
 namespace PrimaryPackage.Interactions;
 
@@ -109,7 +108,7 @@ internal static class PhantomRenderer {
             Submarine = Entity.FindEntityByID(value.Submarine) as Submarine;
             if (value.Submarine != 0 && Submarine is not { Removed: false }) { throw new ArgumentException("Подлодка галлюцинации недоступна"); }
             Rig = new PhantomRig(CharacterPrefab.Prefabs[value.Visual.ToIdentifier()]);
-            try { Motion = new PhantomMotion(new Numerics.Vector2(value.X, value.Y), value.Radius, value.Speed, value.Behavior, start, value.NearDistance, Rig.BodyExtent * value.Scale); }
+            try { Motion = new PhantomMotion(new Vector2(value.X, value.Y), value.Radius, value.Speed, value.Behavior, start, value.NearDistance, Rig.BodyExtent * value.Scale); }
             catch { Rig.Dispose(); throw; }
             active.Add(this);
         }
@@ -117,7 +116,7 @@ internal static class PhantomRenderer {
             if (Submarine is { Removed: true }) { return false; }
             Vector2 observer = Character.Controlled is { Removed: false } player ? player.WorldPosition : GameMain.GameScreen.Cam.Position;
             Vector2 target = observer - (Submarine?.WorldPosition ?? Vector2.Zero);
-            Motion.Advance(now, new Numerics.Vector2(target.X, target.Y), Event.Intensity);
+            Motion.Advance(now, new Vector2(target.X, target.Y), Event.Intensity);
             return !Motion.Vanished;
         }
         internal void Draw(SpriteBatch batch, double now) {
