@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Items>
+  <Item name="" identifier="thgbackpack" category="Equipment" tags="mobilecontainer,mediumitem,backpack,tool,clothing" cargocontaineridentifier="metalcrate" showcontentsintooltip="true" fireproof="true" waterproof="true" impactsoundtag="impact_soft" scale="0.5">
+    <Deconstruct time="15">
+      <Item identifier="organicfiber" amount="2" />
+      <Item identifier="ballisticfiber" amount="2" />
+    </Deconstruct>
+    <InventoryIcon texture="%ModDir%/Content/UI/Inventory/thogbackpackicon.png" sourcerect="0,0,90,90" origin="0.5,0.5" depth="0.56" />
+    <Sprite texture="%ModDir%/Content/Items/Armor/Sheets/thogbackpacksprite.png" sourcerect="0,0,72,126" origin="0.5,0.5" depth="0.56" />
+    <Body width="72" radius="45" density="20" friction="1.0" restitution="0.01" />
+    <Wearable slots="Bag" msg="ItemMsgPickUpSelect">
+      <sprite name="BackpackWearable" texture="%ModDir%/Content/Items/Armor/Sheets/thogbackpack.png" limb="Torso" hidelimb="false" canbehiddenbyotherwearables="false" inherittexturescale="true" origin="0.6992,0.56" sourcerect="77,60,128,129" depth="0.56" />
+      <StatusEffect type="OnWearing" target="Character" SpeedMultiplier="0.88" PropulsionSpeedMultiplier=".8" setvalue="true" disabledeltatime="true" />
+      <ItemContainer capacity="9" keepopenwhenequipped="false" slotsperrow="2" movableframe="true">
+        <Containable items="smallitem" excludeditems="mobilecontainer" />
+        <SlotIcon slotindex="9" texture="%ModDir%/Content/UI/Inventory/wpnicon.png" sourcerect="0,0,64,64" origin="0.5,0.5" />
+        <SubContainer capacity="1" maxstacksize="1">
+          <Containable items="weapon,gun,mountableweapon" hide="true" setactive="false" />
+        </SubContainer>
+      </ItemContainer>
+    </Wearable>
+    <Holdable slots="RightHand+LeftHand" controlpose="true" msg="ItemMsgPickUpUse" canbeselected="false" canbepicked="true" pickkey="Use" />
+  </Item>
+</Items>

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Afflictions>
+  <Affliction identifier="pp_bloodclot" type="pp_cold" limbspecific="true"
+              targets="human" isbuff="false" healableinmedicalclinic="true" maxstrength="25"
+              showiconthreshold="1" showicontoothersthreshold="10" showinhealthscannerthreshold="1"
+              treatmentthreshold="3" karmachangeonapplied="0"
+              iconcolors="180,120,120,255;130,50,50,255">
+    <Effect minstrength="0" maxstrength="16" strengthchange="-0.05"
+            minvitalitydecrease="0" maxvitalitydecrease="3"
+            minspeedmultiplier="1.0" maxspeedmultiplier="0.95" />
+    <Effect minstrength="16" maxstrength="25" strengthchange="0.02"
+            minvitalitydecrease="3" maxvitalitydecrease="12"
+            minspeedmultiplier="0.95" maxspeedmultiplier="0.85"
+            minskillmultiplier="1.0" maxskillmultiplier="0.85" />
+    <Description textidentifier="pp_bloodclot.desc" minstrength="0" maxstrength="25" />
+  </Affliction>
+
+  <Affliction identifier="pp_pulmonary_embolism" type="pp_cold" limbspecific="false" indicatorlimb="Torso"
+              targets="human" isbuff="false" healableinmedicalclinic="true" maxstrength="100"
+              showiconthreshold="1" showicontoothersthreshold="10" showinhealthscannerthreshold="1"
+              treatmentthreshold="3" karmachangeonapplied="0"
+              causeofdeathdescription="pp_cold.causeofdeath" selfcauseofdeathdescription="pp_cold.selfcauseofdeath"
+              iconcolors="190,150,170,255;150,70,100,255;100,30,55,255">
+    <Effect minstrength="0" maxstrength="25" strengthchange="-0.2"
+            minvitalitydecrease="0" maxvitalitydecrease="8"
+            minspeedmultiplier="1.0" maxspeedmultiplier="0.9" />
+    <Effect minstrength="25" maxstrength="75" strengthchange="-0.2"
+            minvitalitydecrease="8" maxvitalitydecrease="45"
+            minspeedmultiplier="0.9" maxspeedmultiplier="0.6"
+            minskillmultiplier="1.0" maxskillmultiplier="0.6" />
+    <Effect minstrength="75" maxstrength="100" strengthchange="-0.2"
+            minvitalitydecrease="45" maxvitalitydecrease="180"
+            minspeedmultiplier="0.6" maxspeedmultiplier="0.3"
+            minskillmultiplier="0.6" maxskillmultiplier="0.3" />
+    <Description textidentifier="pp_pulmonary_embolism.desc" minstrength="0" maxstrength="100" />
+  </Affliction>
+
+  <Affliction identifier="pp_pulmonary_edema" type="pp_cold" limbspecific="false" indicatorlimb="Torso"
+              targets="human" isbuff="false" healableinmedicalclinic="true" maxstrength="100"
+              showiconthreshold="1" showicontoothersthreshold="10" showinhealthscannerthreshold="1"
+              treatmentthreshold="3" karmachangeonapplied="0"
+              causeofdeathdescription="pp_cold.causeofdeath" selfcauseofdeathdescription="pp_cold.selfcauseofdeath"
+              iconcolors="185,200,215,255;120,150,185,255;60,95,140,255">
+    <Effect minstrength="0" maxstrength="25" strengthchange="-0.1"
+            minvitalitydecrease="0" maxvitalitydecrease="6" />
+    <Effect minstrength="25" maxstrength="70" strengthchange="-0.1"
+            minvitalitydecrease="6" maxvitalitydecrease="40"
+            minspeedmultiplier="1.0" maxspeedmultiplier="0.7"
+            minskillmultiplier="1.0" maxskillmultiplier="0.7" />
+    <Effect minstrength="70" maxstrength="100" strengthchange="-0.1"
+            minvitalitydecrease="40" maxvitalitydecrease="170"
+            minspeedmultiplier="0.7" maxspeedmultiplier="0.35"
+            minskillmultiplier="0.7" maxskillmultiplier="0.35" />
+    <Description textidentifier="pp_pulmonary_edema.desc" minstrength="0" maxstrength="100" />
+  </Affliction>
+
+  <Affliction identifier="pp_elevated_core_temp" type="pp_buff" limbspecific="false" indicatorlimb="Torso"
+              targets="human" isbuff="true" maxstrength="50"
+              showiconthreshold="1" showicontoothersthreshold="10" showinhealthscannerthreshold="1"
+              karmachangeonapplied="0" iconcolors="255,190,120,255;255,140,60,255">
+    <Effect minstrength="0" maxstrength="30" strengthchange="-0.2" />
+    <Effect minstrength="30" maxstrength="50" strengthchange="-0.2"
+            minvitalitydecrease="0" maxvitalitydecrease="12"
+            minskillmultiplier="1.0" maxskillmultiplier="0.85" />
+    <Description textidentifier="pp_elevated_core_temp.desc" minstrength="0" maxstrength="50" />
+  </Affliction>
+
+  <Affliction identifier="pp_thrombolytics" type="pp_chem" limbspecific="false" indicatorlimb="Torso"
+              targets="human" isbuff="true" maxstrength="100"
+              showiconthreshold="1" showicontoothersthreshold="100" showinhealthscannerthreshold="1"
+              karmachangeonapplied="0" iconcolors="200,180,220,255">
+    <Effect minstrength="0" maxstrength="100" strengthchange="-1.0" />
+    <Description textidentifier="pp_thrombolytics.desc" minstrength="0" maxstrength="100" />
+  </Affliction>
+
+  <Affliction identifier="pp_diuretics" type="pp_chem" limbspecific="false" indicatorlimb="Torso"
+              targets="human" isbuff="true" maxstrength="100"
+              showiconthreshold="1" showicontoothersthreshold="100" showinhealthscannerthreshold="1"
+              karmachangeonapplied="0" iconcolors="215,215,175,255">
+    <Effect minstrength="0" maxstrength="100" strengthchange="-1.0" />
+    <Description textidentifier="pp_diuretics.desc" minstrength="0" maxstrength="100" />
+  </Affliction>
+
+  <Affliction identifier="pp_aafn" type="pp_chem" limbspecific="false" indicatorlimb="Torso"
+              targets="human" isbuff="true" maxstrength="100"
+              showiconthreshold="1" showicontoothersthreshold="100" showinhealthscannerthreshold="1"
+              karmachangeonapplied="0" iconcolors="180,230,200,255;120,200,160,255">
+    <Effect minstrength="0" maxstrength="100" strengthchange="-1.5" />
+    <Description textidentifier="pp_aafn.desc" minstrength="0" maxstrength="100" />
+  </Affliction>
+
+  <Affliction identifier="pp_aafn_overdose" type="pp_chem" limbspecific="false" indicatorlimb="Torso"
+              targets="human" isbuff="false" healableinmedicalclinic="true" maxstrength="100"
+              showiconthreshold="1" showicontoothersthreshold="5" showinhealthscannerthreshold="1"
+              treatmentthreshold="2" karmachangeonapplied="0"
+              iconcolors="150,220,170,255;70,160,110,255;30,90,60,255">
+    <Effect minstrength="0" maxstrength="50" strengthchange="-0.5"
+            minvitalitydecrease="0" maxvitalitydecrease="25"
+            minspeedmultiplier="1.0" maxspeedmultiplier="0.75"
+            minskillmultiplier="1.0" maxskillmultiplier="0.6" />
+    <Effect minstrength="50" maxstrength="100" strengthchange="-0.5"
+            minvitalitydecrease="25" maxvitalitydecrease="190"
+            minspeedmultiplier="0.75" maxspeedmultiplier="0.3"
+            minskillmultiplier="0.6" maxskillmultiplier="0.2"
+            minscreendistort="0" maxscreendistort="0.6"
+            minchromaticaberration="0" maxchromaticaberration="0.5" />
+    <Description textidentifier="pp_aafn_overdose.desc" minstrength="0" maxstrength="100" />
+  </Affliction>
+
+  <Affliction identifier="pp_panic" type="pp_symptom" limbspecific="false" indicatorlimb="Head"
+              targets="human" isbuff="false" maxstrength="100"
+              showiconthreshold="1" showicontoothersthreshold="15" showinhealthscannerthreshold="1"
+              karmachangeonapplied="0" iconcolors="240,200,120,255;235,140,60,255">
+    <Effect minstrength="0" maxstrength="50" strengthchange="-2.0"
+            minskillmultiplier="1.0" maxskillmultiplier="0.6" />
+    <Effect minstrength="50" maxstrength="100" strengthchange="-2.0"
+            minskillmultiplier="0.6" maxskillmultiplier="0.25"
+            minscreendistort="0" maxscreendistort="0.2"
+            minvitalitydecrease="0" maxvitalitydecrease="5" />
+    <Description textidentifier="pp_panic.desc" minstrength="0" maxstrength="100" />
+  </Affliction>
+
+  <Affliction identifier="pp_stasis_starter" type="pp_chem" limbspecific="false" indicatorlimb="Torso"
+              targets="human" isbuff="true" maxstrength="100"
+              showiconthreshold="1" showicontoothersthreshold="100" showinhealthscannerthreshold="1"
+              karmachangeonapplied="0" iconcolors="190,225,245,255">
+    <Effect minstrength="0" maxstrength="100" strengthchange="0" />
+    <Description textidentifier="pp_stasis_starter.desc" minstrength="0" maxstrength="100" />
+  </Affliction>
+</Afflictions>

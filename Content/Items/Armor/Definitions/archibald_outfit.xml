@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Items>
+  <Item name="Archibald" identifier="backrooms_archibald" category="Equipment" noninteractable="true" cargocontaineridentifier="metalcrate" tags="smallitem,clothing,vest" scale="0.5" impactsoundtag="impact_soft">
+    <InventoryIcon name="Icon" texture="%ModDir%/Content/Items/Armor/Uniforms/archibald_suit.png" sourcerect="640,2,66,65" origin="0.5,0.5" />
+    <Sprite name="Medic Uniform 1" texture="%ModDir%/Content/Items/Armor/Uniforms/archibald_suit.png" sourcerect="640,2,66,65" depth="0.6" origin="0.5,0.5" />
+    <Body width="100" height="50" density="15" friction="0.8" restitution="0.01" />
+    <Wearable slots="InnerClothes" msg="ItemMsgPickUpSelect">
+      <sprite name="Hat" texture="%ModDir%/Content/Items/Armor/Uniforms/archibald_suit.png" limb="Head" hidewearablesoftype="Hair" inheritlimbdepth="true" inheritscale="true" ignorelimbscale="true" scale="0.69" hidelimb="true" sourcerect="633,167,73,81" origin="0.50181687,0.541065" />
+      <sprite name="Medic Uniform 1 Right Lower Arm" texture="%ModDir%/Content/Items/Armor/Uniforms/archibald_suit.png" limb="RightForearm" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+      <sprite name="Medic Uniform 1 Left Lower Arm" texture="%ModDir%/Content/Items/Armor/Uniforms/archibald_suit.png" limb="LeftForearm" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,708,260" origin="0.5,0.5" />
+      <sprite name="Medic Uniform 1 Right Upper Arm" texture="%ModDir%/Content/Items/Armor/Uniforms/archibald_suit.png" limb="RightArm" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+      <sprite name="Medic Uniform 1 Left Upper Arm" texture="%ModDir%/Content/Items/Armor/Uniforms/archibald_suit.png" limb="LeftArm" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+      <sprite name="Uniform Right Hand" texture="%ModDir%/Content/Items/Armor/Uniforms/archibald_suit.png" limb="RightHand" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Uniform Left Hand" texture="%ModDir%/Content/Items/Armor/Uniforms/archibald_suit.png" limb="LeftHand" hidelimb="true" inherittexturescale="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,805,256" origin="0.5,0.5" />
+      <sprite name="Exosuit Torso" texture="%ModDir%/Content/Items/Armor/Uniforms/archibald_suit.png" limb="Torso" scale="1.2" hidelimb="true" inherittexturescale="true" hideotherwearables="true" inheritorigin="false" origin="0.44279808,0.47327906" inheritlimbdepth="true" inheritsourcerect="false" sourcerect="0,0,156,260" />
+      <sprite name="Exosuit Right Thigh" texture="%ModDir%/Content/Items/IRTools/ladder_blank.png" limb="RightThigh" hidelimb="true" inherittexturescale="true" hideotherwearables="true" inheritorigin="false" origin="0.5,0.5" inheritsourcerect="false" inheritlimbdepth="true" sourcerect="0,0,96,113" />
+      <sprite name="Exosuit Left Thigh" texture="%ModDir%/Content/Items/IRTools/ladder_blank.png" limb="LeftThigh" hidelimb="true" inherittexturescale="true" hideotherwearables="true" inheritorigin="false" origin="0.5,0.5" inheritsourcerect="false" sourcerect="0,0,96,113" />
+      <sprite name="Exosuit Right Leg" texture="%ModDir%/Content/Items/IRTools/ladder_blank.png" limb="RightLeg" hidelimb="true" inherittexturescale="true" hideotherwearables="true" inheritorigin="true" inheritlimbdepth="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+      <sprite name="Exosuit Left Leg" texture="%ModDir%/Content/Items/IRTools/ladder_blank.png" limb="LeftLeg" hidelimb="true" inherittexturescale="true" hideotherwearables="true" inheritorigin="true" inheritsourcerect="true" sourcerect="0,0,0,0" origin="0.5,0.5" />
+      <sprite name="Exosuit Left Shoe" texture="%ModDir%/Content/Items/IRTools/ladder_blank.png" limb="LeftFoot" hidelimb="true" inherittexturescale="true" hideotherwearables="true" inheritorigin="false" origin="0.4,0.5" inheritsourcerect="false" sourcerect="364,211,108,37" />
+      <sprite name="Exosuit Right Shoe" texture="%ModDir%/Content/Items/IRTools/ladder_blank.png" limb="RightFoot" hidelimb="true" inherittexturescale="true" hideotherwearables="true" inheritorigin="false" origin="0.4,0.5" inheritsourcerect="false" sourcerect="364,211,108,37" />
+      <StatValue stattype="WalkingSpeed" value="-0.5" />
+      <StatusEffect type="OnWearing" target="Character" setvalue="true" disabledeltatime="true">
+        <TriggerAnimation Type="Walk" path="%ModDir%/Content/Items/Armor/Animations/archibald_walk.xml" priority="99" />
+        <TriggerAnimation Type="Run" path="%ModDir%/Content/Items/Armor/Animations/archibald_run.xml" priority="99" />
+      </StatusEffect>
+    </Wearable>
+  </Item>
+</Items>

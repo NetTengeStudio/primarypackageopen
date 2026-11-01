@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Afflictions>
+  <Affliction identifier="pp_removed_skin" type="pp_cold" limbspecific="true"
+              targets="human" isbuff="false" healableinmedicalclinic="true" maxstrength="20"
+              showiconthreshold="1" showicontoothersthreshold="5" showinhealthscannerthreshold="1"
+              treatmentthreshold="1" karmachangeonapplied="0"
+              iconcolors="215,165,155,255;180,95,85,255">
+    <Effect minstrength="0" maxstrength="20" strengthchange="0"
+            minvitalitydecrease="0" maxvitalitydecrease="14"
+            minspeedmultiplier="1.0" maxspeedmultiplier="0.9"
+            minskillmultiplier="1.0" maxskillmultiplier="0.8" />
+    <Description textidentifier="pp_removed_skin.desc" minstrength="0" maxstrength="20" />
+  </Affliction>
+
+  <Affliction identifier="pp_grafted_skin" type="pp_buff" limbspecific="true"
+              targets="human" isbuff="true" maxstrength="10"
+              showiconthreshold="1" showicontoothersthreshold="5" showinhealthscannerthreshold="1"
+              karmachangeonapplied="0" iconcolors="215,195,175,255">
+    <Effect minstrength="0" maxstrength="10" strengthchange="0" />
+    <Description textidentifier="pp_grafted_skin.desc" minstrength="0" maxstrength="10" />
+  </Affliction>
+
+  <Affliction identifier="pp_stretched_skin" type="pp_cold" limbspecific="true"
+              targets="human" isbuff="false" healableinmedicalclinic="true" maxstrength="20"
+              showiconthreshold="1" showicontoothersthreshold="5" showinhealthscannerthreshold="1"
+              treatmentthreshold="2" karmachangeonapplied="0"
+              iconcolors="210,190,180,255;175,140,125,255">
+    <Effect minstrength="0" maxstrength="20" strengthchange="-0.05"
+            minvitalitydecrease="0" maxvitalitydecrease="6"
+            minspeedmultiplier="1.0" maxspeedmultiplier="0.8" />
+    <Description textidentifier="pp_stretched_skin.desc" minstrength="0" maxstrength="20" />
+  </Affliction>
+
+  <Affliction identifier="pp_melted_skin" type="pp_heat" limbspecific="true"
+              targets="human" isbuff="false" healableinmedicalclinic="true" maxstrength="20"
+              showiconthreshold="1" showicontoothersthreshold="5" showinhealthscannerthreshold="1"
+              treatmentthreshold="1" karmachangeonapplied="0"
+              iconcolors="220,160,120,255;170,80,45,255">
+    <Effect minstrength="0" maxstrength="20" strengthchange="0"
+            minvitalitydecrease="0" maxvitalitydecrease="18"
+            minspeedmultiplier="1.0" maxspeedmultiplier="0.88"
+            minskillmultiplier="1.0" maxskillmultiplier="0.78" />
+    <Description textidentifier="pp_melted_skin.desc" minstrength="0" maxstrength="20" />
+  </Affliction>
+</Afflictions>

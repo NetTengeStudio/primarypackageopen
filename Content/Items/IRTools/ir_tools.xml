@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Items>
+  <Item name="" identifier="pp_effect_flashlight_dir" Category="Hidden" Tags="effect,directional" maxstacksize="1" cargocontaineridentifier="metalcrate" scale="0.5" spritecolor="255,255,255,0" noninteractable="true" hideinmenus="true">
+    <Sprite texture="Content/Items/Tools/tools.png" depth="0.55" sourcerect="0,0,1,1" />
+    <Body radius="1" density="10" />
+    <Holdable handle1="0,0" slots="Any" msg="ItemMsgPickUpSelect">
+      <StatusEffect type="OnNotContained" target="This">
+        <Remove />
+      </StatusEffect>
+      <StatusEffect type="Always" target="This" interval="0.2" comparison="Or">
+        <Conditional timeframe="eq 0" targetcontainer="true" />
+        <Conditional timeframe="eq 2" targetcontainer="true" />
+        <Remove />
+      </StatusEffect>
+    </Holdable>
+  </Item>
+  <Item name="" identifier="pp_effect_flashlight_rad" Category="Hidden" Tags="effect,radial" maxstacksize="1" cargocontaineridentifier="metalcrate" scale="0.5" spritecolor="255,255,255,0" noninteractable="true" hideinmenus="true">
+    <Sprite texture="Content/Items/Tools/tools.png" depth="0.55" sourcerect="0,0,1,1" />
+    <Body radius="1" density="10" />
+    <Holdable handle1="0,0" slots="Any" msg="ItemMsgPickUpSelect">
+      <StatusEffect type="OnNotContained" target="This">
+        <Remove />
+      </StatusEffect>
+      <StatusEffect type="Always" target="This" interval="0.2" comparison="Or">
+        <Conditional timeframe="lt 2" targetcontainer="true" />
+        <Remove />
+      </StatusEffect>
+    </Holdable>
+  </Item>
+  <Item name="" identifier="pp_industrialflashlight" category="Equipment" Tags="smallitem,tool,industrialflashlight,stunbaton,provocative" cargocontaineridentifier="metalcrate" Scale="0.5" impactsoundtag="impact_metal_light">
+    <PreferredContainer primary="divingcab" minamount="1" maxamount="2" spawnprobability="1" notcampaign="true" />
+    <PreferredContainer secondary="wreckstoragecab,abandonedstoragecab,wrecksupplycab,beaconsupplycab" amount="1" spawnprobability="0.05" />
+    <PreferredContainer secondary="outpostcrewcabinet" amount="1" spawnprobability="0.1" />
+    <Price baseprice="200" minavailable="2">
+      <Price storeidentifier="merchantoutpost" />
+      <Price storeidentifier="merchantcity" multiplier="0.9" minavailable="3" />
+      <Price storeidentifier="merchantresearch" multiplier="1.25" />
+      <Price storeidentifier="merchantmilitary" multiplier="1.25" />
+      <Price storeidentifier="merchantmine" />
+    </Price>
+    <Fabricate suitablefabricators="fabricator" requiredtime="10">
+      <RequiredSkill identifier="mechanical" level="25" />
+      <RequiredItem identifier="aluminium" amount="2" />
+      <RequiredItem tag="lightcomponent" />
+    </Fabricate>
+    <Deconstruct time="15">
+      <Item identifier="aluminium" />
+      <Item identifier="lightcomponent" />
+    </Deconstruct>
+    <InventoryIcon texture="%ModDir%/Content/Items/IRTools/ir_tools.png" sourcerect="446,48,65,47" origin="0.5,0.5" />
+    <Sprite texture="%ModDir%/Content/Items/IRTools/ir_tools.png" sourcerect="446,48,65,47" depth="0.55" origin="0.5,0.5" />
+    <Body width="64" height="46" density="10" />
+    <GreaterComponent canbeselected="false" canbepicked="false" allowingameediting="false" timeframe="0" />
+    <LightComponent LightColor="0.5,0.5,0.5,1.0" directional="true" Flicker="0.02" range="1000" powerconsumption="10" IsOn="true" comparison="Or">
+      <ActiveConditional HasTag="directional" targetcontaineditem="true" />
+      <LightTexture texture="Content/Lights/lightcone.png" origin="0.005, 0.502" size="1.0,1.0" />
+      <StatusEffect type="OnActive" target="This" flicker="0.8" pulsefrequency="0.1" pulseamount="0.5" setvalue="true">
+        <Conditional condition="lt 3" targetslot="0" targetcontaineditem="true" />
+      </StatusEffect>
+      <StatusEffect type="OnActive" target="This" flicker="0.02" pulsefrequency="0.0" pulseamount="0.0" setvalue="true">
+        <Conditional condition="gte 3" targetslot="0" targetcontaineditem="true" />
+      </StatusEffect>
+      <StatusEffect type="OnActive" targettype="Contained" Condition="-0.3">
+        <RequiredItem items="mobilebattery" type="Contained" />
+      </StatusEffect>
+    </LightComponent>
+    <LightComponent LightColor="0.5,0.5,0.5,1.0" directional="false" Flicker="0.02" range="500" powerconsumption="10" IsOn="true" comparison="Or">
+      <ActiveConditional HasTag="radial" targetcontaineditem="true" />
+      <Sprite texture="%ModDir%/Content/Items/IRTools/ir_atlas.png" sourcerect="280,305,65,47" origin="0.5,0.28" />
+      <StatusEffect type="OnActive" target="This" flicker="0.8" pulsefrequency="0.1" pulseamount="0.5" setvalue="true">
+        <Conditional condition="lt 3" targetslot="0" targetcontaineditem="true" />
+      </StatusEffect>
+      <StatusEffect type="OnActive" target="This" flicker="0.02" pulsefrequency="0.0" pulseamount="0.0" setvalue="true">
+        <Conditional condition="gte 3" targetslot="0" targetcontaineditem="true" />
+      </StatusEffect>
+      <StatusEffect type="OnActive" targettype="Contained" Condition="-0.3">
+        <RequiredItem items="mobilebattery" type="Contained" />
+      </StatusEffect>
+    </LightComponent>
+    <Holdable slots="Any,RightHand,LeftHand" aimable="true" holdpos="30,-50" aimpos="60,0" handle1="-10,20" msg="ItemMsgPickUpSelect" />
+    <CustomInterface canbeselected="false" drawhudwhenequipped="true" allowuioverlap="false">
+      <GuiFrame style="ItemUI" absoluteoffset="0,0" anchor="BottomCenter" relativesize="0.1,0.13" />
+      <Button text="interaction.directionalmode">
+        <StatusEffect type="OnUse" target="This" timeframe="1" setvalue="true">
+          <SpawnItem identifier="pp_effect_flashlight_dir" spawnposition="ThisInventory" SpawnIfInventoryFull="false" />
+        </StatusEffect>
+      </Button>
+      <Button text="interaction.radialmode">
+        <StatusEffect type="OnUse" target="This" timeframe="2" setvalue="true">
+          <SpawnItem identifier="pp_effect_flashlight_rad" spawnposition="ThisInventory" SpawnIfInventoryFull="false" />
+        </StatusEffect>
+      </Button>
+      <Button text="interaction.multimode">
+        <StatusEffect type="OnUse" target="This" timeframe="3" setvalue="true">
+          <SpawnItem identifier="pp_effect_flashlight_rad" spawnposition="ThisInventory" SpawnIfInventoryFull="false" />
+          <SpawnItem identifier="pp_effect_flashlight_dir" spawnposition="ThisInventory" SpawnIfInventoryFull="false" />
+        </StatusEffect>
+      </Button>
+      <Button text="interaction.turnoff">
+        <StatusEffect type="OnUse" target="This" timeframe="0" setvalue="true" />
+      </Button>
+    </CustomInterface>
+    <ItemContainer capacity="1" maxstacksize="1" hideitems="true" containedstateindicatorstyle="battery">
+      <SlotIcon slotindex="0" texture="Content/UI/StatusMonitorUI.png" sourcerect="128,448,64,64" origin="0.5,0.5" />
+      <Containable items="mobilebattery">
+        <StatusEffect type="OnContaining" targettype="This" Voltage="2.0" setvalue="true" />
+      </Containable>
+    </ItemContainer>
+    <ItemContainer capacity="1" maxstacksize="1" canbeselected="false" removecontaineditemsondeconstruct="true">
+      <Containable identifier="pp_effect_flashlight_dir" />
+      <SubContainer capacity="1">
+        <Containable identifier="pp_effect_flashlight_rad" />
+      </SubContainer>
+    </ItemContainer>
+    <AiTarget sightrange="3000" />
+  </Item>
+  <Item name="" identifier="pp_jackhammer" category="Equipment" Tags="smallitem,cuttingequipment,tool,mountableweapon,stunbaton,plasmacutter" cargocontaineridentifier="metalcrate" Scale="0.5" impactsoundtag="impact_metal_heavy" isshootable="true" requireaimtouse="true">
+    <PreferredContainer secondary="outpostcrewcabinet" amount="1" spawnprobability="0.05" />
+    <PreferredContainer secondary="wreckstoragecab,abandonedstoragecab" amount="1" spawnprobability="0.05" />
+    <PreferredContainer primary="divingcab" secondary="engcab" />
+    <Price baseprice="150">
+      <Price storeidentifier="merchantoutpost" minavailable="3" />
+      <Price storeidentifier="merchantcity" minavailable="2" />
+      <Price storeidentifier="merchantresearch" multiplier="1.25" minavailable="2" />
+      <Price storeidentifier="merchantmilitary" multiplier="1.25" minavailable="2" />
+      <Price storeidentifier="merchantmine" multiplier="0.9" minavailable="10" />
+    </Price>
+    <Deconstruct time="10">
+      <Item identifier="steel" />
+      <Item identifier="plastic" />
+    </Deconstruct>
+    <Fabricate suitablefabricators="fabricator" requiredtime="20">
+      <RequiredSkill identifier="mechanical" level="30" />
+      <RequiredItem identifier="steel" amount="2" />
+      <RequiredItem identifier="plastic" amount="2" />
+    </Fabricate>
+    <InventoryIcon texture="%ModDir%/Content/Items/IRTools/ir_atlas.png" sourcerect="658,548,195,195" origin="0.5,0.5" />
+    <Sprite texture="%ModDir%/Content/Items/IRTools/ir_atlas.png" sourcerect="658,445,258,51" depth="0.55" origin="0.5,0.5" />
+    <DecorativeSprite texture="%ModDir%/Content/Items/IRTools/ir_atlas.png" sourcerect="688,496,229,51" depth="0.551" origin="0.5,0.5" offset="8,0" offsetanim="Sine" offsetanimspeed="55.0">
+      <AnimationConditional Voltage="gt 0.5" targetitemcomponent="LightComponent" />
+    </DecorativeSprite>
+    <Body radius="24" width="210" density="25" />
+    <LightComponent LightColor="204,178,255,0" powerconsumption="10" range="0" Flicker="0.5" IsOn="true">
+      <sprite texture="Content/Items/Electricity/lightsprite.png" origin="0.5,0.5" />
+      <StatusEffect type="OnActive" target="This" IsOn="false" setvalue="true" comparison="And">
+        <Conditional IsOn="true" />
+        <Conditional Voltage="lt 0.9" />
+        <Sound file="%ModDir%/Content/Items/IRTools/pp_jackhammer_end.ogg" loop="false" volume="2" range="1500" />
+      </StatusEffect>
+    </LightComponent>
+    <Holdable slots="Any,RightHand+LeftHand" controlpose="true" aimpos="75,-5" holdpos="70,-15" holdangle="340" handle1="-80,0" handle2="-41,-10" msg="ItemMsgPickUpSelect">
+      <StatusEffect type="OnUse" target="This" interval="0.5" comparison="And">
+        <RequiredItems items="mobilebattery" type="Contained" msg="itemmsgbatterycellrequired" />
+        <RequiredItems items="weldingtoolfuel" type="Contained" msg="ItemMsgOxygenTankRequired" />
+        <ParticleEmitter particle="spark" particleamount="3" anglemax="360" velocitymin="5.0" velocitymax="250.0" scalemin="0.5" scalemax="1" mincondition="0.0" maxcondition="25.0" />
+      </StatusEffect>
+    </Holdable>
+    <RepairTool firedamage="0.0" structurefixamount="-0.25" range="50" barrelpos="10,0" combatpriority="0" repairmultiple="false" repairthroughwalls="false" maxoverlappingwalldist="0.0" repairthroughholes="true" levelwallfixamount="-10.0" targetforce="10" comparison="And">
+      <RequiredItems items="mobilebattery" type="Contained" msg="itemmsgbatterycellrequired" />
+      <RequiredItems items="oxygensource,weldingtoolfuel" type="Contained" msg="ItemMsgOxygenTankRequired" />
+      <RequiredSkill identifier="mechanical" level="50" />
+      <StatusEffect type="OnUse" targettype="Contained" targets="mobilebattery" Condition="-1.0" />
+      <StatusEffect type="OnUse" targettype="Contained" targets="oxygensource" Condition="-2.0" />
+      <StatusEffect type="OnSuccess" targettype="UseTarget" targets="weldable" Stuck="-20.0" />
+      <StatusEffect type="OnSuccess" targettype="UseTarget" Condition="-15.0" />
+      <StatusEffect type="OnSuccess" targettype="Limb" severlimbsprobability="0.005">
+        <Affliction identifier="lacerations" amount="20.0" />
+        <Affliction identifier="bleeding" amount="10.0" />
+      </StatusEffect>
+      <StatusEffect type="OnUse" target="This" IsOn="true" voltage="1.0" setvalue="true" interval="0.1" duration="0.11">
+        <RequiredItem items="mobilebattery" type="Contained" />
+        <Sound file="%ModDir%/Content/Items/IRTools/pp_jackhammer_loop.ogg" loop="true" volume="2" range="1500" />
+        <Explosion range="100" force="0.5" itemdamage="0" structuredamage="0" ignorecover="true" ballastfloradamage="0" camerashake="1" camerashakerange="100" explosiondamage="0" flames="false" smoke="false" shockwave="false" sparks="false" flash="false" underwaterbubble="false" playtinnitus="false" />
+      </StatusEffect>
+      <ParticleEmitter particle="bubbles" scalemin="0.6" scalemax="0.6" particlespersecond="20" />
+      <ParticleEmitterHitStructure particle="spark" particlespersecond="100" anglemin="-40" anglemax="40" velocitymin="100" velocitymax="800" />
+      <ParticleEmitterHitStructure particle="smoke" particlespersecond="3" anglemin="-5" anglemax="5" velocitymin="10" velocitymax="20" />
+      <ParticleEmitterHitItem identifiers="door,hatch,ductblock,ore" particle="spark" particlespersecond="100" anglemin="-40" anglemax="40" velocitymin="100" velocitymax="800" />
+      <ParticleEmitterHitItem identifiers="door,hatch,ductblock" particle="smoke" particlespersecond="3" anglemin="-5" anglemax="5" velocitymin="10" velocitymax="100" />
+      <ParticleEmitterHitItem identifiers="ore" particle="iceshards" particlespersecond="5" anglemin="-40" anglemax="40" velocitymin="10" velocitymax="300" scalemin="0.5" scalemax="1.0" />
+      <ParticleEmitterHitCharacter particle="blooddrop" particlespersecond="100" anglemin="-40" anglemax="40" velocitymin="0" velocitymax="50" />
+      <Fixable identifier="structure" />
+    </RepairTool>
+    <RepairTool firedamage="0.0" structurefixamount="0.0" range="50" barrelpos="10,0" combatpriority="0" repairmultiple="true" repairthroughwalls="false" maxoverlappingwalldist="0.0" repairthroughholes="true" levelwallfixamount="0.0" targetforce="10" comparison="And">
+      <RequiredItems items="mobilebattery" type="Contained" msg="itemmsgbatterycellrequired" />
+      <RequiredItems items="oxygensource,weldingtoolfuel" type="Contained" msg="ItemMsgOxygenTankRequired" />
+      <RequiredSkill identifier="mechanical" level="50" />
+      <Fixable identifier="structure" />
+    </RepairTool>
+    <RepairTool firedamage="0.0" structurefixamount="-0.25" range="50" barrelpos="10,0" combatpriority="0" repairmultiple="true" repairthroughwalls="false" maxoverlappingwalldist="0.0" repairthroughholes="true" levelwallfixamount="-10.0" targetforce="10" comparison="And">
+      <RequiredItems items="mobilebattery" type="Contained" msg="itemmsgbatterycellrequired" />
+      <RequiredItems items="weldingtoolfuel" type="Contained" />
+      <RequiredSkill identifier="mechanical" level="50" />
+      <StatusEffect type="OnUse" targettype="Contained" targets="mobilebattery" Condition="-2.0" />
+      <StatusEffect type="OnUse" targettype="Contained" targets="weldingfuel" Condition="-4.0" />
+      <StatusEffect type="OnSuccess" targettype="UseTarget" targets="weldable" Stuck="-20.0" />
+      <StatusEffect type="OnSuccess" targettype="UseTarget" Condition="-15.0" />
+      <StatusEffect type="OnSuccess" targettype="Limb" severlimbsprobability="0.005">
+        <Affliction identifier="lacerations" amount="20.0" />
+        <Affliction identifier="bleeding" amount="10.0" />
+      </StatusEffect>
+      <StatusEffect type="OnUse" target="This" interval="0.1" duration="0.11" comparison="And">
+        <RequiredItem items="mobilebattery" type="Contained" />
+        <RequiredItem items="weldingfuel" type="Contained" />
+        <Sound file="Content/Items/Engine/Engine.ogg" loop="true" volume="1.5" range="500" />
+        <Explosion range="100" force="0.5" itemdamage="0" structuredamage="0" ignorecover="true" ballastfloradamage="0" camerashake="1" camerashakerange="100" explosiondamage="0" flames="false" smoke="false" shockwave="false" sparks="false" flash="false" underwaterbubble="false" playtinnitus="false" />
+      </StatusEffect>
+      <Fixable identifier="structure" />
+    </RepairTool>
+    <ItemContainer capacity="1" maxstacksize="1" hideitems="true" itempos="0,-39" containedspritedepth="0.56" containedstateindicatorstyle="battery" containedstateindicatorslot="0">
+      <SlotIcon slotindex="0" texture="Content/UI/StatusMonitorUI.png" sourcerect="128,448,64,64" origin="0.5,0.5" />
+      <SlotIcon slotindex="1" texture="Content/UI/StatusMonitorUI.png" sourcerect="64,448,64,64" origin="0.5,0.5" />
+      <Containable items="mobilebattery" />
+      <SubContainer capacity="1">
+        <Containable items="weldingtoolfuel,oxygensource" />
+      </SubContainer>
+    </ItemContainer>
+    <aitarget sightrange="2000" soundrange="6000" fadeouttime="3" />
+    <Quality>
+      <QualityStat stattype="RepairToolStructureDamageMultiplier" value="0.1" />
+      <QualityStat stattype="RepairToolDeattachTimeMultiplier" value="0.1" />
+    </Quality>
+    <SkillRequirementHint identifier="mechanical" level="50" />
+  </Item>
+  <Item name="" nameidentifier="pp_ladder_placed" identifier="pp_ladder_placed" category="Equipment" Tags="largeitem" cargocontaineridentifier="metalcrate" scale="0.5" impactsoundtag="impact_metal_Heavy" hideinmenus="true">
+    <InventoryIcon texture="Content/Map/Outposts/Art/Shop.png" sourcerect="0,484,95,364" origin="0.5,0.5" />
+    <sprite texture="%ModDir%/Content/Items/IRTools/ladder_blank.png" sourcerect="0,0,95,364" depth="0.501" premultiplyalpha="false" origin="0.5,0.5" />
+    <DecorativeSprite texture="Content/Map/Outposts/Art/Shop.png" sourcerect="0,484,95,364" depth="0.52" premultiplyalpha="false" origin="0.5,0.5" />
+    <Body width="161" height="364" bodytype="Static" />
+    <trigger x="-40" y="20" width="180" />
+    <Ladder canbeselected="true" msg="ItemMsgClimbSelect" />
+    <ConnectionPanel selectkey="Action" canbeselected="true" msg="ItemMsgDetach" hudpriority="10">
+      <GuiFrame relativesize="0.2,0.32" minsize="400,350" maxsize="480,420" anchor="Center" style="ConnectionPanel" />
+      <StatusEffect type="OnPicked" target="This" disabledeltatime="true">
+        <Remove />
+        <SpawnItem identifier="pp_ladder" spawnposition="This" />
+      </StatusEffect>
+    </ConnectionPanel>
+  </Item>
+  <Item name="" identifier="pp_ladder" category="Equipment" tags="largeitem" Scale="0.5" impactsoundtag="impact_metal_heavy" isshootable="true" requireaimtouse="true">
+    <InventoryIcon texture="Content/Map/Outposts/Art/Shop.png" sourcerect="0,484,95,364" origin="0.5,0.5" />
+    <sprite texture="Content/Map/Outposts/Art/Shop.png" sourcerect="0,484,95,364" depth="0.51" premultiplyalpha="false" origin="0.5,0.5" />
+    <Body width="60" height="364" density="50" />
+    <Price baseprice="75">
+      <Price locationtype="outpost" multiplier="1.1" sold="true" minavailable="1" />
+      <Price locationtype="city" multiplier="1.0" sold="true" minavailable="1" />
+      <Price locationtype="research" multiplier="0.9" sold="true" minavailable="1" />
+      <Price locationtype="military" multiplier="1.2" sold="true" minavailable="1" />
+      <Price locationtype="mine" multiplier="1.0" sold="true" minavailable="1" />
+    </Price>
+    <Deconstruct time="10">
+      <Item identifier="carbon" amount="2" />
+    </Deconstruct>
+    <Fabricate suitablefabricators="fabricator" requiredtime="20">
+      <RequiredSkill identifier="mechanical" level="35" />
+      <RequiredItem identifier="carbon" amount="4" />
+    </Fabricate>
+    <ItemComponent characterusable="false">
+      <IsActiveConditional attached="true" targetitemcomponent="Holdable" />
+      <StatusEffect type="Always" target="This" condition="-199.9">
+        <Conditional attached="true" />
+      </StatusEffect>
+      <StatusEffect type="OnBroken" target="This">
+        <SpawnItem identifier="pp_ladder_placed" spawnposition="This" />
+        <Remove />
+      </StatusEffect>
+    </ItemComponent>
+    <Holdable selectkey="Select" pickkey="Select" slots="RightHand,LeftHand" controlpose="true" aimpos="45,10" handle1="20,-18" holdpos="25,-1" holdangle="270" msg="ItemMsgPickUpSelect" attachable="true" attachedbydefault="false" attached="false" aimable="true" PickingTime="0.0" characterusable="true">
+      <StatusEffect type="OnUse" target="This" noninteractable="true" setvalue="true" />
+    </Holdable>
+  </Item>
+</Items>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Items>
+  <Item name="Аптечка военнослужащего" identifier="medkitcontainerarmy" description="Полевой контейнер под медикаменты. 6 слотов под препараты (по 6 шт.) и 2 слота под медицинские швы (по 16 шт.)." category="Medical,Misc" tags="smallitem,smallmedicalcontainer" impactsoundtag="impact_metal_light" cargocontaineridentifier="mediccrate" showcontentsintooltip="true" waterproof="true" scale="0.35">
+    <Sprite texture="%ModDir%/Content/Items/Containers/medkit_container_army.png" depth="0.55" sourcerect="0,0,64,64" origin="0.5,0.5" />
+    <InventoryIcon texture="%ModDir%/Content/Items/Containers/medkit_container_army.png" sourcerect="64,0,74,66" origin="0.5,0.5" />
+    <PreferredContainer secondary="wrecksupplycab,beaconsupplycab" amount="1" spawnprobability="0.03" />
+    <PreferredContainer primary="supplycab" amount="1" spawnprobability="0.0" notcampaign="true" transferonlyonepercontainer="true" />
+    <PreferredContainer primary="wreckmedcab,abandonedmedcab,medcab" amount="1" spawnprobability="0.05" />
+    <Price baseprice="60" sold="false">
+      <Price storeidentifier="merchantmedical" minavailable="4" sold="true" />
+    </Price>
+    <Body width="40" height="40" density="12" />
+    <Holdable selectkey="Select" slots="Any,RightHand,LeftHand" msg="ItemMsgPickUpSelect" holdpos="40,-30" handle1="0,0" holdangle="30" />
+    <Deconstruct time="3">
+      <Item identifier="silicon" />
+      <Item identifier="carbon" />
+    </Deconstruct>
+    <Fabricate suitablefabricators="fabricator" requiredtime="5">
+      <RequiredItem identifier="plastic" amount="1" />
+      <RequiredItem identifier="bluepaint" mincondition="0.1" usecondition="true" />
+    </Fabricate>
+    <ItemContainer capacity="6" maxstacksize="6" slotsperrow="4">
+      <SlotIcon slotindex="0" texture="Content/UI/ContainerIndicators.png" sourcerect="2,155,120,29" origin="0.5,0.5" />
+      <SlotIcon slotindex="1" texture="Content/UI/ContainerIndicators.png" sourcerect="2,155,120,29" origin="0.5,0.5" />
+      <SlotIcon slotindex="2" texture="Content/UI/ContainerIndicators.png" sourcerect="2,155,120,29" origin="0.5,0.5" />
+      <SlotIcon slotindex="3" texture="Content/UI/ContainerIndicators.png" sourcerect="2,155,120,29" origin="0.5,0.5" />
+      <SlotIcon slotindex="4" texture="Content/UI/ContainerIndicators.png" sourcerect="2,155,120,29" origin="0.5,0.5" />
+      <SlotIcon slotindex="5" texture="Content/UI/ContainerIndicators.png" sourcerect="2,155,120,29" origin="0.5,0.5" />
+      <Containable items="chem,medical" excludeditems="toolbox,toolbelt,mediumitem" />
+      <subcontainer capacity="2" maxstacksize="16">
+        <Containable items="suture" />
+      </subcontainer>
+    </ItemContainer>
+  </Item>
+</Items>

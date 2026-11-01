@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Items>
+  <Item name="" identifier="pp_heatpad" category="Medical" maxstacksize="32" maxstacksizecharacterinventory="16"
+        cargocontaineridentifier="mediccrate" tags="smallitem,medical" useinhealthinterface="true" scale="0.2"
+        impactsoundtag="impact_soft" requireaimtouse="true"
+        description="Разогревающий пластырь для быстрого прогрева переохлаждённой конечности.">
+    <PreferredContainer primary="medcab" minamount="4" maxamount="10" spawnprobability="1" />
+    <Fabricate suitablefabricators="medicalfabricator" amount="4" requiredtime="10">
+      <RequiredSkill identifier="medical" level="10" />
+      <RequiredItem identifier="plastic" />
+      <RequiredItem identifier="iron" />
+    </Fabricate>
+    <Deconstruct />
+    <Price baseprice="60">
+      <Price storeidentifier="merchantmedical" sold="true" multiplier="0.9" minavailable="3" />
+    </Price>
+    <InventoryIcon texture="%ModDir%/Content/Items/Cold/pp_thermal_items.png" sourcerect="223,7,110,114" origin="0.52,0.52" />
+    <Sprite texture="%ModDir%/Content/Items/Cold/pp_thermal_items.png" sourcerect="223,7,110,114" depth="0.55" origin="0.51,0.46" />
+    <Body width="65" height="45" density="50" />
+    <MeleeWeapon canbecombined="false" removeoncombined="true" slots="Any,RightHand,LeftHand" aimpos="20,5"
+                 handle1="0,0" holdangle="10" reload="1.0" msg="ItemMsgPickUpSelect" hitonlycharacters="true">
+      <RequiredSkill identifier="medical" level="10" />
+      <StatusEffect type="OnUse" target="This" Condition="-100.0" setvalue="true">
+        <Sound file="Content/Items/Medical/Bandage1.ogg" range="500" />
+      </StatusEffect>
+      <StatusEffect target="Limb" type="OnSuccess">
+        <ReduceAffliction identifier="pp_hypothermia" amount="18" />
+        <Affliction identifier="pp_warmth" amount="35" />
+      </StatusEffect>
+      <StatusEffect type="OnFailure" target="Limb">
+        <ReduceAffliction identifier="pp_hypothermia" amount="8" />
+        <Affliction identifier="pp_warmth" amount="15" />
+      </StatusEffect>
+      <StatusEffect type="OnBroken" target="This">
+        <Remove />
+      </StatusEffect>
+    </MeleeWeapon>
+  </Item>
+
+  <Item name="" identifier="pp_warm_iv_bag" category="Medical" maxstacksize="8" maxstacksizecharacterinventory="1"
+        cargocontaineridentifier="mediccrate" tags="smallitem,chem,medical" useinhealthinterface="true" scale="0.275"
+        impactsoundtag="impact_soft" requireaimtouse="true"
+        description="Подогретый физраствор для внутривенного согрева пациента с тяжёлым переохлаждением.">
+    <PreferredContainer primary="medcab" minamount="1" maxamount="3" spawnprobability="0.6" />
+    <Fabricate suitablefabricators="medicalfabricator" requiredtime="10">
+      <RequiredSkill identifier="medical" level="30" />
+      <RequiredItem identifier="antibloodloss1" />
+      <RequiredItem identifier="plastic" />
+    </Fabricate>
+    <Deconstruct />
+    <Price baseprice="110">
+      <Price storeidentifier="merchantmedical" sold="true" multiplier="0.9" minavailable="2" />
+    </Price>
+    <InventoryIcon texture="%ModDir%/Content/Items/Cold/pp_thermal_items.png" sourcerect="133,2,87,126" origin="0.54,0.48" />
+    <Sprite texture="%ModDir%/Content/Items/Cold/pp_thermal_items.png" sourcerect="133,2,87,126" depth="0.6" origin="0.54,0.48" />
+    <Body width="80" height="45" density="11" />
+    <MeleeWeapon canbecombined="false" removeoncombined="true" slots="Any,RightHand,LeftHand" aimpos="20,5"
+                 handle1="0,0" holdangle="10" reload="1.0" msg="ItemMsgPickUpSelect" hitonlycharacters="true">
+      <RequiredSkill identifier="medical" level="30" />
+      <StatusEffect type="OnUse" target="This" Condition="-100.0" setvalue="true">
+        <Sound file="Content/Items/Medical/Syringe.ogg" range="500" />
+      </StatusEffect>
+      <StatusEffect target="Limb" targetlimbs="Torso" type="OnSuccess">
+        <ReduceAffliction identifier="pp_hypothermia" amount="35" />
+        <Affliction identifier="pp_warmth" amount="60" />
+      </StatusEffect>
+      <StatusEffect type="OnFailure" target="Limb" targetlimbs="Torso">
+        <ReduceAffliction identifier="pp_hypothermia" amount="15" />
+        <Affliction identifier="bleeding" amount="4" />
+      </StatusEffect>
+      <StatusEffect type="OnBroken" target="This">
+        <Remove />
+      </StatusEffect>
+    </MeleeWeapon>
+  </Item>
+
+  <Item name="" identifier="pp_coolgel" category="Medical" maxstacksize="32" maxstacksizecharacterinventory="16"
+        cargocontaineridentifier="mediccrate" tags="smallitem,medical" useinhealthinterface="true" scale="0.2"
+        impactsoundtag="impact_soft" requireaimtouse="true"
+        description="Охлаждающий гель, снимает симптомы перегрева и теплового удара.">
+    <PreferredContainer primary="medcab" minamount="4" maxamount="10" spawnprobability="1" />
+    <Fabricate suitablefabricators="medicalfabricator" amount="4" requiredtime="10">
+      <RequiredSkill identifier="medical" level="10" />
+      <RequiredItem identifier="plastic" />
+      <RequiredItem identifier="sodium" amount="2" />
+    </Fabricate>
+    <Deconstruct />
+    <Price baseprice="60">
+      <Price storeidentifier="merchantmedical" sold="true" multiplier="0.9" minavailable="3" />
+    </Price>
+    <InventoryIcon texture="%ModDir%/Content/Items/Cold/pp_thermal_items.png" sourcerect="416,1,68,127" origin="0.54,0.51" />
+    <Sprite texture="%ModDir%/Content/Items/Cold/pp_thermal_items.png" sourcerect="416,1,68,127" depth="0.55" origin="0.54,0.51" />
+    <Body width="65" height="45" density="50" />
+    <MeleeWeapon canbecombined="false" removeoncombined="true" slots="Any,RightHand,LeftHand" aimpos="20,5"
+                 handle1="0,0" holdangle="10" reload="1.0" msg="ItemMsgPickUpSelect" hitonlycharacters="true">
+      <RequiredSkill identifier="medical" level="10" />
+      <StatusEffect type="OnUse" target="This" Condition="-100.0" setvalue="true">
+        <Sound file="Content/Items/Medical/Syringe.ogg" range="500" />
+      </StatusEffect>
+      <StatusEffect target="Limb" type="OnSuccess">
+        <ReduceAffliction identifier="pp_hyperthermia" amount="25" />
+      </StatusEffect>
+      <StatusEffect type="OnFailure" target="Limb">
+        <ReduceAffliction identifier="pp_hyperthermia" amount="10" />
+      </StatusEffect>
+      <StatusEffect type="OnBroken" target="This">
+        <Remove />
+      </StatusEffect>
+    </MeleeWeapon>
+  </Item>
+
+  <Item name="" identifier="pp_compactheater" category="Equipment" tags="smallitem,thermal" scale="0.5"
+        cargocontaineridentifier="metalcrate" impactsoundtag="impact_metal_light"
+        description="Компактный обогреватель на батарее. Согревает владельца, пока в нём есть заряд.">
+    <PreferredContainer primary="engcab" minamount="0" maxamount="1" spawnprobability="0.2" />
+    <Fabricate suitablefabricators="fabricator" amount="1" requiredtime="10">
+      <RequiredSkill identifier="electrical" level="35" />
+      <RequiredItem identifier="steel" />
+      <RequiredItem identifier="copper" />
+    </Fabricate>
+    <Deconstruct />
+    <Price baseprice="300">
+      <Price storeidentifier="merchantengineer" sold="true" multiplier="1.1" minavailable="1" />
+    </Price>
+    <InventoryIcon texture="%ModDir%/Content/Items/Cold/pp_thermal_items.png" sourcerect="6,247,170,151" origin="0.5,0.57" />
+    <Sprite texture="%ModDir%/Content/Items/Cold/pp_thermal_items.png" sourcerect="6,247,170,151" depth="0.55" origin="0.51,0.57" />
+    <Body width="65" height="65" density="50" />
+    <Wearable slots="Bag" msg="ItemMsgEquipSelect" displaycontainedstatus="true" canbeselected="false" canbepicked="true" pickkey="Select">
+      <Sprite texture="%ModDir%/Content/Items/Cold/pp_thermal_items.png" sourcerect="6,247,170,151" depth="0.55" origin="0.5,0.2" limb="Torso" scale="0.22" />
+    </Wearable>
+    <Holdable slots="RightHand+LeftHand" holdpos="0,-70" handle1="-5,0" handle2="10,-20" holdangle="0" msg="ItemMsgPickUpUse" canbeselected="false" canbepicked="true" pickkey="Use" />
+    <ItemContainer capacity="1" maxstacksize="1" hideitems="true" containedstateindicatorstyle="battery" ContainedStateIndicatorSlot="0">
+      <SlotIcon slotindex="0" texture="Content/UI/StatusMonitorUI.png" sourcerect="128,448,64,64" origin="0.5,0.5" />
+      <Containable items="mobilebattery">
+        <StatusEffect type="OnContaining" targettype="This" Voltage="1.0" setvalue="true" />
+        <StatusEffect type="OnWearing" target="Contained" playsoundonrequireditemfailure="true">
+          <RequiredItem items="mobilebattery" type="Contained" matchonempty="true" />
+          <Conditional condition="lte 10.0" />
+          <Sound file="%ModDir%/Content/Items/Cold/pp_lowheater.ogg" range="250" loop="true" />
+        </StatusEffect>
+      </Containable>
+    </ItemContainer>
+  </Item>
+
+  <Item name="" identifier="pp_thermometer" category="Equipment" tags="smallitem,tool,medical" scale="0.22"
+        cargocontaineridentifier="metalcrate" useinhealthinterface="true" impactsoundtag="impact_metal_light"
+        requireaimtouse="true" description="Ручной термометр. Измеряет температуру отсека или конечности пациента.">
+    <PreferredContainer primary="medcab" minamount="1" maxamount="1" spawnprobability="0.4" />
+    <Fabricate suitablefabricators="fabricator" requiredtime="20">
+      <RequiredSkill identifier="medical" level="20" />
+      <RequiredItem identifier="plastic" />
+      <RequiredItem identifier="silicon" />
+    </Fabricate>
+    <Deconstruct time="10">
+      <Item identifier="plastic" />
+      <Item identifier="silicon" />
+    </Deconstruct>
+    <Price baseprice="180">
+      <Price storeidentifier="merchantmedical" sold="true" multiplier="0.9" minavailable="1" />
+    </Price>
+    <InventoryIcon texture="%ModDir%/Content/Items/Cold/pp_thermal_items.png" sourcerect="684,13,81,112" origin="0.5,0.49" />
+    <Sprite texture="%ModDir%/Content/Items/Cold/pp_thermal_items.png" sourcerect="797,17,85,106" depth="0.6" origin="0.5,0.5" />
+    <Body width="25" height="25" density="40" />
+    <MeleeWeapon canbecombined="false" slots="Any,RightHand,LeftHand" aimpos="20,5" handle1="0,0" holdangle="10"
+                 reload="1.0" msg="ItemMsgPickUpSelect" hitonlycharacters="true">
+      <RequiredItems items="mobilebattery" type="Contained" msg="ItemMsgBatteryCellRequired" />
+      <StatusEffect type="OnUse" target="Contained" Condition="-0.4">
+        <RequiredItem items="mobilebattery" type="Contained" />
+        <Sound file="%ModDir%/Content/Items/Cold/pp_thermometer.ogg" range="300" />
+      </StatusEffect>
+    </MeleeWeapon>
+    <ItemContainer capacity="1" maxstacksize="1" hideitems="true" containedstateindicatorstyle="battery">
+      <Containable items="mobilebattery" />
+    </ItemContainer>
+  </Item>
+
+  <Item name="" identifier="pp_towel" category="Medical" maxstacksize="1" maxstacksizecharacterinventory="1"
+        cargocontaineridentifier="mediccrate" tags="smallitem,medical" useinhealthinterface="true" scale="0.2"
+        impactsoundtag="impact_soft" requireaimtouse="true"
+        description="Полотенце для вытирания насквозь промокшего пациента. Не расходуется.">
+    <PreferredContainer primary="medcab" minamount="0" maxamount="1" spawnprobability="0.5" />
+    <Fabricate suitablefabricators="medicalfabricator" requiredtime="15">
+      <RequiredSkill identifier="medical" level="20" />
+      <RequiredItem identifier="organicfiber" amount="2" />
+    </Fabricate>
+    <Deconstruct time="5">
+      <Item identifier="organicfiber" />
+    </Deconstruct>
+    <Price baseprice="50">
+      <Price storeidentifier="merchantmedical" sold="true" multiplier="0.9" minavailable="3" />
+    </Price>
+    <InventoryIcon texture="%ModDir%/Content/Items/Cold/pp_thermal_items.png" sourcerect="572,1,96,131" origin="0.53,0.48" />
+    <Sprite texture="%ModDir%/Content/Items/Cold/pp_thermal_items.png" sourcerect="572,1,96,131" depth="0.55" origin="0.53,0.48" />
+    <Body width="65" height="45" density="50" />
+    <MeleeWeapon canbecombined="false" slots="Any,RightHand,LeftHand" aimpos="20,5" handle1="0,0" holdangle="10"
+                 reload="1.0" msg="ItemMsgPickUpSelect" hitonlycharacters="true">
+      <RequiredSkill identifier="medical" level="5" />
+      <StatusEffect type="OnUse" target="Limb">
+        <Sound file="Content/Items/Medical/Bandage1.ogg" range="500" />
+      </StatusEffect>
+    </MeleeWeapon>
+  </Item>
+
+  <Item name="" identifier="pp_warm_rag" category="Medical" maxstacksize="8" maxstacksizecharacterinventory="1"
+        cargocontaineridentifier="mediccrate" tags="smallitem,chem,medical" useinhealthinterface="true" scale="0.2"
+        impactsoundtag="impact_soft" requireaimtouse="true"
+        description="Тёплая влажная тряпка для прогрева переохлаждённой конечности. Остывает от использования — грейте в тёплом контейнере.">
+    <PreferredContainer primary="medcab" minamount="1" maxamount="2" spawnprobability="0.4" />
+    <Fabricate suitablefabricators="medicalfabricator" requiredtime="15">
+      <RequiredSkill identifier="medical" level="20" />
+      <RequiredItem identifier="organicfiber" amount="3" />
+    </Fabricate>
+    <Deconstruct time="5">
+      <Item identifier="organicfiber" amount="3" />
+    </Deconstruct>
+    <Price baseprice="80">
+      <Price storeidentifier="merchantmedical" sold="true" multiplier="0.9" minavailable="3" />
+    </Price>
+    <InventoryIcon texture="%ModDir%/Content/Items/Cold/pp_thermal_items.png" sourcerect="0,0,128,128" origin="0.55,0.5" />
+    <Sprite texture="%ModDir%/Content/Items/Cold/pp_thermal_items.png" sourcerect="0,0,128,128" depth="0.6" origin="0.53,0.41" />
+    <Body width="80" height="45" density="11" />
+    <MeleeWeapon canbecombined="false" slots="Any,RightHand,LeftHand" aimpos="20,5" handle1="0,0" holdangle="10"
+                 reload="1.0" msg="ItemMsgPickUpSelect" hitonlycharacters="true">
+      <RequiredSkill identifier="medical" level="20" />
+      <StatusEffect type="OnUse" target="This" Condition="-25.0">
+        <Sound file="Content/Items/Medical/Bandage1.ogg" range="500" />
+      </StatusEffect>
+      <StatusEffect target="Limb" type="OnSuccess" comparison="And">
+        <Conditional condition="gt 20" />
+        <ReduceAffliction identifier="pp_hypothermia" amount="14" />
+        <Affliction identifier="pp_warmth" amount="30" />
+      </StatusEffect>
+      <StatusEffect type="OnContained" target="This" interval="4" disabledeltatime="true" Condition="15">
+        <Conditional hastag="heating" targetcontainer="true" />
+      </StatusEffect>
+    </MeleeWeapon>
+  </Item>
+
+  <Item name="" identifier="pp_heatcontainer" category="Equipment" maxstacksize="1" maxstacksizecharacterinventory="1"
+        tags="container,medical,smallitem,mobilecontainer,tool,toolbox,heating" showcontentsintooltip="true"
+        scale="0.5" impactsoundtag="impact_metal_heavy" description="Контейнер, поддерживающий тряпки внутри тёплыми.">
+    <PreferredContainer primary="medcab" minamount="0" maxamount="1" spawnprobability="0.5" />
+    <Fabricate suitablefabricators="fabricator" amount="1" requiredtime="10">
+      <RequiredSkill identifier="mechanical" level="20" />
+      <RequiredItem identifier="steel" />
+      <RequiredItem identifier="aluminium" />
+    </Fabricate>
+    <Deconstruct />
+    <Price baseprice="120">
+      <Price storeidentifier="merchantmedical" sold="true" multiplier="0.9" minavailable="3" />
+    </Price>
+    <InventoryIcon texture="%ModDir%/Content/Items/Cold/pp_thermal_items.png" sourcerect="22,151,83,67" origin="0.53,0.55" />
+    <Sprite texture="%ModDir%/Content/Items/Cold/pp_thermal_items.png" sourcerect="22,151,83,67" depth="0.55" origin="0.53,0.55" />
+    <Body width="65" height="45" density="50" />
+    <Holdable slots="RightHand+LeftHand" holdpos="0,-70" handle1="-10,10" handle2="10,10" aimable="false" msg="ItemMsgPickUpSelect" />
+    <ItemContainer capacity="6" keepopenwhenequipped="true" movableframe="true">
+      <Containable items="pp_warm_rag" excludeditems="toolbelt,toolbox" />
+    </ItemContainer>
+  </Item>
+</Items>

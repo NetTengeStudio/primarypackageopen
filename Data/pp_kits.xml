@@ -1,0 +1,1867 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Kits>
+  <npc identifier="YOOOO" job="captain">
+    <Character name="Ashly Meisner" originalname="Ashly Meisner" speciesname="human" tags="head1,female" salary="6953" experiencepoints="0" additionaltalentpoints="0" talentResetCount="0" hairindex="3" beardindex="0" moustacheindex="0" faceattachmentindex="12" skincolor="252,225,198,255" haircolor="106,59,55,255" facialhaircolor="58,58,60,255" startitemsgiven="false" personality="professional" refundpoints="0" lastrewarddistribution="-1" permanentlydead="false" IsOnReserveBench="false" renamingenabled="false" missionscompletedsincedeath="0">
+      <job name="Капитан" identifier="captain">
+        <skill identifier="helm" level="100" />
+        <skill identifier="weapons" level="97.95431" />
+        <skill identifier="mechanical" level="65.653755" />
+        <skill identifier="electrical" level="73.30873" />
+        <skill identifier="medical" level="22.159033" />
+      </job>
+      <savedstatvalues />
+      <Talents version="1.13.4.0">
+        <Talent identifier="kill_pill" resettable="false" />
+      </Talents>
+    </Character>
+    <ItemSet commonness="1">
+      <Item identifier="idcard_separatists" equip="true" />
+      <Item identifier="co_headset_protective" equip="true" />
+      <Item identifier="aar_piratehelmet1-open" equip="true" />
+      <Item identifier="scp_livuniform" equip="true" />
+      <Item identifier="aar_heavybodyarmor" equip="true">
+        <Item identifier="machinegun">
+          <Item identifier="hmgmagazine" />
+        </Item>
+      </Item>
+      <Item identifier="scp_assaultpack" equip="true">
+        <Item identifier="handcuffs" />
+        <Item identifier="handcuffs" />
+        <Item identifier="handcuffs" />
+        <Item identifier="handcuffs" />
+        <Item identifier="howdah_44">
+          <Item identifier="44_round" />
+          <Item identifier="44_round" />
+          <Item identifier="44_round" />
+          <Item identifier="44_round" />
+        </Item>
+        <Item identifier="flashlight">
+          <Item identifier="batterycell">
+            <Item identifier="laserpistolbeam" />
+          </Item>
+        </Item>
+        <Item identifier="co_bulletpouch">
+          <Item identifier="44_round" />
+          <Item identifier="44_round" />
+          <Item identifier="44_round" />
+          <Item identifier="44_round" />
+          <Item identifier="44_round" />
+          <Item identifier="44_round" />
+          <Item identifier="44_round" />
+          <Item identifier="44_round" />
+          <Item identifier="44_round" />
+          <Item identifier="44_round" />
+          <Item identifier="44_round" />
+          <Item identifier="44_round" />
+          <Item identifier="44_round" />
+          <Item identifier="44_round" />
+          <Item identifier="44_round" />
+          <Item identifier="44_round" />
+          <Item identifier="44_round" />
+          <Item identifier="44_round" />
+          <Item identifier="44_round" />
+          <Item identifier="44_round" />
+        </Item>
+        <Item identifier="stungrenade" />
+        <Item identifier="divingknife_m" />
+        <Item identifier="fraggrenade" />
+        <Item identifier="flare" />
+        <Item identifier="flare" />
+        <Item identifier="flare" />
+        <Item identifier="flare" />
+        <Item identifier="flare" />
+      </Item>
+      <Item identifier="hmgmagazine">
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+      </Item>
+      <Item identifier="hmgmagazine">
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+      </Item>
+      <Item identifier="hmgmagazine">
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+      </Item>
+      <Item identifier="co_bulletpouch">
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+        <Item identifier="mg_round_ap" />
+      </Item>
+      <Item identifier="wrench" />
+      <Item identifier="medkitcontainerscientific">
+        <Item identifier="gypsum" />
+        <Item identifier="gypsum" />
+        <Item identifier="antibleeding2" />
+        <Item identifier="antibleeding2" />
+        <Item identifier="combatstimulantsyringe" />
+        <Item identifier="combatstimulantsyringe" />
+        <Item identifier="tourniquet" />
+        <Item identifier="deusizine" />
+      </Item>
+      <Item identifier="mreerc" />
+      <Item identifier="aar_facemask" equip="true" />
+    </ItemSet>
+  </npc>
+  <npc identifier="cbgasmask1" job="captain">
+    <Character name="Капитан" originalname="Капитан" speciesname="human" tags="head1,male" salary="2589" experiencepoints="0" additionaltalentpoints="0" talentResetCount="0" hairindex="3" beardindex="5" moustacheindex="0" faceattachmentindex="0" skincolor="214,154,112,255" haircolor="71,54,55,255" facialhaircolor="216,186,133,255" startitemsgiven="true" personality="rude" refundpoints="0" lastrewarddistribution="-1" permanentlydead="false" IsOnReserveBench="false" renamingenabled="false" missionscompletedsincedeath="0">
+      <job name="Капитан" identifier="captain">
+        <skill identifier="helm" level="44.996662" />
+        <skill identifier="weapons" level="100" />
+        <skill identifier="mechanical" level="21.391775" />
+        <skill identifier="electrical" level="23.330498" />
+        <skill identifier="medical" level="9.492081" />
+      </job>
+      <savedstatvalues />
+      <Talents version="1.13.4.0">
+        <Talent identifier="commando" resettable="false" />
+      </Talents>
+    </Character>
+    <ItemSet commonness="1">
+      <Item identifier="idcard_coalition" equip="true" />
+      <Item identifier="co_headset_protective" equip="true" />
+      <Item identifier="tachelmercgasmask_erc" equip="true" />
+      <Item identifier="coalitionclotheshard" equip="true" />
+      <Item identifier="tacticalvestheavy" equip="true">
+        <Item identifier="44_round" slotindex="0" />
+        <Item identifier="44_round" slotindex="0" />
+        <Item identifier="44_round" slotindex="0" />
+        <Item identifier="44_round" slotindex="0" />
+        <Item identifier="44_round" slotindex="0" />
+        <Item identifier="44_round" slotindex="0" />
+        <Item identifier="44_round" slotindex="0" />
+        <Item identifier="44_round" slotindex="0" />
+        <Item identifier="44_round" slotindex="0" />
+        <Item identifier="44_round" slotindex="0" />
+        <Item identifier="44_round" slotindex="1" />
+        <Item identifier="44_round" slotindex="1" />
+        <Item identifier="44_round" slotindex="1" />
+        <Item identifier="44_round" slotindex="1" />
+        <Item identifier="44_round" slotindex="1" />
+        <Item identifier="44_round" slotindex="1" />
+        <Item identifier="44_round" slotindex="1" />
+        <Item identifier="44_round" slotindex="1" />
+        <Item identifier="44_round" slotindex="1" />
+        <Item identifier="44_round" slotindex="1" />
+        <Item identifier="revolver_44" slotindex="2">
+          <Item identifier="44_compensator" slotindex="7" />
+        </Item>
+      </Item>
+      <Item identifier="thgbackpack" equip="true">
+        <Item identifier="mreerc" slotindex="0" />
+        <Item identifier="primarypkg_coalitiondocument" slotindex="1" />
+        <Item identifier="corporatelaws" slotindex="3" />
+        <Item identifier="shotgun_assalt" slotindex="9">
+          <Item identifier="flashlight_t" slotindex="4">
+            <Item identifier="fulguriumbatterycell" slotindex="0">
+              <Item identifier="laserpistolbeampowerful" slotindex="0" />
+            </Item>
+          </Item>
+          <Item identifier="co_choke" slotindex="5" />
+        </Item>
+      </Item>
+      <Item identifier="flashlight" slotindex="8">
+        <Item identifier="fulguriumbatterycell" slotindex="0">
+          <Item identifier="laserpistolbeampowerful" slotindex="0" />
+        </Item>
+      </Item>
+      <Item identifier="divingknife_m" slotindex="9" />
+      <Item identifier="fraggrenade" slotindex="10" />
+      <Item identifier="fraggrenade" slotindex="10" />
+      <Item identifier="stungrenade" slotindex="11" />
+      <Item identifier="flare" slotindex="15" />
+      <Item identifier="flare" slotindex="15" />
+      <Item identifier="flare" slotindex="15" />
+      <Item identifier="medkitcontainerscientific" slotindex="16">
+        <Item identifier="antibloodloss1" slotindex="0" />
+        <Item identifier="needle" slotindex="1" />
+        <Item identifier="tourniquet" slotindex="2" />
+        <Item identifier="combatstimulantsyringe" slotindex="3" />
+        <Item identifier="antibleeding2" slotindex="4" />
+        <Item identifier="deusizine" slotindex="5" />
+        <Item identifier="gypsum" slotindex="6" />
+        <Item identifier="tonicliquid" slotindex="7" />
+      </Item>
+      <Item identifier="co_bulletpouch" slotindex="17">
+        <Item identifier="shotgunshell" slotindex="0" />
+        <Item identifier="shotgunshell" slotindex="0" />
+        <Item identifier="shotgunshell" slotindex="0" />
+        <Item identifier="shotgunshell" slotindex="0" />
+        <Item identifier="shotgunshell" slotindex="0" />
+        <Item identifier="shotgunshell" slotindex="0" />
+        <Item identifier="shotgunshell" slotindex="1" />
+        <Item identifier="shotgunshell" slotindex="1" />
+        <Item identifier="shotgunshell" slotindex="1" />
+        <Item identifier="shotgunshell" slotindex="1" />
+        <Item identifier="shotgunshell" slotindex="1" />
+        <Item identifier="shotgunshell" slotindex="1" />
+        <Item identifier="shotgunshell" slotindex="1" />
+        <Item identifier="shotgunshell" slotindex="1" />
+        <Item identifier="shotgunshell" slotindex="1" />
+        <Item identifier="shotgunshell" slotindex="1" />
+        <Item identifier="shotgunshell" slotindex="2" />
+        <Item identifier="shotgunshell" slotindex="2" />
+        <Item identifier="shotgunshell" slotindex="2" />
+        <Item identifier="shotgunshell" slotindex="2" />
+        <Item identifier="shotgunshell" slotindex="2" />
+        <Item identifier="shotgunshell" slotindex="2" />
+        <Item identifier="shotgunshell" slotindex="2" />
+        <Item identifier="shotgunshell" slotindex="2" />
+        <Item identifier="shotgunshell" slotindex="2" />
+        <Item identifier="shotgunshell" slotindex="2" />
+        <Item identifier="shotgunshell" slotindex="3" />
+        <Item identifier="shotgunshell" slotindex="3" />
+        <Item identifier="shotgunshell" slotindex="3" />
+        <Item identifier="shotgunshell" slotindex="3" />
+        <Item identifier="shotgunshell" slotindex="3" />
+        <Item identifier="shotgunshell" slotindex="3" />
+        <Item identifier="shotgunshell" slotindex="3" />
+        <Item identifier="shotgunshell" slotindex="3" />
+        <Item identifier="shotgunshell" slotindex="3" />
+        <Item identifier="shotgunshell" slotindex="3" />
+        <Item identifier="shotgunshell" slotindex="4" />
+        <Item identifier="shotgunshell" slotindex="4" />
+        <Item identifier="shotgunshell" slotindex="4" />
+        <Item identifier="shotgunshell" slotindex="4" />
+        <Item identifier="shotgunshell" slotindex="4" />
+        <Item identifier="shotgunshell" slotindex="4" />
+        <Item identifier="shotgunshell" slotindex="4" />
+        <Item identifier="shotgunshell" slotindex="4" />
+        <Item identifier="shotgunshell" slotindex="4" />
+        <Item identifier="shotgunshell" slotindex="4" />
+        <Item identifier="shotgunshell" slotindex="5" />
+        <Item identifier="shotgunshell" slotindex="5" />
+        <Item identifier="shotgunshell" slotindex="5" />
+        <Item identifier="shotgunshell" slotindex="5" />
+        <Item identifier="shotgunshell" slotindex="5" />
+        <Item identifier="shotgunshell" slotindex="5" />
+        <Item identifier="shotgunshell" slotindex="5" />
+        <Item identifier="shotgunshell" slotindex="5" />
+        <Item identifier="shotgunshell" slotindex="5" />
+        <Item identifier="shotgunshell" slotindex="5" />
+      </Item>
+    </ItemSet>
+  </npc>
+  <npc identifier="cbmiddleak1" job="captain">
+    <Character name="Капитан" originalname="Капитан" speciesname="human" tags="head1,male" salary="256" experiencepoints="0" additionaltalentpoints="0" talentResetCount="0" hairindex="3" beardindex="5" moustacheindex="0" faceattachmentindex="0" skincolor="214,154,112,255" haircolor="71,54,55,255" facialhaircolor="216,186,133,255" startitemsgiven="true" personality="rude" refundpoints="0" lastrewarddistribution="-1" permanentlydead="false" IsOnReserveBench="false" renamingenabled="false" missionscompletedsincedeath="0">
+      <job name="Капитан" identifier="captain">
+        <skill identifier="helm" level="44.996662" />
+        <skill identifier="weapons" level="100" />
+        <skill identifier="mechanical" level="21.391775" />
+        <skill identifier="electrical" level="23.330498" />
+        <skill identifier="medical" level="9.492081" />
+      </job>
+      <savedstatvalues />
+      <Talents version="1.13.4.0">
+        <Talent identifier="commando" resettable="false" />
+      </Talents>
+    </Character>
+    <ItemSet commonness="1">
+      <Item identifier="idcard_coalition" equip="true" />
+      <Item identifier="co_headset_protective" equip="true" />
+      <Item identifier="contollerhelmetlclosed" equip="true" />
+      <Item identifier="coalitionclotheshard" equip="true" />
+      <Item identifier="bodyarmorlighterc" equip="true">
+        <Item identifier="co_bulletpouch" slotindex="0">
+          <Item identifier="5.45mm_round" slotindex="0" />
+          <Item identifier="5.45mm_round" slotindex="0" />
+          <Item identifier="5.45mm_round" slotindex="0" />
+          <Item identifier="5.45mm_round" slotindex="0" />
+          <Item identifier="5.45mm_round" slotindex="0" />
+          <Item identifier="5.45mm_round" slotindex="0" />
+          <Item identifier="5.45mm_round" slotindex="0" />
+          <Item identifier="5.45mm_round" slotindex="0" />
+          <Item identifier="5.45mm_round" slotindex="0" />
+          <Item identifier="5.45mm_round" slotindex="0" />
+          <Item identifier="5.45mm_round" slotindex="1" />
+          <Item identifier="5.45mm_round" slotindex="1" />
+          <Item identifier="5.45mm_round" slotindex="1" />
+          <Item identifier="5.45mm_round" slotindex="1" />
+          <Item identifier="5.45mm_round" slotindex="1" />
+          <Item identifier="5.45mm_round" slotindex="1" />
+          <Item identifier="5.45mm_round" slotindex="1" />
+          <Item identifier="5.45mm_round" slotindex="1" />
+          <Item identifier="5.45mm_round" slotindex="1" />
+          <Item identifier="5.45mm_round" slotindex="1" />
+          <Item identifier="5.45mm_round" slotindex="2" />
+          <Item identifier="5.45mm_round" slotindex="2" />
+          <Item identifier="5.45mm_round" slotindex="2" />
+          <Item identifier="5.45mm_round" slotindex="2" />
+          <Item identifier="5.45mm_round" slotindex="2" />
+          <Item identifier="5.45mm_round" slotindex="2" />
+          <Item identifier="5.45mm_round" slotindex="2" />
+          <Item identifier="5.45mm_round" slotindex="2" />
+          <Item identifier="5.45mm_round" slotindex="2" />
+          <Item identifier="5.45mm_round" slotindex="2" />
+          <Item identifier="5.45mm_round" slotindex="3" />
+          <Item identifier="5.45mm_round" slotindex="3" />
+          <Item identifier="5.45mm_round" slotindex="3" />
+          <Item identifier="5.45mm_round" slotindex="3" />
+          <Item identifier="5.45mm_round" slotindex="3" />
+          <Item identifier="5.45mm_round" slotindex="3" />
+          <Item identifier="5.45mm_round" slotindex="3" />
+          <Item identifier="5.45mm_round" slotindex="3" />
+          <Item identifier="5.45mm_round" slotindex="3" />
+          <Item identifier="5.45mm_round" slotindex="3" />
+          <Item identifier="5.45mm_round_sb" slotindex="4" />
+          <Item identifier="5.45mm_round_sb" slotindex="4" />
+          <Item identifier="5.45mm_round_sb" slotindex="4" />
+          <Item identifier="5.45mm_round_sb" slotindex="4" />
+          <Item identifier="5.45mm_round_sb" slotindex="4" />
+          <Item identifier="5.45mm_round_sb" slotindex="4" />
+          <Item identifier="5.45mm_round_sb" slotindex="4" />
+          <Item identifier="5.45mm_round_sb" slotindex="4" />
+          <Item identifier="5.45mm_round_sb" slotindex="4" />
+          <Item identifier="5.45mm_round_sb" slotindex="4" />
+          <Item identifier="5.45mm_round_sb" slotindex="5" />
+          <Item identifier="5.45mm_round_sb" slotindex="5" />
+          <Item identifier="5.45mm_round_sb" slotindex="5" />
+          <Item identifier="5.45mm_round_sb" slotindex="5" />
+          <Item identifier="5.45mm_round_sb" slotindex="5" />
+          <Item identifier="5.45mm_round_sb" slotindex="5" />
+          <Item identifier="5.45mm_round_sb" slotindex="5" />
+          <Item identifier="5.45mm_round_sb" slotindex="5" />
+          <Item identifier="5.45mm_round_sb" slotindex="5" />
+          <Item identifier="5.45mm_round_sb" slotindex="5" />
+        </Item>
+        <Item identifier="medkitcontainerscientific" slotindex="1">
+          <Item identifier="antibloodloss1" slotindex="0" />
+          <Item identifier="needle" slotindex="1" />
+          <Item identifier="tourniquet" slotindex="2" />
+          <Item identifier="combatstimulantsyringe" slotindex="3" />
+          <Item identifier="antibleeding2" slotindex="4" />
+          <Item identifier="deusizine" slotindex="5" />
+          <Item identifier="gypsum" slotindex="6" />
+          <Item identifier="tonicliquid" slotindex="7" />
+        </Item>
+        <Item identifier="divingknife_m" slotindex="2" />
+        <Item identifier="5.45mm_magazine_window" slotindex="3">
+          <Item identifier="5.45mm_round" slotindex="0" />
+          <Item identifier="5.45mm_round" slotindex="0" />
+          <Item identifier="5.45mm_round" slotindex="0" />
+          <Item identifier="5.45mm_round" slotindex="0" />
+          <Item identifier="5.45mm_round" slotindex="0" />
+          <Item identifier="5.45mm_round" slotindex="1" />
+          <Item identifier="5.45mm_round" slotindex="1" />
+          <Item identifier="5.45mm_round" slotindex="1" />
+          <Item identifier="5.45mm_round" slotindex="1" />
+          <Item identifier="5.45mm_round" slotindex="1" />
+          <Item identifier="5.45mm_round" slotindex="2" />
+          <Item identifier="5.45mm_round" slotindex="2" />
+          <Item identifier="5.45mm_round" slotindex="2" />
+          <Item identifier="5.45mm_round" slotindex="2" />
+          <Item identifier="5.45mm_round" slotindex="2" />
+          <Item identifier="5.45mm_round" slotindex="3" />
+          <Item identifier="5.45mm_round" slotindex="3" />
+          <Item identifier="5.45mm_round" slotindex="3" />
+          <Item identifier="5.45mm_round" slotindex="3" />
+          <Item identifier="5.45mm_round" slotindex="3" />
+          <Item identifier="5.45mm_round" slotindex="4" />
+          <Item identifier="5.45mm_round" slotindex="4" />
+          <Item identifier="5.45mm_round" slotindex="4" />
+          <Item identifier="5.45mm_round" slotindex="4" />
+          <Item identifier="5.45mm_round" slotindex="4" />
+          <Item identifier="5.45mm_round" slotindex="5" />
+          <Item identifier="5.45mm_round" slotindex="5" />
+          <Item identifier="5.45mm_round" slotindex="5" />
+          <Item identifier="5.45mm_round" slotindex="5" />
+          <Item identifier="5.45mm_round" slotindex="5" />
+        </Item>
+        <Item identifier="5.45mm_magazine_window" slotindex="4">
+          <Item identifier="5.45mm_round_sb" slotindex="0" />
+          <Item identifier="5.45mm_round_sb" slotindex="0" />
+          <Item identifier="5.45mm_round_sb" slotindex="0" />
+          <Item identifier="5.45mm_round_sb" slotindex="0" />
+          <Item identifier="5.45mm_round_sb" slotindex="0" />
+          <Item identifier="5.45mm_round_sb" slotindex="1" />
+          <Item identifier="5.45mm_round_sb" slotindex="1" />
+          <Item identifier="5.45mm_round_sb" slotindex="1" />
+          <Item identifier="5.45mm_round_sb" slotindex="1" />
+          <Item identifier="5.45mm_round_sb" slotindex="1" />
+          <Item identifier="5.45mm_round_sb" slotindex="2" />
+          <Item identifier="5.45mm_round_sb" slotindex="2" />
+          <Item identifier="5.45mm_round_sb" slotindex="2" />
+          <Item identifier="5.45mm_round_sb" slotindex="2" />
+          <Item identifier="5.45mm_round_sb" slotindex="2" />
+          <Item identifier="5.45mm_round_sb" slotindex="3" />
+          <Item identifier="5.45mm_round_sb" slotindex="3" />
+          <Item identifier="5.45mm_round_sb" slotindex="3" />
+          <Item identifier="5.45mm_round_sb" slotindex="3" />
+          <Item identifier="5.45mm_round_sb" slotindex="3" />
+          <Item identifier="5.45mm_round_sb" slotindex="4" />
+          <Item identifier="5.45mm_round_sb" slotindex="4" />
+          <Item identifier="5.45mm_round_sb" slotindex="4" />
+          <Item identifier="5.45mm_round_sb" slotindex="4" />
+          <Item identifier="5.45mm_round_sb" slotindex="4" />
+          <Item identifier="5.45mm_round_sb" slotindex="5" />
+          <Item identifier="5.45mm_round_sb" slotindex="5" />
+          <Item identifier="5.45mm_round_sb" slotindex="5" />
+          <Item identifier="5.45mm_round_sb" slotindex="5" />
+          <Item identifier="5.45mm_round_sb" slotindex="5" />
+        </Item>
+        <Item identifier="5.45mm_magazine_window" slotindex="5">
+          <Item identifier="5.45mm_round_sb" slotindex="0" />
+          <Item identifier="5.45mm_round_sb" slotindex="0" />
+          <Item identifier="5.45mm_round_sb" slotindex="0" />
+          <Item identifier="5.45mm_round_sb" slotindex="0" />
+          <Item identifier="5.45mm_round_sb" slotindex="0" />
+          <Item identifier="5.45mm_round_sb" slotindex="1" />
+          <Item identifier="5.45mm_round_sb" slotindex="1" />
+          <Item identifier="5.45mm_round_sb" slotindex="1" />
+          <Item identifier="5.45mm_round_sb" slotindex="1" />
+          <Item identifier="5.45mm_round_sb" slotindex="1" />
+          <Item identifier="5.45mm_round_sb" slotindex="2" />
+          <Item identifier="5.45mm_round_sb" slotindex="2" />
+          <Item identifier="5.45mm_round_sb" slotindex="2" />
+          <Item identifier="5.45mm_round_sb" slotindex="2" />
+          <Item identifier="5.45mm_round_sb" slotindex="2" />
+          <Item identifier="5.45mm_round_sb" slotindex="3" />
+          <Item identifier="5.45mm_round_sb" slotindex="3" />
+          <Item identifier="5.45mm_round_sb" slotindex="3" />
+          <Item identifier="5.45mm_round_sb" slotindex="3" />
+          <Item identifier="5.45mm_round_sb" slotindex="3" />
+          <Item identifier="5.45mm_round_sb" slotindex="4" />
+          <Item identifier="5.45mm_round_sb" slotindex="4" />
+          <Item identifier="5.45mm_round_sb" slotindex="4" />
+          <Item identifier="5.45mm_round_sb" slotindex="4" />
+          <Item identifier="5.45mm_round_sb" slotindex="4" />
+          <Item identifier="5.45mm_round_sb" slotindex="5" />
+          <Item identifier="5.45mm_round_sb" slotindex="5" />
+          <Item identifier="5.45mm_round_sb" slotindex="5" />
+          <Item identifier="5.45mm_round_sb" slotindex="5" />
+          <Item identifier="5.45mm_round_sb" slotindex="5" />
+        </Item>
+        <Item identifier="revolver_44" slotindex="6" />
+      </Item>
+      <Item identifier="scp_assaultpack" equip="true">
+        <Item identifier="mreerc" slotindex="0" />
+        <Item identifier="handcuffs" slotindex="1" />
+        <Item identifier="handcuffs" slotindex="1" />
+        <Item identifier="handcuffs" slotindex="1" />
+        <Item identifier="handcuffs" slotindex="1" />
+        <Item identifier="co_bulletpouch" slotindex="3">
+          <Item identifier="44_round" slotindex="0" />
+          <Item identifier="44_round" slotindex="0" />
+          <Item identifier="44_round" slotindex="0" />
+          <Item identifier="44_round" slotindex="0" />
+          <Item identifier="44_round" slotindex="0" />
+          <Item identifier="44_round" slotindex="0" />
+          <Item identifier="44_round" slotindex="0" />
+          <Item identifier="44_round" slotindex="0" />
+          <Item identifier="44_round" slotindex="0" />
+          <Item identifier="44_round" slotindex="0" />
+          <Item identifier="44_round" slotindex="1" />
+          <Item identifier="44_round" slotindex="1" />
+          <Item identifier="44_round" slotindex="1" />
+          <Item identifier="44_round" slotindex="1" />
+          <Item identifier="44_round" slotindex="1" />
+          <Item identifier="44_round" slotindex="1" />
+          <Item identifier="44_round" slotindex="1" />
+          <Item identifier="44_round" slotindex="1" />
+          <Item identifier="44_round" slotindex="1" />
+          <Item identifier="44_round" slotindex="1" />
+          <Item identifier="44_round" slotindex="2" />
+          <Item identifier="44_round" slotindex="2" />
+          <Item identifier="44_round" slotindex="2" />
+          <Item identifier="44_round" slotindex="2" />
+          <Item identifier="44_round" slotindex="2" />
+          <Item identifier="44_round" slotindex="2" />
+          <Item identifier="44_round" slotindex="2" />
+          <Item identifier="44_round" slotindex="2" />
+          <Item identifier="44_round" slotindex="2" />
+          <Item identifier="44_round" slotindex="2" />
+          <Item identifier="44_round" slotindex="3" />
+          <Item identifier="44_round" slotindex="3" />
+          <Item identifier="44_round" slotindex="3" />
+          <Item identifier="44_round" slotindex="3" />
+          <Item identifier="44_round" slotindex="3" />
+          <Item identifier="44_round" slotindex="3" />
+          <Item identifier="44_round" slotindex="3" />
+          <Item identifier="44_round" slotindex="3" />
+          <Item identifier="44_round" slotindex="3" />
+          <Item identifier="44_round" slotindex="3" />
+        </Item>
+        <Item identifier="corporatelaws" slotindex="4" />
+        <Item identifier="545_ar_uw" slotindex="8">
+          <Item identifier="545_compensator" slotindex="0" />
+        </Item>
+      </Item>
+      <Item identifier="flashlight" slotindex="8">
+        <Item identifier="fulguriumbatterycell" slotindex="0">
+          <Item identifier="laserpistolbeampowerful" slotindex="0" />
+        </Item>
+      </Item>
+      <Item identifier="fraggrenade" slotindex="9" />
+      <Item identifier="fraggrenade" slotindex="9" />
+      <Item identifier="flare" slotindex="10" />
+      <Item identifier="flare" slotindex="10" />
+      <Item identifier="flare" slotindex="10" />
+      <Item identifier="flare" slotindex="10" />
+      <Item identifier="wrench" slotindex="11" />
+      <Item identifier="co_magazinepouch_large" slotindex="17">
+        <Item identifier="5.45mm_magazine_window" slotindex="0">
+          <Item identifier="5.45mm_round_sb" slotindex="0" />
+          <Item identifier="5.45mm_round_sb" slotindex="0" />
+          <Item identifier="5.45mm_round_sb" slotindex="0" />
+          <Item identifier="5.45mm_round_sb" slotindex="0" />
+          <Item identifier="5.45mm_round_sb" slotindex="0" />
+          <Item identifier="5.45mm_round_sb" slotindex="1" />
+          <Item identifier="5.45mm_round_sb" slotindex="1" />
+          <Item identifier="5.45mm_round_sb" slotindex="1" />
+          <Item identifier="5.45mm_round_sb" slotindex="1" />
+          <Item identifier="5.45mm_round_sb" slotindex="1" />
+          <Item identifier="5.45mm_round_sb" slotindex="2" />
+          <Item identifier="5.45mm_round_sb" slotindex="2" />
+          <Item identifier="5.45mm_round_sb" slotindex="2" />
+          <Item identifier="5.45mm_round_sb" slotindex="2" />
+          <Item identifier="5.45mm_round_sb" slotindex="2" />
+          <Item identifier="5.45mm_round_sb" slotindex="3" />
+          <Item identifier="5.45mm_round_sb" slotindex="3" />
+          <Item identifier="5.45mm_round_sb" slotindex="3" />
+          <Item identifier="5.45mm_round_sb" slotindex="3" />
+          <Item identifier="5.45mm_round_sb" slotindex="3" />
+          <Item identifier="5.45mm_round_sb" slotindex="4" />
+          <Item identifier="5.45mm_round_sb" slotindex="4" />
+          <Item identifier="5.45mm_round_sb" slotindex="4" />
+          <Item identifier="5.45mm_round_sb" slotindex="4" />
+          <Item identifier="5.45mm_round_sb" slotindex="4" />
+          <Item identifier="5.45mm_round_sb" slotindex="5" />
+          <Item identifier="5.45mm_round_sb" slotindex="5" />
+          <Item identifier="5.45mm_round_sb" slotindex="5" />
+          <Item identifier="5.45mm_round_sb" slotindex="5" />
+          <Item identifier="5.45mm_round_sb" slotindex="5" />
+        </Item>
+        <Item identifier="5.45mm_magazine_window" slotindex="1">
+          <Item identifier="5.45mm_round_sb" slotindex="0" />
+          <Item identifier="5.45mm_round_sb" slotindex="0" />
+          <Item identifier="5.45mm_round_sb" slotindex="0" />
+          <Item identifier="5.45mm_round_sb" slotindex="0" />
+          <Item identifier="5.45mm_round_sb" slotindex="0" />
+          <Item identifier="5.45mm_round_sb" slotindex="1" />
+          <Item identifier="5.45mm_round_sb" slotindex="1" />
+          <Item identifier="5.45mm_round_sb" slotindex="1" />
+          <Item identifier="5.45mm_round_sb" slotindex="1" />
+          <Item identifier="5.45mm_round_sb" slotindex="1" />
+          <Item identifier="5.45mm_round_sb" slotindex="2" />
+          <Item identifier="5.45mm_round_sb" slotindex="2" />
+          <Item identifier="5.45mm_round_sb" slotindex="2" />
+          <Item identifier="5.45mm_round_sb" slotindex="2" />
+          <Item identifier="5.45mm_round_sb" slotindex="2" />
+          <Item identifier="5.45mm_round_sb" slotindex="3" />
+          <Item identifier="5.45mm_round_sb" slotindex="3" />
+          <Item identifier="5.45mm_round_sb" slotindex="3" />
+          <Item identifier="5.45mm_round_sb" slotindex="3" />
+          <Item identifier="5.45mm_round_sb" slotindex="3" />
+          <Item identifier="5.45mm_round_sb" slotindex="4" />
+          <Item identifier="5.45mm_round_sb" slotindex="4" />
+          <Item identifier="5.45mm_round_sb" slotindex="4" />
+          <Item identifier="5.45mm_round_sb" slotindex="4" />
+          <Item identifier="5.45mm_round_sb" slotindex="4" />
+          <Item identifier="5.45mm_round_sb" slotindex="5" />
+          <Item identifier="5.45mm_round_sb" slotindex="5" />
+          <Item identifier="5.45mm_round_sb" slotindex="5" />
+          <Item identifier="5.45mm_round_sb" slotindex="5" />
+          <Item identifier="5.45mm_round_sb" slotindex="5" />
+        </Item>
+        <Item identifier="5.45mm_magazine_window" slotindex="2">
+          <Item identifier="5.45mm_round" slotindex="0" />
+          <Item identifier="5.45mm_round" slotindex="0" />
+          <Item identifier="5.45mm_round" slotindex="0" />
+          <Item identifier="5.45mm_round" slotindex="0" />
+          <Item identifier="5.45mm_round" slotindex="0" />
+          <Item identifier="5.45mm_round" slotindex="1" />
+          <Item identifier="5.45mm_round" slotindex="1" />
+          <Item identifier="5.45mm_round" slotindex="1" />
+          <Item identifier="5.45mm_round" slotindex="1" />
+          <Item identifier="5.45mm_round" slotindex="1" />
+          <Item identifier="5.45mm_round" slotindex="2" />
+          <Item identifier="5.45mm_round" slotindex="2" />
+          <Item identifier="5.45mm_round" slotindex="2" />
+          <Item identifier="5.45mm_round" slotindex="2" />
+          <Item identifier="5.45mm_round" slotindex="2" />
+          <Item identifier="5.45mm_round" slotindex="3" />
+          <Item identifier="5.45mm_round" slotindex="3" />
+          <Item identifier="5.45mm_round" slotindex="3" />
+          <Item identifier="5.45mm_round" slotindex="3" />
+          <Item identifier="5.45mm_round" slotindex="3" />
+          <Item identifier="5.45mm_round" slotindex="4" />
+          <Item identifier="5.45mm_round" slotindex="4" />
+          <Item identifier="5.45mm_round" slotindex="4" />
+          <Item identifier="5.45mm_round" slotindex="4" />
+          <Item identifier="5.45mm_round" slotindex="4" />
+          <Item identifier="5.45mm_round" slotindex="5" />
+          <Item identifier="5.45mm_round" slotindex="5" />
+          <Item identifier="5.45mm_round" slotindex="5" />
+          <Item identifier="5.45mm_round" slotindex="5" />
+          <Item identifier="5.45mm_round" slotindex="5" />
+        </Item>
+      </Item>
+      <Item identifier="armband_coal" equip="true" />
+    </ItemSet>
+  </npc>
+  <npc identifier="sb1" job="captain">
+    <Character name="Капитан" originalname="Капитан" speciesname="human" tags="head1,male" salary="2589" experiencepoints="0" additionaltalentpoints="0" talentResetCount="0" hairindex="3" beardindex="5" moustacheindex="0" faceattachmentindex="0" skincolor="214,154,112,255" haircolor="71,54,55,255" facialhaircolor="216,186,133,255" startitemsgiven="true" personality="rude" refundpoints="0" lastrewarddistribution="-1" permanentlydead="false" IsOnReserveBench="false" renamingenabled="false" missionscompletedsincedeath="0">
+      <job name="Капитан" identifier="captain">
+        <skill identifier="helm" level="44.996662" />
+        <skill identifier="weapons" level="100" />
+        <skill identifier="mechanical" level="21.391775" />
+        <skill identifier="electrical" level="23.330498" />
+        <skill identifier="medical" level="9.492081" />
+      </job>
+      <savedstatvalues />
+      <Talents version="1.13.4.0">
+        <Talent identifier="commando" resettable="false" />
+      </Talents>
+    </Character>
+    <ItemSet commonness="1">
+      <Item identifier="idcard" equip="true">
+        <Item identifier="actor-menu-proxy" slotindex="2" />
+      </Item>
+      <Item identifier="headset" equip="true" />
+      <Item identifier="aar_ballistichelmet2" equip="true" />
+      <Item identifier="coalitionclotheshard" equip="true" />
+      <Item identifier="bodyarmorlighterc" equip="true">
+        <Item identifier="co_bulletpouch" slotindex="0">
+          <Item identifier="5.56mm_round" slotindex="0" />
+          <Item identifier="5.56mm_round" slotindex="0" />
+          <Item identifier="5.56mm_round" slotindex="0" />
+          <Item identifier="5.56mm_round" slotindex="0" />
+          <Item identifier="5.56mm_round" slotindex="0" />
+          <Item identifier="5.56mm_round" slotindex="0" />
+          <Item identifier="5.56mm_round" slotindex="0" />
+          <Item identifier="5.56mm_round" slotindex="0" />
+          <Item identifier="5.56mm_round" slotindex="0" />
+          <Item identifier="5.56mm_round" slotindex="0" />
+          <Item identifier="5.56mm_round" slotindex="1" />
+          <Item identifier="5.56mm_round" slotindex="1" />
+          <Item identifier="5.56mm_round" slotindex="1" />
+          <Item identifier="5.56mm_round" slotindex="1" />
+          <Item identifier="5.56mm_round" slotindex="1" />
+          <Item identifier="5.56mm_round" slotindex="1" />
+          <Item identifier="5.56mm_round" slotindex="1" />
+          <Item identifier="5.56mm_round" slotindex="1" />
+          <Item identifier="5.56mm_round" slotindex="1" />
+          <Item identifier="5.56mm_round" slotindex="1" />
+          <Item identifier="5.56mm_round" slotindex="2" />
+          <Item identifier="5.56mm_round" slotindex="2" />
+          <Item identifier="5.56mm_round" slotindex="2" />
+          <Item identifier="5.56mm_round" slotindex="2" />
+          <Item identifier="5.56mm_round" slotindex="2" />
+          <Item identifier="5.56mm_round" slotindex="2" />
+          <Item identifier="5.56mm_round" slotindex="2" />
+          <Item identifier="5.56mm_round" slotindex="2" />
+          <Item identifier="5.56mm_round" slotindex="2" />
+          <Item identifier="5.56mm_round" slotindex="2" />
+          <Item identifier="5.56mm_round" slotindex="3" />
+          <Item identifier="5.56mm_round" slotindex="3" />
+          <Item identifier="5.56mm_round" slotindex="3" />
+          <Item identifier="5.56mm_round" slotindex="3" />
+          <Item identifier="5.56mm_round" slotindex="3" />
+          <Item identifier="5.56mm_round" slotindex="3" />
+          <Item identifier="5.56mm_round" slotindex="3" />
+          <Item identifier="5.56mm_round" slotindex="3" />
+          <Item identifier="5.56mm_round" slotindex="3" />
+          <Item identifier="5.56mm_round" slotindex="3" />
+          <Item identifier="5.56mm_round" slotindex="4" />
+          <Item identifier="5.56mm_round" slotindex="4" />
+          <Item identifier="5.56mm_round" slotindex="4" />
+          <Item identifier="5.56mm_round" slotindex="4" />
+          <Item identifier="5.56mm_round" slotindex="4" />
+          <Item identifier="5.56mm_round" slotindex="4" />
+          <Item identifier="5.56mm_round" slotindex="4" />
+          <Item identifier="5.56mm_round" slotindex="4" />
+          <Item identifier="5.56mm_round" slotindex="4" />
+          <Item identifier="5.56mm_round" slotindex="4" />
+          <Item identifier="5.56mm_round" slotindex="5" />
+          <Item identifier="5.56mm_round" slotindex="5" />
+          <Item identifier="5.56mm_round" slotindex="5" />
+          <Item identifier="5.56mm_round" slotindex="5" />
+          <Item identifier="5.56mm_round" slotindex="5" />
+          <Item identifier="5.56mm_round" slotindex="5" />
+          <Item identifier="5.56mm_round" slotindex="5" />
+          <Item identifier="5.56mm_round" slotindex="5" />
+          <Item identifier="5.56mm_round" slotindex="5" />
+          <Item identifier="5.56mm_round" slotindex="5" />
+        </Item>
+        <Item identifier="medkitcontainerscientific" slotindex="1">
+          <Item identifier="antibloodloss1" slotindex="0" />
+          <Item identifier="needle" slotindex="1" />
+          <Item identifier="tourniquet" slotindex="2" />
+          <Item identifier="combatstimulantsyringe" slotindex="3" />
+          <Item identifier="antibleeding2" slotindex="4" />
+          <Item identifier="deusizine" slotindex="5" />
+          <Item identifier="gypsum" slotindex="6" />
+          <Item identifier="tonicliquid" slotindex="7" />
+        </Item>
+        <Item identifier="divingknife_folding" slotindex="2" />
+        <Item identifier="5.56_magazine_window" slotindex="4" />
+        <Item identifier="5.56_magazine_window" slotindex="5" />
+        <Item identifier="45_pistol_uw" slotindex="6">
+          <Item identifier="pistol45_magazine_extended" slotindex="0">
+            <Item identifier="45_round" slotindex="0" />
+            <Item identifier="45_round" slotindex="0" />
+            <Item identifier="45_round" slotindex="0" />
+            <Item identifier="45_round" slotindex="0" />
+            <Item identifier="45_round" slotindex="1" />
+            <Item identifier="45_round" slotindex="1" />
+            <Item identifier="45_round" slotindex="1" />
+            <Item identifier="45_round" slotindex="1" />
+            <Item identifier="45_round" slotindex="2" />
+            <Item identifier="45_round" slotindex="2" />
+            <Item identifier="45_round" slotindex="2" />
+            <Item identifier="45_round" slotindex="2" />
+          </Item>
+        </Item>
+      </Item>
+      <Item identifier="556_carbine" equip="true">
+        <Item identifier="556_suppressor" slotindex="0" />
+        <Item identifier="5.56_magazine_window" slotindex="1">
+          <Item identifier="5.56mm_round" slotindex="0" />
+          <Item identifier="5.56mm_round" slotindex="1" />
+          <Item identifier="5.56mm_round" slotindex="1" />
+          <Item identifier="5.56mm_round" slotindex="1" />
+          <Item identifier="5.56mm_round" slotindex="1" />
+          <Item identifier="5.56mm_round" slotindex="1" />
+          <Item identifier="5.56mm_round" slotindex="2" />
+          <Item identifier="5.56mm_round" slotindex="2" />
+          <Item identifier="5.56mm_round" slotindex="2" />
+          <Item identifier="5.56mm_round" slotindex="2" />
+          <Item identifier="5.56mm_round" slotindex="2" />
+          <Item identifier="5.56mm_round" slotindex="3" />
+          <Item identifier="5.56mm_round" slotindex="3" />
+          <Item identifier="5.56mm_round" slotindex="3" />
+          <Item identifier="5.56mm_round" slotindex="3" />
+          <Item identifier="5.56mm_round" slotindex="3" />
+          <Item identifier="5.56mm_round" slotindex="4" />
+          <Item identifier="5.56mm_round" slotindex="4" />
+          <Item identifier="5.56mm_round" slotindex="4" />
+          <Item identifier="5.56mm_round" slotindex="4" />
+          <Item identifier="5.56mm_round" slotindex="4" />
+          <Item identifier="5.56mm_round" slotindex="5" />
+          <Item identifier="5.56mm_round" slotindex="5" />
+          <Item identifier="5.56mm_round" slotindex="5" />
+          <Item identifier="5.56mm_round" slotindex="5" />
+          <Item identifier="5.56mm_round" slotindex="5" />
+        </Item>
+      </Item>
+      <Item identifier="thgbackpack" equip="true">
+        <Item identifier="fraggrenade" slotindex="0" />
+        <Item identifier="fraggrenade" slotindex="0" />
+        <Item identifier="medkitcontainerscientific" slotindex="1">
+          <Item identifier="antibloodloss1" slotindex="0" />
+          <Item identifier="needle" slotindex="1" />
+          <Item identifier="tourniquet" slotindex="2" />
+          <Item identifier="combatstimulantsyringe" slotindex="3" />
+          <Item identifier="antibleeding2" slotindex="4" />
+          <Item identifier="deusizine" slotindex="5" />
+          <Item identifier="gypsum" slotindex="6" />
+          <Item identifier="tonicliquid" slotindex="7" />
+        </Item>
+        <Item identifier="glowstick" slotindex="2" />
+        <Item identifier="glowstick" slotindex="2" />
+        <Item identifier="glowstick" slotindex="2" />
+        <Item identifier="mreerc" slotindex="3" />
+        <Item identifier="corporatelaws" slotindex="4" />
+        <Item identifier="handcuffs" slotindex="5" />
+        <Item identifier="handcuffs" slotindex="5" />
+        <Item identifier="handcuffs" slotindex="5" />
+        <Item identifier="pistol45_magazine_extended" slotindex="6">
+          <Item identifier="45_round" slotindex="0" />
+          <Item identifier="45_round" slotindex="0" />
+          <Item identifier="45_round" slotindex="0" />
+          <Item identifier="45_round" slotindex="0" />
+          <Item identifier="45_round" slotindex="1" />
+          <Item identifier="45_round" slotindex="1" />
+          <Item identifier="45_round" slotindex="1" />
+          <Item identifier="45_round" slotindex="1" />
+          <Item identifier="45_round" slotindex="2" />
+          <Item identifier="45_round" slotindex="2" />
+          <Item identifier="45_round" slotindex="2" />
+          <Item identifier="45_round" slotindex="2" />
+        </Item>
+        <Item identifier="handheldterminal" slotindex="7" />
+        <Item identifier="pistol45_magazine_extended" slotindex="8">
+          <Item identifier="45_round" slotindex="0" />
+          <Item identifier="45_round" slotindex="0" />
+          <Item identifier="45_round" slotindex="0" />
+          <Item identifier="45_round" slotindex="0" />
+          <Item identifier="45_round" slotindex="1" />
+          <Item identifier="45_round" slotindex="1" />
+          <Item identifier="45_round" slotindex="1" />
+          <Item identifier="45_round" slotindex="1" />
+          <Item identifier="45_round" slotindex="2" />
+          <Item identifier="45_round" slotindex="2" />
+          <Item identifier="45_round" slotindex="2" />
+          <Item identifier="45_round" slotindex="2" />
+        </Item>
+      </Item>
+      <Item identifier="co_magazinepouch_large" slotindex="8">
+        <Item identifier="5.56_magazine" slotindex="0">
+          <Item identifier="5.56mm_round" slotindex="0" />
+          <Item identifier="5.56mm_round" slotindex="0" />
+          <Item identifier="5.56mm_round" slotindex="0" />
+          <Item identifier="5.56mm_round" slotindex="0" />
+          <Item identifier="5.56mm_round" slotindex="0" />
+          <Item identifier="5.56mm_round" slotindex="1" />
+          <Item identifier="5.56mm_round" slotindex="1" />
+          <Item identifier="5.56mm_round" slotindex="1" />
+          <Item identifier="5.56mm_round" slotindex="1" />
+          <Item identifier="5.56mm_round" slotindex="1" />
+          <Item identifier="5.56mm_round" slotindex="2" />
+          <Item identifier="5.56mm_round" slotindex="2" />
+          <Item identifier="5.56mm_round" slotindex="2" />
+          <Item identifier="5.56mm_round" slotindex="2" />
+          <Item identifier="5.56mm_round" slotindex="2" />
+          <Item identifier="5.56mm_round" slotindex="3" />
+          <Item identifier="5.56mm_round" slotindex="3" />
+          <Item identifier="5.56mm_round" slotindex="3" />
+          <Item identifier="5.56mm_round" slotindex="3" />
+          <Item identifier="5.56mm_round" slotindex="3" />
+          <Item identifier="5.56mm_round" slotindex="4" />
+          <Item identifier="5.56mm_round" slotindex="4" />
+          <Item identifier="5.56mm_round" slotindex="4" />
+          <Item identifier="5.56mm_round" slotindex="4" />
+          <Item identifier="5.56mm_round" slotindex="4" />
+          <Item identifier="5.56mm_round" slotindex="5" />
+          <Item identifier="5.56mm_round" slotindex="5" />
+          <Item identifier="5.56mm_round" slotindex="5" />
+          <Item identifier="5.56mm_round" slotindex="5" />
+          <Item identifier="5.56mm_round" slotindex="5" />
+        </Item>
+        <Item identifier="5.56_magazine" slotindex="1">
+          <Item identifier="5.56mm_round" slotindex="0" />
+          <Item identifier="5.56mm_round" slotindex="0" />
+          <Item identifier="5.56mm_round" slotindex="0" />
+          <Item identifier="5.56mm_round" slotindex="0" />
+          <Item identifier="5.56mm_round" slotindex="0" />
+          <Item identifier="5.56mm_round" slotindex="1" />
+          <Item identifier="5.56mm_round" slotindex="1" />
+          <Item identifier="5.56mm_round" slotindex="1" />
+          <Item identifier="5.56mm_round" slotindex="1" />
+          <Item identifier="5.56mm_round" slotindex="1" />
+          <Item identifier="5.56mm_round" slotindex="2" />
+          <Item identifier="5.56mm_round" slotindex="2" />
+          <Item identifier="5.56mm_round" slotindex="2" />
+          <Item identifier="5.56mm_round" slotindex="2" />
+          <Item identifier="5.56mm_round" slotindex="2" />
+          <Item identifier="5.56mm_round" slotindex="3" />
+          <Item identifier="5.56mm_round" slotindex="3" />
+          <Item identifier="5.56mm_round" slotindex="3" />
+          <Item identifier="5.56mm_round" slotindex="3" />
+          <Item identifier="5.56mm_round" slotindex="3" />
+          <Item identifier="5.56mm_round" slotindex="4" />
+          <Item identifier="5.56mm_round" slotindex="4" />
+          <Item identifier="5.56mm_round" slotindex="4" />
+          <Item identifier="5.56mm_round" slotindex="4" />
+          <Item identifier="5.56mm_round" slotindex="4" />
+          <Item identifier="5.56mm_round" slotindex="5" />
+          <Item identifier="5.56mm_round" slotindex="5" />
+          <Item identifier="5.56mm_round" slotindex="5" />
+          <Item identifier="5.56mm_round" slotindex="5" />
+          <Item identifier="5.56mm_round" slotindex="5" />
+        </Item>
+        <Item identifier="5.56_magazine" slotindex="2">
+          <Item identifier="5.56mm_round" slotindex="0" />
+          <Item identifier="5.56mm_round" slotindex="0" />
+          <Item identifier="5.56mm_round" slotindex="0" />
+          <Item identifier="5.56mm_round" slotindex="0" />
+          <Item identifier="5.56mm_round" slotindex="0" />
+          <Item identifier="5.56mm_round" slotindex="1" />
+          <Item identifier="5.56mm_round" slotindex="1" />
+          <Item identifier="5.56mm_round" slotindex="1" />
+          <Item identifier="5.56mm_round" slotindex="1" />
+          <Item identifier="5.56mm_round" slotindex="1" />
+          <Item identifier="5.56mm_round" slotindex="2" />
+          <Item identifier="5.56mm_round" slotindex="2" />
+          <Item identifier="5.56mm_round" slotindex="2" />
+          <Item identifier="5.56mm_round" slotindex="2" />
+          <Item identifier="5.56mm_round" slotindex="2" />
+          <Item identifier="5.56mm_round" slotindex="3" />
+          <Item identifier="5.56mm_round" slotindex="3" />
+          <Item identifier="5.56mm_round" slotindex="3" />
+          <Item identifier="5.56mm_round" slotindex="3" />
+          <Item identifier="5.56mm_round" slotindex="3" />
+          <Item identifier="5.56mm_round" slotindex="4" />
+          <Item identifier="5.56mm_round" slotindex="4" />
+          <Item identifier="5.56mm_round" slotindex="4" />
+          <Item identifier="5.56mm_round" slotindex="4" />
+          <Item identifier="5.56mm_round" slotindex="4" />
+          <Item identifier="5.56mm_round" slotindex="5" />
+          <Item identifier="5.56mm_round" slotindex="5" />
+          <Item identifier="5.56mm_round" slotindex="5" />
+          <Item identifier="5.56mm_round" slotindex="5" />
+          <Item identifier="5.56mm_round" slotindex="5" />
+        </Item>
+      </Item>
+    </ItemSet>
+  </npc>
+  <npc identifier="sbheavy1" job="captain">
+    <Character name="Капитан" originalname="Капитан" speciesname="human" tags="head1,male" salary="256" experiencepoints="0" additionaltalentpoints="0" talentResetCount="0" hairindex="3" beardindex="5" moustacheindex="0" faceattachmentindex="0" skincolor="214,154,112,255" haircolor="71,54,55,255" facialhaircolor="216,186,133,255" startitemsgiven="true" personality="rude" refundpoints="0" lastrewarddistribution="-1" permanentlydead="false" IsOnReserveBench="false" renamingenabled="false" missionscompletedsincedeath="0">
+      <job name="Капитан" identifier="captain">
+        <skill identifier="helm" level="44.996662" />
+        <skill identifier="weapons" level="100" />
+        <skill identifier="mechanical" level="21.391775" />
+        <skill identifier="electrical" level="23.330498" />
+        <skill identifier="medical" level="9.492081" />
+      </job>
+      <savedstatvalues />
+      <Talents version="1.13.4.0">
+        <Talent identifier="commando" resettable="false" />
+      </Talents>
+    </Character>
+    <ItemSet commonness="1">
+      <Item identifier="idcard_coalition" equip="true" />
+      <Item identifier="co_headset_protective" equip="true" />
+      <Item identifier="aar_piratehelmet1-open" equip="true" />
+      <Item identifier="scp_veronuniform" equip="true" />
+      <Item identifier="tacticalvestheavy" equip="true">
+        <Item identifier="pistol9mm_magazine" slotindex="0">
+          <Item identifier="9mm_round" slotindex="0" />
+          <Item identifier="9mm_round" slotindex="0" />
+          <Item identifier="9mm_round" slotindex="0" />
+          <Item identifier="9mm_round" slotindex="0" />
+          <Item identifier="9mm_round" slotindex="0" />
+          <Item identifier="9mm_round" slotindex="1" />
+          <Item identifier="9mm_round" slotindex="1" />
+          <Item identifier="9mm_round" slotindex="1" />
+          <Item identifier="9mm_round" slotindex="1" />
+          <Item identifier="9mm_round" slotindex="1" />
+        </Item>
+        <Item identifier="pistol9mm_magazine" slotindex="1">
+          <Item identifier="9mm_round" slotindex="0" />
+          <Item identifier="9mm_round" slotindex="0" />
+          <Item identifier="9mm_round" slotindex="0" />
+          <Item identifier="9mm_round" slotindex="0" />
+          <Item identifier="9mm_round" slotindex="0" />
+          <Item identifier="9mm_round" slotindex="1" />
+          <Item identifier="9mm_round" slotindex="1" />
+          <Item identifier="9mm_round" slotindex="1" />
+          <Item identifier="9mm_round" slotindex="1" />
+          <Item identifier="9mm_round" slotindex="1" />
+        </Item>
+        <Item identifier="9mm_pistol_water2" slotindex="2" />
+      </Item>
+      <Item identifier="thgbackpack" equip="true">
+        <Item identifier="handcuffs" slotindex="1" />
+        <Item identifier="handcuffs" slotindex="1" />
+        <Item identifier="handcuffs" slotindex="1" />
+        <Item identifier="corporatelaws" slotindex="3" />
+        <Item identifier="mreerc" slotindex="5" />
+        <Item identifier="handheldterminal" slotindex="7" />
+        <Item identifier="shotgun_water2" slotindex="9">
+          <Item identifier="flashlight_t" slotindex="5">
+            <Item identifier="fulguriumbatterycell" slotindex="0">
+              <Item identifier="laserpistolbeampowerful" slotindex="0" />
+            </Item>
+          </Item>
+          <Item identifier="12_suppressor" slotindex="6" />
+        </Item>
+      </Item>
+      <Item identifier="divingknife_m" slotindex="8" />
+      <Item identifier="impactgrenadeerc" slotindex="9" />
+      <Item identifier="impactgrenadeerc" slotindex="9" />
+      <Item identifier="stungrenade" slotindex="10" />
+      <Item identifier="glowstick" slotindex="15" />
+      <Item identifier="glowstick" slotindex="15" />
+      <Item identifier="glowstick" slotindex="15" />
+      <Item identifier="medkitcontainerscientific" slotindex="16">
+        <Item identifier="antibloodloss1" slotindex="0" />
+        <Item identifier="needle" slotindex="1" />
+        <Item identifier="tourniquet" slotindex="2" />
+        <Item identifier="combatstimulantsyringe" slotindex="3" />
+        <Item identifier="antibleeding2" slotindex="4" />
+        <Item identifier="deusizine" slotindex="5" />
+        <Item identifier="gypsum" slotindex="6" />
+        <Item identifier="tonicliquid" slotindex="7" />
+      </Item>
+      <Item identifier="co_bulletpouch" slotindex="17">
+        <Item identifier="shotgunshell" slotindex="0" />
+        <Item identifier="shotgunshell" slotindex="0" />
+        <Item identifier="shotgunshell" slotindex="0" />
+        <Item identifier="shotgunshell" slotindex="0" />
+        <Item identifier="shotgunshell" slotindex="0" />
+        <Item identifier="shotgunshell" slotindex="0" />
+        <Item identifier="shotgunshell" slotindex="0" />
+        <Item identifier="shotgunshell" slotindex="0" />
+        <Item identifier="shotgunshell" slotindex="0" />
+        <Item identifier="shotgunshell" slotindex="0" />
+        <Item identifier="shotgunshell" slotindex="1" />
+        <Item identifier="shotgunshell" slotindex="1" />
+        <Item identifier="shotgunshell" slotindex="1" />
+        <Item identifier="shotgunshell" slotindex="1" />
+        <Item identifier="shotgunshell" slotindex="1" />
+        <Item identifier="shotgunshell" slotindex="1" />
+        <Item identifier="shotgunshell" slotindex="1" />
+        <Item identifier="shotgunshell" slotindex="1" />
+        <Item identifier="shotgunshell" slotindex="1" />
+        <Item identifier="shotgunshell" slotindex="1" />
+        <Item identifier="shotgunshell" slotindex="2" />
+        <Item identifier="shotgunshell" slotindex="2" />
+        <Item identifier="shotgunshell" slotindex="2" />
+        <Item identifier="shotgunshell" slotindex="2" />
+        <Item identifier="shotgunshell" slotindex="2" />
+        <Item identifier="shotgunshell" slotindex="2" />
+        <Item identifier="shotgunshell" slotindex="2" />
+        <Item identifier="shotgunshell" slotindex="2" />
+        <Item identifier="shotgunshell" slotindex="2" />
+        <Item identifier="shotgunshell" slotindex="2" />
+        <Item identifier="shotgunshell" slotindex="3" />
+        <Item identifier="shotgunshell" slotindex="3" />
+        <Item identifier="shotgunshell" slotindex="3" />
+        <Item identifier="shotgunshell" slotindex="3" />
+        <Item identifier="shotgunshell" slotindex="3" />
+        <Item identifier="shotgunshell" slotindex="3" />
+        <Item identifier="shotgunshell" slotindex="3" />
+        <Item identifier="shotgunshell" slotindex="3" />
+        <Item identifier="shotgunshell" slotindex="3" />
+        <Item identifier="shotgunshell" slotindex="3" />
+        <Item identifier="shotgunshell" slotindex="4" />
+        <Item identifier="shotgunshell" slotindex="4" />
+        <Item identifier="shotgunshell" slotindex="4" />
+        <Item identifier="shotgunshell" slotindex="4" />
+        <Item identifier="shotgunshell" slotindex="4" />
+        <Item identifier="shotgunshell" slotindex="4" />
+        <Item identifier="shotgunshell" slotindex="4" />
+        <Item identifier="shotgunshell" slotindex="4" />
+        <Item identifier="shotgunshell" slotindex="4" />
+        <Item identifier="shotgunshell" slotindex="4" />
+        <Item identifier="shotgunshell" slotindex="5" />
+        <Item identifier="shotgunshell" slotindex="5" />
+        <Item identifier="shotgunshell" slotindex="5" />
+        <Item identifier="shotgunshell" slotindex="5" />
+        <Item identifier="shotgunshell" slotindex="5" />
+        <Item identifier="shotgunshell" slotindex="5" />
+        <Item identifier="shotgunshell" slotindex="5" />
+        <Item identifier="shotgunshell" slotindex="5" />
+        <Item identifier="shotgunshell" slotindex="5" />
+        <Item identifier="shotgunshell" slotindex="5" />
+      </Item>
+      <Item identifier="aar_facemask" equip="true" />
+    </ItemSet>
+  </npc>
+  <npc identifier="yooo3" job="captain">
+    <Character name="Ashly Meisner" originalname="Ashly Meisner" speciesname="human" tags="female,head1" salary="464" experiencepoints="0" additionaltalentpoints="0" talentResetCount="0" hairindex="3" beardindex="0" moustacheindex="0" faceattachmentindex="12" skincolor="252,225,198,255" haircolor="106,59,55,255" facialhaircolor="58,58,60,255" startitemsgiven="false" personality="professional" refundpoints="0" lastrewarddistribution="-1" permanentlydead="false" IsOnReserveBench="false" renamingenabled="false" missionscompletedsincedeath="0">
+      <job name="Капитан" identifier="captain">
+        <skill identifier="helm" level="100" />
+        <skill identifier="weapons" level="97.95431" />
+        <skill identifier="mechanical" level="65.653755" />
+        <skill identifier="electrical" level="73.30873" />
+        <skill identifier="medical" level="22.159086" />
+      </job>
+      <savedstatvalues />
+      <Talents version="1.13.4.0">
+        <Talent identifier="kill_pill" resettable="false" />
+      </Talents>
+    </Character>
+    <ItemSet commonness="1">
+      <Item identifier="idcard_separatists" equip="true" slotindex="0" />
+      <Item identifier="co_headset_protective" equip="true" slotindex="1" />
+      <Item identifier="aar_piratehelmet1-open" equip="true" slotindex="2" />
+      <Item identifier="scp_livuniform" equip="true" slotindex="3" />
+      <Item identifier="aar_heavybodyarmor" equip="true" slotindex="4">
+        <Item identifier="hmgmagazine" slotindex="0">
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+        </Item>
+        <Item identifier="hmgmagazine" slotindex="1">
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+        </Item>
+        <Item identifier="hmgmagazine" slotindex="2">
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="1" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="2" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+          <Item identifier="mg_round" slotindex="3" />
+        </Item>
+        <Item identifier="stungrenade" slotindex="3" />
+        <Item identifier="fraggrenade" slotindex="4" />
+        <Item identifier="co_bulletpouch" slotindex="5">
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round" slotindex="0" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+          <Item identifier="mg_round_ap" slotindex="1" />
+        </Item>
+      </Item>
+      <Item identifier="scp_assaultpack" equip="true" slotindex="7">
+        <Item identifier="co_bulletpouch" slotindex="0">
+          <Item identifier="44_round" slotindex="0" />
+          <Item identifier="44_round" slotindex="0" />
+          <Item identifier="44_round" slotindex="0" />
+          <Item identifier="44_round" slotindex="0" />
+          <Item identifier="44_round" slotindex="0" />
+          <Item identifier="44_round" slotindex="0" />
+          <Item identifier="44_round" slotindex="0" />
+          <Item identifier="44_round" slotindex="0" />
+          <Item identifier="44_round" slotindex="0" />
+          <Item identifier="44_round" slotindex="0" />
+          <Item identifier="44_round" slotindex="1" />
+          <Item identifier="44_round" slotindex="1" />
+          <Item identifier="44_round" slotindex="1" />
+          <Item identifier="44_round" slotindex="1" />
+          <Item identifier="44_round" slotindex="1" />
+          <Item identifier="44_round" slotindex="1" />
+          <Item identifier="44_round" slotindex="1" />
+          <Item identifier="44_round" slotindex="1" />
+          <Item identifier="44_round" slotindex="1" />
+          <Item identifier="44_round" slotindex="1" />
+        </Item>
+        <Item identifier="mreerc" slotindex="2" />
+        <Item identifier="howdah_44" slotindex="3">
+          <Item identifier="44_round" slotindex="0" />
+          <Item identifier="44_round" slotindex="1" />
+          <Item identifier="44_round" slotindex="2" />
+          <Item identifier="44_round" slotindex="3" />
+        </Item>
+        <Item identifier="machinegun" slotindex="8">
+          <Item identifier="hmgmagazine" slotindex="0">
+            <Item identifier="mg_round" slotindex="1" />
+            <Item identifier="mg_round" slotindex="1" />
+            <Item identifier="mg_round" slotindex="1" />
+            <Item identifier="mg_round" slotindex="1" />
+            <Item identifier="mg_round" slotindex="1" />
+            <Item identifier="mg_round" slotindex="1" />
+            <Item identifier="mg_round" slotindex="1" />
+            <Item identifier="mg_round" slotindex="1" />
+            <Item identifier="mg_round" slotindex="1" />
+            <Item identifier="mg_round" slotindex="1" />
+            <Item identifier="mg_round" slotindex="1" />
+            <Item identifier="mg_round" slotindex="1" />
+            <Item identifier="mg_round" slotindex="1" />
+            <Item identifier="mg_round" slotindex="1" />
+            <Item identifier="mg_round" slotindex="1" />
+            <Item identifier="mg_round" slotindex="1" />
+            <Item identifier="mg_round" slotindex="1" />
+            <Item identifier="mg_round" slotindex="1" />
+            <Item identifier="mg_round" slotindex="1" />
+            <Item identifier="mg_round" slotindex="2" />
+            <Item identifier="mg_round" slotindex="2" />
+            <Item identifier="mg_round" slotindex="2" />
+            <Item identifier="mg_round" slotindex="2" />
+            <Item identifier="mg_round" slotindex="2" />
+            <Item identifier="mg_round" slotindex="2" />
+            <Item identifier="mg_round" slotindex="2" />
+            <Item identifier="mg_round" slotindex="2" />
+            <Item identifier="mg_round" slotindex="2" />
+            <Item identifier="mg_round" slotindex="2" />
+            <Item identifier="mg_round" slotindex="2" />
+            <Item identifier="mg_round" slotindex="2" />
+            <Item identifier="mg_round" slotindex="2" />
+            <Item identifier="mg_round" slotindex="2" />
+            <Item identifier="mg_round" slotindex="2" />
+            <Item identifier="mg_round" slotindex="2" />
+            <Item identifier="mg_round" slotindex="2" />
+            <Item identifier="mg_round" slotindex="2" />
+            <Item identifier="mg_round" slotindex="2" />
+            <Item identifier="mg_round" slotindex="2" />
+            <Item identifier="mg_round" slotindex="3" />
+            <Item identifier="mg_round" slotindex="3" />
+            <Item identifier="mg_round" slotindex="3" />
+            <Item identifier="mg_round" slotindex="3" />
+            <Item identifier="mg_round" slotindex="3" />
+            <Item identifier="mg_round" slotindex="3" />
+            <Item identifier="mg_round" slotindex="3" />
+            <Item identifier="mg_round" slotindex="3" />
+            <Item identifier="mg_round" slotindex="3" />
+            <Item identifier="mg_round" slotindex="3" />
+            <Item identifier="mg_round" slotindex="3" />
+            <Item identifier="mg_round" slotindex="3" />
+            <Item identifier="mg_round" slotindex="3" />
+            <Item identifier="mg_round" slotindex="3" />
+            <Item identifier="mg_round" slotindex="3" />
+            <Item identifier="mg_round" slotindex="3" />
+            <Item identifier="mg_round" slotindex="3" />
+            <Item identifier="mg_round" slotindex="3" />
+            <Item identifier="mg_round" slotindex="3" />
+            <Item identifier="mg_round" slotindex="3" />
+          </Item>
+        </Item>
+      </Item>
+      <Item identifier="divingknife_m" slotindex="8" />
+      <Item identifier="flashlight" slotindex="9">
+        <Item identifier="batterycell" slotindex="0">
+          <Item identifier="laserpistolbeam" slotindex="0" />
+        </Item>
+      </Item>
+      <Item identifier="medkitcontainerscientific" slotindex="10">
+        <Item identifier="gypsum" slotindex="0" />
+        <Item identifier="gypsum" slotindex="1" />
+        <Item identifier="antibleeding2" slotindex="2" />
+        <Item identifier="antibleeding2" slotindex="3" />
+        <Item identifier="combatstimulantsyringe" slotindex="4" />
+        <Item identifier="combatstimulantsyringe" slotindex="5" />
+        <Item identifier="tourniquet" slotindex="6" />
+        <Item identifier="deusizine" slotindex="7" />
+      </Item>
+      <Item identifier="wrench" slotindex="11" />
+      <Item identifier="handcuffs" slotindex="16" />
+      <Item identifier="handcuffs" slotindex="16" />
+      <Item identifier="handcuffs" slotindex="16" />
+      <Item identifier="handcuffs" slotindex="16" />
+      <Item identifier="flare" slotindex="17" />
+      <Item identifier="flare" slotindex="17" />
+      <Item identifier="flare" slotindex="17" />
+      <Item identifier="flare" slotindex="17" />
+      <Item identifier="flare" slotindex="17" />
+      <Item identifier="aar_facemask" equip="true" slotindex="18" />
+    </ItemSet>
+  </npc>
+</Kits>

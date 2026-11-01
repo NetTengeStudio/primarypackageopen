@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Items>
+  <Item name="Caveman Cutout" identifier="backrooms_caveman" Tags="mediumitem" cargocontaineridentifier="metalcrate" scale="0.6" description="" impactsoundtag="impact_soft" isshootable="true">
+    <Fabricate suitablefabricators="fabricator" requiredtime="15">
+      <Item identifier="plastic" amount="3" />
+    </Fabricate>
+    <ContainedSprite texture="%ModDir%/Content/Items/Decorations/caveman_cutout.png" usewhenattached="true" decorativespritebehavior="HideWhenNotVisible" depth="0.55" sourcerect="0,0,129,324" origin="0.5,0.5" />
+    <Sprite texture="%ModDir%/Content/Items/Decorations/caveman_cutout.png" depth="0.8" sourcerect="0,0,129,323" origin="0.5,0.5" canflipx="false" canflipy="false" />
+    <Body width="100" radius="175" density="15" />
+    <PreferredContainer primary="crewcab" spawnprobability="0" />
+    <Holdable selectkey="Select" pickkey="Use" slots="Any,RightHand,LeftHand" msg="ItemMsgDetach" PickingTime="5.0" aimpos="65,-10" handle1="0,0" attachable="true" aimable="true" />
+  </Item>
+</Items>

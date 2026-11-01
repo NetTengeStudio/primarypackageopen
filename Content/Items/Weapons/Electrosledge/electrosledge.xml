@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Items>
+  <Item name="" description="" identifier="pp_electrosledge" category="Weapon" subcategory="Melee" Tags="mediumitem,weapon,gunsmith,mountableweapon,alien" cargocontaineridentifier="metalcrate" scale="0.27" impactsoundtag="impact_metal_light" RequireAimToUse="True">
+    <Deconstruct time="10">
+      <RequiredItem identifier="titaniumaluminiumalloy" amount="4" />
+      <RequiredItem identifier="fulgurium" amount="2" />
+      <RequiredItem identifier="fulguriumbatterycell" />
+    </Deconstruct>
+    <Fabricate suitablefabricators="fabricator" requiredtime="60">
+      <RequiredSkill identifier="mechanical" level="95" />
+      <RequiredSkill identifier="electrical" level="95" />
+      <RequiredSkill identifier="weapons" level="75" />
+      <RequiredItem identifier="titaniumaluminiumalloy" amount="6" />
+      <RequiredItem identifier="physicorium" amount="16" />
+      <RequiredItem identifier="fulguriumbatterycell" amount="4" />
+      <RequiredItem identifier="scp_submissionbaton" />
+      <RequiredItem identifier="scp_sledge" />
+    </Fabricate>
+    <InventoryIcon name="sledgeinv" texture="%ModDir%/Content/Items/Weapons/Electrosledge/electrosledge.png" sourcerect="348,2,100,98" origin="0.5,0.5" />
+    <Sprite texture="%ModDir%/Content/Items/Weapons/Electrosledge/electrosledge.png" sourcerect="2,251,468,152" depth="0.55" origin="0.5,0.5" />
+    <Body width="370" height="60" density="60" />
+    <MeleeWeapon slots="Any,RightHand+LeftHand" controlpose="true" holdpos="15,-60" aimpos="45,-10" reload="2" handle1="-30,0" range="120" handle2="15,5" holdangle="45" combatpriority="40">
+      <Attack targetimpulse="10" severlimbsprobability="0.15" ballastfloradamage="50" itemdamage="40" structuredamage="25.5" structuresoundtype="StructureSlash" penetration="0.01">
+        <Affliction identifier="lacerations" strength="15" />
+        <Affliction identifier="blunttrauma" strength="15" />
+        <Affliction identifier="bleeding" strength="5" />
+        <Affliction identifier="stun" strength="5" />
+      </Attack>
+      <StatusEffect type="OnUse" target="UseTarget" disabledeltatime="true">
+        <Affliction identifier="stun" strength="1.5" />
+        <Affliction identifier="burn" strength="0.15" />
+        <Affliction identifier="nausea" strength="1" />
+        <Affliction identifier="blunttrauma" strength="10" probability="0.4" />
+        <Affliction identifier="blunttrauma" strength="15" probability="0.2" />
+        <Affliction identifier="electricshock" strength="50" />
+        <Affliction identifier="electricshock" strength="50" probability="0.25" />
+        <sound file="%ModDir%/Content/Items/Weapons/Electrosledge/electrosledge.ogg" range="1250" volume="3" />
+        <RequiredItem items="batterycell" type="Contained" msg="ItemMsgBatteryCellRequired" />
+        <Explosion range="100.0" force="3" shockwave="false" flames="false" smoke="false" underwaterbubble="false" camerashake="50.0" />
+        <Conditional mass="lt 100" />
+      </StatusEffect>
+      <StatusEffect type="OnUse" target="UseTarget" disabledeltatime="true">
+        <Affliction identifier="lacerations" strength="10" />
+        <Affliction identifier="stun" strength="2.5" />
+        <Affliction identifier="burn" strength="0.8" />
+        <Affliction identifier="nausea" strength="10" />
+        <Affliction identifier="blunttrauma" strength="15" probability="0.4" />
+        <Affliction identifier="blunttrauma" strength="20" probability="0.2" />
+        <Affliction identifier="electricshock" strength="75" />
+        <Affliction identifier="electricshock" strength="130" probability="0.2" />
+        <sound file="%ModDir%/Content/Items/Weapons/Electrosledge/electrosledge.ogg" range="2000" volume="2" />
+        <RequiredItem items="fulguriumbatterycell" type="Contained" msg="ItemMsgBatteryCellRequired" />
+        <Explosion range="100.0" force="1" shockwave="false" flames="false" smoke="true" underwaterbubble="false" camerashake="70.0" />
+        <Conditional mass="lt 150" />
+      </StatusEffect>
+      <StatusEffect type="OnUse" target="UseTarget" disabledeltatime="true">
+        <Affliction identifier="lacerations" strength="15" />
+        <Affliction identifier="stun" strength="3.5" />
+        <Affliction identifier="burn" strength="1" />
+        <Affliction identifier="nausea" strength="2" />
+        <Affliction identifier="blunttrauma" strength="25" probability="0.4" />
+        <Affliction identifier="blunttrauma" strength="45" probability="0.2" />
+        <Affliction identifier="electricshock" strength="120" />
+        <Affliction identifier="electricshock" strength="150" probability="0.2" />
+        <sound file="%ModDir%/Content/Items/Weapons/Electrosledge/electrosledge.ogg" range="2000" volume="3" />
+        <RequiredItem items="alienpowercell" type="Contained" msg="ItemMsgBatteryCellRequired" />
+        <Explosion range="100.0" force="1" shockwave="false" flames="false" smoke="true" underwaterbubble="false" camerashake="90.0" />
+        <Conditional mass="lt 200" />
+      </StatusEffect>
+      <StatusEffect type="OnUse" target="Contained,UseTarget" Condition="-30.0" disabledeltatime="true">
+        <RequiredItem items="mobilebattery" type="Contained" msg="ItemMsgBatteryCellRequired" />
+        <Conditional entitytype="eq Character" />
+      </StatusEffect>
+      <StatusEffect type="OnUse" target="Contained,UseTarget" Condition="-15.0" disabledeltatime="true">
+        <RequiredItem items="fulguriumbatterycell" type="Contained" msg="ItemMsgBatteryCellRequired" />
+        <Conditional entitytype="eq Character" />
+      </StatusEffect>
+      <StatusEffect type="OnUse" target="Contained,UseTarget" Condition="-15.0" disabledeltatime="true">
+        <RequiredItem items="alienpowercell" type="Contained" msg="ItemMsgBatteryCellRequired" />
+        <Conditional entitytype="eq Character" />
+      </StatusEffect>
+    </MeleeWeapon>
+    <ItemContainer capacity="1" maxstacksize="1" hideitems="true" containedstateindicatorstyle="battery">
+      <Containable items="mobilebattery" />
+      <Containable items="alienpowercell" />
+    </ItemContainer>
+    <aitarget sightrange="500" soundrange="250" fadeouttime="1" />
+    <SkillRequirementHint identifier="mechanical" level="85" />
+  </Item>
+</Items>

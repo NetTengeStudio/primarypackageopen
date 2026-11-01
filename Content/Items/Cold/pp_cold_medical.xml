@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Items>
+  <Item name="" identifier="pp_alteplase" category="Medical" maxstacksize="8" maxstacksizecharacterinventory="4"
+        cargocontaineridentifier="mediccrate" tags="smallitem,chem,medical" useinhealthinterface="true" scale="0.25"
+        impactsoundtag="impact_soft" requireaimtouse="true"
+        description="Тромболитик. Растворяет тромбы, образовавшиеся после обморожения. Разжижает кровь — опасен при кровотечении.">
+    <PreferredContainer primary="medcab" minamount="1" maxamount="3" spawnprobability="0.5" />
+    <Fabricate suitablefabricators="medicalfabricator" requiredtime="15">
+      <RequiredSkill identifier="medical" level="45" />
+      <RequiredItem identifier="organicfiber" />
+      <RequiredItem identifier="plastic" />
+    </Fabricate>
+    <Deconstruct />
+    <Price baseprice="180">
+      <Price storeidentifier="merchantmedical" sold="true" multiplier="0.9" minavailable="2" />
+    </Price>
+    <InventoryIcon texture="%ModDir%/Content/Items/Cold/pp_thermal_items.png" sourcerect="133,2,87,126" origin="0.54,0.48" />
+    <Sprite texture="%ModDir%/Content/Items/Cold/pp_thermal_items.png" sourcerect="133,2,87,126" depth="0.6" origin="0.54,0.48" />
+    <Body width="60" height="35" density="11" />
+    <MeleeWeapon canbecombined="false" removeoncombined="true" slots="Any,RightHand,LeftHand" aimpos="20,5"
+                 handle1="0,0" holdangle="10" reload="1.0" msg="ItemMsgPickUpSelect" hitonlycharacters="true">
+      <RequiredSkill identifier="medical" level="40" />
+      <StatusEffect type="OnUse" target="This" Condition="-100.0" setvalue="true">
+        <Sound file="Content/Items/Medical/Syringe.ogg" range="500" />
+      </StatusEffect>
+      <StatusEffect target="Character" type="OnSuccess">
+        <Affliction identifier="pp_thrombolytics" amount="45" />
+        <ReduceAffliction identifier="pp_pulmonary_embolism" amount="30" />
+      </StatusEffect>
+      <StatusEffect target="Character" type="OnFailure">
+        <Affliction identifier="pp_thrombolytics" amount="45" />
+        <Affliction identifier="bleeding" amount="8" />
+      </StatusEffect>
+      <StatusEffect type="OnBroken" target="This">
+        <Remove />
+      </StatusEffect>
+    </MeleeWeapon>
+  </Item>
+
+  <Item name="" identifier="pp_furosemide" category="Medical" maxstacksize="8" maxstacksizecharacterinventory="4"
+        cargocontaineridentifier="mediccrate" tags="smallitem,chem,medical" useinhealthinterface="true" scale="0.25"
+        impactsoundtag="impact_soft" requireaimtouse="true"
+        description="Диуретик. Сгоняет отёк лёгких после переохлаждения. Обезвоживает.">
+    <PreferredContainer primary="medcab" minamount="1" maxamount="3" spawnprobability="0.5" />
+    <Fabricate suitablefabricators="medicalfabricator" requiredtime="12">
+      <RequiredSkill identifier="medical" level="35" />
+      <RequiredItem identifier="sodium" />
+      <RequiredItem identifier="plastic" />
+    </Fabricate>
+    <Deconstruct />
+    <Price baseprice="140">
+      <Price storeidentifier="merchantmedical" sold="true" multiplier="0.9" minavailable="2" />
+    </Price>
+    <InventoryIcon texture="%ModDir%/Content/Items/Cold/pp_thermal_items.png" sourcerect="416,1,68,127" origin="0.54,0.51" />
+    <Sprite texture="%ModDir%/Content/Items/Cold/pp_thermal_items.png" sourcerect="416,1,68,127" depth="0.6" origin="0.54,0.51" />
+    <Body width="60" height="35" density="11" />
+    <MeleeWeapon canbecombined="false" removeoncombined="true" slots="Any,RightHand,LeftHand" aimpos="20,5"
+                 handle1="0,0" holdangle="10" reload="1.0" msg="ItemMsgPickUpSelect" hitonlycharacters="true">
+      <RequiredSkill identifier="medical" level="30" />
+      <StatusEffect type="OnUse" target="This" Condition="-100.0" setvalue="true">
+        <Sound file="Content/Items/Medical/Syringe.ogg" range="500" />
+      </StatusEffect>
+      <StatusEffect target="Character" type="OnSuccess">
+        <Affliction identifier="pp_diuretics" amount="50" />
+        <ReduceAffliction identifier="pp_pulmonary_edema" amount="35" />
+      </StatusEffect>
+      <StatusEffect target="Character" type="OnFailure">
+        <Affliction identifier="pp_diuretics" amount="50" />
+        <ReduceAffliction identifier="pp_pulmonary_edema" amount="12" />
+      </StatusEffect>
+      <StatusEffect type="OnBroken" target="This">
+        <Remove />
+      </StatusEffect>
+    </MeleeWeapon>
+  </Item>
+
+  <Item name="" identifier="pp_aafn_vial" category="Medical" maxstacksize="8" maxstacksizecharacterinventory="2"
+        cargocontaineridentifier="mediccrate" tags="smallitem,chem,medical" useinhealthinterface="true" scale="0.25"
+        impactsoundtag="impact_soft" requireaimtouse="true"
+        description="Антифризный агент. Разгоняет обмен и разогревает тело изнутри, растворяя ледяные кристаллы в сосудах. Передозировка убивает.">
+    <PreferredContainer primary="medcab" minamount="0" maxamount="2" spawnprobability="0.3" />
+    <Fabricate suitablefabricators="medicalfabricator" requiredtime="20">
+      <RequiredSkill identifier="medical" level="55" />
+      <RequiredItem identifier="fulgurium" />
+      <RequiredItem identifier="organicfiber" />
+      <RequiredItem identifier="plastic" />
+    </Fabricate>
+    <Deconstruct />
+    <Price baseprice="400">
+      <Price storeidentifier="merchantmedical" sold="true" multiplier="0.95" minavailable="1" />
+    </Price>
+    <InventoryIcon texture="%ModDir%/Content/Items/Cold/pp_thermal_items.png" sourcerect="133,2,87,126" origin="0.54,0.48" />
+    <Sprite texture="%ModDir%/Content/Items/Cold/pp_thermal_items.png" sourcerect="133,2,87,126" depth="0.6" origin="0.54,0.48" />
+    <Body width="60" height="35" density="11" />
+    <MeleeWeapon canbecombined="false" removeoncombined="true" slots="Any,RightHand,LeftHand" aimpos="20,5"
+                 handle1="0,0" holdangle="10" reload="1.0" msg="ItemMsgPickUpSelect" hitonlycharacters="true">
+      <RequiredSkill identifier="medical" level="50" />
+      <StatusEffect type="OnUse" target="This" Condition="-100.0" setvalue="true">
+        <Sound file="Content/Items/Medical/Syringe.ogg" range="500" />
+      </StatusEffect>
+      <StatusEffect target="Character" type="OnSuccess">
+        <Affliction identifier="pp_aafn" amount="60" />
+        <Affliction identifier="pp_elevated_core_temp" amount="30" />
+        <ReduceAffliction identifier="pp_frozen_vessels" amount="40" />
+      </StatusEffect>
+      <StatusEffect target="Character" type="OnFailure">
+        <Affliction identifier="pp_aafn" amount="60" />
+        <Affliction identifier="pp_elevated_core_temp" amount="30" />
+      </StatusEffect>
+      <StatusEffect type="OnBroken" target="This">
+        <Remove />
+      </StatusEffect>
+    </MeleeWeapon>
+  </Item>
+
+  <Item name="" identifier="pp_skin_grafter" category="Medical" maxstacksize="1" maxstacksizecharacterinventory="1"
+        cargocontaineridentifier="mediccrate" tags="smallitem,medical,surgerytool" useinhealthinterface="true" scale="0.3"
+        impactsoundtag="impact_metal_light" requireaimtouse="true"
+        description="Кожный графтер. Пересаживает лоскут кожи на участок, содранный обморожением. Требует высокой квалификации.">
+    <PreferredContainer primary="medcab" minamount="0" maxamount="1" spawnprobability="0.35" />
+    <Fabricate suitablefabricators="fabricator" requiredtime="25">
+      <RequiredSkill identifier="medical" level="60" />
+      <RequiredItem identifier="steel" />
+      <RequiredItem identifier="silicon" />
+      <RequiredItem identifier="organicfiber" />
+    </Fabricate>
+    <Deconstruct time="10">
+      <Item identifier="steel" />
+      <Item identifier="silicon" />
+    </Deconstruct>
+    <Price baseprice="520">
+      <Price storeidentifier="merchantmedical" sold="true" multiplier="0.95" minavailable="1" />
+    </Price>
+    <InventoryIcon texture="%ModDir%/Content/Items/Cold/pp_thermal_items.png" sourcerect="684,13,81,112" origin="0.5,0.49" />
+    <Sprite texture="%ModDir%/Content/Items/Cold/pp_thermal_items.png" sourcerect="797,17,85,106" depth="0.6" origin="0.5,0.5" />
+    <Body width="40" height="30" density="40" />
+    <MeleeWeapon canbecombined="false" slots="Any,RightHand,LeftHand" aimpos="20,5" handle1="0,0" holdangle="10"
+                 reload="2.0" msg="ItemMsgPickUpSelect" hitonlycharacters="true">
+      <RequiredSkill identifier="medical" level="55" />
+      <StatusEffect type="OnUse" target="This" Condition="-8.0">
+        <Sound file="Content/Items/Medical/Bandage1.ogg" range="500" />
+      </StatusEffect>
+      <StatusEffect target="Limb" type="OnSuccess">
+        <ReduceAffliction identifier="pp_removed_skin" amount="20" />
+        <ReduceAffliction identifier="pp_melted_skin" amount="10" />
+        <Affliction identifier="pp_grafted_skin" amount="10" />
+      </StatusEffect>
+      <StatusEffect target="Limb" type="OnFailure">
+        <Affliction identifier="pp_stretched_skin" amount="10" />
+        <Affliction identifier="bleeding" amount="6" />
+      </StatusEffect>
+      <StatusEffect type="OnBroken" target="This">
+        <Remove />
+      </StatusEffect>
+    </MeleeWeapon>
+  </Item>
+
+  <Item name="" identifier="pp_stasis_starter" category="Medical" maxstacksize="4" maxstacksizecharacterinventory="2"
+        cargocontaineridentifier="mediccrate" tags="smallitem,chem,medical" useinhealthinterface="true" scale="0.25"
+        impactsoundtag="impact_soft" requireaimtouse="true"
+        description="Криопротектор. В достаточно холодном месте вводит пациента в стазис — обмен веществ и любые термические процессы останавливаются.">
+    <PreferredContainer primary="medcab" minamount="0" maxamount="2" spawnprobability="0.3" />
+    <Fabricate suitablefabricators="medicalfabricator" requiredtime="20">
+      <RequiredSkill identifier="medical" level="50" />
+      <RequiredItem identifier="sodium" />
+      <RequiredItem identifier="organicfiber" />
+    </Fabricate>
+    <Deconstruct />
+    <Price baseprice="350">
+      <Price storeidentifier="merchantmedical" sold="true" multiplier="0.95" minavailable="1" />
+    </Price>
+    <InventoryIcon texture="%ModDir%/Content/Items/Cold/pp_thermal_items.png" sourcerect="416,1,68,127" origin="0.54,0.51" />
+    <Sprite texture="%ModDir%/Content/Items/Cold/pp_thermal_items.png" sourcerect="416,1,68,127" depth="0.6" origin="0.54,0.51" />
+    <Body width="60" height="35" density="11" />
+    <MeleeWeapon canbecombined="false" removeoncombined="true" slots="Any,RightHand,LeftHand" aimpos="20,5"
+                 handle1="0,0" holdangle="10" reload="1.0" msg="ItemMsgPickUpSelect" hitonlycharacters="true">
+      <RequiredSkill identifier="medical" level="45" />
+      <StatusEffect type="OnUse" target="This" Condition="-100.0" setvalue="true">
+        <Sound file="Content/Items/Medical/Syringe.ogg" range="500" />
+      </StatusEffect>
+      <StatusEffect target="Character" type="OnUse">
+        <Affliction identifier="pp_stasis_starter" amount="100" />
+      </StatusEffect>
+      <StatusEffect type="OnBroken" target="This">
+        <Remove />
+      </StatusEffect>
+    </MeleeWeapon>
+  </Item>
+
+  <Item name="" identifier="pp_stasisbag" category="Medical" maxstacksize="4" maxstacksizecharacterinventory="1"
+        cargocontaineridentifier="mediccrate" tags="mediumitem,medical,pp_stasisbag" scale="0.5"
+        impactsoundtag="impact_soft" allowdroppingonswapwith="diving"
+        description="Криомешок. Надетый на пациента в холодном отсеке, удерживает его в стазисе без препарата.">
+    <PreferredContainer primary="medcab" minamount="0" maxamount="1" spawnprobability="0.3" />
+    <Fabricate suitablefabricators="medicalfabricator" requiredtime="25">
+      <RequiredSkill identifier="medical" level="45" />
+      <RequiredItem identifier="organicfiber" amount="3" />
+      <RequiredItem identifier="plastic" amount="2" />
+    </Fabricate>
+    <Deconstruct time="10">
+      <Item identifier="organicfiber" amount="2" />
+    </Deconstruct>
+    <Price baseprice="450">
+      <Price storeidentifier="merchantmedical" sold="true" multiplier="0.95" minavailable="1" />
+    </Price>
+    <InventoryIcon texture="%ModDir%/Content/Items/Cold/pp_thermal_items.png" sourcerect="572,1,96,131" origin="0.53,0.48" />
+    <Sprite texture="%ModDir%/Content/Items/Cold/pp_thermal_items.png" sourcerect="572,1,96,131" depth="0.55" origin="0.53,0.48" />
+    <Body width="70" height="50" density="15" />
+    <Wearable slots="OuterClothes" msg="ItemMsgEquipSelect" canbeselected="false" canbepicked="true" pickkey="Select"
+              variantof="">
+      <Sprite texture="%ModDir%/Content/Items/Cold/pp_thermal_items.png" sourcerect="572,1,96,131" depth="0.05" origin="0.5,0.5" limb="Torso" scale="0.5" hidelimb="false" />
+      <StatusEffect type="OnWearing" target="Character" interval="1" disabledeltatime="true">
+        <Conditional IsDead="false" />
+        <ReduceAffliction identifier="pp_hyperthermia" amount="2" />
+      </StatusEffect>
+    </Wearable>
+  </Item>
+
+  <Item name="" identifier="pp_cryotank" category="Medical" maxstacksize="1" maxstacksizecharacterinventory="1"
+        tags="mediumitem,medical,container,heating" showcontentsintooltip="true" scale="0.5"
+        impactsoundtag="impact_metal_heavy"
+        description="Криотанк. Держит содержимое замороженным — органы и препараты не портятся.">
+    <PreferredContainer primary="medcab" minamount="0" maxamount="1" spawnprobability="0.3" />
+    <Fabricate suitablefabricators="fabricator" requiredtime="20">
+      <RequiredSkill identifier="mechanical" level="35" />
+      <RequiredItem identifier="steel" amount="2" />
+      <RequiredItem identifier="aluminium" />
+    </Fabricate>
+    <Deconstruct time="10">
+      <Item identifier="steel" />
+      <Item identifier="aluminium" />
+    </Deconstruct>
+    <Price baseprice="380">
+      <Price storeidentifier="merchantmedical" sold="true" multiplier="0.95" minavailable="1" />
+    </Price>
+    <InventoryIcon texture="%ModDir%/Content/Items/Cold/pp_thermal_items.png" sourcerect="22,151,83,67" origin="0.53,0.55" />
+    <Sprite texture="%ModDir%/Content/Items/Cold/pp_thermal_items.png" sourcerect="22,151,83,67" depth="0.55" origin="0.53,0.55" />
+    <Body width="70" height="55" density="50" />
+    <Holdable slots="RightHand+LeftHand" holdpos="0,-70" handle1="-10,10" handle2="10,10" aimable="false" msg="ItemMsgPickUpSelect" />
+    <ItemContainer capacity="4" keepopenwhenequipped="true" movableframe="true">
+      <Containable items="smallitem" excludeditems="toolbelt,toolbox">
+        <StatusEffect type="OnContaining" target="Contained" Condition="0.02" interval="1" disabledeltatime="true" />
+      </Containable>
+    </ItemContainer>
+  </Item>
+
+  <Item name="" identifier="pp_heatcrate" category="Equipment" maxstacksize="1" maxstacksizecharacterinventory="1"
+        tags="container,medical,mediumitem,mobilecontainer,heating" showcontentsintooltip="true"
+        scale="0.5" impactsoundtag="impact_metal_heavy"
+        description="Термоящик. Держит содержимое горячим — тряпки и физраствор не остывают.">
+    <PreferredContainer primary="medcab" minamount="0" maxamount="1" spawnprobability="0.4" />
+    <Fabricate suitablefabricators="fabricator" amount="1" requiredtime="15">
+      <RequiredSkill identifier="mechanical" level="30" />
+      <RequiredItem identifier="steel" amount="2" />
+      <RequiredItem identifier="copper" />
+    </Fabricate>
+    <Deconstruct time="10">
+      <Item identifier="steel" />
+      <Item identifier="copper" />
+    </Deconstruct>
+    <Price baseprice="260">
+      <Price storeidentifier="merchantmedical" sold="true" multiplier="0.9" minavailable="2" />
+    </Price>
+    <InventoryIcon texture="%ModDir%/Content/Items/Cold/pp_thermal_items.png" sourcerect="22,151,83,67" origin="0.53,0.55" />
+    <Sprite texture="%ModDir%/Content/Items/Cold/pp_thermal_items.png" sourcerect="22,151,83,67" depth="0.55" origin="0.53,0.55" />
+    <Body width="70" height="55" density="50" />
+    <Holdable slots="RightHand+LeftHand" holdpos="0,-70" handle1="-10,10" handle2="10,10" aimable="false" msg="ItemMsgPickUpSelect" />
+    <ItemContainer capacity="12" keepopenwhenequipped="true" movableframe="true">
+      <Containable items="pp_warm_rag,pp_heatpad,pp_warm_iv_bag" excludeditems="toolbelt,toolbox" />
+    </ItemContainer>
+  </Item>
+</Items>

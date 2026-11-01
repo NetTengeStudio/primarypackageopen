@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Afflictions>
+  <Affliction identifier="pp_hypothermia" type="pp_cold" limbspecific="false" indicatorlimb="Torso"
+              targets="human" isbuff="false" healableinmedicalclinic="true" maxstrength="100"
+              showiconthreshold="3" showicontoothersthreshold="12" showinhealthscannerthreshold="3"
+              treatmentthreshold="8" karmachangeonapplied="0"
+              causeofdeathdescription="pp_cold.causeofdeath" selfcauseofdeathdescription="pp_cold.selfcauseofdeath"
+              iconcolors="150,190,220,255;110,165,215,255;80,135,200,255;50,95,175,255">
+    <Effect minstrength="0" maxstrength="25" strengthchange="0"
+            minvitalitydecrease="0" maxvitalitydecrease="0"
+            minspeedmultiplier="1.0" maxspeedmultiplier="0.96" />
+    <Effect minstrength="25" maxstrength="50" strengthchange="0"
+            minvitalitydecrease="0" maxvitalitydecrease="8"
+            minspeedmultiplier="0.96" maxspeedmultiplier="0.87"
+            minskillmultiplier="1.0" maxskillmultiplier="0.9" />
+    <Effect minstrength="50" maxstrength="75" strengthchange="0"
+            minvitalitydecrease="8" maxvitalitydecrease="35"
+            minspeedmultiplier="0.87" maxspeedmultiplier="0.72"
+            minskillmultiplier="0.9" maxskillmultiplier="0.7" />
+    <Effect minstrength="75" maxstrength="100" strengthchange="0"
+            minvitalitydecrease="35" maxvitalitydecrease="220"
+            minspeedmultiplier="0.72" maxspeedmultiplier="0.45"
+            minskillmultiplier="0.7" maxskillmultiplier="0.4" />
+    <Description textidentifier="pp_cold.stage1" minstrength="0" maxstrength="25" />
+    <Description textidentifier="pp_cold.stage2" minstrength="25" maxstrength="50" />
+    <Description textidentifier="pp_cold.stage3" minstrength="50" maxstrength="75" />
+    <Description textidentifier="pp_cold.stage4" minstrength="75" maxstrength="100" />
+    <icon texture="%ModDir%/Content/Afflictions/Icons/pp_cold_icons.png" sheetelementsize="128,128" sourcerect="779,1,125,127" origin="0,0" />
+  </Affliction>
+
+  <Affliction identifier="pp_frostbite" type="pp_cold" limbspecific="true"
+              targets="human" isbuff="false" healableinmedicalclinic="true" maxstrength="100"
+              showiconthreshold="1" showicontoothersthreshold="25" showinhealthscannerthreshold="1"
+              treatmentthreshold="5" karmachangeonapplied="0"
+              causeofdeathdescription="pp_frostbite.causeofdeath" selfcauseofdeathdescription="pp_frostbite.selfcauseofdeath"
+              iconcolors="190,205,225,255;150,180,215,255;110,145,195,255;70,95,140,255">
+    <Effect minstrength="0" maxstrength="25" strengthchange="0"
+            minvitalitydecrease="0" maxvitalitydecrease="2"
+            minspeedmultiplier="1.0" maxspeedmultiplier="0.97" />
+    <Effect minstrength="25" maxstrength="50" strengthchange="0"
+            minvitalitydecrease="2" maxvitalitydecrease="8"
+            minspeedmultiplier="0.97" maxspeedmultiplier="0.9"
+            minskillmultiplier="1.0" maxskillmultiplier="0.92" />
+    <Effect minstrength="50" maxstrength="75" strengthchange="0"
+            minvitalitydecrease="8" maxvitalitydecrease="20"
+            minspeedmultiplier="0.9" maxspeedmultiplier="0.8"
+            minskillmultiplier="0.92" maxskillmultiplier="0.78" />
+    <Effect minstrength="75" maxstrength="100" strengthchange="0"
+            minvitalitydecrease="20" maxvitalitydecrease="45"
+            minspeedmultiplier="0.8" maxspeedmultiplier="0.68"
+            minskillmultiplier="0.78" maxskillmultiplier="0.6" />
+    <Description textidentifier="pp_frostbite.stage1" minstrength="0" maxstrength="25" />
+    <Description textidentifier="pp_frostbite.stage2" minstrength="25" maxstrength="50" />
+    <Description textidentifier="pp_frostbite.stage3" minstrength="50" maxstrength="75" />
+    <Description textidentifier="pp_frostbite.stage4" minstrength="75" maxstrength="100" />
+    <icon texture="%ModDir%/Content/Afflictions/Icons/pp_cold_icons.png" sheetelementsize="128,128" sourcerect="649,1,125,127" origin="0,0" />
+  </Affliction>
+</Afflictions>

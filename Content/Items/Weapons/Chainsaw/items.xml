@@ -1,0 +1,168 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Items>
+  <Item name="" identifier="pp_chainsawdeathbringer" category="Weapon" tags="mediumitem,weapon,mountableweapon" scale="0.6" allowasextracargo="true" requireaimtouse="true" impactsoundtag="impact_metal_heavy">
+    <Deconstruct time="20">
+      <Item identifier="plastic" />
+      <Item identifier="iron" amount="3" />
+      <Item identifier="titaniumaluminiumalloy" amount="2" />
+    </Deconstruct>
+    <InventoryIcon texture="%ModDir%/Content/Items/Weapons/Chainsaw/chainsaw.png" sourcerect="0,128,64,64" origin="0.5,0.5" />
+    <Sprite texture="%ModDir%/Content/Items/Weapons/Chainsaw/chainsaw.png" sourcerect="0,0,230,85" depth="0.55" origin="0.5,0.8" />
+    <Body width="230" height="24" density="25" />
+    <Wearable slots="Bag" msg="ItemMsgEquipSelect" canbeselected="false" canbepicked="true" pickkey="Select">
+      <sprite texture="%ModDir%/Content/Items/Weapons/Chainsaw/chainsaw.png" canbehiddenbyotherwearables="false" rotation="90" inheritlimbdepth="false" depth="0.6" sourcerect="0,0,230,85" limb="Torso" inherittexturescale="true" origin="0.5,1.15" />
+    </Wearable>
+    <MeleeWeapon allowhitmultiple="true" swingpos="-45,0" swingforce="5.0,-1.0" slots="RightHand+LeftHand" controlpose="true" holdpos="52,-52" aimpos="45,0" handle1="-55,25" handle2="-23,28" holdangle="-5" reload="2.0" range="152" combatPriority="80" msg="ItemMsgPickUpSelect">
+      <RequiredSkill identifier="weapons" level="70" />
+      <RequiredSkill identifier="mechanical" level="50" />
+      <RequiredItems items="mobilebattery,pp_chainsawdeathbringer.draw" type="Contained" msg="itemmsgbatterycellrequired" />
+      <Attack targetimpulse="15" severlimbsprobability="7.5" itemdamage="30" structuredamage="12" penetration="0.55">
+        <Affliction identifier="lacerations" strength="40" />
+        <Affliction identifier="bleeding" strength="20" />
+        <Affliction identifier="bloodloss" strength="5" />
+        <Affliction identifier="stun" strength="0.8" />
+        <StatusEffect type="OnUse" target="UseTarget" comparison="and">
+          <Conditional entitytype="eq Character" IsMachine="false" />
+          <Sound file="%ModDir%/Content/Items/Weapons/Chainsaw/chainsaw_hit_1.ogg" selectionmode="random" range="3000" />
+          <Sound file="%ModDir%/Content/Items/Weapons/Chainsaw/chainsaw_hit_2.ogg" range="3000" />
+          <Sound file="%ModDir%/Content/Items/Weapons/Chainsaw/chainsaw_hit_3.ogg" range="3000" />
+          <Sound file="%ModDir%/Content/Items/Weapons/Chainsaw/chainsaw_hit_4.ogg" range="3000" />
+          <ParticleEmitter particle="bloodsplash" particleamount="5" velocitymin="0" velocitymax="900" anglemin="-105" anglemax="105" distancemin="-15" distancemax="30" scalemin="0.5" scalemax="1" />
+          <ParticleEmitter particle="whitegoosplash" particleamount="5" colormultiplier="255,0,0,255" velocitymin="0" velocitymax="900" anglemin="-105" anglemax="105" distancemin="-15" distancemax="30" scalemin="0.5" scalemax="1" />
+          <ParticleEmitter particle="blood" particleamount="8" scalemin="1.8" scalemax="2.2" anglemin="-105" anglemax="105" velocitymin="0" velocitymax="300" />
+        </StatusEffect>
+        <StatusEffect type="OnUse" target="UseTarget">
+          <Conditional entitytype="eq Structure" />
+          <Conditional hastag="eq door" />
+          <Sound file="%ModDir%/Content/Items/Weapons/Chainsaw/chainsaw_slash_3.ogg" selectionmode="random" range="3000" />
+          <Sound file="%ModDir%/Content/Items/Weapons/Chainsaw/chainsaw_slash_4.ogg" range="3000" />
+          <ParticleEmitter particle="spark" copytargetangle="true" anglemin="0" anglemax="180" particleamount="2" velocitymin="300" velocitymax="700" scalemin="0.5" scalemax="1" />
+        </StatusEffect>
+      </Attack>
+      <StatusEffect type="OnUse" target="Contained" targetslot="0" Condition="-4.3" disabledeltatime="true" />
+      <StatusEffect type="OnUse" target="Contained,Limb" targetslot="1">
+        <Conditional ConditionPercentage="gte 50" />
+        <ParticleEmitter particle="gib" particleamount="10" scalemin="0.25" scalemax="1" velocitymin="0" velocitymax="900" anglemin="-105" anglemax="105" distancemin="-15" distancemax="30" />
+        <Affliction identifier="lacerations" strength="15" />
+        <Affliction identifier="bleeding" strength="10" />
+        <Affliction identifier="stun" strength="0.4" />
+      </StatusEffect>
+      <StatusEffect type="OnSuccess" target="Contained,Limb" targetslot="1">
+        <Conditional ConditionPercentage="gte 50" />
+        <Affliction identifier="lacerations" strength="15" />
+        <Affliction identifier="bleeding" strength="10" />
+        <Affliction identifier="stun" strength="0.4" />
+      </StatusEffect>
+      <StatusEffect type="OnUse" target="Contained,Limb" targetslot="1">
+        <Conditional IsFullCondition="true" />
+        <ParticleEmitter particle="heavygib" drawontop="true" particleamount="1" scalemin="1" scalemax="1" velocitymin="0" velocitymax="300" anglemin="-105" anglemax="105" distancemin="-15" distancemax="30" />
+        <Affliction identifier="lacerations" strength="15" />
+        <Affliction identifier="bleeding" strength="10" />
+        <Affliction identifier="stun" strength="0.4" />
+      </StatusEffect>
+      <StatusEffect type="OnSuccess" target="Contained,Limb" targetslot="1">
+        <Conditional IsFullCondition="true" />
+        <Affliction identifier="lacerations" strength="15" />
+        <Affliction identifier="bleeding" strength="10" />
+        <Affliction identifier="stun" strength="0.4" />
+      </StatusEffect>
+      <StatusEffect type="OnUse" target="Contained" targetslot="1" Condition="-125" disabledeltatime="true" />
+      <StatusEffect type="OnSuccess" target="This" Condition="+6" duration="1.0" stackable="false" />
+      <StatusEffect type="OnSuccess" target="Contained" targetslot="1" Condition="+50" duration="1.0" stackable="false" />
+      <StatusEffect type="OnSecondaryUse" target="This,Contained" targetslot="1" displaysidebysidewhenlinked="true" allowswapping="true">
+        <RequiredItems tag="mobilebattery" type="Contained" targetslot="0" />
+      </StatusEffect>
+      <StatusEffect type="OnSecondaryUse" target="This" Condition="-4" disabledeltatime="true" delay="0.5" stackable="false">
+        <Conditional displaysidebysidewhenlinked="true" />
+      </StatusEffect>
+      <StatusEffect type="OnSecondaryUse" target="Contained" targetslot="1" Condition="+10" disabledeltatime="true" delay="0.1" stackable="false" checkconditionalalways="true">
+        <Conditional displaysidebysidewhenlinked="true" />
+      </StatusEffect>
+      <StatusEffect type="OnSecondaryUse" target="Contained" targetslot="0" Condition="-1.8" disabledeltatime="true" delay="0.5" stackable="false" />
+      <StatusEffect type="OnActive" target="Contained,Character" targetslot="1" SpeedMultiplier="0.3" setvalue="true" comparison="and" allowswapping="false">
+        <Conditional allowswapping="true" IsFullCondition="false" />
+      </StatusEffect>
+      <StatusEffect type="OnActive" target="Contained,Character" targetslot="1" SpeedMultiplier="1.5" setvalue="true" multiplyAfflictionsByMaxVitality="true" comparison="and">
+        <Affliction identifier="powerattack" strength="1.5" />
+        <Conditional IsFullCondition="true" />
+      </StatusEffect>
+      <StatusEffect type="OnActive" target="Contained,Character" targetslot="1" interval="0.1" duration="1.0" stackable="false" comparison="and">
+        <ReduceAffliction identifier="stun" strength="5.0" />
+        <Conditional IsFullCondition="true" />
+      </StatusEffect>
+      <StatusEffect type="OnActive" target="This" interval="0.3">
+        <Conditional hitting="true" targetitemcomponent="MeleeWeapon" />
+        <Sound file="%ModDir%/Content/Items/Weapons/Chainsaw/chainsaw_slash_1.ogg" selectionmode="random" range="3000" />
+        <Sound file="%ModDir%/Content/Items/Weapons/Chainsaw/chainsaw_slash_2.ogg" range="3000" />
+      </StatusEffect>
+      <StatusEffect type="Always" target="This" Condition="+6.0" disabledeltatime="true" interval="0.1" delay="0.4" stackable="false" checkconditionalalways="true" comparison="and">
+        <Conditional displaysidebysidewhenlinked="false" Condition="gt 0" />
+      </StatusEffect>
+      <StatusEffect type="Always" target="This" displaysidebysidewhenlinked="false" />
+      <StatusEffect type="OnBroken" target="This" delay="2.0" stackable="false" Condition="+64" disabledeltatime="true">
+        <Sound file="%ModDir%/Content/Items/Weapons/Chainsaw/chainsaw_reload.ogg" range="3000" loop="true" />
+      </StatusEffect>
+      <StatusEffect type="OnBroken" target="Contained" targetslot="1" duration="1.0">
+        <Sound file="%ModDir%/Content/Items/Weapons/Chainsaw/chainsaw_end.ogg" range="3000" loop="true" />
+        <ParticleEmitter particle="smoke" particlespersecond="10" scalemin="1" scalemax="1.5" anglemin="0" anglemax="360" velocitymin="5" velocitymax="20" />
+      </StatusEffect>
+      <StatusEffect type="OnBroken" target="Contained" targetslot="1" Condition="0" setvalue="true" />
+    </MeleeWeapon>
+    <ItemContainer capacity="1" maxstacksize="1" hideitems="true" containedstateindicatorslot="1" containedstateindicatorstyle="battery" containedspritedepth="0.56" removecontaineditemsondeconstruct="false" SpawnWithId="pp_chainsawdeathbringer.draw">
+      <Containable tag="mobilebattery" />
+      <SlotIcon slotindex="0" texture="Content/UI/WeaponUI.png" sourcerect="64,961,32,22" origin="0.5,0.45" />
+      <SubContainer capacity="1" maxstacksize="1">
+        <Containable identifier="pp_chainsawdeathbringer.draw" itempos="-34,7">
+          <StatusEffect type="OnContaining" target="Contained" interval="0.3">
+            <Explosion showeffects="false" camerashakerange="150" camerashake="2.0" />
+          </StatusEffect>
+          <StatusEffect type="OnContaining" target="Contained">
+            <ParticleEmitter particle="swirlysmoke" particlespersecond="3" scalemin="0.3" scalemax="0.4" />
+            <ParticleEmitter particle="mist" particlespersecond="9" scalemin="0.9" scalemax="1.1" colormultiplier="1.0,1.0,1.0,0.5" />
+            <Conditional InWater="false" />
+          </StatusEffect>
+          <StatusEffect type="OnContaining" target="Contained">
+            <ParticleEmitter particle="bubbles" particlespersecond="10" anglemin="0" anglemax="360" scalemin="0.3" scalemax="0.7" velocitymin="5" velocitymax="50" />
+            <Conditional InWater="true" />
+          </StatusEffect>
+          <StatusEffect type="OnContaining" target="Contained">
+            <Sound file="%ModDir%/Content/Items/Weapons/Chainsaw/chainsaw_idle.ogg" range="2000" loop="true" />
+            <Conditional IsFullCondition="false" />
+          </StatusEffect>
+          <StatusEffect type="OnContaining" target="Contained" comparison="and">
+            <Sound file="%ModDir%/Content/Items/Weapons/Chainsaw/chainsaw_draw.ogg" selectionmode="random" range="3000" loop="true" />
+            <Sound file="%ModDir%/Content/Items/Weapons/Chainsaw/chainsaw_draw_1.ogg" range="3000" loop="true" />
+            <Conditional displaysidebysidewhenlinked="true" IsFullCondition="false" />
+          </StatusEffect>
+          <StatusEffect type="OnContaining" target="Contained">
+            <Sound file="%ModDir%/Content/Items/Weapons/Chainsaw/chainsaw_loop.ogg" range="3000" frequency="0.9" volume="2.0" loop="true" />
+            <ParticleEmitter particle="flare" particlespersecond="100" scalemultiplier="2.0,2.0" colormultiplier="192,192,255" lifetimemultiplier="0.25" />
+            <Conditional IsFullCondition="true" />
+          </StatusEffect>
+          <StatusEffect type="OnContaining" target="Contained" comparison="and">
+            <ParticleEmitter particle="flarebubbles" particlespersecond="30" anglemin="0" anglemax="360" velocitymin="10" velocitymax="100" scalemin="0.4" scalemax="0.8" />
+            <Conditional IsFullCondition="true" InWater="true" />
+          </StatusEffect>
+          <StatusEffect type="OnContaining" target="Contained" Condition="-20" disabledeltatime="true" interval="0.1" delay="0.4" stackable="false" checkconditionalalways="true">
+            <Conditional displaysidebysidewhenlinked="false" />
+          </StatusEffect>
+          <StatusEffect type="OnContaining" target="Contained" displaysidebysidewhenlinked="false" />
+        </Containable>
+      </SubContainer>
+    </ItemContainer>
+    <Quality>
+      <QualityStat stattype="Condition" value="0.1" />
+      <QualityStat stattype="StrikingPowerMultiplier" value="0.1" />
+    </Quality>
+    <AiTarget sightrange="900" soundrange="450" fadeouttime="1" />
+    <SkillRequirementHint identifier="weapons" level="70" />
+    <SkillRequirementHint identifier="mechanical" level="50" />
+  </Item>
+  <Item name="Slot Draw" identifier="pp_chainsawdeathbringer.draw" tags="" category="Misc" health="300" noninteractable="true" hideinmenus="true">
+    <InventoryIcon texture="Content/UI/CampaignUIAtlas2.png" sourcerect="158,921,72,83" origin="0.5,0.5" />
+    <Sprite texture="Content/UI/CampaignUIAtlas2.png" sourcerect="158,921,72,83" origin="0.5,0.5" depth="0.55" />
+    <ItemComponent>
+      <StatusEffect type="OnSpawn" target="This" Condition="0" setvalue="true" delay="0.01" stackable="false" oneshot="true" />
+    </ItemComponent>
+  </Item>
+</Items>

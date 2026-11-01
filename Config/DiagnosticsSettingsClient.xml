@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Configuration>
+  <Settings>
+    <Setting Name="ColdDebug" Type="bool" Value="false" />
+    <Setting Name="InspectDebug" Type="bool" Value="false" />
+  </Settings>
+</Configuration>

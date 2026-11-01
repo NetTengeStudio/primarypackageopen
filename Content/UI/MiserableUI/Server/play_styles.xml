@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Override>
+  <Style>
+    <PlayStyleBanner.Serious>
+      <Sprite name="PlayStyleBanner.Serious" texture="%ModDir%/Content/UI/MiserableUI/Server/playstyle_serious.png" sourcerect="0,0,960,384" bannercolor="#20686c" />
+    </PlayStyleBanner.Serious>
+    <PlayStyleBanner.Casual>
+      <Sprite name="PlayStyleBanner.Casual" texture="%ModDir%/Content/UI/MiserableUI/Server/playstyle_casual.png" sourcerect="0,0,960,384" bannercolor="#1f661c" />
+    </PlayStyleBanner.Casual>
+    <PlayStyleBanner.Roleplay>
+      <Sprite name="PlayStyleBanner.Roleplay" texture="%ModDir%/Content/UI/MiserableUI/Server/playstyle_roleplay.png" sourcerect="0,0,960,384" bannercolor="#8b1b45" />
+    </PlayStyleBanner.Roleplay>
+    <PlayStyleBanner.Rampage>
+      <Sprite name="PlayStyleBanner.Rampage" texture="%ModDir%/Content/UI/MiserableUI/Server/playstyle_rampage.png" sourcerect="0,0,960,384" bannercolor="#8a3622" />
+    </PlayStyleBanner.Rampage>
+    <PlayStyleBanner.SomethingDifferent>
+      <Sprite name="PlayStyleBanner.SomethingDifferent" texture="%ModDir%/Content/UI/MiserableUI/Server/playstyle_something_different.png" sourcerect="0,0,960,384" bannercolor="#6d2460" />
+    </PlayStyleBanner.SomethingDifferent>
+  </Style>
+</Override>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<infotexts language="Russian" nowhitespace="false" translatedname="Russian">
+  <entityname.pp_chainsawdeathbringer>Бензопила "Смертоносец"</entityname.pp_chainsawdeathbringer>
+  <entitydescription.pp_chainsawdeathbringer>Тяжёлая моторизованная пила ближнего боя, требует батарею.</entitydescription.pp_chainsawdeathbringer>
+  <entityname.pp_electrosledge>Электрокувалда</entityname.pp_electrosledge>
+  <entitydescription.pp_electrosledge>Ударное оружие с электрошоковым эффектом при попадании.</entitydescription.pp_electrosledge>
+  <entityname.pp_minigun>Миниган</entityname.pp_minigun>
+  <entitydescription.pp_minigun>Тяжёлое автоматическое орудие с ленточным питанием.</entitydescription.pp_minigun>
+  <entityname.pp_minigunammobox>Патронный ящик для минигана</entityname.pp_minigunammobox>
+  <entityname.pp_minigunround>Патрон для минигана</entityname.pp_minigunround>
+  <entityname.spb_jus_item>Корпоративный Закон</entityname.spb_jus_item>
+  <entityname.PlutonFuel>Плутониевое топливо</entityname.PlutonFuel>
+  <entityname.firespearcrossbow>Огненная стрела</entityname.firespearcrossbow>
+  <entityname.pp_effect_flashlight_dir>Эффект: направленный свет</entityname.pp_effect_flashlight_dir>
+  <entityname.pp_effect_flashlight_rad>Эффект: круговой свет</entityname.pp_effect_flashlight_rad>
+  <entityname.firespear_flamehead_item>Огненный наконечник</entityname.firespear_flamehead_item>
+  <entityname.polypchmground>Патрон тяжёлого пулемёта</entityname.polypchmground>
+  <entityname.polyrocketrailgunshellsecondstage>Снаряд рельсового ракетомёта (вторая ступень)</entityname.polyrocketrailgunshellsecondstage>
+  <entityname.polyrocketrailgunshelldud>Неразорвавшийся снаряд рельсового ракетомёта</entityname.polyrocketrailgunshelldud>
+  <entityname.pp_minigunspinningbarrels>Вращающиеся стволы минигана</entityname.pp_minigunspinningbarrels>
+  <entityname.pp_minigunspinningsound>Звук вращения минигана</entityname.pp_minigunspinningsound>
+  <entityname.pp_minigunejector>Выброс гильз минигана</entityname.pp_minigunejector>
+</infotexts>

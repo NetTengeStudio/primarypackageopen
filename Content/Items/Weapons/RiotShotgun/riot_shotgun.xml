@@ -1,0 +1,164 @@
+<Items>
+  <Item name="" identifier="riotshotgun" HideConditionBar="true" category="Weapon" cargocontaineridentifier="metalcrate" tags="mediumitem,weapon,gun,gunsmith,provocativetohumanai,mountableweapon" Scale="0.5" impactsoundtag="impact_metal_light">
+      <PreferredContainer primary="secarmcab" amount="1" spawnprobability="1" notcampaign="true" notpvp="true" />
+      <PreferredContainer secondary="outpostsecarmcab" amount="1" spawnprobability="0.5" />
+      <PreferredContainer secondary="wrecksecarmcab,abandonedsecarmcab,piratesecarmcab" amount="1" spawnprobability="0.2" />
+      <PreferredContainer secondary="wreckweaponholder" amount="1" spawnprobability="0.03" />
+      <PreferredContainer secondary="armcab" />
+      <Price baseprice="500" minleveldifficulty="30">
+        <Price storeidentifier="merchantoutpost" sold="false" multiplier="1.5" />
+        <Price storeidentifier="merchantcity" multiplier="1.25" minavailable="1" sold="false" />
+        <Price storeidentifier="merchantresearch" sold="false" multiplier="1.25" />
+        <Price storeidentifier="merchantmilitary" multiplier="0.9" minavailable="3" />
+        <Price storeidentifier="merchantmine" sold="false" multiplier="1.25" />
+        <Price storeidentifier="merchantarmory" multiplier="0.9" minavailable="3" />
+      </Price>
+      <Deconstruct time="10">
+        <Item identifier="steel" />
+        <Item identifier="titaniumaluminiumalloy" />
+        <Item identifier="plastic" />
+      </Deconstruct>
+      <Fabricate suitablefabricators="fabricator" requiredtime="60" requiresrecipe="true">
+        <RequiredSkill identifier="weapons" level="55" />
+        <RequiredItem identifier="steel" amount="2" />
+        <RequiredItem identifier="titaniumaluminiumalloy" amount="2" />
+        <RequiredItem identifier="plastic" amount="2" />
+      </Fabricate>
+      <InventoryIcon texture="%ModDir%/Content/Items/Weapons/RiotShotgun/Sprites/riot_shotgun.png" sourcerect="0,0,260,52" depth="0.55" origin="0.45,0.25" />
+      <Sprite texture="%ModDir%/Content/Items/Weapons/RiotShotgun/Sprites/riot_shotgun.png" sourcerect="0,0,260,52" depth="0.55" origin="0.45,0.25" />
+      <BrokenSprite texture="%ModDir%/Content/Items/Weapons/RiotShotgun/Sprites/riot_shotgun.png" sourcerect="0,52,260,52" depth="0.55" origin="0.45,0.25" maxcondition="50" />
+      <BrokenSprite texture="%ModDir%/Content/Items/Weapons/RiotShotgun/Sprites/riot_shotgun.png" sourcerect="0,0,260,52" depth="0.55" origin="0.45,0.25" maxcondition="0" />
+      <Body width="180" height="30" density="25" />
+      <Holdable slots="Any,RightHand+LeftHand" controlpose="true" holdpos="45,-15" aimpos="30,-3" handle1="-30,-17" handle2="70,-4" holdangle="-40" msg="ItemMsgPickUpSelect" />
+      <GreaterComponent TimeFrame="0" MaxOutputLength="0" />
+      <Wearable slots="Bag" msg="ItemMsgEquipSelect" canbeselected="false" canbepicked="true" pickkey="Select">
+        <sprite name="Riot Shotgun Worn" texture="%ModDir%/Content/Items/Weapons/RiotShotgun/Sprites/riot_shotgun.png" canbehiddenbyotherwearables="false" rotation="90" depth="0.6" sourcerect="0,0,260,52" limb="Torso" depthlimb="LeftArm" scale="0.4" origin="0.5,1" />
+      </Wearable>
+      <RangedWeapon barrelpos="100,5" spread="0.1" unskilledspread="3" combatPriority="80" reload="1" drawhudwhenequipped="true" crosshairscale="0.2">
+        <Crosshair texture="%ModDir%/Content/Items/Weapons/Shared/crosshairs.png" sourcerect="256,512,256,256" />
+        <CrosshairPointer texture="%ModDir%/Content/Items/Weapons/Shared/crosshairs.png" sourcerect="0,512,256,256" />
+        <ParticleEmitter particle="largemuzzleflash" particleamount="1" />
+        <ParticleEmitter particle="muzzlelight" particleamount="1" scalemultiplier="6,4" colormultiplier="255,255,100,175" CopyEntityAngle="true" />
+        <ParticleEmitter particle="muzzlelight" particleamount="1" scalemultiplier="16,12" colormultiplier="215,215,215,100" CopyEntityAngle="true" />
+        <ParticleEmitter particle="largegunsmoke" particleamount="1" />
+        <ParticleEmitter particle="underwatermuzzle" particleamount="1" velocitymin="0" velocitymax="0" scalemultiplier="2.5,2.5" />
+        <ParticleEmitter particle="muzzlebubbles" particleamount="6" anglemin="30" anglemax="80" velocitymin="20" velocitymax="50" />
+        <ParticleEmitter particle="gunbubbles" particleamount="12" anglemin="170" anglemax="180" velocitymin="10" velocitymax="20" distancemin="0" distancemax="90" />
+        <Sound file="%ModDir%/Content/Items/Weapons/RiotShotgun/Sounds/shotgun_2.ogg" type="OnUse" range="3000" volume="2.5" />
+        <StatusEffect type="OnUse" targetitemcomponent="LightComponent" target="This" lightcolor="255,255,75,255" setvalue="true" />
+        <StatusEffect type="OnUse" targetitemcomponent="LightComponent" target="This" lightcolor="255,255,75,0" setvalue="true" delay="0.115" />
+        <StatusEffect type="OnUse" target="This">
+          <Conditional targetcontainer="true" skillrequirement="true" weapons="lt 50" />
+          <Explosion range="50.0" force="5" shockwave="false" smoke="false" flash="true" sparks="true" flames="false" underwaterbubble="false" camerashake="45.0" />
+        </StatusEffect>
+        <StatusEffect type="OnUse" target="This">
+          <Conditional targetcontainer="true" skillrequirement="true" weapons="gte 50" />
+          <Explosion range="150.0" force="2.5" shockwave="false" smoke="false" flash="true" sparks="true" flames="false" underwaterbubble="false" camerashake="25.0" />
+        </StatusEffect>
+        <StatusEffect Type="Always" OneShot="True" target="This" isshootable="True" holdpos="45,-15" aimpos="30,-3" handle1="-30,-17" handle2="70,-4" holdangle="-40" aimangle="0" condition="100" MaxOutputLength="0" setvalue="true" />
+        <StatusEffect type="Always" OneShot="True" targetitemcomponent="LightComponent" target="This" lightcolor="255,255,75,0" setvalue="true" />
+        <StatusEffect type="Always" OneShot="True" target="Contained" targetidentifiers="shotgunammo" NonInteractable="false" setvalue="true" />
+        <RequiredItems items="shotgunammo" type="Contained" msg="ItemMsgAmmoRequired" />
+        <RequiredSkill identifier="weapons" level="50" />
+      </RangedWeapon>
+      <LightComponent range="49.0" lightcolor="255,255,75,0" IsOn="true">
+        <LightTexture texture="%ModDir%/Content/Items/Weapons/RiotShotgun/Sprites/riot_shotgun_muzzle.png" origin="0.46,0.565" size="1.0,1.0" />
+      </LightComponent>
+      <ItemContainer capacity="1" maxstacksize="6" hideitems="false" containedstateindicatorslot="0" containedstateindicatorstyle="bullet" containedspritedepth="0.56">
+        <Containable items="shotgunammo" hide="true" ExcludeBroken="false">
+          <StatusEffect type="OnInserted" target="This" MaxOutputLength="1" disabledeltatime="true" />
+          <StatusEffect type="OnInserted" target="This" isshootable="False" Condition="0" setvalue="true" comparison="and" allowwhenbroken="true" />
+          <StatusEffect type="OnInserted" target="This" noninteractable="True" delay="0.01" setvalue="true" comparison="and" allowwhenbroken="true" />
+          <StatusEffect type="OnInserted" target="This" holdpos="25,-10" aimpos="20,-10" holdangle="-15" aimangle="-15" setvalue="true" comparison="and" allowwhenbroken="true" checkconditionalalways="true" />
+          <StatusEffect type="OnInserted" target="This" handle2="5,-17" delay="0.2" setvalue="true" comparison="and" allowwhenbroken="true" checkconditionalalways="true">
+            <Sound file="%ModDir%/Content/Items/Weapons/RiotShotgun/Sounds/winchester_1300_reload_start.ogg" type="OnUse" range="500" volume="3" />
+            <Conditional MaxOutputLength="gt 0" />
+          </StatusEffect>
+          <StatusEffect type="OnInserted" target="This" handle2="-3,-25" delay="0.6" setvalue="true" comparison="and" allowwhenbroken="true" checkconditionalalways="true">
+            <Sound file="%ModDir%/Content/Items/Weapons/RiotShotgun/Sounds/winchester_1300_reload_ammo.ogg" type="OnUse" range="500" volume="3" />
+            <Conditional MaxOutputLength="gt 0" />
+          </StatusEffect>
+          <StatusEffect type="OnInserted" target="This" Condition="100" noninteractable="False" MaxOutputLength="0" isshootable="True" holdpos="45,-15" aimpos="30,-3" handle1="-30,-17" handle2="70,-4" holdangle="-40" aimangle="0" delay="0.9" setvalue="true" comparison="and" allowwhenbroken="true" checkconditionalalways="true">
+            <Conditional MaxOutputLength="1" />
+          </StatusEffect>
+          <StatusEffect type="OnInserted" target="This" handle2="6,-17" delay="0.9" setvalue="true" comparison="and" allowwhenbroken="true" checkconditionalalways="true">
+            <Conditional MaxOutputLength="gt 1" />
+          </StatusEffect>
+          <StatusEffect type="OnInserted" target="This" handle2="-3,-25" delay="1.2" setvalue="true" comparison="and" allowwhenbroken="true" checkconditionalalways="true">
+            <Sound file="%ModDir%/Content/Items/Weapons/RiotShotgun/Sounds/winchester_1300_reload_ammo.ogg" type="OnUse" range="500" volume="3" />
+            <Conditional MaxOutputLength="gt 1" />
+          </StatusEffect>
+          <StatusEffect type="OnInserted" target="This" Condition="100" noninteractable="False" MaxOutputLength="0" isshootable="True" holdpos="45,-15" aimpos="30,-3" handle1="-30,-17" handle2="70,-4" holdangle="-40" aimangle="0" delay="1.5" setvalue="true" comparison="and" allowwhenbroken="true" checkconditionalalways="true">
+            <Conditional MaxOutputLength="2" />
+          </StatusEffect>
+          <StatusEffect type="OnInserted" target="This" handle2="6,-17" delay="1.5" setvalue="true" comparison="and" allowwhenbroken="true" checkconditionalalways="true">
+            <Conditional MaxOutputLength="gt 2" />
+          </StatusEffect>
+          <StatusEffect type="OnInserted" target="This" handle2="-3,-25" delay="1.8" setvalue="true" comparison="and" allowwhenbroken="true" checkconditionalalways="true">
+            <Sound file="%ModDir%/Content/Items/Weapons/RiotShotgun/Sounds/winchester_1300_reload_ammo.ogg" type="OnUse" range="500" volume="3" />
+            <Conditional MaxOutputLength="gt 2" />
+          </StatusEffect>
+          <StatusEffect type="OnInserted" target="This" Condition="100" noninteractable="False" MaxOutputLength="0" isshootable="True" holdpos="45,-15" aimpos="30,-3" handle1="-30,-17" handle2="70,-4" holdangle="-40" aimangle="0" delay="2.1" setvalue="true" comparison="and" allowwhenbroken="true" checkconditionalalways="true">
+            <Conditional MaxOutputLength="3" />
+          </StatusEffect>
+          <StatusEffect type="OnInserted" target="This" handle2="6,-17" delay="2.1" setvalue="true" comparison="and" allowwhenbroken="true" checkconditionalalways="true">
+            <Conditional MaxOutputLength="gt 3" />
+          </StatusEffect>
+          <StatusEffect type="OnInserted" target="This" handle2="-3,-25" delay="2.4" setvalue="true" comparison="and" allowwhenbroken="true" checkconditionalalways="true">
+            <Sound file="%ModDir%/Content/Items/Weapons/RiotShotgun/Sounds/winchester_1300_reload_ammo.ogg" type="OnUse" range="500" volume="3" />
+            <Conditional MaxOutputLength="gt 3" />
+          </StatusEffect>
+          <StatusEffect type="OnInserted" target="This" Condition="100" noninteractable="False" MaxOutputLength="0" isshootable="True" holdpos="45,-15" aimpos="30,-3" handle1="-30,-17" handle2="70,-4" holdangle="-40" aimangle="0" delay="2.7" setvalue="true" comparison="and" allowwhenbroken="true" checkconditionalalways="true">
+            <Conditional MaxOutputLength="4" />
+          </StatusEffect>
+          <StatusEffect type="OnInserted" target="This" handle2="6,-17" delay="2.7" setvalue="true" comparison="and" allowwhenbroken="true" checkconditionalalways="true">
+            <Conditional MaxOutputLength="gt 4" />
+          </StatusEffect>
+          <StatusEffect type="OnInserted" target="This" handle2="-3,-25" delay="3.0" setvalue="true" comparison="and" allowwhenbroken="true" checkconditionalalways="true">
+            <Sound file="%ModDir%/Content/Items/Weapons/RiotShotgun/Sounds/winchester_1300_reload_ammo.ogg" type="OnUse" range="500" volume="3" />
+            <Conditional MaxOutputLength="gt 4" />
+          </StatusEffect>
+          <StatusEffect type="OnInserted" target="This" Condition="100" noninteractable="False" MaxOutputLength="0" isshootable="True" holdpos="45,-15" aimpos="30,-3" handle1="-30,-17" handle2="70,-4" holdangle="-40" aimangle="0" delay="3.3" setvalue="true" comparison="and" allowwhenbroken="true" checkconditionalalways="true">
+            <Conditional MaxOutputLength="5" />
+          </StatusEffect>
+          <StatusEffect type="OnInserted" target="This" handle2="6,-17" delay="3.3" setvalue="true" comparison="and" allowwhenbroken="true" checkconditionalalways="true">
+            <Conditional MaxOutputLength="gt 5" />
+          </StatusEffect>
+          <StatusEffect type="OnInserted" target="This" handle2="-3,-25" delay="3.6" setvalue="true" comparison="and" allowwhenbroken="true" checkconditionalalways="true">
+            <Sound file="%ModDir%/Content/Items/Weapons/RiotShotgun/Sounds/winchester_1300_reload_ammo.ogg" type="OnUse" range="500" volume="3" />
+            <Conditional MaxOutputLength="6" />
+          </StatusEffect>
+          <StatusEffect type="OnInserted" target="This" handle2="50,-7" delay="3.9" setvalue="true" comparison="and" allowwhenbroken="true" checkconditionalalways="true">
+            <Sound file="%ModDir%/Content/Items/Weapons/RiotShotgun/Sounds/winchester_1300_reload_empty_start.ogg" type="OnUse" range="500" volume="3" />
+            <Conditional MaxOutputLength="6" />
+          </StatusEffect>
+          <StatusEffect type="OnInserted" target="This" Condition="100" noninteractable="False" MaxOutputLength="0" isshootable="True" holdpos="45,-15" aimpos="30,-3" handle1="-30,-17" handle2="70,-4" holdangle="-40" aimangle="0" delay="4.2" setvalue="true" comparison="and" allowwhenbroken="true" checkconditionalalways="true">
+            <Conditional MaxOutputLength="6" />
+          </StatusEffect>
+        </Containable>
+        <SlotIcon slotindex="0" texture="Content/UI/StatusMonitorUI.png" sourcerect="256,448,64,64" origin="0.5,0.5" />
+        <SlotIcon slotindex="1" texture="Content/UI/StatusMonitorUI.png" sourcerect="320,448,64,64" origin="0.5,0.5" />
+        <SlotIcon slotindex="2" texture="Content/UI/StatusMonitorUI.png" sourcerect="320,448,64,64" origin="0.5,0.5" />
+        <SlotIcon slotindex="3" texture="Content/UI/StatusMonitorUI.png" sourcerect="320,448,64,64" origin="0.5,0.5" />
+        <SlotIcon slotindex="4" texture="Content/UI/StatusMonitorUI.png" sourcerect="320,448,64,64" origin="0.5,0.5" />
+        <SubContainer capacity="1" maxstacksize="1">
+          <Containable items="flashlight" hide="false" itempos="20,4" setactive="true" />
+        </SubContainer>
+        <SubContainer capacity="1" maxstacksize="1">
+          <Containable items="flashlight" hide="false" itempos="40,0" setactive="true" />
+        </SubContainer>
+        <SubContainer capacity="1" maxstacksize="1">
+          <Containable items="flashlight" hide="false" itempos="40,-6" setactive="true" />
+        </SubContainer>
+        <SubContainer capacity="1" maxstacksize="1">
+          <Containable items="flashlight" hide="false" itempos="20,-8" setactive="true" />
+        </SubContainer>
+      </ItemContainer>
+      <aitarget sightrange="3000" soundrange="5000" fadeouttime="5" />
+      <Quality>
+        <QualityStat stattype="FirepowerMultiplier" value="0.1" />
+      </Quality>
+      <Upgrade gameversion="0.10.0.0" scale="0.5" />
+      <SkillRequirementHint identifier="weapons" level="50" />
+    </Item>
+</Items>

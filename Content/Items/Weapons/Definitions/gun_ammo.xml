@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Items>
+  <Item name="" identifier="sigmcxmagazine" maxstacksize="8" maxstacksizecharacterinventory="2" scale="0.5" category="Weapon" allowasextracargo="true" cargocontaineridentifier="metalcrate" linkable="true" tags="smallitem,sigmcxammo,handheldammo" impactsoundtag="impact_metal_light">
+    <PreferredContainer primary="sigmcx" minamount="1" maxamount="1" spawnprobability="1" />
+    <PreferredContainer primary="armcab" secondary="secarmcab" />
+    <Price baseprice="300" sold="false" minleveldifficulty="60" displaynonempty="true">
+      <Price storeidentifier="merchantoutpost" multiplier="1.4" />
+      <Price storeidentifier="merchantcity" multiplier="1.25" />
+      <Price storeidentifier="merchantresearch" multiplier="1.25" />
+      <Price storeidentifier="merchantmilitary" sold="true" multiplier="0.9" minavailable="0" maxavailable="4" />
+      <Price storeidentifier="merchantmine" multiplier="1.25" />
+    </Price>
+    <Fabricate suitablefabricators="fabricator" requiredtime="35" requiresrecipe="true">
+      <RequiredSkill identifier="weapons" level="40" />
+      <RequiredItem identifier="magnesium" />
+      <RequiredItem tag="advmunition_tip" description="fabricationdescription.advmunition_tip" />
+      <RequiredItem tag="advmunition_core" description="fabricationdescription.advmunition_core" />
+      <RequiredItem tag="advmunition_jacket" description="fabricationdescription.advmunition_jacket" />
+      <RequiredItem identifier="steel" />
+    </Fabricate>
+    <Fabricate suitablefabricators="fabricator" requiredtime="35" displayname="recycleitem" requiresrecipe="true">
+      <RequiredSkill identifier="weapons" level="40" />
+      <RequiredItem identifier="magnesium" />
+      <RequiredItem tag="advmunition_tip" description="fabricationdescription.advmunition_tip" />
+      <RequiredItem tag="advmunition_core" description="fabricationdescription.advmunition_core" />
+      <RequiredItem tag="advmunition_jacket" description="fabricationdescription.advmunition_jacket" />
+      <RequiredItem identifier="sigmcxmagazine" mincondition="0.0" maxcondition="0.1" usecondition="false" />
+    </Fabricate>
+    <Deconstruct time="15">
+      <Item identifier="steel" />
+    </Deconstruct>
+    <InventoryIcon texture="%ModDir%/Content/Items/Weapons/Shared/ammunition.png" sourcerect="245,64,64,64" origin="0.5,0.5" />
+    <Sprite texture="%ModDir%/Content/Items/Weapons/Shared/ammunition.png" depth="0.54" sourcerect="16,47,33,47" origin="0.5,0.5" />
+    <BrokenSprite texture="%ModDir%/Content/Items/Weapons/Shared/ammunition.png" depth="0.54" sourcerect="49,47,33,47" origin="0.5,0.5" maxcondition="67" />
+    <BrokenSprite texture="%ModDir%/Content/Items/Weapons/Shared/ammunition.png" depth="0.54" sourcerect="82,47,33,47" origin="0.5,0.5" maxcondition="60" />
+    <BrokenSprite texture="%ModDir%/Content/Items/Weapons/Shared/ammunition.png" depth="0.54" sourcerect="115,47,33,47" origin="0.5,0.5" maxcondition="53" />
+    <BrokenSprite texture="%ModDir%/Content/Items/Weapons/Shared/ammunition.png" depth="0.54" sourcerect="148,47,33,47" origin="0.5,0.5" maxcondition="47" />
+    <BrokenSprite texture="%ModDir%/Content/Items/Weapons/Shared/ammunition.png" depth="0.54" sourcerect="181,47,33,47" origin="0.5,0.5" maxcondition="40" />
+    <BrokenSprite texture="%ModDir%/Content/Items/Weapons/Shared/ammunition.png" depth="0.54" sourcerect="16,95,33,47" origin="0.5,0.5" maxcondition="34" />
+    <BrokenSprite texture="%ModDir%/Content/Items/Weapons/Shared/ammunition.png" depth="0.54" sourcerect="49,95,33,47" origin="0.5,0.5" maxcondition="27" />
+    <BrokenSprite texture="%ModDir%/Content/Items/Weapons/Shared/ammunition.png" depth="0.54" sourcerect="82,95,33,47" origin="0.5,0.5" maxcondition="20" />
+    <BrokenSprite texture="%ModDir%/Content/Items/Weapons/Shared/ammunition.png" depth="0.54" sourcerect="115,95,33,47" origin="0.5,0.5" maxcondition="14" />
+    <BrokenSprite texture="%ModDir%/Content/Items/Weapons/Shared/ammunition.png" depth="0.54" sourcerect="148,95,33,47" origin="0.5,0.5" maxcondition="7" />
+    <BrokenSprite texture="%ModDir%/Content/Items/Weapons/Shared/ammunition.png" depth="0.54" sourcerect="181,95,33,47" origin="0.5,0.5" maxcondition="1" />
+    <Body width="28" height="40" density="25" />
+    <ItemContainer hideitems="true" capacity="1" drawinventory="false" canbeselected="false" ShowConditionInContainedStateIndicator="true" SpawnWithId="sigmcxround" removecontaineditemsondeconstruct="true" containedstateindicatorstyle="bullet">
+      <Containable items="sigmcxround" />
+      <StatusEffect type="OnUse" target="This" condition="-3.3" disabledeltatime="true">
+        <SpawnItem identifiers="sigmcxround" spawnposition="ThisInventory" />
+      </StatusEffect>
+    </ItemContainer>
+    <Holdable canBeCombined="true" slots="Any,RightHand,LeftHand" handle1="0,0" msg="ItemMsgPickUpSelect" />
+  </Item>
+  <Item name="sigmcxround" identifier="sigmcxround" category="Weapon" interactthroughwalls="true" cargocontaineridentifier="metalcrate" tags="smallitem,riflemanbonus" impactsoundtag="impact_metal_light" hideinmenus="true" scale="0.5">
+    <InventoryIcon texture="Content/Items/InventoryIconAtlas.png" sourcerect="896,960,64,64" origin="0.5,0.5" />
+    <Sprite texture="Content/Items/Weapons/weapons_new.png" sourcerect="195,282,17,6" depth="0.55" origin="0.5,0.5" />
+    <Body width="40" height="14" density="30" />
+    <Pickable slots="Any" msg="ItemMsgPickUpSelect" />
+    <Projectile characterusable="false" hitscan="true" removeonhit="true">
+      <ParticleEmitter particle="tracerfirearm" particleamount="1" scalemultiplier="1,0.8" />
+      <Attack structuredamage="1.0" targetforce="2" itemdamage="1" severlimbsprobability="0.06" penetration="0.08">
+        <Affliction identifier="bleeding" strength="8" />
+        <Affliction identifier="bleeding" strength="6" probability="0.33" />
+        <Affliction identifier="gunshotwound" strength="16" />
+        <Affliction identifier="stun" strength="0.08" probability="0.1" />
+      </Attack>
+      <StatusEffect type="OnImpact" target="UseTarget">
+        <ParticleEmitter particle="impactfirearm" particleamount="1" velocitymin="0" velocitymax="0" scalemultiplier="2,2" />
+      </StatusEffect>
+      <StatusEffect type="OnImpact" target="UseTarget">
+        <Conditional entitytype="eq Structure" />
+        <Conditional hastag="eq door" />
+        <ParticleEmitter particle="spark" copyentityangle="true" anglemin="-10" anglemax="10" particleamount="5" velocitymin="-10" velocitymax="-200" scalemin="0.5" scalemax="1" />
+      </StatusEffect>
+    </Projectile>
+  </Item>
+  <Item name="" identifier="scarriflemagazine" maxstacksize="2" maxstacksizecharacterinventory="2" scale="0.5" category="Weapon" allowasextracargo="true" cargocontaineridentifier="metalcrate" linkable="true" tags="smallitem,scarrifleammo,handheldammo" impactsoundtag="impact_metal_light">
+    <PreferredContainer primary="scarrifle" minamount="1" maxamount="1" spawnprobability="1" />
+    <PreferredContainer primary="armcab" secondary="secarmcab" />
+    <Price baseprice="300" sold="false" minleveldifficulty="60" displaynonempty="true">
+      <Price storeidentifier="merchantoutpost" multiplier="1.4" />
+      <Price storeidentifier="merchantcity" multiplier="1.25" />
+      <Price storeidentifier="merchantresearch" multiplier="1.25" />
+      <Price storeidentifier="merchantmilitary" sold="true" multiplier="0.9" minavailable="0" maxavailable="4" />
+      <Price storeidentifier="merchantmine" multiplier="1.25" />
+    </Price>
+    <Fabricate suitablefabricators="fabricator" requiredtime="35" requiresrecipe="true">
+      <RequiredSkill identifier="weapons" level="40" />
+      <RequiredItem identifier="magnesium" />
+      <RequiredItem tag="advmunition_tip" description="fabricationdescription.advmunition_tip" />
+      <RequiredItem tag="advmunition_core" description="fabricationdescription.advmunition_core" />
+      <RequiredItem tag="advmunition_jacket" description="fabricationdescription.advmunition_jacket" />
+      <RequiredItem identifier="steel" />
+    </Fabricate>
+    <Fabricate suitablefabricators="fabricator" requiredtime="35" displayname="recycleitem" requiresrecipe="true">
+      <RequiredSkill identifier="weapons" level="40" />
+      <RequiredItem identifier="magnesium" />
+      <RequiredItem tag="advmunition_tip" description="fabricationdescription.advmunition_tip" />
+      <RequiredItem tag="advmunition_core" description="fabricationdescription.advmunition_core" />
+      <RequiredItem tag="advmunition_jacket" description="fabricationdescription.advmunition_jacket" />
+      <RequiredItem identifier="scarriflemagazine" mincondition="0.0" maxcondition="0.1" usecondition="false" />
+    </Fabricate>
+    <Deconstruct time="15">
+      <Item identifier="steel" />
+    </Deconstruct>
+    <InventoryIcon texture="%ModDir%/Content/Items/Weapons/Shared/ammunition.png" sourcerect="245,64,64,64" origin="0.5,0.5" />
+    <Sprite texture="%ModDir%/Content/Items/Weapons/Shared/ammunition.png" depth="0.54" sourcerect="16,47,33,47" origin="0.5,0.5" />
+    <BrokenSprite texture="%ModDir%/Content/Items/Weapons/Shared/ammunition.png" depth="0.54" sourcerect="49,47,33,47" origin="0.5,0.5" maxcondition="67" />
+    <BrokenSprite texture="%ModDir%/Content/Items/Weapons/Shared/ammunition.png" depth="0.54" sourcerect="82,47,33,47" origin="0.5,0.5" maxcondition="60" />
+    <BrokenSprite texture="%ModDir%/Content/Items/Weapons/Shared/ammunition.png" depth="0.54" sourcerect="115,47,33,47" origin="0.5,0.5" maxcondition="53" />
+    <BrokenSprite texture="%ModDir%/Content/Items/Weapons/Shared/ammunition.png" depth="0.54" sourcerect="148,47,33,47" origin="0.5,0.5" maxcondition="47" />
+    <BrokenSprite texture="%ModDir%/Content/Items/Weapons/Shared/ammunition.png" depth="0.54" sourcerect="181,47,33,47" origin="0.5,0.5" maxcondition="40" />
+    <BrokenSprite texture="%ModDir%/Content/Items/Weapons/Shared/ammunition.png" depth="0.54" sourcerect="16,95,33,47" origin="0.5,0.5" maxcondition="34" />
+    <BrokenSprite texture="%ModDir%/Content/Items/Weapons/Shared/ammunition.png" depth="0.54" sourcerect="49,95,33,47" origin="0.5,0.5" maxcondition="27" />
+    <BrokenSprite texture="%ModDir%/Content/Items/Weapons/Shared/ammunition.png" depth="0.54" sourcerect="82,95,33,47" origin="0.5,0.5" maxcondition="20" />
+    <BrokenSprite texture="%ModDir%/Content/Items/Weapons/Shared/ammunition.png" depth="0.54" sourcerect="115,95,33,47" origin="0.5,0.5" maxcondition="14" />
+    <BrokenSprite texture="%ModDir%/Content/Items/Weapons/Shared/ammunition.png" depth="0.54" sourcerect="148,95,33,47" origin="0.5,0.5" maxcondition="7" />
+    <BrokenSprite texture="%ModDir%/Content/Items/Weapons/Shared/ammunition.png" depth="0.54" sourcerect="181,95,33,47" origin="0.5,0.5" maxcondition="1" />
+    <Body width="28" height="40" density="25" />
+    <ItemContainer hideitems="true" capacity="1" drawinventory="false" canbeselected="false" ShowConditionInContainedStateIndicator="true" SpawnWithId="scarrifleround" removecontaineditemsondeconstruct="true" containedstateindicatorstyle="bullet">
+      <Containable items="scarrifleround" />
+      <StatusEffect type="OnUse" target="This" condition="-5" disabledeltatime="true">
+        <SpawnItem identifiers="scarrifleround" spawnposition="ThisInventory" />
+      </StatusEffect>
+    </ItemContainer>
+    <Holdable canBeCombined="true" slots="Any,RightHand,LeftHand" handle1="0,0" msg="ItemMsgPickUpSelect" />
+  </Item>
+  <Item name="scarrifleround" identifier="scarrifleround" category="Weapon" interactthroughwalls="true" cargocontaineridentifier="metalcrate" tags="smallitem,riflemanbonus" impactsoundtag="impact_metal_light" hideinmenus="true" scale="0.5">
+    <InventoryIcon texture="Content/Items/InventoryIconAtlas.png" sourcerect="896,960,64,64" origin="0.5,0.5" />
+    <Sprite texture="Content/Items/Weapons/weapons_new.png" sourcerect="195,282,17,6" depth="0.55" origin="0.5,0.5" />
+    <Body width="40" height="14" density="30" />
+    <Pickable slots="Any" msg="ItemMsgPickUpSelect" />
+    <Projectile characterusable="false" hitscan="true" removeonhit="true">
+      <ParticleEmitter particle="tracerfirearm" particleamount="1" scalemultiplier="1,0.8" />
+      <Attack structuredamage="1.5" targetforce="5" itemdamage="4" severlimbsprobability="0.22" penetration="0.22">
+        <Affliction identifier="bleeding" strength="18" />
+        <Affliction identifier="bleeding" strength="8" probability="0.33" />
+        <Affliction identifier="gunshotwound" strength="26" />
+        <Affliction identifier="stun" strength="0.1" probability="0.15" />
+      </Attack>
+      <StatusEffect type="OnImpact" target="UseTarget">
+        <ParticleEmitter particle="impactfirearm" particleamount="1" velocitymin="0" velocitymax="0" scalemultiplier="2,2" />
+      </StatusEffect>
+      <StatusEffect type="OnImpact" target="UseTarget">
+        <Conditional entitytype="eq Structure" />
+        <Conditional hastag="eq door" />
+        <ParticleEmitter particle="spark" copyentityangle="true" anglemin="-10" anglemax="10" particleamount="5" velocitymin="-10" velocitymax="-200" scalemin="0.5" scalemax="1" />
+      </StatusEffect>
+    </Projectile>
+  </Item>
+  <Item name="" identifier="fnfalriflemagazine" maxstacksize="2" maxstacksizecharacterinventory="2" scale="0.5" category="Weapon" allowasextracargo="true" cargocontaineridentifier="metalcrate" linkable="true" tags="smallitem,fnfalrifleammo,handheldammo" impactsoundtag="impact_metal_light">
+    <PreferredContainer primary="fnfalrifle" minamount="1" maxamount="1" spawnprobability="1" />
+    <PreferredContainer primary="armcab" secondary="secarmcab" />
+    <Price baseprice="300" sold="false" minleveldifficulty="60" displaynonempty="true">
+      <Price storeidentifier="merchantoutpost" multiplier="1.4" />
+      <Price storeidentifier="merchantcity" multiplier="1.25" />
+      <Price storeidentifier="merchantresearch" multiplier="1.25" />
+      <Price storeidentifier="merchantmilitary" sold="true" multiplier="0.9" minavailable="0" maxavailable="4" />
+      <Price storeidentifier="merchantmine" multiplier="1.25" />
+    </Price>
+    <Fabricate suitablefabricators="fabricator" requiredtime="35" requiresrecipe="true">
+      <RequiredSkill identifier="weapons" level="40" />
+      <RequiredItem identifier="magnesium" />
+      <RequiredItem tag="advmunition_tip" description="fabricationdescription.advmunition_tip" />
+      <RequiredItem tag="advmunition_core" description="fabricationdescription.advmunition_core" />
+      <RequiredItem tag="advmunition_jacket" description="fabricationdescription.advmunition_jacket" />
+      <RequiredItem identifier="steel" />
+    </Fabricate>
+    <Fabricate suitablefabricators="fabricator" requiredtime="35" displayname="recycleitem" requiresrecipe="true">
+      <RequiredSkill identifier="weapons" level="40" />
+      <RequiredItem identifier="magnesium" />
+      <RequiredItem tag="advmunition_tip" description="fabricationdescription.advmunition_tip" />
+      <RequiredItem tag="advmunition_core" description="fabricationdescription.advmunition_core" />
+      <RequiredItem tag="advmunition_jacket" description="fabricationdescription.advmunition_jacket" />
+      <RequiredItem identifier="fnfalriflemagazine" mincondition="0.0" maxcondition="0.1" usecondition="false" />
+    </Fabricate>
+    <Deconstruct time="15">
+      <Item identifier="steel" />
+    </Deconstruct>
+    <InventoryIcon texture="%ModDir%/Content/Items/Weapons/Shared/ammunition.png" sourcerect="245,64,64,64" origin="0.5,0.5" />
+    <Sprite texture="%ModDir%/Content/Items/Weapons/Shared/ammunition.png" depth="0.54" sourcerect="16,47,33,47" origin="0.5,0.5" />
+    <BrokenSprite texture="%ModDir%/Content/Items/Weapons/Shared/ammunition.png" depth="0.54" sourcerect="49,47,33,47" origin="0.5,0.5" maxcondition="67" />
+    <BrokenSprite texture="%ModDir%/Content/Items/Weapons/Shared/ammunition.png" depth="0.54" sourcerect="82,47,33,47" origin="0.5,0.5" maxcondition="60" />
+    <BrokenSprite texture="%ModDir%/Content/Items/Weapons/Shared/ammunition.png" depth="0.54" sourcerect="115,47,33,47" origin="0.5,0.5" maxcondition="53" />
+    <BrokenSprite texture="%ModDir%/Content/Items/Weapons/Shared/ammunition.png" depth="0.54" sourcerect="148,47,33,47" origin="0.5,0.5" maxcondition="47" />
+    <BrokenSprite texture="%ModDir%/Content/Items/Weapons/Shared/ammunition.png" depth="0.54" sourcerect="181,47,33,47" origin="0.5,0.5" maxcondition="40" />
+    <BrokenSprite texture="%ModDir%/Content/Items/Weapons/Shared/ammunition.png" depth="0.54" sourcerect="16,95,33,47" origin="0.5,0.5" maxcondition="34" />
+    <BrokenSprite texture="%ModDir%/Content/Items/Weapons/Shared/ammunition.png" depth="0.54" sourcerect="49,95,33,47" origin="0.5,0.5" maxcondition="27" />
+    <BrokenSprite texture="%ModDir%/Content/Items/Weapons/Shared/ammunition.png" depth="0.54" sourcerect="82,95,33,47" origin="0.5,0.5" maxcondition="20" />
+    <BrokenSprite texture="%ModDir%/Content/Items/Weapons/Shared/ammunition.png" depth="0.54" sourcerect="115,95,33,47" origin="0.5,0.5" maxcondition="14" />
+    <BrokenSprite texture="%ModDir%/Content/Items/Weapons/Shared/ammunition.png" depth="0.54" sourcerect="148,95,33,47" origin="0.5,0.5" maxcondition="7" />
+    <BrokenSprite texture="%ModDir%/Content/Items/Weapons/Shared/ammunition.png" depth="0.54" sourcerect="181,95,33,47" origin="0.5,0.5" maxcondition="1" />
+    <Body width="28" height="40" density="25" />
+    <ItemContainer hideitems="true" capacity="1" drawinventory="false" canbeselected="false" ShowConditionInContainedStateIndicator="true" SpawnWithId="fnfalrifleround" removecontaineditemsondeconstruct="true" containedstateindicatorstyle="bullet">
+      <Containable items="fnfalrifleround" />
+      <StatusEffect type="OnUse" target="This" condition="-5" disabledeltatime="true">
+        <SpawnItem identifiers="fnfalrifleround" spawnposition="ThisInventory" />
+      </StatusEffect>
+    </ItemContainer>
+    <Holdable canBeCombined="true" slots="Any,RightHand,LeftHand" handle1="0,0" msg="ItemMsgPickUpSelect" />
+  </Item>
+  <Item name="fnfalrifleround" identifier="fnfalrifleround" category="Weapon" interactthroughwalls="true" cargocontaineridentifier="metalcrate" tags="smallitem,riflemanbonus" impactsoundtag="impact_metal_light" hideinmenus="true" scale="0.5">
+    <InventoryIcon texture="Content/Items/InventoryIconAtlas.png" sourcerect="896,960,64,64" origin="0.5,0.5" />
+    <Sprite texture="Content/Items/Weapons/weapons_new.png" sourcerect="195,282,17,6" depth="0.55" origin="0.5,0.5" />
+    <Body width="40" height="14" density="30" />
+    <Pickable slots="Any" msg="ItemMsgPickUpSelect" />
+    <Projectile characterusable="false" hitscan="true" removeonhit="true">
+      <ParticleEmitter particle="tracerfirearm" particleamount="1" scalemultiplier="1,0.8" />
+      <Attack structuredamage="2.0" targetforce="7" itemdamage="6" severlimbsprobability="0.30" penetration="0.28">
+        <Affliction identifier="bleeding" strength="22" />
+        <Affliction identifier="bleeding" strength="10" probability="0.33" />
+        <Affliction identifier="gunshotwound" strength="30" />
+        <Affliction identifier="stun" strength="0.12" probability="0.15" />
+      </Attack>
+      <StatusEffect type="OnImpact" target="UseTarget">
+        <ParticleEmitter particle="impactfirearm" particleamount="1" velocitymin="0" velocitymax="0" scalemultiplier="2,2" />
+      </StatusEffect>
+      <StatusEffect type="OnImpact" target="UseTarget">
+        <Conditional entitytype="eq Structure" />
+        <Conditional hastag="eq door" />
+        <ParticleEmitter particle="spark" copyentityangle="true" anglemin="-10" anglemax="10" particleamount="5" velocitymin="-10" velocitymax="-200" scalemin="0.5" scalemax="1" />
+      </StatusEffect>
+    </Projectile>
+  </Item>
+</Items>

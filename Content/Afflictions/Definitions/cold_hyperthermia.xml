@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Afflictions>
+  <Affliction identifier="pp_hyperthermia" type="pp_heat" limbspecific="false" indicatorlimb="Torso"
+              targets="human" isbuff="false" healableinmedicalclinic="true" maxstrength="100"
+              showiconthreshold="3" showicontoothersthreshold="12" showinhealthscannerthreshold="3"
+              treatmentthreshold="8" karmachangeonapplied="0"
+              causeofdeathdescription="pp_heat.causeofdeath" selfcauseofdeathdescription="pp_heat.selfcauseofdeath"
+              iconcolors="220,190,150,255;215,165,110,255;200,135,80,255;175,95,50,255">
+    <Effect minstrength="0" maxstrength="25" strengthchange="0"
+            minvitalitydecrease="0" maxvitalitydecrease="0"
+            minspeedmultiplier="1.0" maxspeedmultiplier="0.96" />
+    <Effect minstrength="25" maxstrength="50" strengthchange="0"
+            minvitalitydecrease="0" maxvitalitydecrease="6"
+            minspeedmultiplier="0.96" maxspeedmultiplier="0.88"
+            minskillmultiplier="1.0" maxskillmultiplier="0.9" />
+    <Effect minstrength="50" maxstrength="75" strengthchange="0"
+            minvitalitydecrease="6" maxvitalitydecrease="30"
+            minspeedmultiplier="0.88" maxspeedmultiplier="0.75"
+            minskillmultiplier="0.9" maxskillmultiplier="0.72" />
+    <Effect minstrength="75" maxstrength="100" strengthchange="0"
+            minvitalitydecrease="30" maxvitalitydecrease="200"
+            minspeedmultiplier="0.75" maxspeedmultiplier="0.5"
+            minskillmultiplier="0.72" maxskillmultiplier="0.42" />
+    <Description textidentifier="pp_heat.stage1" minstrength="0" maxstrength="25" />
+    <Description textidentifier="pp_heat.stage2" minstrength="25" maxstrength="50" />
+    <Description textidentifier="pp_heat.stage3" minstrength="50" maxstrength="75" />
+    <Description textidentifier="pp_heat.stage4" minstrength="75" maxstrength="100" />
+    <icon texture="%ModDir%/Content/Afflictions/NTThermal/pp_thermal_afflictions.png" sheetelementsize="128,128" sourcerect="521,402,125,127" origin="0,0" />
+  </Affliction>
+</Afflictions>

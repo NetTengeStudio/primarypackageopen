@@ -1,0 +1,168 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Override>
+  <Items>
+    <Item name="" identifier="spb_jus_item" allowstealingalways="true" category="Misc" Tags="smallitem" cargocontaineridentifier="metalcrate" scale="0.5" impactsoundtag="impact_soft">
+      <InventoryIcon name="Корпоративный Закон" texture="Content/Map/Outposts/Art/FactionItems.png" sourcerect="214,200,50,50" origin="0.5,0.5" />
+      <Sprite name="Корпоративный Закон - спрайт" texture="Content/Map/Outposts/Art/FactionItems.png" sourcerect="367,194,12,44" origin="0.5,0.5" depth="0.8" />
+      <Body width="35" height="40" density="8" />
+      <Holdable slots="Any,RightHand,LeftHand" aimable="true" aimpos="45,0" holdpos="35,15" handle1="0,-20" handle2="0,10" msg="ItemMsgPickUpSelect" />
+      <Terminal canbeselected="true" msg="ItemMsgInteractSelect" AllowInGameEditing="false" AutoHideScrollbar="true" readonly="true" autoscrolltobottom="false" linestartsymbol="" marginmultiplier="1.5" drawhudwhenequipped="true">
+        <GuiFrame relativesize="0.5,0.56" anchor="Center" style="spb_jus" hidedragicons="true" />
+      </Terminal>
+    </Item>
+    <Item name="" identifier="PlutonFuel" category="Fuel" Tags="smallitem" maxstacksize="4" allowasextracargo="true" cargocontaineridentifier="metalcrate" health="400" scale="0.45">
+      <Price baseprice="700" sold="false" displaynonempty="true">
+        <Price storeidentifier="merchantcity" multiplier="0.9" />
+        <Price storeidentifier="merchantresearch" multiplier="1.25" />
+      </Price>
+      <Deconstruct time="15">
+        <Item identifier="steel" />
+        <Item identifier="lead" />
+        <Item identifier="plutonmat" />
+      </Deconstruct>
+      <Fabricate suitablefabricators="fabricator" requiredtime="25">
+        <RequiredSkill identifier="electrical" level="65" />
+        <RequiredItem identifier="plutonmat" amount="2" />
+        <RequiredItem identifier="lead" amount="4" />
+        <RequiredItem identifier="steel" />
+      </Fabricate>
+      <Fabricate suitablefabricators="fabricator" displayname="recycleitem" requiredtime="10">
+        <RequiredSkill identifier="electrical" level="70" />
+        <RequiredItem identifier="plutonmat" amount="2" />
+        <RequiredItem identifier="PlutonFuel" mincondition="0.0" maxcondition="0.1" usecondition="false" />
+      </Fabricate>
+      <InventoryIcon texture="Content/Items/InventoryIconAtlas.png" sourcerect="576,64,64,64" origin="0.5,0.5" />
+      <Sprite texture="Content/Items/Tools/tools.png" depth="0.55" sourcerect="410,1,19,68" />
+      <Body radius="6" height="55" density="30" />
+      <Holdable handle1="0,0" slots="Any,RightHand,LeftHand" msg="ItemMsgPickUpSelect">
+        <StatusEffect type="OnActive" target="nearbyItems" range="80" targettags="geigercounter" condition="-0.4" delay="1" interval="5" disabledeltatime="true" />
+        <LightComponent canbeselected="true" lightcolor="43,90,131,150" range="100" alphablend="true" castshadows="false" AllowInGameEditing="false">
+          <LightTexture texture="Content/Lights/pointlight_bounce.png" origin="0.5,0.5" />
+        </LightComponent>
+      </Holdable>
+      <ItemContainer hideitems="true" capacity="1" itemrotation="90" drawinventory="false" canbeselected="false" SpawnWithId="plutonngunbolt" removecontaineditemsondeconstruct="true" showcontainedstateindicator="false">
+        <Containable items="plutonngunbolt" />
+        <StatusEffect type="OnUse" target="This" interval="1" condition="-1000" disabledeltatime="true">
+          <SpawnItem identifiers="plutonngunbolt" spawnposition="ThisInventory" />
+        </StatusEffect>
+      </ItemContainer>
+      <Quality>
+        <QualityStat stattype="Condition" value="0.1" />
+      </Quality>
+    </Item>
+    <Item name="" identifier="fulguriumfuelrodvolatile" category="Fuel" Tags="smallitem,reactorfuel" maxstacksize="8" allowasextracargo="true" cargocontaineridentifier="metalcrate" health="400" scale="0.5">
+      <PreferredContainer primary="reactorcab" />
+      <Price baseprice="400" sold="false" displaynonempty="true">
+        <Price storeidentifier="merchantoutpost" />
+        <Price storeidentifier="merchantcity" multiplier="0.9" />
+        <Price storeidentifier="merchantresearch" multiplier="1.25" />
+        <Price storeidentifier="merchantmilitary" multiplier="1.25" />
+        <Price storeidentifier="merchantmine" multiplier="1.1" />
+      </Price>
+      <Deconstruct time="15">
+        <Item identifier="steel" />
+        <Item identifier="lead" />
+        <Item identifier="fulgurium" mincondition="0.95" />
+        <Item identifier="thorium" mincondition="0.95" />
+      </Deconstruct>
+      <Fabricate suitablefabricators="fabricator" requiredtime="25" requiresrecipe="true">
+        <RequiredSkill identifier="electrical" level="70" />
+        <RequiredItem identifier="steel" />
+        <RequiredItem identifier="lead" amount="2" />
+        <RequiredItem identifier="fulgurium" />
+        <RequiredItem identifier="thorium" />
+      </Fabricate>
+      <Fabricate suitablefabricators="fabricator" displayname="recycleitem" requiredtime="10" requiresrecipe="true">
+        <RequiredSkill identifier="electrical" level="70" />
+        <RequiredItem identifier="fulgurium" />
+        <RequiredItem identifier="thorium" />
+        <RequiredItem identifier="fulguriumfuelrodvolatile" mincondition="0.0" maxcondition="0.1" usecondition="false" />
+      </Fabricate>
+      <InventoryIcon texture="Content/Items/Jobgear/TalentGear.png" sourcerect="67,176,62,61" origin="0.5,0.5" />
+      <Sprite texture="Content/Items/Jobgear/TalentGear.png" depth="0.55" sourcerect="190,60,20,71" origin="0.5,0.5" />
+      <Body radius="6" height="55" density="30" />
+      <LightComponent allowingameediting="false" lightcolor="60,200,150,150" canbeselected="false" range="300.0" ison="true" />
+      <Holdable handle1="0,0" slots="Any,RightHand,LeftHand" msg="ItemMsgPickUpSelect"></Holdable>
+      <ItemContainer hideitems="true" capacity="1" itemrotation="90" drawinventory="false" canbeselected="false" SpawnWithId="nucleargunbolt" removecontaineditemsondeconstruct="true" showcontainedstateindicator="false">
+        <Containable items="nucleargunbolt" />
+        <StatusEffect type="OnUse" target="This" interval="0.5" condition="-20" disabledeltatime="true">
+          <SpawnItem identifiers="nucleargunbolt" spawnposition="ThisInventory" />
+        </StatusEffect>
+      </ItemContainer>
+      <Quality>
+        <QualityStat stattype="Condition" value="0.1" />
+      </Quality>
+    </Item>
+    <Item name="Осколочная мина" identifier="landmine_erc" category="Weapon" health="10" maxstacksize="16" maxstacksizecharacterinventory="4" cargocontaineridentifier="explosivecrate" damagedbyprojectiles="true" damagedbymeleeweapons="true" damagedbyrepairtools="true" IsAITurretTarget="true" AITurretPriority="0.75" tags="smallitem,weapon,explosive,demolitionsexpert,trap,hidden,provocativetohumanai" scale="0.5" impactsoundtag="impact_metal_heavy" isdangerous="true">
+      <PreferredContainer primary="secarmcab" minamount="1" maxamount="2" spawnprobability="0.0" notcampaign="true" notpvp="true" />
+      <PreferredContainer secondary="wreckarmcab,abandonedarmcab" minamount="1" maxamount="2" spawnprobability="0.0" />
+      <PreferredContainer secondary="armcab" />
+      <Upgrade gameversion="0.9.3.0" scale="0.5" />
+      <Price baseprice="250" minleveldifficulty="20" sold="false">
+        <Price storeidentifier="merchantoutpost" sold="false" multiplier="1.35" />
+        <Price storeidentifier="merchantcity" multiplier="1.25" minavailable="2" sold="false" />
+        <Price storeidentifier="merchantresearch" sold="false" multiplier="1.25" />
+        <Price storeidentifier="merchantmilitary" multiplier="0.9" minavailable="3" />
+        <Price storeidentifier="merchantmine" sold="false" multiplier="1.25" />
+        <Price storeidentifier="merchantarmory" multiplier="0.9" minavailable="3" />
+      </Price>
+      <Fabricate suitablefabricators="fabricator" requiredtime="10" requiresrecipe="true">
+        <RequiredSkill identifier="weapons" level="60" />
+        <RequiredItem identifier="fraggrenade" amount="1" />
+        <RequiredItem identifier="motiondetector" amount="1" />
+      </Fabricate>
+      <Deconstruct time="10">
+        <Item identifier="iron" />
+        <Item identifier="sodium" />
+        <Item identifier="plastic" />
+        <Item identifier="copper" />
+      </Deconstruct>
+      <InventoryIcon texture="Content/Items/InventoryIconAtlas.png" sourcerect="580,770,54,63" origin="0.5,0.5" />
+      <Sprite texture="Content/Items/Weapons/weapons_new.png" sourcerect="217,305,40,61" depth="0.4" origin="0.5,0.5" />
+      <Body width="60" height="25" density="30" />
+      <MotionSensor rangeX="10" rangeY="300" target="Human,Monster" UpdateInterval="1.5" minimumvelocity="1" detectownmotion="false" canbeselected="false">
+        <StatusEffect type="OnUse" target="This" Condition="-100.0" disabledeltatime="true" conditionalcomparison="And">
+          <Conditional Speed="lt 0.1" />
+          <Conditional IsContained="false" />
+          <sound file="%ModDir%/Content/Items/Weapons/RussianRevolver/hammercock.ogg" type="OnUse" range="400" volume="0.5" />
+        </StatusEffect>
+        <StatusEffect type="OnBroken" target="This">
+          <sound file="%ModDir%/Content/Sounds/Weapons/InfiniteHell/alien_click.ogg" type="OnUse" range="800" volume="2" />
+        </StatusEffect>
+        <StatusEffect type="OnBroken" target="This" delay="0.22">
+          <sound file="Content/Items/Weapons/ExplosionMedium1.ogg" range="30000" forceplaysounds="true" selectionmode="All" />
+          <sound file="Content/Items/Weapons/ExplosionDebris1.ogg" range="10000" forceplaysounds="true" />
+          <Explosion range="300.0" structuredamage="10" ballastfloradamage="120" itemdamage="3000" force="20" severlimbsprobability="0.8" decal="explosion" decalsize="0.5">
+            <Affliction identifier="bleeding" strength="120" />
+            <Affliction identifier="explosiondamage" strength="270" />
+            <Affliction identifier="explosiondamage" strength="350" probability="0.2" />
+            <Affliction identifier="stun" strength="5" />
+            <Affliction identifier="concussion" strength="10" />
+            <Affliction identifier="incrementalstun" strength="270" />
+          </Explosion>
+          <Explosion range="700.0" structuredamage="5" ballastfloradamage="10" itemdamage="10" force="1" severlimbsprobability="0.8">
+            <Affliction identifier="bleeding" strength="10" />
+            <Affliction identifier="lacerations" strength="50" />
+            <Affliction identifier="lacerations" strength="50" probability="0.5" />
+            <Affliction identifier="lacerations" strength="20" probability="0.2" />
+            <Affliction identifier="stun" strength="1" />
+          </Explosion>
+        </StatusEffect>
+        <StatusEffect type="OnBroken" target="This" delay="0.25">
+          <RemoveItem />
+        </StatusEffect>
+      </MotionSensor>
+      <Throwable slots="Any,RightHand,LeftHand" holdpos="0,0" handle1="0,0" throwforce="1" msg="ItemMsgPickUpSelect" PickingTime="2"></Throwable>
+      <Projectile characterusable="false" launchimpulse="5" spread="360">
+        <Attack targetforce="1" severlimbsprobability="0.1" penetration="0.0">
+          <Affliction identifier="blunttrauma" strength="1" />
+          <Affliction identifier="stun" strength="0.2" />
+        </Attack>
+      </Projectile>
+      <Quality>
+        <QualityStat stattype="ExplosionRadius" value="0.1" />
+        <QualityStat stattype="ExplosionDamage" value="0.1" />
+      </Quality>
+    </Item>
+  </Items>
+</Override>

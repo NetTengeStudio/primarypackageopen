@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PpWake enabledbydefault="true"
+        sleepsec="10" dotssec="2" alarmholdsec="3"
+        fadesec="1.5" dotsfadesec="0.4" dotinterval="0.5"
+        charinterval="0.09" textscale="1.0" font="LargeFont"
+        typesound="Content/Sounds/UI/pp_type.ogg" alarmsound="Content/Sounds/Alarms/pp_alarm.ogg"
+        skipjobs="mindlesshuman_d3,soviet,mvd" skipafflictions="pp_survivalintro" />

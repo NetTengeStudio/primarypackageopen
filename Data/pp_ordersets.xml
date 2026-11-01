@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<OrderSets>
+  <OrderSet id="pp_order_repairkit" name="Ремонтный набор" reward="1400">
+    <Item identifier="weldingtool" count="4" />
+    <Item identifier="wrench" count="2" />
+    <Item identifier="screwdriver" count="2" />
+    <Item identifier="crowbar" count="2" />
+    <Item identifier="extinguisher" count="2" />
+    <Item identifier="flashlight" count="2" />
+  </OrderSet>
+
+  <OrderSet id="pp_order_oxygen" name="Поставка кислорода" reward="1600">
+    <Item identifier="oxygentank" count="8" />
+    <Item identifier="liquidoxygenite" count="2" />
+    <Item identifier="divingmask" count="2" />
+    <Item identifier="flashlight" count="2" />
+    <Item identifier="glowstick" count="4" />
+    <Item identifier="flare" count="2" />
+  </OrderSet>
+
+  <OrderSet id="pp_order_biodiesel" name="Набор с биодизелем" reward="1500">
+    <Item identifier="ethanol_makeshift_erc" count="6" />
+    <Item identifier="ethanol" count="4" />
+    <Item identifier="weldingfueltank" count="2" />
+    <Item identifier="incendiumfueltank" count="2" />
+    <Item identifier="fuelrod" count="1" />
+    <Item identifier="batterycell" count="2" />
+  </OrderSet>
+
+  <OrderSet id="pp_order_materials" name="Набор с материалами" reward="1000">
+    <Item identifier="steel" count="6" />
+    <Item identifier="aluminium" count="6" />
+    <Item identifier="plastic" count="6" />
+    <Item identifier="copper" count="4" />
+    <Item identifier="iron" count="4" />
+    <Item identifier="lead" count="4" />
+  </OrderSet>
+
+  <OrderSet id="pp_order_ore" name="Набор с рудой" reward="2000">
+    <Item identifier="ironore" count="8" />
+    <Item identifier="uraniumore" count="4" />
+    <Item identifier="titanite" count="4" />
+    <Item identifier="quartz" count="4" />
+    <Item identifier="diamond" count="2" />
+    <Item identifier="graphite" count="4" />
+  </OrderSet>
+
+  <OrderSet id="pp_order_medical" name="Медицинский набор" reward="1700">
+    <Item identifier="antibiotics" count="4" />
+    <Item identifier="opium" count="4" />
+    <Item identifier="stabilozine" count="2" />
+    <Item identifier="adrenaline" count="2" />
+    <Item identifier="calcium" count="4" />
+    <Item identifier="deusizine" count="2" />
+  </OrderSet>
+
+  <OrderSet id="pp_order_scrap" name="Набор утилизации" reward="1300">
+    <Item identifier="scrap" count="6" />
+    <Item identifier="rubber" count="6" />
+    <Item identifier="tin" count="4" />
+    <Item identifier="zinc" count="4" />
+    <Item identifier="lithium" count="4" />
+    <Item identifier="magnesium" count="4" />
+  </OrderSet>
+
+  <OrderSet id="pp_order_signal" name="Сигнальное оборудование" reward="1500">
+    <Item identifier="sonarbeacon" count="2" />
+    <Item identifier="flashlight" count="2" />
+    <Item identifier="glowstick" count="4" />
+    <Item identifier="flare" count="4" />
+    <Item identifier="wire" count="8" />
+    <Item identifier="fpgacircuit" count="4" />
+  </OrderSet>
+
+  <OrderSet id="pp_order_electronics" name="Набор электроники" reward="1500">
+    <Item identifier="fpgacircuit" count="6" />
+    <Item identifier="wire" count="10" />
+    <Item identifier="lightcomponent" count="4" />
+    <Item identifier="batterycell" count="4" />
+    <Item identifier="fulguriumbatterycell" count="2" />
+  </OrderSet>
+
+  <OrderSet id="pp_order_diving" name="Водолазное снаряжение" reward="1600">
+    <Item identifier="divingmask" count="2" />
+    <Item identifier="flashlight" count="2" />
+    <Item identifier="handheldsonar" count="1" />
+    <Item identifier="glowstick" count="4" />
+    <Item identifier="sonarbeacon" count="2" />
+    <Item identifier="oxygentank" count="4" />
+  </OrderSet>
+
+  <OrderSet id="pp_order_batteries" name="Аккумуляторы и топливо" reward="1900">
+    <Item identifier="batterycell" count="8" />
+    <Item identifier="fuelrod" count="2" />
+    <Item identifier="fulguriumfuelrod" count="2" />
+    <Item identifier="fulguriumbatterycell" count="2" />
+    <Item identifier="weldingfueltank" count="2" />
+    <Item identifier="incendiumfueltank" count="2" />
+  </OrderSet>
+
+  <OrderSet id="pp_order_welding" name="Сварочное топливо" reward="1400">
+    <Item identifier="weldingfueltank" count="6" />
+    <Item identifier="weldingtool" count="2" />
+    <Item identifier="incendiumfueltank" count="2" />
+    <Item identifier="fulgurium" count="2" />
+    <Item identifier="incendium" count="2" />
+    <Item identifier="graphite" count="2" />
+  </OrderSet>
+
+  <OrderSet id="pp_order_chemicals" name="Химические реагенты" reward="700">
+    <Item identifier="chlorine" count="6" />
+    <Item identifier="phosphorus" count="6" />
+    <Item identifier="calcium" count="4" />
+    <Item identifier="carbon" count="4" />
+    <Item identifier="sodium" count="4" />
+    <Item identifier="potassium" count="4" />
+  </OrderSet>
+
+  <OrderSet id="pp_order_titanium" name="Титановый сплав" reward="1600">
+    <Item identifier="titanium" count="8" />
+    <Item identifier="titaniumaluminiumalloy" count="4" />
+    <Item identifier="aluminium" count="4" />
+    <Item identifier="steel" count="4" />
+    <Item identifier="iron" count="4" />
+    <Item identifier="copper" count="4" />
+  </OrderSet>
+
+  <OrderSet id="pp_order_gardening" name="Набор садовода" reward="1200">
+    <Item identifier="seedbag" count="2" />
+    <Item identifier="saltvineseed" count="4" />
+    <Item identifier="fertilizer" count="4" />
+    <Item identifier="wateringcan" count="1" />
+    <Item identifier="smallplanter" count="2" />
+    <Item identifier="organicfiber" count="4" />
+  </OrderSet>
+</OrderSets>

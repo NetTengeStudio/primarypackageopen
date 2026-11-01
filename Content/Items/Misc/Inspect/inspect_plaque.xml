@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Items>
+  <Item name="" identifier="pp_inspect_plaque" category="Misc" subcategory="Осмотр" tags="pp_inspect" scale="0.5" interactdistance="120" allowrotatingineditor="false">
+    <Sprite texture="Content/Items/Labels/labels.png" sourcerect="0,0,126,48" depth="0.55" origin="0.5,0.5" />
+    <InventoryIcon texture="Content/Items/Labels/labels.png" sourcerect="0,0,126,48" origin="0.5,0.5" />
+    <InspectComponent />
+  </Item>
+</Items>

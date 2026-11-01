@@ -1,0 +1,706 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Items>
+  <Item name="Press (N) to remove" identifier="actor-menu-proxy" category="Equipment" scale="0.0" InvulnerableToDamage="true" Tags="proxy">
+    <Sprite texture="%ModDir%/Content/Items/PDA/InteractionSprites/pdainteraction.png" depth="0.57" sourcerect="0,0,4,4" origin="0,0" />
+    <Body width="16" height="30" density="10.05" />
+    <Wearable canBeCombined="true" slots="Card,Head,InnerClothes,OuterClothes,Bag,Headset" aimable="false" msg="ItemMsgPickUpSelect">
+      <StatusEffect type="OnNotContained" target="This" stackable="false">
+        <Remove />
+      </StatusEffect>
+      <StatusEffect type="Always" target="This,NearbyCharacters" oneshot="true" range="20" interval="2" stackable="false">
+        <Conditional aaac_disable_interact="gt 0" />
+        <Remove />
+      </StatusEffect>
+      <CustomInterface canbeselected="false" drawhudwhenequipped="true" allowuioverlap="true" draggable="false">
+        <GuiFrame relativesize="0.1,0.15" anchor="BottomRight" absoluteoffset="0,200" />
+        <Button text="Spit">
+          <StatusEffect type="OnUse" target="This,Character" disabledeltatime="true" delay="0.5">
+            <Affliction identifier="primarypkg_spit" amount="100" />
+          </StatusEffect>
+        </Button>
+        <Button text="Shout">
+          <StatusEffect type="OnUse" target="This,Character" disabledeltatime="true">
+            <Affliction identifier="primarypkg_spasm-shout" amount="100" />
+          </StatusEffect>
+        </Button>
+        <Button text="Vomit">
+          <StatusEffect type="OnUse" target="This,Character" disabledeltatime="false" interval="2" stackable="false">
+            <SpawnItem identifier="vomit-proxy" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+            <Conditional lockhands="false" />
+          </StatusEffect>
+        </Button>
+        <Button text="Interaction">
+          <StatusEffect AllowWhenBroken="true" type="OnUse" target="This,Character" disabledeltatime="true">
+            <SpawnItem identifier="cursor-anim" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+            <Conditional lockhands="false" />
+          </StatusEffect>
+          <StatusEffect AllowWhenBroken="true" type="OnUse" target="This,Character" disabledeltatime="true">
+            <SpawnItem identifier="cursor-anim1" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+            <Conditional lockhands="false" />
+          </StatusEffect>
+        </Button>
+      </CustomInterface>
+    </Wearable>
+  </Item>
+  <Item name="Press (N) to remove" identifier="cursor-anim" category="Equipment" scale="0.0" InvulnerableToDamage="true" Tags="none">
+    <Sprite texture="%ModDir%/Content/Items/PDA/InteractionSprites/fist_up_2.png" origin="0.5,0.5" sourcerect="70,0,233,440" depth="0.57" />
+    <Body width="16" height="30" density="10.05" />
+    <Holdable canBeCombined="false" slots="RightHand" aimable="true" holdangle="25" aimpos="30,10" handle1="-100,-55" handle2="100,-10" msg="ItemMsgPickUpSelect">
+      <StatusEffect type="OnNotContained" target="This" stackable="false">
+        <Remove />
+      </StatusEffect>
+      <CustomInterface canbeselected="false" drawhudwhenequipped="true" allowuioverlap="true" draggable="false">
+        <GuiFrame relativesize="0.1,0.15" anchor="BottomRight" absoluteoffset="0,400" />
+        <Button text="push">
+          <StatusEffect type="OnUse" target="This" disabledeltatime="true">
+            <SpawnItem identifier="push-anim" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+            <Remove />
+          </StatusEffect>
+          <StatusEffect type="OnUse" target="This" disabledeltatime="true">
+            <SpawnItem identifier="push-anim1" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+            <Remove />
+          </StatusEffect>
+        </Button>
+        <Button text="Point">
+          <StatusEffect type="OnUse" target="This" disabledeltatime="true">
+            <SpawnItem identifier="point-anim" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+            <Remove />
+          </StatusEffect>
+        </Button>
+        <Button text="Fake.handcuffs">
+          <StatusEffect type="OnUse" target="NearbyItems" targetidentifiers="cursor-anim,cursor-anim1,push-anim,push-anim1,point-anim,point-anim1" range="15" disabledeltatime="true">
+            <SpawnItem identifier="handcuffs-anim" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+            <Remove />
+          </StatusEffect>
+        </Button>
+        <Button text="Hands.up">
+          <StatusEffect type="OnUse" target="NearbyItems" targetidentifiers="cursor-anim,cursor-anim1,push-anim,push-anim1,point-anim,point-anim1" range="15" disabledeltatime="true">
+            <SpawnItem identifier="hands-up-anim" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+            <Remove />
+          </StatusEffect>
+        </Button>
+      </CustomInterface>
+    </Holdable>
+    <RangedWeapon reload="1" weapondamagemodifier="1" penetration="0.0" holdtrigger="false" barrelpos="-100,0" spread="0" unskilledspread="0" combatPriority="-1" drawhudwhenequipped="false" crosshairscale="0.2">
+      <StatusEffect type="OnUse" target="This" disabledeltatime="true" />
+      <StatusEffect type="OnSecondaryUse" target="This,Character" SpeedMultiplier="0.8" setvalue="true" disabledeltatime="true">
+        <Conditional skillrequirement="true" weapons="gt 65" />
+      </StatusEffect>
+      <StatusEffect type="OnSecondaryUse" target="This,Character" SpeedMultiplier="0.7" conditionalcomparison="and" setvalue="true" disabledeltatime="true">
+        <Conditional skillrequirement="true" weapons="lte 65" />
+        <Conditional skillrequirement="true" weapons="gte 35" />
+      </StatusEffect>
+      <StatusEffect type="OnSecondaryUse" target="This,Character" SpeedMultiplier="0.6" setvalue="true" disabledeltatime="true">
+        <Conditional skillrequirement="true" weapons="lt 35" />
+      </StatusEffect>
+      <StatusEffect type="OnUse" target="Contained">
+        <Use />
+      </StatusEffect>
+      <StatusEffect type="OnUse" target="This">
+        <Spawnitem identifiers="fisthdamagevolume" spawnposition="ThisInventory" />
+      </StatusEffect>
+    </RangedWeapon>
+    <ItemContainer capacity="2" maxstacksize="1" SpawnWithId="fisththrust,fisthdamagevolume" hideitems="true" drawinventory="false" canbeselected="false" removecontaineditemsondeconstruct="true" ShowConditionInContainedStateIndicator="false" containedspritedepth="0.56">
+      <Containable items="fisththrust,fisthdamagevolume" hide="true" itempos="-65,0" />
+    </ItemContainer>
+  </Item>
+  <Item name="Press (N) to remove" identifier="cursor-anim1" category="Equipment" scale="0.0" InvulnerableToDamage="true" Tags="none">
+    <Sprite texture="%ModDir%/Content/Items/PDA/InteractionSprites/fist_up.png" origin="0.5,0.5" sourcerect="70,0,233,440" depth="0.57" />
+    <Body width="16" height="30" density="10.05" />
+    <Holdable canBeCombined="false" slots="LeftHand" aimable="true" holdangle="25" aimpos="30,10" handle1="-100,-55" handle2="100,-10" msg="ItemMsgPickUpSelect">
+      <StatusEffect type="OnNotContained" target="This" stackable="false">
+        <Remove />
+      </StatusEffect>
+      <CustomInterface canbeselected="false" drawhudwhenequipped="true" allowuioverlap="true" draggable="false">
+        <GuiFrame relativesize="0.1,0.15" anchor="BottomRight" absoluteoffset="150,400" />
+        <Button text="push">
+          <StatusEffect type="OnUse" target="This" disabledeltatime="true">
+            <SpawnItem identifier="push-anim" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+            <Remove />
+          </StatusEffect>
+          <StatusEffect type="OnUse" target="This" disabledeltatime="true">
+            <SpawnItem identifier="push-anim1" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+            <Remove />
+          </StatusEffect>
+        </Button>
+        <Button text="Point">
+          <StatusEffect type="OnUse" target="This" disabledeltatime="true">
+            <SpawnItem identifier="point-anim" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+            <Remove />
+          </StatusEffect>
+          <StatusEffect type="OnUse" target="This" disabledeltatime="true">
+            <SpawnItem identifier="point-anim1" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+            <Remove />
+          </StatusEffect>
+        </Button>
+        <Button text="Fake.handcuffs">
+          <StatusEffect type="OnUse" target="NearbyItems" targetidentifiers="cursor-anim,cursor-anim1,push-anim,push-anim1,point-anim,point-anim1" range="15" disabledeltatime="true">
+            <SpawnItem identifier="handcuffs-anim" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+            <Remove />
+          </StatusEffect>
+        </Button>
+        <Button text="Hands.up">
+          <StatusEffect type="OnUse" target="NearbyItems" targetidentifiers="cursor-anim,cursor-anim1,push-anim,push-anim1,point-anim,point-anim1" range="15" disabledeltatime="true">
+            <SpawnItem identifier="hands-up-anim" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+            <Remove />
+          </StatusEffect>
+        </Button>
+      </CustomInterface>
+    </Holdable>
+    <RangedWeapon reload="1" weapondamagemodifier="1" penetration="0.0" holdtrigger="false" barrelpos="-100,0" spread="0" unskilledspread="0" combatPriority="-1" drawhudwhenequipped="false" crosshairscale="0.2">
+      <StatusEffect type="OnUse" target="This" disabledeltatime="true" />
+      <StatusEffect type="OnSecondaryUse" target="This,Character" SpeedMultiplier="0.8" setvalue="true" disabledeltatime="true">
+        <Conditional skillrequirement="true" weapons="gt 65" />
+      </StatusEffect>
+      <StatusEffect type="OnSecondaryUse" target="This,Character" SpeedMultiplier="0.7" conditionalcomparison="and" setvalue="true" disabledeltatime="true">
+        <Conditional skillrequirement="true" weapons="lte 65" />
+        <Conditional skillrequirement="true" weapons="gte 35" />
+      </StatusEffect>
+      <StatusEffect type="OnSecondaryUse" target="This,Character" SpeedMultiplier="0.6" setvalue="true" disabledeltatime="true">
+        <Conditional skillrequirement="true" weapons="lt 35" />
+      </StatusEffect>
+      <StatusEffect type="OnUse" target="Contained">
+        <Use />
+      </StatusEffect>
+      <StatusEffect type="OnUse" target="This">
+        <Spawnitem identifiers="fisthdamagevolume" spawnposition="ThisInventory" />
+      </StatusEffect>
+    </RangedWeapon>
+    <ItemContainer capacity="2" maxstacksize="1" SpawnWithId="fisththrust,fisthdamagevolume" hideitems="true" drawinventory="false" canbeselected="false" removecontaineditemsondeconstruct="true" ShowConditionInContainedStateIndicator="false" containedspritedepth="0.56">
+      <Containable items="fisththrust,fisthdamagevolume" hide="true" itempos="-65,0" />
+    </ItemContainer>
+  </Item>
+  <Item identifier="fisthdamagevolume" hideinmenus="true" category="Material" Tags="smallitem" canbepicked="true" description="" cargocontaineridentifier="metalcrate" scale="0.35" spritecolor="0,0,0,0" inventoryiconcolor="0,0,0,0">
+    <Sprite texture="%ModDir%/Content/Items/PDA/InteractionSprites/pdainteraction.png" depth="0.57" sourcerect="0,0,4,4" origin="0,0" />
+    <Body width="10" height="10" density="0" />
+    <Holdable slots="Any,RightHand,LeftHand" handle1="0,0" msg="ItemMsgPickUpSelect" />
+    <Projectile characterusable="false" launchimpulse="10" hitscan="false" removeonhit="true">
+      <Attack structuredamage="0" itemdamage="0" targetforce="5" severlimbsprobability="0.01">
+        <Affliction identifier="blunttrauma" strength="1.5" />
+        <Affliction identifier="primarypkg_blind_anim_2" strength="1" />
+        <StatusEffect type="OnUse" target="Limb" targetLimbs="Head" disabledeltatime="true">
+          <Affliction identifier="stun" strength="5" probability="0.01" />
+          <Affliction identifier="stun" strength="10" probability="0.005" />
+          <Affliction identifier="stun" strength="15" probability="0.005" />
+          <Affliction identifier="stun" strength="20" probability="0.005" />
+          <Affliction identifier="stun" strength="25" probability="0.005" />
+          <Affliction identifier="stun" strength="30" probability="0.005" />
+          <Affliction identifier="concussion" strength="2" probability="0.15" />
+        </StatusEffect>
+        <StatusEffect type="OnUse" target="Limb" targetLimbs="Torso" disabledeltatime="true">
+          <Affliction identifier="nausea" strength="10" probability="0.25" />
+        </StatusEffect>
+        <StatusEffect type="OnUse" target="Limb" targetLimbs="Waist" disabledeltatime="true">
+          <Conditional ismale="true" />
+        </StatusEffect>
+      </Attack>
+      <StatusEffect type="OnUse" target="UseTarget">
+        <Conditional entitytype="eq Character" />
+        <Sound file="Content/Sounds/Damage/LimbSlash1.ogg" selectionmode="random" range="500" />
+        <Sound file="Content/Sounds/Damage/LimbSlash2.ogg" range="500" />
+        <Sound file="Content/Sounds/Damage/LimbSlash3.ogg" range="500" />
+        <Sound file="Content/Sounds/Damage/LimbSlash4.ogg" range="500" />
+        <Sound file="Content/Sounds/Damage/LimbSlash5.ogg" range="500" />
+        <Sound file="Content/Sounds/Damage/LimbSlash6.ogg" range="500" />
+      </StatusEffect>
+      <StatusEffect type="OnUse" target="This" delay="0.12">
+        <Remove />
+      </StatusEffect>
+    </Projectile>
+  </Item>
+  <Item identifier="fisththrust" hideinmenus="true" category="Material" Tags="smallitem" canbepicked="true" description="" cargocontaineridentifier="metalcrate" scale="0.35" impactsoundtag="impact_metal_light" spritecolor="0,0,0,0" inventoryiconcolor="0,0,0,0">
+    <Sprite texture="%ModDir%/Content/Items/PDA/InteractionSprites/pdainteraction.png" depth="0.57" sourcerect="0,0,4,4" origin="0,0" />
+    <Body width="45" height="30" density="30" />
+    <Holdable slots="Any,RightHand,LeftHand" handle1="0,0" msg="ItemMsgPickUpSelect">
+      <StatusEffect type="OnUse" target="this">
+        <Explosion range="80.0" force="6" shockwave="false" smoke="false" flames="false" sparks="false" underwaterbubble="false" flash="false" camerashake="0" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/fisth.ogg" range="350" selectionmode="random" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/fisth_1.ogg" range="350" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/fisth_2.ogg" range="350" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/fisth_3.ogg" range="350" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/fisth_4.ogg" range="350" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/fisth_5.ogg" range="350" />
+      </StatusEffect>
+    </Holdable>
+  </Item>
+  <Item name="Press (N) to remove" identifier="handcuffs-anim" category="Equipment" scale="0.0" InvulnerableToDamage="true" Tags="none">
+    <Sprite texture="%ModDir%/Content/Items/PDA/InteractionSprites/free.png" origin="0.5,0.5" sourcerect="10,0,493,512" depth="0.57" />
+    <Body width="16" height="30" density="10.05" />
+    <Holdable canBeCombined="true" slots="RightHand+LeftHand" aimable="false" holdpos="-30,-65" aimpos="-30,-65" handle1="0,0" handle2="0,0" msg="ItemMsgPickUpSelect">
+      <StatusEffect type="OnNotContained" target="This" stackable="false">
+        <Remove />
+      </StatusEffect>
+      <StatusEffect type="OnActive" target="Character" lockhands="true" duration="0.11" interval="0.1"></StatusEffect>
+      <StatusEffect type="Always" target="Character" oneshot="true">
+        <LuaHook name="AA.hands" />
+      </StatusEffect>
+      <CustomInterface canbeselected="false" drawhudwhenequipped="true" allowuioverlap="true" draggable="false">
+        <GuiFrame relativesize="0.2,0.2" absoluteoffset="0,400" draggable="false" />
+        <Button text="Remove_fake_handcuffs">
+          <StatusEffect type="OnUse" target="This" disabledeltatime="true">
+            <Remove />
+          </StatusEffect>
+        </Button>
+      </CustomInterface>
+    </Holdable>
+  </Item>
+  <Item name="Press (N) to remove" identifier="hands-up-anim" category="Equipment" scale="0.0" InvulnerableToDamage="true" Tags="none">
+    <Sprite texture="%ModDir%/Content/Items/PDA/InteractionSprites/white_flag.png" origin="0.5,0.5" sourcerect="61,3,392,503" depth="0.57" />
+    <Body width="16" height="30" density="10.05" />
+    <Holdable canBeCombined="true" slots="RightHand+LeftHand" aimable="true" aimpos="10,55" handle1="0,0" handle2="1000,0" msg="ItemMsgPickUpSelect">
+      <StatusEffect type="OnNotContained" target="This" stackable="false">
+        <Remove />
+        <DropContainedItems />
+      </StatusEffect>
+      <StatusEffect type="OnSecondaryUse" target="Contained" setactive="true" ison="true">
+        <Use />
+      </StatusEffect>
+      <CustomInterface canbeselected="false" drawhudwhenequipped="true" allowuioverlap="true" draggable="false">
+        <GuiFrame relativesize="0.1,0.15" anchor="BottomRight" absoluteoffset="0,400" />
+        <Button text="Fists">
+          <StatusEffect type="OnUse" target="This" disabledeltatime="true">
+            <SpawnItem identifier="cursor-anim" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+            <Remove />
+          </StatusEffect>
+          <StatusEffect type="OnUse" target="This" disabledeltatime="true">
+            <SpawnItem identifier="cursor-anim1" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+            <Remove />
+          </StatusEffect>
+        </Button>
+        <Button text="Push">
+          <StatusEffect type="OnUse" target="This" disabledeltatime="true">
+            <SpawnItem identifier="push-anim" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+            <Remove />
+          </StatusEffect>
+          <StatusEffect type="OnUse" target="This" disabledeltatime="true">
+            <SpawnItem identifier="push-anim1" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+            <Remove />
+          </StatusEffect>
+        </Button>
+        <Button text="Point">
+          <StatusEffect type="OnUse" target="This" disabledeltatime="true">
+            <SpawnItem identifier="point-anim" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+            <Remove />
+          </StatusEffect>
+          <StatusEffect type="OnUse" target="This" disabledeltatime="true">
+            <SpawnItem identifier="point-anim1" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+            <Remove />
+          </StatusEffect>
+        </Button>
+        <Button text="Fake.handcuffs">
+          <StatusEffect type="OnUse" target="This" disabledeltatime="true">
+            <SpawnItem identifier="handcuffs-anim" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+            <Remove />
+          </StatusEffect>
+        </Button>
+      </CustomInterface>
+    </Holdable>
+    <ItemContainer capacity="1" slotsperrow="1" containedspritedepth="0.56" maxstacksize="1" hideitems="false">
+      <Containable items="smallitem,mediumitem" hide="false"></Containable>
+    </ItemContainer>
+  </Item>
+  <Item name="Press (N) to remove" identifier="point-anim" category="Equipment" scale="0.0" InvulnerableToDamage="true" Tags="none">
+    <Sprite texture="%ModDir%/Content/Items/PDA/InteractionSprites/finger.png" origin="0.5,0.5" sourcerect="120,12,272,493" depth="0.57" />
+    <Body width="16" height="30" density="10.05" />
+    <Holdable canBeCombined="false" slots="RightHand" aimable="true" holdangle="25" aimpos="75,0" handle1="0,0" handle2="0,0" msg="ItemMsgPickUpSelect">
+      <StatusEffect type="OnNotContained" target="This" stackable="false">
+        <Remove />
+      </StatusEffect>
+      <CustomInterface canbeselected="false" drawhudwhenequipped="true" allowuioverlap="true" draggable="false">
+        <GuiFrame relativesize="0.1,0.15" anchor="BottomRight" absoluteoffset="0,400" />
+        <Button text="Fists">
+          <StatusEffect type="OnUse" target="This" disabledeltatime="true">
+            <SpawnItem identifier="cursor-anim" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+            <Remove />
+          </StatusEffect>
+          <StatusEffect type="OnUse" target="This" disabledeltatime="true">
+            <SpawnItem identifier="cursor-anim1" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+            <Remove />
+          </StatusEffect>
+        </Button>
+        <Button text="push">
+          <StatusEffect type="OnUse" target="This" disabledeltatime="true">
+            <SpawnItem identifier="push-anim" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+            <Remove />
+          </StatusEffect>
+          <StatusEffect type="OnUse" target="This" disabledeltatime="true">
+            <SpawnItem identifier="push-anim1" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+            <Remove />
+          </StatusEffect>
+        </Button>
+        <Button text="Fake.handcuffs">
+          <StatusEffect type="OnUse" target="NearbyItems" targetidentifiers="cursor-anim,cursor-anim1,push-anim,push-anim1,point-anim,point-anim1" range="15" disabledeltatime="true">
+            <SpawnItem identifier="handcuffs-anim" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+            <Remove />
+          </StatusEffect>
+        </Button>
+        <Button text="Hands.up">
+          <StatusEffect type="OnUse" target="NearbyItems" targetidentifiers="cursor-anim,cursor-anim1,push-anim,push-anim1,point-anim,point-anim1" range="15" disabledeltatime="true">
+            <SpawnItem identifier="hands-up-anim" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+            <Remove />
+          </StatusEffect>
+        </Button>
+      </CustomInterface>
+    </Holdable>
+    <RangedWeapon reload="0.35" weapondamagemodifier="1" penetration="0.0" holdtrigger="false" barrelpos="100,0" spread="0" unskilledspread="0" combatPriority="-1" drawhudwhenequipped="false" crosshairscale="0.2">
+      <StatusEffect type="OnUse" target="This" disabledeltatime="true" />
+      <StatusEffect type="OnUse" target="This,NearbyItems" targetidentifiers="door,windoweddoor,hatch,doorwbuttons,windoweddoorwbuttons,hatchwbuttons,dockingport,dockinghatch,ductblock,smalldoor" range="60" disabledeltatime="true">
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock.ogg" frequencymultiplier="0.8" dontmuffle="true" range="1000" selectionmode="random" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock.ogg" frequencymultiplier="0.85" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock.ogg" frequencymultiplier="0.9" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock.ogg" frequencymultiplier="0.95" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock.ogg" frequencymultiplier="1.0" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock.ogg" frequencymultiplier="1.05" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock.ogg" frequencymultiplier="1.1" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock.ogg" frequencymultiplier="1.15" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock.ogg" frequencymultiplier="1.2" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock_1.ogg" frequencymultiplier="0.8" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock_1.ogg" frequencymultiplier="0.85" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock_1.ogg" frequencymultiplier="0.9" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock_1.ogg" frequencymultiplier="0.95" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock_1.ogg" frequencymultiplier="1.0" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock_1.ogg" frequencymultiplier="1.05" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock_1.ogg" frequencymultiplier="1.1" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock_1.ogg" frequencymultiplier="1.15" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock_1.ogg" frequencymultiplier="1.2" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock_2.ogg" frequencymultiplier="0.8" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock_2.ogg" frequencymultiplier="0.85" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock_2.ogg" frequencymultiplier="0.9" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock_2.ogg" frequencymultiplier="0.95" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock_2.ogg" frequencymultiplier="1.0" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock_2.ogg" frequencymultiplier="1.05" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock_2.ogg" frequencymultiplier="1.1" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock_2.ogg" frequencymultiplier="1.15" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock_2.ogg" frequencymultiplier="1.2" dontmuffle="true" range="1000" />
+        <Spawnitem identifiers="pointthrust-door" spawnposition="ThisInventory" />
+      </StatusEffect>
+      <StatusEffect type="OnUse" target="NearbyItems" targetidentifiers="point-anim1" range="20" disabledeltatime="true">
+        <Spawnitem identifiers="pointthrust-clap" spawnposition="ThisInventory" />
+      </StatusEffect>
+      <StatusEffect type="OnUse" target="This" disabledeltatime="true" holdangle="15" aimpos="50,0" />
+      <StatusEffect type="OnUse" target="This" disabledeltatime="true" holdangle="25" aimpos="75,0" delay="0.3" />
+      <StatusEffect type="OnUse" target="Contained">
+        <Use />
+      </StatusEffect>
+      <StatusEffect type="OnUse" target="This">
+        <Spawnitem identifiers="pointthrust" spawnposition="ThisInventory" />
+      </StatusEffect>
+    </RangedWeapon>
+    <ItemContainer capacity="2" maxstacksize="1" hideitems="true" SpawnWithID="pointthrust" drawinventory="false" canbeselected="false" removecontaineditemsondeconstruct="true" ShowConditionInContainedStateIndicator="false" containedspritedepth="0.56">
+      <Containable items="pointthrust,pointthrust-door,pointthrust-clap" hide="true" itempos="-65,0" />
+    </ItemContainer>
+  </Item>
+  <Item name="Press (N) to remove" identifier="point-anim1" category="Equipment" scale="0.0" InvulnerableToDamage="true" Tags="none">
+    <Sprite texture="%ModDir%/Content/Items/PDA/InteractionSprites/finger_2.png" origin="0.5,0.5" sourcerect="120,12,272,493" depth="0.57" />
+    <Body width="16" height="30" density="10.05" />
+    <Holdable canBeCombined="false" slots="LeftHand" aimable="true" holdangle="25" aimpos="75,10" handle1="-100,-55" handle2="100,-10" msg="ItemMsgPickUpSelect">
+      <StatusEffect type="OnNotContained" target="This" stackable="false">
+        <Remove />
+      </StatusEffect>
+      <CustomInterface canbeselected="false" drawhudwhenequipped="true" allowuioverlap="true" draggable="false">
+        <GuiFrame relativesize="0.1,0.15" anchor="BottomRight" absoluteoffset="150,400" />
+        <Button text="Fists">
+          <StatusEffect type="OnUse" target="This" disabledeltatime="true">
+            <SpawnItem identifier="cursor-anim" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+            <Remove />
+          </StatusEffect>
+          <StatusEffect type="OnUse" target="This" disabledeltatime="true">
+            <SpawnItem identifier="cursor-anim1" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+            <Remove />
+          </StatusEffect>
+        </Button>
+        <Button text="push">
+          <StatusEffect type="OnUse" target="This" disabledeltatime="true">
+            <SpawnItem identifier="push-anim" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+            <Remove />
+          </StatusEffect>
+          <StatusEffect type="OnUse" target="This" disabledeltatime="true">
+            <SpawnItem identifier="push-anim1" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+            <Remove />
+          </StatusEffect>
+        </Button>
+        <Button text="Fake.handcuffs">
+          <StatusEffect type="OnUse" target="NearbyItems" targetidentifiers="cursor-anim,cursor-anim1,push-anim,push-anim1,point-anim,point-anim1" range="15" disabledeltatime="true">
+            <SpawnItem identifier="handcuffs-anim" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+            <Remove />
+          </StatusEffect>
+        </Button>
+        <Button text="Hands.up">
+          <StatusEffect type="OnUse" target="NearbyItems" targetidentifiers="cursor-anim,cursor-anim1,push-anim,push-anim1,point-anim,point-anim1" range="15" disabledeltatime="true">
+            <SpawnItem identifier="hands-up-anim" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+            <Remove />
+          </StatusEffect>
+        </Button>
+      </CustomInterface>
+    </Holdable>
+    <RangedWeapon reload="0.35" weapondamagemodifier="1" penetration="0.0" holdtrigger="false" barrelpos="100,0" spread="0" unskilledspread="0" combatPriority="-1" drawhudwhenequipped="false" crosshairscale="0.2">
+      <StatusEffect type="OnUse" target="This" disabledeltatime="true" />
+      <StatusEffect type="OnUse" target="This,NearbyItems" targetidentifiers="door,windoweddoor,hatch,doorwbuttons,windoweddoorwbuttons,hatchwbuttons,dockingport,dockinghatch,ductblock,smalldoor" range="60" disabledeltatime="true">
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock.ogg" frequencymultiplier="0.8" dontmuffle="true" range="1000" selectionmode="random" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock.ogg" frequencymultiplier="0.85" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock.ogg" frequencymultiplier="0.9" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock.ogg" frequencymultiplier="0.95" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock.ogg" frequencymultiplier="1.0" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock.ogg" frequencymultiplier="1.05" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock.ogg" frequencymultiplier="1.1" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock.ogg" frequencymultiplier="1.15" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock.ogg" frequencymultiplier="1.2" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock_1.ogg" frequencymultiplier="0.8" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock_1.ogg" frequencymultiplier="0.85" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock_1.ogg" frequencymultiplier="0.9" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock_1.ogg" frequencymultiplier="0.95" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock_1.ogg" frequencymultiplier="1.0" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock_1.ogg" frequencymultiplier="1.05" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock_1.ogg" frequencymultiplier="1.1" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock_1.ogg" frequencymultiplier="1.15" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock_1.ogg" frequencymultiplier="1.2" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock_2.ogg" frequencymultiplier="0.8" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock_2.ogg" frequencymultiplier="0.85" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock_2.ogg" frequencymultiplier="0.9" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock_2.ogg" frequencymultiplier="0.95" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock_2.ogg" frequencymultiplier="1.0" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock_2.ogg" frequencymultiplier="1.05" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock_2.ogg" frequencymultiplier="1.1" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock_2.ogg" frequencymultiplier="1.15" dontmuffle="true" range="1000" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/knock_2.ogg" frequencymultiplier="1.2" dontmuffle="true" range="1000" />
+        <Spawnitem identifiers="pointthrust-door" spawnposition="ThisInventory" />
+      </StatusEffect>
+      <StatusEffect type="OnUse" target="NearbyItems" targetidentifiers="point-anim" range="20" disabledeltatime="true">
+        <Spawnitem identifiers="pointthrust-clap" spawnposition="ThisInventory" />
+      </StatusEffect>
+      <StatusEffect type="OnUse" target="This" disabledeltatime="true" holdangle="15" aimpos="50,0" />
+      <StatusEffect type="OnUse" target="This" disabledeltatime="true" holdangle="25" aimpos="75,10" delay="0.3" />
+      <StatusEffect type="OnUse" target="Contained">
+        <Use />
+      </StatusEffect>
+      <StatusEffect type="OnUse" target="This">
+        <Spawnitem identifiers="pointthrust" spawnposition="ThisInventory" />
+      </StatusEffect>
+    </RangedWeapon>
+    <ItemContainer capacity="2" maxstacksize="1" hideitems="true" drawinventory="false" SpawnWithID="pointthrust" canbeselected="false" removecontaineditemsondeconstruct="true" ShowConditionInContainedStateIndicator="false" containedspritedepth="0.56">
+      <Containable items="pointthrust,pointthrust-door" hide="true" itempos="-65,0" />
+    </ItemContainer>
+  </Item>
+  <Item identifier="pointthrust" hideinmenus="true" category="Material" Tags="smallitem" canbepicked="true" description="" cargocontaineridentifier="metalcrate" scale="0.01" spritecolor="0,0,0,0" inventoryiconcolor="0,0,0,0">
+    <Sprite texture="%ModDir%/Content/Items/PDA/InteractionSprites/pdainteraction.png" depth="0.57" sourcerect="0,0,4,4" origin="0,0" />
+    <Body width="45" height="30" density="30" />
+    <Holdable slots="Any,RightHand,LeftHand" handle1="0,0" msg="ItemMsgPickUpSelect">
+      <StatusEffect type="OnUse" target="this" delay="0.3">
+        <Explosion range="10.0" force="3" shockwave="false" smoke="false" flames="false" sparks="false" underwaterbubble="false" flash="false" camerashake="1" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/finger_clap.ogg" frequencymultiplier="0.8" range="500" selectionmode="random" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/finger_clap.ogg" frequencymultiplier="0.85" range="500" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/finger_clap.ogg" frequencymultiplier="0.9" range="500" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/finger_clap.ogg" frequencymultiplier="0.95" range="500" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/finger_clap.ogg" frequencymultiplier="1.0" range="500" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/finger_clap.ogg" frequencymultiplier="1.05" range="500" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/finger_clap.ogg" frequencymultiplier="1.1" range="500" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/finger_clap.ogg" frequencymultiplier="1.15" range="500" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/finger_clap.ogg" frequencymultiplier="1.2" range="500" />
+        <Remove />
+      </StatusEffect>
+    </Holdable>
+  </Item>
+  <Item identifier="pointthrust-clap" hideinmenus="true" category="Material" Tags="smallitem" canbepicked="true" description="" cargocontaineridentifier="metalcrate" scale="0.01" spritecolor="0,0,0,0" inventoryiconcolor="0,0,0,0">
+    <Sprite texture="%ModDir%/Content/Items/PDA/InteractionSprites/pdainteraction.png" depth="0.57" sourcerect="0,0,4,4" origin="0,0" />
+    <Body width="45" height="30" density="30" />
+    <Holdable slots="Any,RightHand,LeftHand" handle1="0,0" msg="ItemMsgPickUpSelect">
+      <StatusEffect type="OnUse" target="this" delay="0.3">
+        <Explosion range="20.0" force="4" shockwave="false" smoke="false" flames="false" sparks="false" underwaterbubble="false" flash="false" camerashake="1" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/clap.ogg" frequencymultiplier="0.8" range="500" selectionmode="random" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/clap.ogg" frequencymultiplier="0.85" range="500" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/clap.ogg" frequencymultiplier="0.9" range="500" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/clap.ogg" frequencymultiplier="0.95" range="500" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/clap.ogg" frequencymultiplier="1.0" range="500" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/clap.ogg" frequencymultiplier="1.05" range="500" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/clap.ogg" frequencymultiplier="1.1" range="500" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/clap.ogg" frequencymultiplier="1.15" range="500" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/clap.ogg" frequencymultiplier="1.2" range="500" />
+        <Remove />
+      </StatusEffect>
+    </Holdable>
+  </Item>
+  <Item identifier="pointthrust-door" hideinmenus="true" category="Material" Tags="smallitem" canbepicked="true" description="" cargocontaineridentifier="metalcrate" scale="0.01" spritecolor="0,0,0,0" inventoryiconcolor="0,0,0,0">
+    <Sprite texture="%ModDir%/Content/Items/PDA/InteractionSprites/pdainteraction.png" depth="0.57" sourcerect="0,0,4,4" origin="0,0" />
+    <Body width="45" height="30" density="30" />
+    <Holdable slots="Any,RightHand,LeftHand" handle1="0,0" msg="ItemMsgPickUpSelect">
+      <StatusEffect type="OnUse" target="this" delay="0.3">
+        <Explosion range="50.0" force="5" shockwave="false" smoke="false" flames="false" sparks="false" underwaterbubble="false" flash="false" camerashake="2" />
+        <Remove />
+      </StatusEffect>
+    </Holdable>
+  </Item>
+  <Item name="Press (N) to remove" identifier="push-anim" category="Equipment" scale="0.0" InvulnerableToDamage="true" Tags="none">
+    <Sprite texture="%ModDir%/Content/Items/PDA/InteractionSprites/push_2.png" origin="0.5,0.5" sourcerect="86,30,338,456" depth="0.57" />
+    <Body width="16" height="30" density="10.05" />
+    <Holdable canBeCombined="false" slots="RightHand" aimable="true" holdangle="0" aimpos="25,-10" handle1="0,0" handle2="0,0" msg="ItemMsgPickUpSelect">
+      <StatusEffect type="OnNotContained" target="This" stackable="false">
+        <Remove />
+      </StatusEffect>
+      <CustomInterface canbeselected="false" drawhudwhenequipped="true" allowuioverlap="true" draggable="false">
+        <GuiFrame relativesize="0.1,0.15" anchor="BottomRight" absoluteoffset="0,400" />
+        <Button text="Fists">
+          <StatusEffect type="OnUse" target="This" disabledeltatime="true">
+            <SpawnItem identifier="cursor-anim" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+            <Remove />
+          </StatusEffect>
+          <StatusEffect type="OnUse" target="This" disabledeltatime="true">
+            <SpawnItem identifier="cursor-anim1" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+            <Remove />
+          </StatusEffect>
+        </Button>
+        <Button text="Point">
+          <StatusEffect type="OnUse" target="This" disabledeltatime="true">
+            <SpawnItem identifier="point-anim" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+            <Remove />
+          </StatusEffect>
+          <StatusEffect type="OnUse" target="This" disabledeltatime="true">
+            <SpawnItem identifier="point-anim1" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+            <Remove />
+          </StatusEffect>
+        </Button>
+        <Button text="Fake.handcuffs">
+          <StatusEffect type="OnUse" target="NearbyItems" targetidentifiers="cursor-anim,cursor-anim1,push-anim,push-anim1,point-anim,point-anim1" range="15" disabledeltatime="true">
+            <SpawnItem identifier="handcuffs-anim" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+            <Remove />
+          </StatusEffect>
+        </Button>
+        <Button text="Hands.up">
+          <StatusEffect type="OnUse" target="NearbyItems" targetidentifiers="cursor-anim,cursor-anim1,push-anim,push-anim1,point-anim,point-anim1" range="15" disabledeltatime="true">
+            <SpawnItem identifier="hands-up-anim" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+            <Remove />
+          </StatusEffect>
+        </Button>
+      </CustomInterface>
+    </Holdable>
+    <RangedWeapon reload="2.5" weapondamagemodifier="1" penetration="0.0" holdtrigger="false" barrelpos="110,15" spread="0" unskilledspread="0" combatPriority="-1" drawhudwhenequipped="false" crosshairscale="0.2">
+      <StatusEffect type="OnUse" target="This" disabledeltatime="true" />
+      <StatusEffect type="OnUse" target="Contained">
+        <Use />
+      </StatusEffect>
+      <StatusEffect type="OnUse" target="This">
+        <Spawnitem identifiers="pushdamagevolume" spawnposition="ThisInventory" />
+      </StatusEffect>
+    </RangedWeapon>
+    <ItemContainer capacity="2" maxstacksize="1" SpawnWithId="pushthrust,pushdamagevolume" hideitems="true" drawinventory="false" canbeselected="false" removecontaineditemsondeconstruct="true" ShowConditionInContainedStateIndicator="false" containedspritedepth="0.56">
+      <Containable items="pushthrust,pushdamagevolume" hide="true" itempos="-65,0" />
+    </ItemContainer>
+  </Item>
+  <Item name="Press (N) to remove" identifier="push-anim1" category="Equipment" scale="0.0" InvulnerableToDamage="true" Tags="none">
+    <Sprite texture="%ModDir%/Content/Items/PDA/InteractionSprites/push.png" origin="0.5,0.5" sourcerect="86,30,338,456" depth="0.57" />
+    <Body width="16" height="30" density="10.05" />
+    <Holdable canBeCombined="false" slots="LeftHand" aimable="true" holdangle="0" aimpos="25,-10" handle1="0,0" handle2="0,0" msg="ItemMsgPickUpSelect">
+      <StatusEffect type="OnNotContained" target="This" stackable="false">
+        <Remove />
+      </StatusEffect>
+      <CustomInterface canbeselected="false" drawhudwhenequipped="true" allowuioverlap="true" draggable="false">
+        <GuiFrame relativesize="0.1,0.15" anchor="BottomRight" absoluteoffset="150,400" />
+        <Button text="Fists">
+          <StatusEffect type="OnUse" target="This" disabledeltatime="true">
+            <SpawnItem identifier="cursor-anim" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+            <Remove />
+          </StatusEffect>
+          <StatusEffect type="OnUse" target="This" disabledeltatime="true">
+            <SpawnItem identifier="cursor-anim1" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+            <Remove />
+          </StatusEffect>
+        </Button>
+        <Button text="Point">
+          <StatusEffect type="OnUse" target="This" disabledeltatime="true">
+            <SpawnItem identifier="point-anim" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+            <Remove />
+          </StatusEffect>
+          <StatusEffect type="OnUse" target="This" disabledeltatime="true">
+            <SpawnItem identifier="point-anim1" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+            <Remove />
+          </StatusEffect>
+        </Button>
+        <Button text="Fake.handcuffs">
+          <StatusEffect type="OnUse" target="NearbyItems" targetidentifiers="cursor-anim,cursor-anim1,push-anim,push-anim1,point-anim,point-anim1" range="15" disabledeltatime="true">
+            <SpawnItem identifier="handcuffs-anim" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+            <Remove />
+          </StatusEffect>
+        </Button>
+        <Button text="Hands.up">
+          <StatusEffect type="OnUse" target="NearbyItems" targetidentifiers="cursor-anim,cursor-anim1,push-anim,push-anim1,point-anim,point-anim1" range="15" disabledeltatime="true">
+            <SpawnItem identifier="hands-up-anim" spawnposition="SameInventory" spawnifcantbecontained="false" SpawnIfInventoryFull="false" />
+            <Remove />
+          </StatusEffect>
+        </Button>
+      </CustomInterface>
+    </Holdable>
+    <RangedWeapon reload="2.5" weapondamagemodifier="1" penetration="0.0" holdtrigger="false" barrelpos="110,15" spread="0" unskilledspread="0" combatPriority="-1" drawhudwhenequipped="false" crosshairscale="0.2">
+      <StatusEffect type="OnUse" target="This" disabledeltatime="true" />
+      <StatusEffect type="OnUse" target="Contained">
+        <Use />
+      </StatusEffect>
+      <StatusEffect type="OnUse" target="This">
+        <Spawnitem identifiers="pushdamagevolume" spawnposition="ThisInventory" />
+      </StatusEffect>
+    </RangedWeapon>
+    <ItemContainer capacity="2" maxstacksize="1" SpawnWithId="pushthrust,pushdamagevolume" hideitems="true" drawinventory="false" canbeselected="false" removecontaineditemsondeconstruct="true" ShowConditionInContainedStateIndicator="false" containedspritedepth="0.56">
+      <Containable items="pushthrust,pushdamagevolume" hide="true" itempos="-65,0" />
+    </ItemContainer>
+  </Item>
+  <Item identifier="pushdamagevolume" hideinmenus="true" category="Material" Tags="smallitem" canbepicked="true" description="" cargocontaineridentifier="metalcrate" scale="0.35" spritecolor="0,0,0,0" inventoryiconcolor="0,0,0,0">
+    <Sprite texture="%ModDir%/Content/Items/PDA/InteractionSprites/pdainteraction.png" depth="0.57" sourcerect="0,0,4,4" origin="0,0" />
+    <Body width="10" height="10" density="0" />
+    <Holdable slots="Any,RightHand,LeftHand" handle1="0,0" msg="ItemMsgPickUpSelect" />
+    <Projectile characterusable="false" launchimpulse="9" hitscan="false" removeonhit="true">
+      <Attack structuredamage="0" itemdamage="0" targetforce="10" severlimbsprobability="0.01">
+        <Affliction identifier="blunttrauma" strength="0.5" />
+        <Affliction identifier="stun" strength="0.4" />
+      </Attack>
+      <StatusEffect type="OnUse" target="UseTarget">
+        <Conditional entitytype="eq Character" />
+        <Sound file="Content/Sounds/Damage/LimbSlash1.ogg" selectionmode="random" range="500" />
+        <Sound file="Content/Sounds/Damage/LimbSlash2.ogg" range="500" />
+        <Sound file="Content/Sounds/Damage/LimbSlash3.ogg" range="500" />
+        <Sound file="Content/Sounds/Damage/LimbSlash4.ogg" range="500" />
+        <Sound file="Content/Sounds/Damage/LimbSlash5.ogg" range="500" />
+        <Sound file="Content/Sounds/Damage/LimbSlash6.ogg" range="500" />
+      </StatusEffect>
+      <StatusEffect type="OnUse" target="This" delay="0.1">
+        <Remove />
+      </StatusEffect>
+    </Projectile>
+  </Item>
+  <Item identifier="pushthrust" hideinmenus="true" category="Material" Tags="smallitem" canbepicked="true" description="" cargocontaineridentifier="metalcrate" scale="0.35" impactsoundtag="impact_metal_light" spritecolor="0,0,0,0" inventoryiconcolor="0,0,0,0">
+    <Sprite texture="%ModDir%/Content/Items/PDA/InteractionSprites/pdainteraction.png" depth="0.57" sourcerect="0,0,4,4" origin="0,0" />
+    <Body width="45" height="30" density="30" />
+    <Holdable slots="Any,RightHand,LeftHand" handle1="0,0" msg="ItemMsgPickUpSelect">
+      <StatusEffect type="OnUse" target="this">
+        <Explosion range="100.0" force="9" shockwave="false" smoke="false" flames="false" sparks="false" underwaterbubble="false" flash="false" camerashake="0" />
+      </StatusEffect>
+    </Holdable>
+  </Item>
+  <Item name=" " identifier="vomit-proxy" maxstacksize="1" scale="0.5" category="Weapon" NonInteractable="True" hideinmenus="true" tags="smallitem">
+    <Sprite texture="Content/Items/Weapons/weapons_new.png" sourcerect="1950,282,17,6" depth="0.55" origin="0.5,0.5" />
+    <Body width="5" height="5" density="25" />
+    <Holdable canBeCombined="true" slots="LeftHand+RightHand" msg="ItemMsgPickUpSelect">
+      <StatusEffect type="OnContained" target="This" oneshot="true" holdpos="25,7" handle2="0,0" aimpos="25,20" />
+      <StatusEffect type="OnContained" target="This,Character" oneshot="true" holdpos="15,7" handle2="0,0" aimpos="15,20" delay="0.5">
+        <Sound file="%ModDir%/Content/Sounds/Interactions/vomit_1.ogg" frequencymultiplier="0.8" range="400" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/vomit_1.ogg" frequencymultiplier="0.9" range="400" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/vomit_1.ogg" frequencymultiplier="1.0" range="400" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/vomit_1.ogg" frequencymultiplier="1.1" range="400" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/vomit_1.ogg" frequencymultiplier="1.2" range="400" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/vomit_2.ogg" frequencymultiplier="0.8" range="400" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/vomit_2.ogg" frequencymultiplier="0.9" range="400" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/vomit_2.ogg" frequencymultiplier="1.0" range="400" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/vomit_2.ogg" frequencymultiplier="1.1" range="400" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/vomit_2.ogg" frequencymultiplier="1.2" range="400" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/vomit_3.ogg" frequencymultiplier="0.8" range="400" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/vomit_3.ogg" frequencymultiplier="0.9" range="400" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/vomit_3.ogg" frequencymultiplier="1.0" range="400" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/vomit_3.ogg" frequencymultiplier="1.1" range="400" />
+        <Sound file="%ModDir%/Content/Sounds/Interactions/vomit_3.ogg" frequencymultiplier="1.2" range="400" />
+        <Affliction identifier="Nausea" amount="2000" probability="0.2" />
+        <Affliction identifier="organdamage" amount="400" probability="0.1" />
+        <Conditional lockhands="false" />
+      </StatusEffect>
+      <StatusEffect type="Always" target="This" delay="2.5">
+        <Remove />
+      </StatusEffect>
+    </Holdable>
+  </Item>
+</Items>

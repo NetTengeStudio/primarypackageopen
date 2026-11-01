@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ModConfig>
+    <Lua Folder="%ModDir%/Lua/Autorun" IsAutorun="true" LoadPriority="1" />
+    <Assembly Folder="%ModDir%/CSharp/Shared" Target="Any" IsScript="true" />
+    <Assembly Folder="%ModDir%/CSharp/Client" Target="Client" IsScript="true" />
+    <Assembly Folder="%ModDir%/CSharp/Server" Target="Server" IsScript="true" />
+    <Config File="%ModDir%/Config/BloomSettingsClient.xml" Target="Client" />
+    <Config File="%ModDir%/Config/ControlsSettingsClient.xml" Target="Client" />
+    <Config File="%ModDir%/Config/DiagnosticsSettingsClient.xml" Target="Client" />
+    <Config File="%ModDir%/Config/GameplaySettingsClient.xml" Target="Client" />
+    <Config File="%ModDir%/Config/MotionBlurSettingsClient.xml" Target="Client" />
+</ModConfig>

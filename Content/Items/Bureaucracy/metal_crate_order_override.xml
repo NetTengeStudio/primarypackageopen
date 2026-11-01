@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Override>
+  <Items>
+    <Item name="" identifier="metalcrate" tags="crate,allowcleanup,primarypkg_ordercrate" aliases="metalcrate_event" scale="0.5" linkable="true" pickdistance="150" showcontentsintooltip="true" impactsoundtag="impact_metal_heavy">
+      <Deconstruct time="0.5"/>
+      <Sprite texture="Content/Items/Containers/containers.png" depth="0.54" sourcerect="407,376,152,89" origin="0.5,0.5" />
+      <Body width="150" height="75" density="25" />
+      <Holdable slots="RightHand+LeftHand" holdpos="0,-80" handle1="-30,14" handle2="30,14" aimable="false" msg="ItemMsgPickUpSelect" />
+      <ItemContainer capacity="20" maxstacksize="32" canbeselected="false" hideitems="true" keepopenwhenequipped="true" movableframe="true">
+        <Containable items="smallitem,mediumitem" excludeditems="toolbelt,toolbox,bandolier,cargoscooter,largemobilecontainer" />
+      </ItemContainer>
+      <OrderClaimComponent />
+      <Upgrade gameversion="1.1.0.0" maxstacksize="64">
+        <ItemContainer maxstacksize="64" />
+      </Upgrade>
+    </Item>
+  </Items>
+</Override>

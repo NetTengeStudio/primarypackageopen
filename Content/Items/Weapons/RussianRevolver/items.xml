@@ -1,0 +1,156 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Items>
+  <Item name="Russian roulette revolver" identifier="pp_russianrouletterevolver" category="Weapon" cargocontaineridentifier="metalcrate" tags="smallitem,weapon,gun,pistolitem,mountableweapon" health="100" AllowSellingWhenBroken="true" Scale="0.5" impactsoundtag="impact_metal_light" isshootable="true" HideConditionBar="true" description="A revolver modified specifically for the most dangerous game of them all. Load with revolver ammo if you want to leave your medic a chance, or handcannon ammo if you're ready to meet death.">
+    <PreferredContainer secondary="wrecksecarmcab,abandonedsecarmcab" spawnprobability="0.01" />
+    <Deconstruct time="10">
+      <Item identifier="steel" />
+      <Item identifier="plastic" />
+    </Deconstruct>
+    <Fabricate suitablefabricators="fabricator" requiredtime="25">
+      <RequiredSkill identifier="weapons" level="40" />
+      <RequiredItem identifier="revolver" />
+    </Fabricate>
+    <Fabricate suitablefabricators="fabricator" requiredtime="40">
+      <RequiredSkill identifier="weapons" level="45" />
+      <RequiredItem identifier="steel" amount="2" />
+      <RequiredItem identifier="plastic" amount="2" />
+      <RequiredItem identifier="tin" amount="2" />
+    </Fabricate>
+    <InventoryIcon texture="%ModDir%/Content/Items/Weapons/RussianRevolver/snubnose.png" sourcerect="0,0,64,64" origin="0.5,0.5" />
+    <Sprite texture="%ModDir%/Content/Items/Weapons/RussianRevolver/snubnose.png" sourcerect="0,10,64,40" depth="0.55" origin="0.5,0.5" />
+    <Body width="180" height="30" density="25" />
+    <Holdable slots="Any,RightHand,LeftHand" controlpose="true" aimpos="22,-5" AimAngle="105" handle1="-15,-9" aimable="false" msg="ItemMsgPickUpSelect">
+      <GreaterComponent TimeFrame="0" />
+      <MemoryComponent MaxValueLength="8" Value="empty" />
+      <LightComponent LightColor="0.0,0.0,0.0,0" range="1" IsOn="true" />
+      <StatusEffect type="OnUse" target="this" IsOn="true" delay="1.5">
+        <Conditional IsOn="eq true" targetitemcomponent="LightComponent" />
+        <RequiredItems items="pistolammoitem" type="Contained" />
+      </StatusEffect>
+      <StatusEffect type="OnUse" target="this" delay="1.15">
+        <Sound file="%ModDir%/Content/Items/Weapons/RussianRevolver/hammercock.ogg" type="OnUse" range="800.0" loop="false" volume="1" />
+        <Conditional IsOn="eq true" targetitemcomponent="LightComponent" />
+        <RequiredItems items="pistolammoitem" type="Contained" />
+      </StatusEffect>
+      <StatusEffect type="OnActive" target="This" IsOn="true" setValue="true" delay="1.5">
+        <Conditional Value="eq empty" />
+        <RequiredItems items="pistolammoitem" type="Contained" />
+      </StatusEffect>
+      <StatusEffect type="OnActive" target="This" delay="1.15">
+        <Conditional Value="eq empty" />
+        <Sound file="%ModDir%/Content/Items/Weapons/RussianRevolver/hammercock.ogg" type="OnUse" range="800.0" loop="false" volume="1" />
+        <RequiredItems items="pistolammoitem" type="Contained" />
+      </StatusEffect>
+      <StatusEffect type="OnActive" target="This" condition="100" IsOn="false" setValue="true">
+        <Conditional Value="eq empty" />
+        <Sound file="%ModDir%/Content/Items/Weapons/RussianRevolver/spin.ogg" type="OnUse" range="800.0" loop="false" volume="1" />
+        <RequiredItems items="pistolammoitem" type="Contained" />
+      </StatusEffect>
+      <StatusEffect type="OnActive" target="This" Value="empty" />
+      <StatusEffect type="OnActive" target="This" Value="revolver" setValue="true">
+        <Conditional HasTag="eq revolverammo" TargetContainedItem="true" />
+      </StatusEffect>
+      <StatusEffect type="OnActive" target="This" Value="cannon" setValue="true">
+        <Conditional HasTag="eq handcannonammo" TargetContainedItem="true" />
+      </StatusEffect>
+      <StatusEffect type="OnUse" target="This" Condition="0" comparison="And" SetValue="true">
+        <Conditional Condition="eq 100" />
+        <Conditional TimeFrame="lte 10" />
+        <Conditional IsOn="eq true" targetitemcomponent="LightComponent" />
+        <RequiredItems items="pistolammoitem" type="Contained" />
+      </StatusEffect>
+      <StatusEffect type="OnUse" target="This" Condition="0" comparison="And" SetValue="true">
+        <Conditional Condition="eq 84" />
+        <Conditional TimeFrame="lte 12" />
+        <Conditional IsOn="eq true" targetitemcomponent="LightComponent" />
+        <RequiredItems items="pistolammoitem" type="Contained" />
+      </StatusEffect>
+      <StatusEffect type="OnUse" target="This" Condition="0" comparison="And" SetValue="true">
+        <Conditional Condition="eq 68" />
+        <Conditional TimeFrame="lte 15" />
+        <Conditional IsOn="eq true" targetitemcomponent="LightComponent" />
+        <RequiredItems items="pistolammoitem" type="Contained" />
+      </StatusEffect>
+      <StatusEffect type="OnUse" target="This" Condition="0" comparison="And" SetValue="true">
+        <Conditional Condition="eq 52" />
+        <Conditional TimeFrame="lte 20" />
+        <Conditional IsOn="eq true" targetitemcomponent="LightComponent" />
+        <RequiredItems items="pistolammoitem" type="Contained" />
+      </StatusEffect>
+      <StatusEffect type="OnUse" target="This" Condition="0" comparison="And" SetValue="true">
+        <Conditional Condition="eq 36" />
+        <Conditional TimeFrame="lte 30" />
+        <Conditional IsOn="eq true" targetitemcomponent="LightComponent" />
+        <RequiredItems items="pistolammoitem" type="Contained" />
+      </StatusEffect>
+      <StatusEffect type="OnUse" target="This" Condition="0" comparison="And" SetValue="true">
+        <Conditional Condition="eq 20" />
+        <Conditional IsOn="eq true" targetitemcomponent="LightComponent" />
+        <RequiredItems items="pistolammoitem" type="Contained" />
+      </StatusEffect>
+      <StatusEffect type="OnUse" target="This" Condition="-16" disabledeltatime="true" comparison="And">
+        <Conditional IsOn="eq true" targetitemcomponent="LightComponent" />
+        <Conditional Condition="gt 0" />
+        <RequiredItems items="pistolammoitem" type="Contained" />
+        <Sound file="%ModDir%/Content/Items/Weapons/RussianRevolver/click.ogg" type="OnActive" range="800" loop="false" volume="1" />
+      </StatusEffect>
+      <StatusEffect type="OnUse" target="this" IsOn="false" />
+      <StatusEffect type="OnUse" target="This,Character" targetlimbs="Head" disabledeltatime="true" comparison="And">
+        <Conditional Condition="lte 0" />
+        <Conditional Value="eq revolver" />
+        <Affliction identifier="gunshotwound" strength="80" />
+        <Affliction identifier="explosiondamage" strength="50" />
+        <Affliction identifier="bleeding" strength="60" />
+        <Affliction identifier="stun" strength="3.0" />
+        <Affliction identifier="concussion" strength="100" />
+      </StatusEffect>
+      <StatusEffect type="OnUse" target="This,Character" targetlimbs="Head" disabledeltatime="true" comparison="And" severlimbsprobability="0.2">
+        <Conditional Condition="lte 0" />
+        <Conditional Value="eq cannon" />
+        <Affliction identifier="gunshotwound" strength="1500" />
+        <Affliction identifier="explosiondamage" strength="500" />
+        <Affliction identifier="bleeding" strength="100" />
+        <Affliction identifier="concussion" strength="100" />
+      </StatusEffect>
+      <StatusEffect type="OnBroken" Target="this">
+        <Conditional Value="eq revolver" />
+        <ParticleEmitter particle="muzzleflash" particleamount="1" anglemin="90" anglemax="90" velocitymin="0" velocitymax="0" />
+        <ParticleEmitter particle="explosionsmoke" particleamount="3" velocitymin="0" velocitymax="0.2" scalemin="0.2" scalemax="0.4" />
+        <Sound file="%ModDir%/Content/Items/Weapons/RussianRevolver/revolver_1.ogg" type="OnActive" range="3000.0" loop="false" volume="1" />
+        <Sound file="%ModDir%/Content/Items/Weapons/RussianRevolver/revolver_2.ogg" type="OnActive" range="3000.0" loop="false" volume="1" />
+        <SpawnItem identifiers="pp_russianrouletterevolver" />
+        <Remove />
+      </StatusEffect>
+      <StatusEffect type="OnBroken" Target="this">
+        <Conditional Value="eq cannon" />
+        <ParticleEmitter particle="muzzleflash" particleamount="1" velocitymin="0" velocitymax="0" />
+        <ParticleEmitter particle="explosionsmoke" particleamount="5" velocitymin="0" velocitymax="0.1" scalemin="0.4" scalemax="0.6" />
+        <Sound file="%ModDir%/Content/Items/Weapons/RussianRevolver/handcannon_1.ogg" type="OnActive" range="3000.0" loop="false" volume="1" selectionmode="random" />
+        <Sound file="%ModDir%/Content/Items/Weapons/RussianRevolver/handcannon_2.ogg" type="OnActive" range="3000.0" loop="false" volume="1" />
+        <SpawnItem identifiers="pp_russianrouletterevolver" />
+        <Remove />
+      </StatusEffect>
+      <CustomInterface canbeselected="false" drawhudwhenequipped="true" allowuioverlap="true">
+        <GuiFrame relativesize="0.11,0.1" anchor="BottomCenter" pivot="BottomRight" relativeoffset="-0.125,0.002" style="ItemUI" />
+        <Button text="russianroulette.spincylinder">
+          <StatusEffect type="OnUse" target="this" IsOn="true" delay="1.5" />
+          <StatusEffect type="OnUse" target="this" IsOn="false" />
+          <StatusEffect type="OnUse" target="This" Condition="100" SetValue="true">
+            <Sound file="%ModDir%/Content/Items/Weapons/RussianRevolver/spin.ogg" type="OnUse" range="800" loop="false" volume="1" />
+          </StatusEffect>
+        </Button>
+      </CustomInterface>
+    </Holdable>
+    <ItemContainer capacity="1" maxstacksize="1" containedstateindicatorstyle="bullet" KeepOpenWhenEquipped="true">
+      <SlotIcon slotindex="0" texture="Content/UI/StatusMonitorUI.png" sourcerect="256,448,64,64" origin="0.5,0.5" />
+      <Containable items="revolverammo,handcannonammo">
+        <StatusEffect type="OnActive" target="This" TimeFrame="1" disabledeltatime="true" />
+        <StatusEffect type="OnActive" target="This" TimeFrame="1" setValue="true">
+          <Conditional TimeFrame="gte 61" />
+        </StatusEffect>
+      </Containable>
+    </ItemContainer>
+    <aitarget sightrange="2000" soundrange="5000" fadeouttime="5" />
+    <Upgrade gameversion="0.10.0.0" scale="0.5" />
+  </Item>
+</Items>

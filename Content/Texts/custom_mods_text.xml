@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<infotexts language="Russian" nowhitespace="false" translatedname="Russian">
+  <pp_kits.title>Конструктор комплектов</pp_kits.title>
+  <pp_kits.tab.overview>Обзор</pp_kits.tab.overview>
+  <pp_kits.tab.variants>Вариации</pp_kits.tab.variants>
+  <pp_kits.nojob>Без должности</pp_kits.nojob>
+  <pp_kits.possess>Вселиться</pp_kits.possess>
+  <pp_kits.spawnnpc>Создать НИП</pp_kits.spawnnpc>
+  <pp_kits.hostile>Враждебный</pp_kits.hostile>
+  <pp_kits.hostilenopossess>Во враждебного вселиться нельзя</pp_kits.hostilenopossess>
+  <pp_kits.export>Экспорт</pp_kits.export>
+  <pp_kits.delete>Удалить</pp_kits.delete>
+  <pp_kits.created>Комплект создан</pp_kits.created>
+  <pp_kits.deleted>Комплект удалён</pp_kits.deleted>
+  <pp_kits.equipped>Комплект выдан</pp_kits.equipped>
+  <pp_kits.exported>Комплект экспортирован в Data/pp_jobs.xml</pp_kits.exported>
+  <pp_kits.exportfailed>Не удалось экспортировать комплект</pp_kits.exportfailed>
+  <pp_kits.needname>Введите название комплекта</pp_kits.needname>
+  <pp_kits.nocharacter>Нет активного персонажа</pp_kits.nocharacter>
+  <pp_kits.noround>Раунд не запущен</pp_kits.noround>
+  <pp_kits.notfound>Комплект не найден</pp_kits.notfound>
+  <pp_kits.overwritten>Комплект перезаписан</pp_kits.overwritten>
+  <pp_kits.stats>Навыки</pp_kits.stats>
+  <pp_kits.variants.hint>Вариации задают случайный разброс снаряжения при выдаче</pp_kits.variants.hint>
+  <pp_kits.variants.reroll>Перегенерировать</pp_kits.variants.reroll>
+  <afflictiontype.pp_cold>Холод</afflictiontype.pp_cold>
+  <Primary_x0020_package.RPWheelKey.DisplayName>Клавиша колеса эмоций</Primary_x0020_package.RPWheelKey.DisplayName>
+  <Primary_x0020_package.RPWheelKey.DisplayCategory>Управление</Primary_x0020_package.RPWheelKey.DisplayCategory>
+  <Primary_x0020_package.RPWheelKey.Tooltip>Вызов колеса отыгрыша</Primary_x0020_package.RPWheelKey.Tooltip>
+  <Primary_x0020_package.ReloadKey.DisplayName>Клавиша перезарядки</Primary_x0020_package.ReloadKey.DisplayName>
+  <Primary_x0020_package.ReloadKey.DisplayCategory>Управление</Primary_x0020_package.ReloadKey.DisplayCategory>
+  <Primary_x0020_package.ReloadKey.Tooltip>Быстрая перезарядка оружия в руках</Primary_x0020_package.ReloadKey.Tooltip>
+  <Primary_x0020_package.ZoomInKey.DisplayName>Клавиша приближения</Primary_x0020_package.ZoomInKey.DisplayName>
+  <Primary_x0020_package.ZoomInKey.DisplayCategory>Управление</Primary_x0020_package.ZoomInKey.DisplayCategory>
+  <Primary_x0020_package.ZoomInKey.Tooltip>Шаг приближения камеры, помимо колеса мыши</Primary_x0020_package.ZoomInKey.Tooltip>
+  <Primary_x0020_package.ZoomOutKey.DisplayName>Клавиша отдаления</Primary_x0020_package.ZoomOutKey.DisplayName>
+  <Primary_x0020_package.ZoomOutKey.DisplayCategory>Управление</Primary_x0020_package.ZoomOutKey.DisplayCategory>
+  <Primary_x0020_package.ZoomOutKey.Tooltip>Шаг отдаления камеры, помимо колеса мыши</Primary_x0020_package.ZoomOutKey.Tooltip>
+  <Primary_x0020_package.ZoomResetKey.DisplayName>Клавиша сброса зума</Primary_x0020_package.ZoomResetKey.DisplayName>
+  <Primary_x0020_package.ZoomResetKey.DisplayCategory>Управление</Primary_x0020_package.ZoomResetKey.DisplayCategory>
+  <Primary_x0020_package.ZoomResetKey.Tooltip>Возврат камеры к обычному приближению</Primary_x0020_package.ZoomResetKey.Tooltip>
+  <Primary_x0020_package.ThoughtsEnabled.DisplayName>Внутренние реплики</Primary_x0020_package.ThoughtsEnabled.DisplayName>
+  <Primary_x0020_package.ThoughtsEnabled.DisplayCategory>Геймплей</Primary_x0020_package.ThoughtsEnabled.DisplayCategory>
+  <Primary_x0020_package.ThoughtsEnabled.Tooltip>Персонаж комментирует происходящее про себя</Primary_x0020_package.ThoughtsEnabled.Tooltip>
+  <Primary_x0020_package.WakeIntroEnabled.DisplayName>Заставка пробуждения</Primary_x0020_package.WakeIntroEnabled.DisplayName>
+  <Primary_x0020_package.WakeIntroEnabled.DisplayCategory>Геймплей</Primary_x0020_package.WakeIntroEnabled.DisplayCategory>
+  <Primary_x0020_package.WakeIntroEnabled.Tooltip>Показ вступительной сцены в начале раунда</Primary_x0020_package.WakeIntroEnabled.Tooltip>
+  <Primary_x0020_package.ColdEffects.DisplayName>Экранные эффекты холода</Primary_x0020_package.ColdEffects.DisplayName>
+  <Primary_x0020_package.ColdEffects.DisplayCategory>Геймплей</Primary_x0020_package.ColdEffects.DisplayCategory>
+  <Primary_x0020_package.ColdEffects.Tooltip>Иней, дрожь и дыхание при переохлаждении</Primary_x0020_package.ColdEffects.Tooltip>
+  <Primary_x0020_package.BloomEnabled.DisplayName>Свечение</Primary_x0020_package.BloomEnabled.DisplayName>
+  <Primary_x0020_package.BloomEnabled.DisplayCategory>Свечение</Primary_x0020_package.BloomEnabled.DisplayCategory>
+  <Primary_x0020_package.BloomEnabled.Tooltip>Ореол вокруг ярких источников света</Primary_x0020_package.BloomEnabled.Tooltip>
+  <Primary_x0020_package.BloomIntensity.DisplayName>Сила свечения</Primary_x0020_package.BloomIntensity.DisplayName>
+  <Primary_x0020_package.BloomIntensity.DisplayCategory>Свечение</Primary_x0020_package.BloomIntensity.DisplayCategory>
+  <Primary_x0020_package.BloomIntensity.Tooltip>Насколько ярко ореол добавляется к кадру</Primary_x0020_package.BloomIntensity.Tooltip>
+  <Primary_x0020_package.BloomThreshold.DisplayName>Порог яркости</Primary_x0020_package.BloomThreshold.DisplayName>
+  <Primary_x0020_package.BloomThreshold.DisplayCategory>Свечение</Primary_x0020_package.BloomThreshold.DisplayCategory>
+  <Primary_x0020_package.BloomThreshold.Tooltip>С какой яркости пиксель начинает светиться</Primary_x0020_package.BloomThreshold.Tooltip>
+  <Primary_x0020_package.BloomKnee.DisplayName>Мягкость порога</Primary_x0020_package.BloomKnee.DisplayName>
+  <Primary_x0020_package.BloomKnee.DisplayCategory>Свечение</Primary_x0020_package.BloomKnee.DisplayCategory>
+  <Primary_x0020_package.BloomKnee.Tooltip>Плавность перехода у порога, убирает мерцание</Primary_x0020_package.BloomKnee.Tooltip>
+  <Primary_x0020_package.BloomMultiplier.DisplayName>Множитель яркости</Primary_x0020_package.BloomMultiplier.DisplayName>
+  <Primary_x0020_package.BloomMultiplier.DisplayCategory>Свечение</Primary_x0020_package.BloomMultiplier.DisplayCategory>
+  <Primary_x0020_package.BloomMultiplier.Tooltip>Усиление того, что прошло порог</Primary_x0020_package.BloomMultiplier.Tooltip>
+  <Primary_x0020_package.BloomRadius.DisplayName>Радиус размытия</Primary_x0020_package.BloomRadius.DisplayName>
+  <Primary_x0020_package.BloomRadius.DisplayCategory>Свечение</Primary_x0020_package.BloomRadius.DisplayCategory>
+  <Primary_x0020_package.BloomRadius.Tooltip>Ширина ореола в текселях</Primary_x0020_package.BloomRadius.Tooltip>
+  <Primary_x0020_package.BloomSpread.DisplayName>Разброс</Primary_x0020_package.BloomSpread.DisplayName>
+  <Primary_x0020_package.BloomSpread.DisplayCategory>Свечение</Primary_x0020_package.BloomSpread.DisplayCategory>
+  <Primary_x0020_package.BloomSpread.Tooltip>Вклад каждого следующего уровня в ореол</Primary_x0020_package.BloomSpread.Tooltip>
+  <Primary_x0020_package.BloomLevels.DisplayName>Уровни размытия</Primary_x0020_package.BloomLevels.DisplayName>
+  <Primary_x0020_package.BloomLevels.DisplayCategory>Свечение</Primary_x0020_package.BloomLevels.DisplayCategory>
+  <Primary_x0020_package.BloomLevels.Tooltip>Меньше уровней дешевле и даёт более тугой ореол</Primary_x0020_package.BloomLevels.Tooltip>
+  <Primary_x0020_package.ExplosionFlash.DisplayName>Вспышка взрыва</Primary_x0020_package.ExplosionFlash.DisplayName>
+  <Primary_x0020_package.ExplosionFlash.DisplayCategory>Свечение</Primary_x0020_package.ExplosionFlash.DisplayCategory>
+  <Primary_x0020_package.ExplosionFlash.Tooltip>Яркость вспышки от взрыва</Primary_x0020_package.ExplosionFlash.Tooltip>
+  <Primary_x0020_package.ExplosionDebris.DisplayName>Осколки взрыва</Primary_x0020_package.ExplosionDebris.DisplayName>
+  <Primary_x0020_package.ExplosionDebris.DisplayCategory>Свечение</Primary_x0020_package.ExplosionDebris.DisplayCategory>
+  <Primary_x0020_package.ExplosionDebris.Tooltip>Количество частиц осколков</Primary_x0020_package.ExplosionDebris.Tooltip>
+  <Primary_x0020_package.ExplosionShock.DisplayName>Ударная волна</Primary_x0020_package.ExplosionShock.DisplayName>
+  <Primary_x0020_package.ExplosionShock.DisplayCategory>Свечение</Primary_x0020_package.ExplosionShock.DisplayCategory>
+  <Primary_x0020_package.ExplosionShock.Tooltip>Сила искажения кадра ударной волной</Primary_x0020_package.ExplosionShock.Tooltip>
+  <Primary_x0020_package.BlastSmoke.DisplayName>Дым взрыва</Primary_x0020_package.BlastSmoke.DisplayName>
+  <Primary_x0020_package.BlastSmoke.DisplayCategory>Свечение</Primary_x0020_package.BlastSmoke.DisplayCategory>
+  <Primary_x0020_package.BlastSmoke.Tooltip>Количество дыма после взрыва</Primary_x0020_package.BlastSmoke.Tooltip>
+  <Primary_x0020_package.MotionBlurEnabled.DisplayName>Размытие в движении</Primary_x0020_package.MotionBlurEnabled.DisplayName>
+  <Primary_x0020_package.MotionBlurEnabled.DisplayCategory>Размытие в движении</Primary_x0020_package.MotionBlurEnabled.DisplayCategory>
+  <Primary_x0020_package.MotionBlurEnabled.Tooltip>Смазывание кадра вдоль направления движения сцены</Primary_x0020_package.MotionBlurEnabled.Tooltip>
+  <Primary_x0020_package.MotionBlurStrength.DisplayName>Сила размытия в движении</Primary_x0020_package.MotionBlurStrength.DisplayName>
+  <Primary_x0020_package.MotionBlurStrength.DisplayCategory>Размытие в движении</Primary_x0020_package.MotionBlurStrength.DisplayCategory>
+  <Primary_x0020_package.MotionBlurStrength.Tooltip>Множитель длины смаза за один кадр</Primary_x0020_package.MotionBlurStrength.Tooltip>
+  <Primary_x0020_package.ColdDebug.DisplayName>Телеметрия холода</Primary_x0020_package.ColdDebug.DisplayName>
+  <Primary_x0020_package.ColdDebug.DisplayCategory>Диагностика</Primary_x0020_package.ColdDebug.DisplayCategory>
+  <Primary_x0020_package.ColdDebug.Tooltip>Панель и карта температур</Primary_x0020_package.ColdDebug.Tooltip>
+  <Primary_x0020_package.InspectDebug.DisplayName>Отладка осмотра</Primary_x0020_package.InspectDebug.DisplayName>
+  <Primary_x0020_package.InspectDebug.DisplayCategory>Диагностика</Primary_x0020_package.InspectDebug.DisplayCategory>
+  <Primary_x0020_package.InspectDebug.Tooltip>Диагностика подсказок осмотра</Primary_x0020_package.InspectDebug.Tooltip>
+</infotexts>
