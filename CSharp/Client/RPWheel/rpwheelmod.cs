@@ -16,7 +16,7 @@ namespace PrimaryPackage.RPWheel
 #if CLIENT
 using GUI = global::Barotrauma.GUI;
 #endif
-    public class RPWheelMod : PrimaryPackage.Core.IModule, IEventUpdate
+    public class RPWheelMod : PrimaryPackage.Core.IModule, IEventUpdate, IEventRoundEnded
     {
 
         public static RPWheelMod?      Instance     { get; private set; }
@@ -34,7 +34,9 @@ using GUI = global::Barotrauma.GUI;
 
         private static double Now => Stopwatch.GetTimestamp() / (double)Stopwatch.Frequency;
 
-        public void RoundStart() => ResetWheel();
+        public void RoundStart() { EmoteDisplay?.Reset(); ResetWheel(); Emotions.EmotePlayback.Reset(); RPWheelNet.Reset(); EmoteNet.Reset(); }
+
+        public void OnRoundEnd() => RoundStart();
 
         public void Attach(Harmony harmony)
         {
@@ -43,12 +45,14 @@ using GUI = global::Barotrauma.GUI;
             ModDir       = PrimaryPackage.Core.ModAssets.Resolve("Content/Systems/RPWheel");
             Theme.Initialize();
             LoadCatalog();
+            Emotions.EmotePlayback.Attach(harmony);
             RebuildWheel();
             wheelLayer = PrimaryPackage.GUI.GUIRuntime.Instance.RegisterOverlay(() => IsWheelOpen, DrawOverlay, ResetWheel, blocksWorld: true, hidesCursor: true);
             emoteLayer = PrimaryPackage.GUI.GUIRuntime.Instance.RegisterOverlay(() => PrimaryPackage.Core.PlayView.Running && EmoteDisplay?.HasEntries == true, batch => EmoteDisplay?.Draw(batch));
             RpUtil.PatchNamespace(harmony);
             RPWheelNet.Register();
             LuaCsSetup.Instance?.EventService?.Subscribe<IEventUpdate>(this);
+            LuaCsSetup.Instance?.EventService?.Subscribe<IEventRoundEnded>(this);
             RegisterConsoleCommands();
         }
 
@@ -56,6 +60,7 @@ using GUI = global::Barotrauma.GUI;
         public void Release()
         {
             LuaCsSetup.Instance?.EventService?.Unsubscribe<IEventUpdate>(this);
+            LuaCsSetup.Instance?.EventService?.Unsubscribe<IEventRoundEnded>(this);
             ResetWheel();
             wheelLayer?.Dispose();
             emoteLayer?.Dispose();
@@ -65,7 +70,8 @@ using GUI = global::Barotrauma.GUI;
             _overlay = null;
             _model = null;
             EmoteDisplay = null;
-            EmoteAudio.DisposeAll();
+            Emotions.EmotePlayback.Reset();
+            RPWheelNet.Release();
             Theme.Dispose();
             _consoleCommands.ForEach(PrimaryPackage.Core.ModCommands.Drop);
             _consoleCommands.Clear();
@@ -75,7 +81,8 @@ using GUI = global::Barotrauma.GUI;
         internal static void LoadCatalog()
         {
             EmoteCatalog.Load();
-            EmoteAudio.LoadCatalog(PrimaryPackage.Core.ModAssets.Root);
+            Emotions.EmotePlayback.RefreshCatalog();
+
         }
 
         public static bool IsWheelOpen => Instance?._model is { Visible: true };
@@ -114,7 +121,7 @@ using GUI = global::Barotrauma.GUI;
                 int selected = _model.Input(now, hotkey, esc && !_wasEscDown);
                 if (selected >= 0) { EmoteNet.Send((byte)selected); }
             }
-            if (Screen.Selected == GameMain.GameScreen) { EmoteDisplay?.Tick(dt); }
+            if (Screen.Selected == GameMain.GameScreen) { RPWheelNet.Update(); EmoteDisplay?.Tick(dt); }
             _wasHotkeyDown = hotkey;
             _wasEscDown    = esc;
         }

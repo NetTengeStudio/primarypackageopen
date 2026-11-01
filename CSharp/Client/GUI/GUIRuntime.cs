@@ -22,6 +22,14 @@ public sealed class GUIRuntime : IDisposable {
     private Screen screen;
     private readonly List<GUIOverlay> overlays = new();
     private readonly List<GUINativeSurface> nativeSurfaces = new();
+    internal bool CapturesAim {
+        get {
+            if (OverlayCapture) { return true; }
+            var windows = Windows.Windows;
+            for (int i = 0; i < windows.Count; i++) { if (!windows[i].Disposed && windows[i].Visible && !windows[i].InputTransparent) { return true; } }
+            return false;
+        }
+    }
     internal bool OverlayCapture {
         get { for (int i = 0; i < overlays.Count; i++) { if (overlays[i].BlocksWorld && overlays[i].Visible()) { return true; } } return false; }
     }
@@ -34,8 +42,8 @@ public sealed class GUIRuntime : IDisposable {
         screen = Screen.Selected;
         Input = new GUIInput(this);
     }
-    public GUIOverlay RegisterOverlay(Func<bool> visible, Action<SpriteBatch> draw, Action cancel = null, bool blocksWorld = false, bool hidesCursor = false) {
-        var overlay = new GUIOverlay(overlays, visible, draw, cancel, blocksWorld, hidesCursor);
+    public GUIOverlay RegisterOverlay(Func<bool> visible, Action<SpriteBatch> draw, Action cancel = null, bool blocksWorld = false, bool hidesCursor = false, bool cancelOnWindowOpen = true) {
+        var overlay = new GUIOverlay(overlays, visible, draw, cancel, blocksWorld, hidesCursor, cancelOnWindowOpen);
         overlays.Add(overlay);
         return overlay;
     }
@@ -46,7 +54,7 @@ public sealed class GUIRuntime : IDisposable {
     }
     internal void AddNativeSurfaces() { for (int i = 0; i < nativeSurfaces.Count; i++) { nativeSurfaces[i].AddToUpdateList(); } }
     internal void CancelBlockingOverlays() {
-        for (int i = 0; i < overlays.Count; i++) { if (overlays[i].BlocksWorld && overlays[i].Visible()) { overlays[i].Cancel?.Invoke(); } }
+        for (int i = 0; i < overlays.Count; i++) { if (overlays[i].BlocksWorld && overlays[i].CancelOnWindowOpen && overlays[i].Visible()) { overlays[i].Cancel?.Invoke(); } }
     }
     internal void DrawOverlays(SpriteBatch batch) {
         bool opened = false;
@@ -176,12 +184,12 @@ public sealed class GUIOverlay : IDisposable {
     internal readonly Func<bool> Visible;
     internal readonly Action<SpriteBatch> Draw;
     internal readonly Action Cancel;
-    internal readonly bool BlocksWorld, HidesCursor;
-    internal GUIOverlay(List<GUIOverlay> owner, Func<bool> visible, Action<SpriteBatch> draw, Action cancel, bool blocksWorld, bool hidesCursor) {
+    internal readonly bool BlocksWorld, HidesCursor, CancelOnWindowOpen;
+    internal GUIOverlay(List<GUIOverlay> owner, Func<bool> visible, Action<SpriteBatch> draw, Action cancel, bool blocksWorld, bool hidesCursor, bool cancelOnWindowOpen) {
         this.owner = owner;
         Visible = visible ?? throw new ArgumentNullException(nameof(visible));
         Draw = draw ?? throw new ArgumentNullException(nameof(draw));
-        Cancel = cancel; BlocksWorld = blocksWorld; HidesCursor = hidesCursor;
+        Cancel = cancel; BlocksWorld = blocksWorld; HidesCursor = hidesCursor; CancelOnWindowOpen = cancelOnWindowOpen;
     }
     public void Dispose() { if (owner.Remove(this)) { Cancel?.Invoke(); } }
 }

@@ -175,7 +175,7 @@ internal sealed class WheelOverlay : IDisposable {
         var currentLanguage = GameSettings.CurrentConfig.Language;
         if (measuredFont != font || language != currentLanguage) {
             for (int i = 0; i < labels.Length; i++) {
-                labels[i] = TextManager.Get(definitions[i].NameKey).Value;
+                labels[i] = definitions[i].Title;
                 sizes[i] = font.MeasureString(labels[i]);
             }
             measuredFont = font;

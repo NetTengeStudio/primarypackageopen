@@ -28,6 +28,8 @@ public sealed class MotionValue : IDisposable {
     internal readonly GUIMotion Owner;
     internal MotionSettings Settings;
     internal double Origin, InitialVelocity, Started;
+    internal MotionCurve Curve;
+    internal double Duration;
     internal int ActiveIndex = -1;
     internal bool Disposed;
     public double Position { get; internal set; }
@@ -44,6 +46,7 @@ public sealed class MotionValue : IDisposable {
     }
 
     public void MoveTo(double target) => Owner.Move(this, target);
+    public void AnimateTo(double target, double duration, MotionCurve curve) => Owner.Animate(this, target, duration, curve);
     public void Finish() => Owner.Finish(this);
     public void Dispose() {
         if (Disposed) { return; }
@@ -95,9 +98,10 @@ public sealed class GUIMotion {
     internal void Move(MotionValue value, double target) {
         if (value.Disposed) { throw new ObjectDisposedException(nameof(MotionValue)); }
         if (!double.IsFinite(target) || Math.Abs(target) > 1e12) { throw new ArgumentOutOfRangeException(nameof(target)); }
-        if (value.Target == target) { return; }
+        if (value.Target == target && value.Duration == 0) { return; }
         if (value.Moving) { Evaluate(value, time); }
         value.Origin = value.Position - target;
+        value.Duration = 0;
         value.InitialVelocity = value.Velocity;
         value.Started = time;
         value.Target = target;
@@ -105,6 +109,15 @@ public sealed class GUIMotion {
             value.ActiveIndex = active.Count;
             active.Add(value);
         }
+    }
+
+    internal void Animate(MotionValue value, double target, double duration, MotionCurve curve) {
+        if (value.Disposed) { throw new ObjectDisposedException(nameof(MotionValue)); }
+        if (!double.IsFinite(target) || Math.Abs(target) > 1e12 || !double.IsFinite(duration) || duration < .001 || duration > 60) { throw new ArgumentOutOfRangeException(nameof(duration)); }
+        if (value.Moving) { Evaluate(value, time); }
+        value.Origin = value.Position - target; value.InitialVelocity = value.Velocity; value.Started = time;
+        value.Target = target; value.Duration = duration; value.Curve = curve;
+        if (!value.Moving) { value.ActiveIndex = active.Count; active.Add(value); }
     }
 
     internal void Finish(MotionValue value) {
@@ -124,10 +137,11 @@ public sealed class GUIMotion {
         }
         value.Position = value.Target;
         value.Velocity = 0;
-        value.Origin = value.InitialVelocity = 0;
+        value.Origin = value.InitialVelocity = value.Duration = 0;
     }
 
     private static bool AtRest(MotionValue value) {
+        if (value.Duration > 0) { return value.Owner.time - value.Started >= value.Duration; }
         double displacement = value.Position - value.Target;
         double speed = value.Velocity / value.Settings.Frequency;
         return displacement * displacement + speed * speed <= value.Settings.Precision * value.Settings.Precision;
@@ -135,6 +149,13 @@ public sealed class GUIMotion {
 
     private static void Evaluate(MotionValue value, double now) {
         double elapsed = Math.Max(0, now - value.Started);
+        if (value.Duration > 0) {
+            if (elapsed >= value.Duration) { value.Position = value.Target; value.Velocity = 0; return; }
+            value.Curve.Sample(elapsed / value.Duration, out double position, out double speed);
+            value.Position = value.Target + value.Origin * (1 - position);
+            value.Velocity = -value.Origin * speed / value.Duration;
+            return;
+        }
         double omega = value.Settings.Frequency, damping = value.Settings.Damping;
         double x = value.Origin, v = value.InitialVelocity;
         double displacement, velocity;

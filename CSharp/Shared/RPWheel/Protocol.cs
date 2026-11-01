@@ -6,15 +6,18 @@ namespace PrimaryPackage.RPWheel
     {
         EmoteRequest    = 1,
         EmoteBroadcast  = 2,
+        EmoteStop = 3,
+        Hello = 4,
+        Denied = 5,
     }
 
     public static class Cfg
     {
-        public const string NetId        = "rpwheel";
+        public const string NetId        = "pp.emotes.v2";
         public const double EmoteCooldown = 0.5;
 
         public const int HeaderMin = 1;
-        public const int HeaderMax = 2;
+        public const int HeaderMax = 5;
 
         public const float EmoteRange = Barotrauma.Networking.ChatMessage.SpeakRange;
     }

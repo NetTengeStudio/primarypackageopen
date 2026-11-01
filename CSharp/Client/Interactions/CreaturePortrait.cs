@@ -22,7 +22,7 @@ internal sealed class CreaturePortrait : GUIComponent {
         }
         if (selected == null) { throw new ArgumentException("У существа нет изображения для предпросмотра"); }
         string path = ContentPath.FromRaw(selected.Element.ContentPackage ?? prefab.ContentPackage, selected.GetTexturePath()).Value;
-        return new Sprite(selected.Element, file: path);
+        return new Sprite(selected.Element, file: path, sourceRectScale: ragdoll.SourceRectScale);
     }
     internal override void Paint(GUIRenderer renderer, float opacity) => renderer.Image(sprite, Bounds, opacity);
     public override void Dispose() { if (Disposed) { return; } base.Dispose(); sprite.Remove(); }

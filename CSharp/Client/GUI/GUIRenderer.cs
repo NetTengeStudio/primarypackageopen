@@ -231,6 +231,7 @@ public sealed class GUIRenderer {
         try {
             for (int w = 0; w < windows.Count; w++) {
                 GUIWindow window = windows[w];
+                if (!window.Visible) { continue; }
                 float opacity = (float)Math.Clamp(window.Openness.Position, 0, 1);
                 if (opacity <= 0) { continue; }
                 if (begun) { batch.End(); begun = false; }

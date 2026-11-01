@@ -6,18 +6,18 @@ namespace PrimaryPackage.Interactions;
 public enum InteractionAction : byte
 {
     ViewCharacter, SendPrivateMessage, QueryCharacters, QueryItems, SpawnCharacter, ControlCharacter, FlickerLight, ManagePermissions,
-    ViewGMFeed, ManageEntities, DirectEvents, ManageKits
+    ViewGMFeed, ManageEntities, DirectEvents, ManageKits, SendGMMessage, RevivePlayers, OverrideRespawnRules
 }
 public enum MessageKind : byte { Private, Support, Roleplay }
 public enum EntityOperation : byte { Condition, RemoveItem, Gib, BreakDoor, SpawnCreature, SpawnDormantCreature, AIEnabled }
-public enum DirectorKind : byte { Sound, Scare, Caption, Stop, StopOne }
+public enum DirectorKind : byte { Sound, Scare, Caption, Stop, StopOne, Hallucination, SignalCollapse }
 public enum MessageStatus : byte { Queued, Stored, Delivered, Read }
-internal enum InteractionPacket : byte { Hello, Query, Spawn, Flicker, PermissionList, PermissionChange, MessageSend, MessageAck, MessageRead, Snapshot, QueryResult, Message, MessageState, PermissionResult, Error, ChannelSend, EntityAction, Director, DirectorEvent, HistoryEnd, DirectorBatch, DirectorList, DirectorStatus, ReceiptBatch }
+internal enum InteractionPacket : byte { Hello, Query, Spawn, Flicker, PermissionList, PermissionChange, MessageSend, MessageAck, MessageRead, Snapshot, QueryResult, Message, MessageState, PermissionResult, Error, ChannelSend, EntityAction, Director, DirectorEvent, HistoryEnd, DirectorBatch, DirectorList, DirectorStatus, ReceiptBatch, ScenePut, SceneRemove, SceneList, SceneStatus, DeviceInspect, DeviceSnapshot, DeviceChange, DeviceDelta, DirectorFailure, WorldReady, DeviceBind, DeviceBindAck, EditHistory, EditReverse, GMAnnouncement, RevivePlayer, WorldTranslate, WorldTransform, DeviceForget, WorldExport, DeviceUninspect }
 
 internal static class InteractionProtocol
 {
-    public const string Channel = "pp.interactions.v2";
-    public const int Version = 2, MaxMessageLength = 512, MaxQueryResults = 200, MaxMessages = 10000;
+    public const string Channel = "pp.interactions.v4";
+    public const int Version = 4, MaxMessageLength = 512, MaxQueryResults = 200, MaxMessages = 10000;
     public static void Header(IWriteMessage message, InteractionPacket packet) { message.WriteByte(Version); message.WriteByte((byte)packet); }
     public static bool Read(IReadMessage message, out InteractionPacket packet)
     {
@@ -25,7 +25,7 @@ internal static class InteractionProtocol
         if (message.LengthBits - message.BitPosition < 16) { return false; }
         if (message.ReadByte() != Version) { return false; }
         byte value = message.ReadByte();
-        if (value > (byte)InteractionPacket.ReceiptBatch) { return false; }
+        if (value > (byte)InteractionPacket.DeviceUninspect) { return false; }
         packet = (InteractionPacket)value;
         return true;
     }

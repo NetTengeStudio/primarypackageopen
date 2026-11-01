@@ -36,6 +36,8 @@ internal sealed partial class InteractionViews : IDisposable {
         client.MessagesChanged += MessagesChanged;
         client.PermissionsChanged += PermissionsChanged;
         client.EffectsChanged += EffectsChanged;
+        client.ScenesChanged += ScenesChanged;
+        client.DeviceReceived += DeviceReceived; client.DeviceValueReceived += DeviceValueReceived; client.HistoryReceived += EditHistoryReceived;
         templateStore = new AtomicStore<List<CharacterTemplate>>(ModAssets.Resolve("Data/Interactions/character-templates.client.json"), ValidateTemplates);
         templates = templateStore.Load(() => new List<CharacterTemplate>(), error => ModLog.Error("Character templates recovered: " + error.Message));
     }
@@ -50,16 +52,19 @@ internal sealed partial class InteractionViews : IDisposable {
     }
     public void OpenHub() {
         hub?.Dispose();
-        hub = OpenCentered("Рабочее пространство GM", 620, 360);
+        hub = OpenCentered("Рабочее пространство GM", 620, 470);
         Vector2 world = GameMain.GameScreen.Cam.ScreenToWorld(Pointer);
         hub.Add(new Text("Мир") { Color = GUITheme.Accent });
         var worldActions = hub.Add(new Panel { Flow = GUIFlow.Horizontal, Height = 40 });
         worldActions.Add(new Button("Персонажи", _ => OpenQuery(true, world)) { Enabled = client.Allows(InteractionAction.QueryCharacters) });
         worldActions.Add(new Button("Предметы", _ => OpenQuery(false, world)) { Enabled = client.Allows(InteractionAction.QueryItems) });
+        hub.Add(new Button("Live Editor · F4", _ => client.ToggleLiveEditor()) { Enabled = client.Allows(InteractionAction.ManageEntities) });
         hub.Add(new Text("Персонажи и события") { Color = GUITheme.Accent });
         hub.Add(new Button("Character Studio", _ => OpenStudio()) { Enabled = client.Allows(InteractionAction.SpawnCharacter) });
         hub.Add(new Button("Horror Director", _ => OpenDirector()) { Enabled = client.Allows(InteractionAction.DirectEvents) });
         hub.Add(new Button("Взаимодействие · F2", _ => OpenMessages(null, "")));
+        hub.Add(new Button("Сообщение игрокам · F3", _ => ToggleGMMessage()) { Enabled = client.Allows(InteractionAction.SendGMMessage) });
+        hub.Add(new Button("Возродить игрока", _ => OpenPlayerRevival()) { Enabled = client.Multiplayer && client.Allows(InteractionAction.RevivePlayers) });
         hub.Add(new Button("Полномочия", _ => OpenPermissions()) { Enabled = client.Multiplayer && client.Allows(InteractionAction.ManagePermissions) });
         hub.Add(new Text("Alt + ЛКМ: мерцание лампы · Alt + ПКМ: это окно") { Color = GUITheme.Muted });
     }
@@ -128,6 +133,7 @@ internal sealed partial class InteractionViews : IDisposable {
         window.Add(new Text("Контейнер: " + (item.Container?.Name ?? "Мир")));
         window.Add(new Text("Состояние: " + item.Condition.ToString("F1")));
         if (client.Allows(InteractionAction.ManageEntities)) {
+            window.Add(new Button("Компоненты и оборудование", _ => OpenDevice(item)));
             window.Add(new Text("Прочность (0–" + item.MaxCondition.ToString("F0") + ")"));
             var condition = window.Add(new TextInput(item.Condition.ToString("F1", CultureInfo.InvariantCulture), 12));
             window.Add(new Button("Применить прочность", _ => client.Act(item.ID, EntityOperation.Condition, condition.Text)));
@@ -192,6 +198,9 @@ internal sealed partial class InteractionViews : IDisposable {
         InteractionAction.ViewGMFeed => "Обращения и RP-лента",
         InteractionAction.ManageEntities => "Редактирование сущностей",
         InteractionAction.DirectEvents => "Horror Director",
+        InteractionAction.SendGMMessage => "GM-сообщения · F3",
+        InteractionAction.RevivePlayers => "Возрождение игроков",
+        InteractionAction.OverrideRespawnRules => "Исключения кампании / permadeath",
         InteractionAction.ManageKits => "Сохранение и удаление Kits",
         _ => action.ToString()
     };
@@ -212,9 +221,12 @@ internal sealed partial class InteractionViews : IDisposable {
         }
     }
     public void Reset() {
+        CloseLiveEditor();
+        deviceWindow?.Dispose(); deviceWindow = null; deviceItem = null; editHistoryWindow?.Dispose(); gmMessageWindow?.Dispose();
         context?.Dispose(); hub?.Dispose(); queryWindow?.Dispose(); messageWindow?.Dispose(); permissionWindow?.Dispose(); creator?.Dispose(); errorWindow?.Dispose();
         context = hub = queryWindow = messageWindow = permissionWindow = creator = errorWindow = null;
-        resultList = auditList = activeEffectsList = null; transcript = null; peersList = null;
+        resultList = auditList = activeEffectsList = runningScenes = draftSteps = null;
+        sceneNumbers.Clear(); sceneDoor = sceneLight = null; sceneSubmarine = null; sceneTarget = ""; scenePointChosen = false; transcript = null; peersList = null;
         resultDetail = errorText = null; director?.Dispose(); director = null; ReleaseStudio();
         for (int i = 0; i < notifications.Count; i++) { notifications[i].Window.Dispose(); }
         contextCharacter = null; contextCamera = null; headerCache.Clear(); history.Clear(); notifications.Clear(); permissionModes.Clear();
@@ -222,6 +234,8 @@ internal sealed partial class InteractionViews : IDisposable {
     public void Dispose() {
         client.ResultsChanged -= ResultsChanged; client.MessagesChanged -= MessagesChanged; client.PermissionsChanged -= PermissionsChanged;
         client.EffectsChanged -= EffectsChanged;
+        client.ScenesChanged -= ScenesChanged;
+        client.DeviceReceived -= DeviceReceived; client.DeviceValueReceived -= DeviceValueReceived; client.HistoryReceived -= EditHistoryReceived;
         Reset();
     }
 }

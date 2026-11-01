@@ -1,0 +1,126 @@
+[
+  {
+    "source": "C:\\Steam\\steamapps\\common\\Barotrauma\\LocalMods\\scpitdcode\\CSharp\\Shared\\Rp\\Emotes.cs",
+    "sha256": "53c1a2b8dcdb553a770e4b35a8dc7217bf6bbf1ab181bf530df93de085bdd844"
+  },
+  {
+    "source": "C:\\Steam\\steamapps\\common\\Barotrauma\\LocalMods\\scpitdcode\\CSharp\\Shared\\Rp\\Poses.cs",
+    "sha256": "d994645c1fe87e815435303e36905b19c008eb4c510582b7cad74cc1a6bb86d1"
+  },
+  {
+    "source": "C:\\Steam\\steamapps\\common\\Barotrauma\\LocalMods\\scpitdcode\\CSharp\\Shared\\Core\\IkBlend.cs",
+    "sha256": "da2577f28e507c1f36bbc506c099cb30ccc5f1feb363584d6479b4bdf8b4e29c"
+  },
+  {
+    "source": "C:\\Steam\\steamapps\\common\\Barotrauma\\LocalMods\\scpitdcode\\CSharp\\Client\\Rp\\EmoteView.cs",
+    "sha256": "fde4d21d3c97771d535dac32d20d08ec1a445c6511f50496cb2ef089d98a785f"
+  },
+  {
+    "source": "C:\\Steam\\steamapps\\common\\Barotrauma\\LocalMods\\scpitd-code-side\\Content\\Data\\emotes.xml",
+    "sha256": "cd70d4833f0cf544aefdf1a771171e574e580e7e6ad4ba0820e1720dce5fd2b9"
+  },
+  {
+    "source": "C:\\Steam\\steamapps\\common\\Barotrauma\\LocalMods\\scpitd-code-side\\Content\\Sound\\Emotes\\applause.ogg",
+    "sha256": "c619db42aae6baa018fa96fae9f813e50cbc8e5936e08db615a011ee3a216341"
+  },
+  {
+    "source": "C:\\Steam\\steamapps\\common\\Barotrauma\\LocalMods\\scpitd-code-side\\Content\\Sound\\Emotes\\clap.ogg",
+    "sha256": "6c9dad22621d2e080f6abcdf8330e3d795ba91d2ade35aac77566cddb15a8a08"
+  },
+  {
+    "source": "C:\\Steam\\steamapps\\common\\Barotrauma\\LocalMods\\scpitd-code-side\\Content\\Sound\\Emotes\\cough.ogg",
+    "sha256": "3d9f9d3913f42fbfd43da52598a1283e51379e8800eaf040bb8ce4549d9fe44f"
+  },
+  {
+    "source": "C:\\Steam\\steamapps\\common\\Barotrauma\\LocalMods\\scpitd-code-side\\Content\\Sound\\Emotes\\cry.ogg",
+    "sha256": "58be794fba8942ac6eec33a4ba4687d589c8e676db8cb2b8cd8437c0fe42e858"
+  },
+  {
+    "source": "C:\\Steam\\steamapps\\common\\Barotrauma\\LocalMods\\scpitd-code-side\\Content\\Sound\\Emotes\\gasp.ogg",
+    "sha256": "7a79e9d566792f7423f5c8aedcd7f5c220bdc8078d4819a0d56adbc82cc5feaa"
+  },
+  {
+    "source": "C:\\Steam\\steamapps\\common\\Barotrauma\\LocalMods\\scpitd-code-side\\Content\\Sound\\Emotes\\knock1.ogg",
+    "sha256": "4b1bbcabf2079908d21611d9037b878582eb42381e1da32640d9e634f4164712"
+  },
+  {
+    "source": "C:\\Steam\\steamapps\\common\\Barotrauma\\LocalMods\\scpitd-code-side\\Content\\Sound\\Emotes\\knock2.ogg",
+    "sha256": "d4ad6ddf7e7833d884c64f88c709c05bf237034316a9845f5b1910fcbd973e18"
+  },
+  {
+    "source": "C:\\Steam\\steamapps\\common\\Barotrauma\\LocalMods\\scpitd-code-side\\Content\\Sound\\Emotes\\knock3.ogg",
+    "sha256": "c3898fd4932fb2f66e40f28af38a85b027f45f6c7fcebb9191a7f9b21b8ee2d1"
+  },
+  {
+    "source": "C:\\Steam\\steamapps\\common\\Barotrauma\\LocalMods\\scpitd-code-side\\Content\\Sound\\Emotes\\laugh.ogg",
+    "sha256": "ae2065cc7217d277ca4b7f707ae818aa152bb64ac7513d27f0c8091f9beab440"
+  },
+  {
+    "source": "C:\\Steam\\steamapps\\common\\Barotrauma\\LocalMods\\scpitd-code-side\\Content\\Sound\\Emotes\\manifest.json",
+    "sha256": "0699de1427abb648a6eabb28721352635041dbf533a9b1bd18f99cfd43f62b65"
+  },
+  {
+    "source": "C:\\Steam\\steamapps\\common\\Barotrauma\\LocalMods\\scpitd-code-side\\Content\\Sound\\Emotes\\salute.ogg",
+    "sha256": "5ea4ec24ca70d761890f899caaa991a545f576ac800073d091034fbc1b871ed4"
+  },
+  {
+    "source": "C:\\Steam\\steamapps\\common\\Barotrauma\\LocalMods\\scpitd-code-side\\Content\\Sound\\Emotes\\scream_f1.ogg",
+    "sha256": "185f2bfe29a58ad969a34ace3bdbf12629ee588bb574879d2b05cb1cbb75089d"
+  },
+  {
+    "source": "C:\\Steam\\steamapps\\common\\Barotrauma\\LocalMods\\scpitd-code-side\\Content\\Sound\\Emotes\\scream_f2.ogg",
+    "sha256": "1e8efbfd9b1b47a00d881168e4fd3b7d080aaa1f4b6e38cefc70c914d6b4a599"
+  },
+  {
+    "source": "C:\\Steam\\steamapps\\common\\Barotrauma\\LocalMods\\scpitd-code-side\\Content\\Sound\\Emotes\\scream_m.ogg",
+    "sha256": "407bb08b94c5da5f2142b4c645d32aed00abdddcceb40af29f1eab5c07fe4cef"
+  },
+  {
+    "source": "C:\\Steam\\steamapps\\common\\Barotrauma\\LocalMods\\scpitd-code-side\\Content\\Sound\\Emotes\\sigh.ogg",
+    "sha256": "6f2f8b75b2fb1b3bfd72a05e431a01261cdd28e31a60c63f2e6c226938348e59"
+  },
+  {
+    "source": "C:\\Steam\\steamapps\\common\\Barotrauma\\LocalMods\\scpitd-code-side\\Content\\Sound\\Emotes\\snap1.ogg",
+    "sha256": "607c88a3b8833768cb7ba7211a83764526ad3febb1f33f61b5716f31bdb7dd51"
+  },
+  {
+    "source": "C:\\Steam\\steamapps\\common\\Barotrauma\\LocalMods\\scpitd-code-side\\Content\\Sound\\Emotes\\snap2.ogg",
+    "sha256": "cba2e907301bd8cc2be2e62cf2a9e795a110929020ab4435c0576d9947df23af"
+  },
+  {
+    "source": "C:\\Steam\\steamapps\\common\\Barotrauma\\LocalMods\\scpitd-code-side\\Content\\Sound\\Emotes\\spit1.ogg",
+    "sha256": "2d42452bc4bfd618fca3420f0d74daa4818010bd8ce30d1ec9e9a73ac3b57660"
+  },
+  {
+    "source": "C:\\Steam\\steamapps\\common\\Barotrauma\\LocalMods\\scpitd-code-side\\Content\\Sound\\Emotes\\spit2.ogg",
+    "sha256": "4a573c83ffa90238619bf6775397b8666aa9bb40d19d5acc259b6b12f8a0a621"
+  },
+  {
+    "source": "C:\\Steam\\steamapps\\common\\Barotrauma\\LocalMods\\scpitd-code-side\\Content\\Sound\\Emotes\\spit3.ogg",
+    "sha256": "770a94a77fb5a5bea25fa65e272c61b09c3d4f799e7f4ecc797af78cced2bed7"
+  },
+  {
+    "source": "C:\\Steam\\steamapps\\common\\Barotrauma\\LocalMods\\scpitd-code-side\\Content\\Sound\\Emotes\\thump.ogg",
+    "sha256": "a8bc767c0b90e49e7545fe989c88ef196328f15687712f1443da0c3e6475a67b"
+  },
+  {
+    "source": "C:\\Steam\\steamapps\\common\\Barotrauma\\LocalMods\\scpitd-code-side\\Content\\Sound\\Emotes\\vomit1.ogg",
+    "sha256": "1d7b88f344d9bdd214a87af2bc5026cef2709939b5644664f91153d022aeb5c8"
+  },
+  {
+    "source": "C:\\Steam\\steamapps\\common\\Barotrauma\\LocalMods\\scpitd-code-side\\Content\\Sound\\Emotes\\vomit2.ogg",
+    "sha256": "dd27a2768294048530fb7065f7b955f743708bc74a1b7953e5aea362b295d07f"
+  },
+  {
+    "source": "C:\\Steam\\steamapps\\common\\Barotrauma\\LocalMods\\scpitd-code-side\\Content\\Sound\\Emotes\\vomit3.ogg",
+    "sha256": "d613c7a2ec581590980faf1c79f9251426b61219e594e477cf6f52255b415994"
+  },
+  {
+    "source": "C:\\Steam\\steamapps\\common\\Barotrauma\\LocalMods\\scpitd-code-side\\Content\\Sound\\Emotes\\whistle.ogg",
+    "sha256": "6cb7c9f4bed3574a793ffaebf2e3df1dba89427ec83cd953a6172550eb8b3494"
+  },
+  {
+    "source": "C:\\Steam\\steamapps\\common\\Barotrauma\\LocalMods\\scpitd-code-side\\Content\\Sound\\Emotes\\yawn.ogg",
+    "sha256": "7651c5eb0c40253a309ff477c1bd3131402d4e8f9134df433bf1755879542bda"
+  }
+]

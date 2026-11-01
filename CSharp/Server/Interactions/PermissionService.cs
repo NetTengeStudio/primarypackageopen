@@ -64,6 +64,8 @@ public sealed class PermissionService {
             InteractionAction.ViewGMFeed => "ahelp",
             InteractionAction.ManageEntities => "edititem",
             InteractionAction.DirectEvents => "spawnchar",
+            InteractionAction.SendGMMessage => "message",
+            InteractionAction.RevivePlayers => "revive",
             InteractionAction.ManageKits => "createkit",
             _ => ""
         };

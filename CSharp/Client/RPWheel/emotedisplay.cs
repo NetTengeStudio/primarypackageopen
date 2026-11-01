@@ -2,60 +2,15 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using Barotrauma;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Barotrauma.Sounds;
 
 namespace PrimaryPackage.RPWheel
 {
 #if CLIENT
 using GUI = global::Barotrauma.GUI;
 #endif
-    internal static class EmoteAudio
-    {
-        private static string?[] _paths = Array.Empty<string?>();
-        private static readonly HashSet<int> _failed = new();
-
-        internal static void LoadCatalog(string packageRoot)
-        {
-            DisposeAll();
-            var defs = EmoteCatalog.Defs;
-            _paths = new string?[defs.Length];
-            for (int i = 0; i < defs.Length; i++)
-            {
-                var def = defs[i];
-                if (!def.HasSound) continue;
-                string full = Path.GetFullPath(Path.Combine(packageRoot, def.SoundRel));
-                if (!File.Exists(full)) continue;
-                _paths[i] = full;
-                PrimaryPackage.Core.SoundStore.Absolute(full);
-            }
-        }
-
-        internal static void Play(int emoteId, Vector2 worldPos)
-        {
-            if ((uint)emoteId >= (uint)_paths.Length) return;
-            string? path = _paths[emoteId];
-            if (path is null) return;
-            try
-            {
-                Sound? s = PrimaryPackage.Core.SoundStore.Absolute(path);
-                if (s is null || s.Disposed) return;
-                s.Play(1.0f, 600f, worldPos);
-            }
-            catch (Exception ex) { if (_failed.Add(emoteId)) RPWheelMod.LogError($"emote {emoteId} does not play: {ex.Message}"); }
-        }
-
-        internal static void DisposeAll()
-        {
-            _paths = Array.Empty<string?>();
-            _failed.Clear();
-        }
-    }
-
-
     internal sealed class EmoteDisplay
     {
         private sealed class Bubble
@@ -99,12 +54,10 @@ using GUI = global::Barotrauma.GUI;
         private readonly Stack<Pending> _pendingPool = new();
 
         public bool HasEntries => _active.Count > 0;
-
-        internal void ShowById(Character ch, int emoteId)
-        {
-            var def = EmoteCatalog.Get(emoteId);
-            if (def == null) return;
-            Show(ch, TextManager.Get(def.NameKey).Value);
+        internal void Reset() {
+            foreach (var bubble in _active) { bubble.Char.SetTarget(null!); bubble.Text = ""; _bubblePool.Push(bubble); }
+            foreach (var pending in _pending) { pending.Char.SetTarget(null!); pending.Msgs.Clear(); pending.LastText = ""; _pendingPool.Push(pending); }
+            _active.Clear(); _pending.Clear();
         }
 
         internal void Show(Character ch, string action)

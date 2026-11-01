@@ -29,7 +29,7 @@ internal static class GUICharacterInteraction {
 [HarmonyPatch(typeof(Character), "UpdateLocalCursor")]
 internal static class GUICharacterCursor {
     [HarmonyPrefix]
-    public static bool Prefix(Character __instance) => !GUIBridge.BlocksWorld || __instance != Character.Controlled;
+    public static bool Prefix(Character __instance) => GUIRuntime.Instance?.CapturesAim != true || __instance != Character.Controlled;
 }
 
 [HarmonyPatch(typeof(PlayerInput))]
@@ -79,6 +79,7 @@ internal static class GUIWorldKeyboard {
     [HarmonyPatch("KeyUp", new[] { typeof(InputType) })]
     public static bool Prefix(InputType inputType, ref bool __result) {
         if (!GUIBridge.BlocksWorld) { return true; }
+        if (GUIVoiceInput.Allows(inputType)) { return true; }
         bool movement = inputType is InputType.Up or InputType.Down or InputType.Left or InputType.Right or InputType.Run or InputType.ToggleRun or InputType.Crouch;
         if (movement && GUIRuntime.Instance?.Input.BlocksWorld != true) { return true; }
         __result = false;
@@ -92,9 +93,19 @@ internal static class GUIWorldKeys {
     [HarmonyPatch("KeyHit", new[] { typeof(Microsoft.Xna.Framework.Input.Keys) })]
     [HarmonyPatch("KeyDown", new[] { typeof(Microsoft.Xna.Framework.Input.Keys) })]
     [HarmonyPatch("KeyUp", new[] { typeof(Microsoft.Xna.Framework.Input.Keys) })]
-    public static bool Prefix(ref bool __result) {
-        if (!GUIBridge.BlocksWorld) { return true; }
+    public static bool Prefix(Microsoft.Xna.Framework.Input.Keys __0, ref bool __result) {
+        if (!GUIBridge.BlocksWorld || GUIVoiceInput.Allows(__0)) { return true; }
         __result = false;
         return false;
+    }
+}
+
+internal static class GUIVoiceInput {
+    private static bool TextFocused => Barotrauma.GUI.KeyboardDispatcher.Subscriber != null;
+    internal static bool Allows(InputType type) => !TextFocused && type is InputType.Voice or InputType.RadioVoice or InputType.LocalVoice;
+    internal static bool Allows(Microsoft.Xna.Framework.Input.Keys key) {
+        if (TextFocused || key == Microsoft.Xna.Framework.Input.Keys.None) { return false; }
+        var bindings = GameSettings.CurrentConfig.KeyMap.Bindings;
+        return bindings[InputType.Voice].Key == key || bindings[InputType.RadioVoice].Key == key || bindings[InputType.LocalVoice].Key == key;
     }
 }

@@ -17,6 +17,7 @@ public sealed class WorldQueryService {
     private sealed class Frame {
         public readonly Submarine Submarine;
         public readonly SpatialIndex<Entity> Index = new();
+        public readonly BoundsIndex<MapEntity> Bounds = new();
         public Frame(Submarine submarine) { Submarine = submarine; }
     }
     private sealed class DistanceOrder : IComparer<WorldQueryResult> {
@@ -39,6 +40,11 @@ public sealed class WorldQueryService {
     public int Count => membership.Count;
 
     public void Attach(Harmony harmony) {
+        foreach (var constructor in AccessTools.GetDeclaredConstructors(typeof(MapEntity))) { if (!constructor.IsStatic) { harmony.Patch(constructor, postfix: ModuleHost.Bind(typeof(WorldQueryService), nameof(MapCreated))); } }
+        harmony.Patch(AccessTools.Method(typeof(MapEntity), nameof(MapEntity.Remove)), prefix: ModuleHost.Bind(typeof(WorldQueryService), nameof(Removing)));
+        harmony.Patch(AccessTools.Method(typeof(MapEntity), nameof(MapEntity.Move)), postfix: ModuleHost.Bind(typeof(WorldQueryService), nameof(MapCreated)));
+        harmony.Patch(AccessTools.PropertySetter(typeof(MapEntity), nameof(MapEntity.Rect)), postfix: ModuleHost.Bind(typeof(WorldQueryService), nameof(MapCreated)));
+        harmony.Patch(AccessTools.PropertySetter(typeof(Item), nameof(Item.Rotation)), postfix: ModuleHost.Bind(typeof(WorldQueryService), nameof(ItemMoved)));
         foreach (var constructor in AccessTools.GetDeclaredConstructors(typeof(Item))) { if (!constructor.IsStatic) { harmony.Patch(constructor, postfix: ModuleHost.Bind(typeof(WorldQueryService), nameof(ItemCreated))); } }
         foreach (var constructor in AccessTools.GetDeclaredConstructors(typeof(Character))) { if (!constructor.IsStatic) { harmony.Patch(constructor, postfix: ModuleHost.Bind(typeof(WorldQueryService), nameof(CharacterCreated))); } }
         harmony.Patch(AccessTools.Method(typeof(Item), nameof(Item.UpdateTransform)), postfix: ModuleHost.Bind(typeof(WorldQueryService), nameof(ItemMoved)));
@@ -50,6 +56,7 @@ public sealed class WorldQueryService {
         harmony.Patch(AccessTools.Method(typeof(Item), nameof(Item.Remove)), prefix: ModuleHost.Bind(typeof(WorldQueryService), nameof(Removing)));
         harmony.Patch(AccessTools.Method(typeof(Character), nameof(Character.Remove)), prefix: ModuleHost.Bind(typeof(WorldQueryService), nameof(Removing)));
     }
+    public static void MapCreated(MapEntity __instance) { if (Instance.seeded) { Instance.MarkDirty(__instance); } }
     public static void ItemCreated(Item __instance) { if (Instance.seeded) { Instance.MarkDirty(__instance); } }
     public static void CharacterCreated(Character __instance) { if (Instance.seeded) { Instance.MarkDirty(__instance); } }
     public static void ItemMoved(Item __instance) { if (Instance.seeded) { Instance.MarkDirty(__instance); } }
@@ -58,19 +65,26 @@ public sealed class WorldQueryService {
     public static void Removing(Entity __instance) => Instance.Remove(__instance);
 
     private void Upsert(Entity entity) {
-        if (entity.Removed || entity is Item { ParentInventory: not null } || entity is not Item && entity is not Character) { Remove(entity); return; }
+        if (entity.Removed || entity is Item { ParentInventory: not null } || entity is not MapEntity && entity is not Character) { Remove(entity); return; }
         Submarine submarine = entity.Submarine;
         ushort id = submarine?.ID ?? 0;
-        if (!frames.TryGetValue(id, out var frame)) { frame = new Frame(submarine); frames.Add(id, frame); }
-        if (membership.TryGetValue(entity, out var previous) && previous != frame) { previous.Index.Remove(entity); }
+        if (!frames.TryGetValue(id, out var frame) || !ReferenceEquals(frame.Submarine, submarine)) { frame = new Frame(submarine); frames[id] = frame; }
+        if (membership.TryGetValue(entity, out var previous) && previous != frame) { previous.Index.Remove(entity); if (entity is MapEntity oldMap) { previous.Bounds.Remove(oldMap); } }
         Vector2 position = entity.WorldPosition - (submarine?.WorldPosition ?? Vector2.Zero);
         if (!float.IsFinite(position.X) || !float.IsFinite(position.Y)) { Remove(entity); return; }
-        frame.Index.Upsert(entity, position.X, position.Y);
+        if (entity is Item or Character) { frame.Index.Upsert(entity, position.X, position.Y); }
+        if (entity is MapEntity map) {
+            Rectangle rect = map.Rect;
+            float cx = rect.X + rect.Width * .5f, cy = rect.Y - rect.Height * .5f;
+            float cosine = Math.Abs(MathF.Cos(map.RotationRad)), sine = Math.Abs(MathF.Sin(map.RotationRad));
+            float hx = (cosine * rect.Width + sine * rect.Height) * .5f, hy = (sine * rect.Width + cosine * rect.Height) * .5f;
+            frame.Bounds.Upsert(map, cx - hx, cy - hy, cx + hx, cy + hy);
+        }
         membership[entity] = frame;
         Updates++;
     }
     private void Remove(Entity entity) {
-        if (membership.Remove(entity, out var frame)) { frame.Index.Remove(entity); }
+        if (membership.Remove(entity, out var frame)) { frame.Index.Remove(entity); if (entity is MapEntity map) { frame.Bounds.Remove(map); } }
         if (pendingSlots.Remove(entity, out int index)) {
             Entity last = pending[pending.Count - 1];
             if (index != pending.Count - 1) { pending[index] = last; pendingSlots[last] = index; }
@@ -94,7 +108,7 @@ public sealed class WorldQueryService {
         if (!float.IsFinite(world.X) || !float.IsFinite(world.Y) || !float.IsFinite(radius) || radius <= 0 || radius > 5000 || limit < 1 || limit > 10000) { throw new ArgumentOutOfRangeException(nameof(radius)); }
         if (!seeded) {
             seeded = true;
-            foreach (Item item in Item.ItemList) { Upsert(item); }
+            foreach (MapEntity map in MapEntity.MapEntityList) { Upsert(map); }
             foreach (Character character in Character.CharacterList) { Upsert(character); }
         }
         Flush();
@@ -128,6 +142,17 @@ public sealed class WorldQueryService {
         }
         results.Sort(order);
         if (results.Count > limit) { results.RemoveRange(limit, results.Count - limit); }
+    }
+    // Uses complete bounds rather than distance to object center, including very large walls.
+    public void QueryMap(Vector2 first, Vector2 second, List<MapEntity> results) {
+        if (!seeded) { seeded = true; foreach (MapEntity map in MapEntity.MapEntityList) { Upsert(map); } foreach (Character character in Character.CharacterList) { Upsert(character); } }
+        Flush(); results.Clear();
+        foreach (var frame in frames.Values) {
+            if (frame.Submarine is { Removed: true }) { continue; }
+            Vector2 offset = frame.Submarine?.WorldPosition ?? Vector2.Zero;
+            frame.Bounds.Query(Math.Min(first.X, second.X) - offset.X, Math.Min(first.Y, second.Y) - offset.Y,
+                Math.Max(first.X, second.X) - offset.X, Math.Max(first.Y, second.Y) - offset.Y, results);
+        }
     }
     private static bool Matches(string name, string filter) => string.IsNullOrEmpty(filter) || name.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0;
     private void AppendInventory(Inventory inventory, float distance) {

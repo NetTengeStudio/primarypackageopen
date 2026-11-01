@@ -31,7 +31,7 @@ public class GUIWindow : ScrollView {
         Modal = modal;
         Window = this;
         Openness = GUIMotion.Shared.Create(0, MotionSettings.Open);
-        Openness.MoveTo(1);
+        Openness.AnimateTo(1, .22, MotionCurve.EaseOut);
     }
 
     public void Close() {
@@ -40,9 +40,19 @@ public class GUIWindow : ScrollView {
         ClosingRequested?.Invoke(this);
         FinishAnimations();
         GUIRuntime.Instance?.Input.Detach(this);
-        Openness.MoveTo(0);
+        Openness.AnimateTo(0, .16, MotionCurve.Smooth);
     }
 
+    public void Suspend() {
+        if (Disposed) { throw new ObjectDisposedException(nameof(GUIWindow)); }
+        Visible = false;
+        GUIRuntime.Instance?.Input.Detach(this);
+    }
+    public void Resume() {
+        if (Disposed) { return; }
+        Visible = true;
+        GUIRuntime.Instance?.Windows.BringToFront(this);
+    }
     public void Move(Vector2 position) {
         if (!float.IsFinite(position.X) || !float.IsFinite(position.Y)) { throw new ArgumentOutOfRangeException(nameof(position)); }
         Anchor = position;
@@ -51,7 +61,7 @@ public class GUIWindow : ScrollView {
     public void Reopen() {
         if (Disposed) { throw new ObjectDisposedException(nameof(GUIWindow)); }
         Closing = false;
-        Openness.MoveTo(1);
+        Openness.AnimateTo(1, .22, MotionCurve.EaseOut);
     }
 
     internal void InvalidateWindow(GUIDirty dirty) => WindowDirty |= dirty | GUIDirty.Render;

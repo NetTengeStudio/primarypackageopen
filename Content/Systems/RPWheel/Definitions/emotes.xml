@@ -1,15 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Emotes key="Mouse5">
-  <Emote id="salute"    name="pp_emote.salute"    category="Hands" sound="Content/Sounds/Emotes/salute.ogg" />
-  <Emote id="clap"      name="pp_emote.clap"      category="Hands" sound="Content/Sounds/Emotes/clap.ogg" />
-  <Emote id="snap"      name="pp_emote.snap"      category="Hands" sound="Content/Sounds/Emotes/snap.ogg" />
-  <Emote id="thump"     name="pp_emote.thump"     category="Hands" sound="Content/Sounds/Emotes/thump.ogg" />
-  <Emote id="laugh"     name="pp_emote.laugh"     category="Vocal" sound="Content/Sounds/Emotes/laugh.ogg" />
-  <Emote id="scream"    name="pp_emote.scream"    category="Vocal" sound="Content/Sounds/Emotes/scream.ogg" />
-  <Emote id="cry"       name="pp_emote.cry"       category="Vocal" sound="Content/Sounds/Emotes/cry.ogg" />
-  <Emote id="sigh"      name="pp_emote.sigh"      category="Vocal" sound="Content/Sounds/Emotes/sigh.ogg" />
-  <Emote id="whistle"   name="pp_emote.whistle"   category="Vocal" sound="Content/Sounds/Emotes/whistle.ogg" />
-  <Emote id="cough"     name="pp_emote.cough"     category="Vocal" sound="Content/Sounds/Emotes/cough.ogg" />
-  <Emote id="yawn"      name="pp_emote.yawn"      category="Vocal" sound="Content/Sounds/Emotes/yawn.ogg" />
-  <Emote id="deathgasp" name="pp_emote.deathgasp" category="Vocal" sound="Content/Sounds/Emotes/deathgasp.ogg" />
+<!-- Каталог эмоций: единственный источник для меню, сервера и сети. Звуки собирает Tools/prepare_emote_audio.py;
+     длительность и такты берутся из Content/Sound/Emotes/manifest.json. -->
+<Emotes>
+  <Emote id="salute" title="Отдать честь" category="hands" bubble="отдаёт честь" hands="one" pose="salute" range="500" cooldown="1.5">
+    <Sound name="salute" />
+  </Emote>
+  <Emote id="clap" title="Хлопнуть" category="hands" bubble="хлопает в ладоши" hands="both" pose="clap" range="700" cooldown="0.8">
+    <Sound name="clap" />
+  </Emote>
+  <Emote id="applause" title="Аплодировать" category="hands" bubble="аплодирует" hands="both" pose="clap" range="900" cooldown="2.5">
+    <Sound name="applause" />
+  </Emote>
+  <Emote id="snap" title="Щёлкнуть пальцами" category="hands" bubble="щёлкает пальцами" hands="one" pose="snap" range="500" cooldown="0.8">
+    <Sound name="snap1" />
+    <Sound name="snap2" />
+  </Emote>
+  <Emote id="thump" title="Ударить себя в грудь" category="hands" bubble="бьёт себя в грудь" hands="one" pose="thump" range="500" cooldown="1.0">
+    <Sound name="thump" />
+  </Emote>
+  <Emote id="knock" title="Постучать" category="hands" bubble="стучит" hands="one" pose="knock" range="1100" cooldown="1.5">
+    <Sound name="knock1" />
+    <Sound name="knock2" />
+    <Sound name="knock3" />
+  </Emote>
+  <Emote id="wave" title="Помахать" category="hands" bubble="машет рукой" hands="one" pose="wave" range="0" cooldown="1.0" seconds="1.4" />
+  <Emote id="point" title="Указать" category="hands" bubble="указывает" hands="one" pose="point" range="0" cooldown="0.8" seconds="1.2" />
+  <Emote id="laugh" title="Засмеяться" category="voice" bubble="смеётся" voice="true" pose="none" range="1200" cooldown="2.0">
+    <Sound name="laugh" />
+  </Emote>
+  <Emote id="scream" title="Закричать" category="voice" bubble="кричит" voice="true" pose="face" range="2200" cooldown="4.0">
+    <Sound name="scream_m" gender="male" />
+    <Sound name="scream_f1" gender="female" />
+    <Sound name="scream_f2" gender="female" />
+  </Emote>
+  <Emote id="cry" title="Заплакать" category="voice" bubble="плачет" voice="true" pose="face" range="700" cooldown="2.0">
+    <Sound name="cry" />
+  </Emote>
+  <Emote id="sigh" title="Вздохнуть" category="voice" bubble="вздыхает" voice="true" pose="none" range="500" cooldown="1.5">
+    <Sound name="sigh" />
+  </Emote>
+  <Emote id="whistle" title="Свистнуть" category="voice" bubble="свистит" voice="true" pose="none" range="1400" cooldown="1.5">
+    <Sound name="whistle" />
+  </Emote>
+  <Emote id="cough" title="Кашлянуть" category="voice" bubble="кашляет" voice="true" pose="mouth" range="700" cooldown="1.0">
+    <Sound name="cough" />
+  </Emote>
+  <Emote id="yawn" title="Зевнуть" category="voice" bubble="зевает" voice="true" pose="mouth" range="600" cooldown="3.0">
+    <Sound name="yawn" />
+  </Emote>
+  <Emote id="gasp" title="Захрипеть" category="voice" bubble="хрипит" voice="true" pose="mouth" range="600" cooldown="4.0" maxvitality="0.5">
+    <Sound name="gasp" />
+  </Emote>
+  <Emote id="spit" title="Сплюнуть" category="body" bubble="сплёвывает" voice="true" pose="none" range="400" cooldown="1.5">
+    <Sound name="spit1" />
+    <Sound name="spit2" />
+    <Sound name="spit3" />
+  </Emote>
+  <Emote id="vomit" title="Стошнить" category="body" bubble="тошнит" voice="true" pose="mouth" range="600" cooldown="6.0">
+    <Sound name="vomit1" />
+    <Sound name="vomit2" />
+    <Sound name="vomit3" />
+  </Emote>
 </Emotes>

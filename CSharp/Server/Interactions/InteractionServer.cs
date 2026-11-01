@@ -13,7 +13,7 @@ using PrimaryPackage.Core;
 
 namespace PrimaryPackage.Interactions;
 
-public sealed class InteractionServer : IModule, ILoadCompleted, IEventUpdate, IEventClientConnected, IEventClientDisconnected, IEventRoundEnded, IEventChatMessage
+public sealed partial class InteractionServer : IModule, ILoadCompleted, IEventUpdate, IEventClientConnected, IEventClientDisconnected, IEventRoundEnded, IEventChatMessage
 {
     private sealed class Session
     {
@@ -24,7 +24,21 @@ public sealed class InteractionServer : IModule, ILoadCompleted, IEventUpdate, I
         public int HistoryCursor;
         public bool Syncing;
         public readonly List<PrivateMessage> Replay = new();
-        public double NextRoleplay, NextAction, NextDirector;
+        public double NextRoleplay, NextAction, NextDirector, NextAnnouncement;
+        public readonly List<(DeviceLease Lease, ushort Component, string Field)> DeviceReplay = new();
+        public int DeviceCursor;
+        public bool WorldReady, WorldReadyRequested;
+        public WorldCapabilities Capabilities;
+        public Guid InspectedDevice;
+        public readonly Dictionary<(ushort Component, string Field), (string Value, ulong Revision)> DeviceObserved = new();
+        public readonly List<(ushort Component, DeviceEditor.Field Field)> DeviceSchema = new();
+        public int DeviceObserveCursor;
+        public readonly List<DeviceSnapshotValue> DeviceSnapshot = new();
+        public DeviceLease DeviceSnapshotLease;
+        public int DeviceSnapshotCursor;
+        public readonly HashSet<Guid> DeviceBindings = new();
+        public readonly Queue<DeviceLease> DeviceOffers = new();
+        public readonly HashSet<Guid> PendingDeviceOffers = new();
         public readonly Dictionary<string, double> Actions = new(StringComparer.Ordinal);
     }
     private readonly Dictionary<byte, Session> sessions = new();
@@ -50,6 +64,7 @@ public sealed class InteractionServer : IModule, ILoadCompleted, IEventUpdate, I
         LightEffectService.Attach(harmony);
         harmony.Patch(AccessTools.Method(typeof(Client), nameof(Client.SetPermissions)), postfix: ModuleHost.Bind(typeof(InteractionServer), nameof(RosterChanged)));
         harmony.Patch(AccessTools.Method(typeof(GameServer), nameof(GameServer.SetClientCharacter)), postfix: ModuleHost.Bind(typeof(InteractionServer), nameof(RosterChanged)));
+        harmony.Patch(AccessTools.Method(typeof(ServerEntityEventManager), nameof(ServerEntityEventManager.InitClientMidRoundSync)), prefix: ModuleHost.Bind(typeof(InteractionServer), nameof(AllowEditedWorldSync)));
         receiver = ModNet.Listen(InteractionProtocol.Channel, Receive);
         LuaCsSetup.Instance.EventService.Subscribe<IEventUpdate>(this);
         LuaCsSetup.Instance.EventService.Subscribe<IEventClientConnected>(this);
@@ -66,11 +81,14 @@ public sealed class InteractionServer : IModule, ILoadCompleted, IEventUpdate, I
         DirectorCatalog.Load();
         gmTools = new GMToolsAdapter(permissions);
         gmTools.TryAttach();
+        InitializeScenes();
         live = true;
     }
     public void RoundStart()
     {
         rosterDirty = true;
+        scenes.Clear();
+        ClearDevices();
         activeDirected.Clear();
         query.Clear();
         WorldQueryService.Instance.Clear();
@@ -129,6 +147,9 @@ public sealed class InteractionServer : IModule, ILoadCompleted, IEventUpdate, I
             switch (packet)
             {
                 case InteractionPacket.Hello:
+                    WorldCapabilities capabilities = (WorldCapabilities)message.ReadUInt32(); byte schema = message.ReadByte();
+                    if (schema != WorldContract.SchemaVersion || (capabilities & WorldContract.Supported) != WorldContract.Supported) { throw new InvalidOperationException("Несовместимая версия Primary Package Live Editor. Обновите клиент и сервер вместе"); }
+                    session.Capabilities = capabilities;
                     SendSnapshot(session);
                     foreach (var effect in LightEffectService.Instance.Active)
                     {
@@ -136,7 +157,7 @@ public sealed class InteractionServer : IModule, ILoadCompleted, IEventUpdate, I
                         for (int c = 0; c < effect.Component.Item.Components.Count && c <= byte.MaxValue; c++) { if (effect.Component.Item.Components[c] == effect.Component) { index = c; break; } }
                         if (index < 0) { continue; }
                         byte component = (byte)index;
-                        ModNet.Send(InteractionProtocol.Channel, sender.Connection, output => { InteractionProtocol.Header(output, InteractionPacket.Flicker); output.WriteUInt16(effect.Component.Item.ID); output.WriteByte(component); output.WriteSingle(effect.Remaining); });
+                        ModNet.Send(InteractionProtocol.Channel, sender.Connection, output => { InteractionProtocol.Header(output, InteractionPacket.Flicker); output.WriteUInt16(effect.Component.Item.ID); output.WriteByte(component); output.WriteSingle(effect.Remaining); output.WriteString(effect.Id.ToString("N")); });
                     }
                     if (messages == null) { break; }
                     session.Replay.Clear();
@@ -238,6 +259,68 @@ public sealed class InteractionServer : IModule, ILoadCompleted, IEventUpdate, I
                     session.Actions.Add(requestId, now);
                     ModLog.Message("GM action " + session.Account + " " + operation + " " + entityId);
                     break;
+                case InteractionPacket.DirectorFailure:
+                    string failedId = message.ReadString(), reason = message.ReadString();
+                    if (!Guid.TryParseExact(failedId, "N", out Guid failedEffect) || !InteractionProtocol.ValidText(reason, 160) ||
+                        !activeDirected.TryGetValue(failedId, out var failedState) || failedState.Event.Target.Length > 0 && failedState.Event.Target != session.Account) { throw new UnauthorizedAccessException("Недопустимый отчёт об эффекте"); }
+                    if (failedState.Event.Target.Length > 0) { activeDirected.Remove(failedId); scenes.FailEffect(failedEffect, reason); PublishSceneChanges(); }
+                    foreach (Session observer in sessions.Values) {
+                        if (!permissions.Allows(observer.Client, InteractionAction.DirectEvents)) { continue; }
+                        ModNet.Send(InteractionProtocol.Channel, observer.Client.Connection, output => { InteractionProtocol.Header(output, InteractionPacket.DirectorFailure); output.WriteString(failedId); output.WriteString(sender.Name + ": " + reason); });
+                        SendDirectorStatus(observer.Client);
+                    }
+                    ModLog.Error("Director client failure " + session.Account + " " + failedId + ": " + reason);
+                    break;
+                case InteractionPacket.GMAnnouncement:
+                    Announce(message, session, now); break;
+                case InteractionPacket.RevivePlayer:
+                    if (now < session.NextSpawn) { throw new InvalidOperationException("Возрождение уже выполняется"); }
+                    session.NextSpawn = now + 2; RevivePlayer(message, session); break;
+                case InteractionPacket.DeviceUninspect:
+                    session.InspectedDevice = Guid.Empty; session.DeviceSnapshotLease = null; session.DeviceSnapshot.Clear(); session.DeviceSchema.Clear(); session.DeviceObserved.Clear(); break;
+                case InteractionPacket.WorldExport:
+                    ExportWorldEdits(session); break;
+                case InteractionPacket.WorldTranslate:
+                    Require(sender, InteractionAction.ManageEntities); TranslateWorld(message, session); break;
+                case InteractionPacket.WorldReady:
+                    QueueDeviceReplay(session, now);
+                    break;
+                case InteractionPacket.DeviceBindAck:
+                    BindDevice(message, session);
+                    break;
+                case InteractionPacket.EditHistory:
+                    Require(sender, InteractionAction.ManageEntities); SendEditHistory(session);
+                    break;
+                case InteractionPacket.EditReverse:
+                    Require(sender, InteractionAction.ManageEntities); ReverseEdit(message, session);
+                    break;
+                case InteractionPacket.DeviceInspect:
+                    Require(sender, InteractionAction.ManageEntities);
+                    InspectDevice(sender, message.ReadUInt16());
+                    break;
+                case InteractionPacket.DeviceChange:
+                    Require(sender, InteractionAction.ManageEntities);
+                    if (now < session.NextAction) { throw new InvalidOperationException("Подождите завершения действия"); }
+                    session.NextAction = now + .2;
+                    ChangeDevice(message, sender);
+                    break;
+                case InteractionPacket.ScenePut:
+                    Require(sender, InteractionAction.DirectEvents);
+                    Guid sceneId = Guid.ParseExact(message.ReadString(), "N");
+                    uint revision = message.ReadUInt32();
+                    SceneProgram program = SceneWire.Read(message, out SceneBindings bindings);
+                    scenes.Arm(sceneId, revision, session.Account, program, bindings, now, sceneWorld);
+                    PublishSceneChanges();
+                    break;
+                case InteractionPacket.SceneRemove:
+                    Require(sender, InteractionAction.DirectEvents);
+                    scenes.Remove(Guid.ParseExact(message.ReadString(), "N"), message.ReadUInt32());
+                    PublishSceneChanges();
+                    break;
+                case InteractionPacket.SceneList:
+                    Require(sender, InteractionAction.DirectEvents);
+                    SendScenes(sender);
+                    break;
                 case InteractionPacket.DirectorList:
                     Require(sender, InteractionAction.DirectEvents);
                     SendDirectorStatus(sender);
@@ -251,8 +334,9 @@ public sealed class InteractionServer : IModule, ILoadCompleted, IEventUpdate, I
                     for (int i = 0; i < eventCount; i++) {
                         DirectorEvent directed = DirectorEvent.Read(message);
                         DirectorEvent.Validate(directed);
+                        if (GameMain.GameSession?.IsRunning != true && directed.Kind is not (DirectorKind.Stop or DirectorKind.StopOne)) { throw new InvalidOperationException("Раунд не запущен"); }
                         if (session.Actions.ContainsKey(directed.Id)) { continue; }
-                        if (directed.Target.Length == 0 && directed.Kind is DirectorKind.Sound or DirectorKind.Scare) { throw new ArgumentException("Выберите игрока для персонального эффекта"); }
+                        if (directed.Target.Length == 0 && directed.Kind is DirectorKind.Sound or DirectorKind.Scare or DirectorKind.Hallucination) { throw new ArgumentException("Выберите игрока для персонального эффекта"); }
                         if (directed.Kind == DirectorKind.StopOne) {
                             if (!activeDirected.TryGetValue(directed.Resource, out var stopping)) { throw new ArgumentException("Событие уже завершилось"); }
                             directed.Target = stopping.Event.Target;
@@ -268,17 +352,7 @@ public sealed class InteractionServer : IModule, ILoadCompleted, IEventUpdate, I
                     if (now < session.NextDirector && !(eventCount == 1 && directedEvents[0].Kind is DirectorKind.Stop or DirectorKind.StopOne)) { throw new InvalidOperationException("Подождите перед следующим событием"); }
                     session.NextDirector = now + .25;
                     foreach (var directed in directedEvents) {
-                        if (directed.Kind == DirectorKind.Stop) {
-                            expiredIds.Clear(); foreach (var entry in activeDirected) { if (directed.Target.Length == 0 || entry.Value.Event.Target == directed.Target) { expiredIds.Add(entry.Key); } }
-                            foreach (string effectId in expiredIds) { activeDirected.Remove(effectId); }
-                        } else if (directed.Kind == DirectorKind.StopOne) { activeDirected.Remove(directed.Resource); }
-                        else { activeDirected.Add(directed.Id, new DirectedState { Actor = session.Account, Event = directed, End = now + directed.Delay + directed.Duration }); }
-                        long eventSequence = ++directorSequence;
-                        foreach (Client connected in GameMain.Server.ConnectedClients) {
-                            if (directed.Target.Length > 0 && PermissionService.Account(connected) != directed.Target) { continue; }
-                            ModNet.Send(InteractionProtocol.Channel, connected.Connection, output => { InteractionProtocol.Header(output, InteractionPacket.DirectorEvent); output.WriteInt64(eventSequence); DirectorEvent.Write(output, directed); });
-                        }
-                        if (directed.Kind == DirectorKind.Stop && directed.Target.Length == 0) { LightEffectService.Instance.Clear(); ModNet.Broadcast(InteractionProtocol.Channel, output => { InteractionProtocol.Header(output, InteractionPacket.Flicker); output.WriteUInt16(0); output.WriteByte(0); output.WriteSingle(0); }); }
+                        PublishDirector(directed, session.Account);
                         session.Actions.Add(directed.Id, now);
                         ModLog.Message("Director " + session.Account + " " + directed.Kind + " " + directed.Target);
                     }
@@ -330,8 +404,7 @@ public sealed class InteractionServer : IModule, ILoadCompleted, IEventUpdate, I
                     ushort itemId = message.ReadUInt16();
                     byte componentIndex = message.ReadByte();
                     if (Entity.FindEntityByID(itemId) is not Item item || item.Removed || componentIndex >= item.Components.Count || item.Components[componentIndex] is not LightComponent light) { throw new ArgumentException("Источник света не найден"); }
-                    LightEffectService.Instance.Start(light, 3);
-                    ModNet.Broadcast(InteractionProtocol.Channel, output => { InteractionProtocol.Header(output, InteractionPacket.Flicker); output.WriteUInt16(itemId); output.WriteByte(componentIndex); output.WriteSingle(3); });
+                    PublishLight(Guid.NewGuid(), item, componentIndex, 3);
                     break;
             }
         }
@@ -353,7 +426,7 @@ public sealed class InteractionServer : IModule, ILoadCompleted, IEventUpdate, I
             var clients = GameMain.Server.ConnectedClients;
             int count = Math.Min(128, clients.Count);
             output.WriteByte((byte)count);
-            for (int i = 0; i < count; i++) { output.WriteString(PermissionService.Account(clients[i])); output.WriteString(clients[i].Name); output.WriteUInt16(clients[i].Character?.ID ?? 0); }
+            for (int i = 0; i < count; i++) { output.WriteString(PermissionService.Account(clients[i])); output.WriteString(clients[i].Name); output.WriteUInt16(clients[i].Character is { Removed: false } body ? body.ID : (ushort)0); }
         });
     }
     private void SendPermissions(Client recipient, string account)
@@ -403,6 +476,7 @@ public sealed class InteractionServer : IModule, ILoadCompleted, IEventUpdate, I
         if (!live) { return; }
         LightEffectService.Instance.Update();
         double now = Now;
+        if (now >= nextSceneTick) { nextSceneTick = now + .1; scenes.Advance(now); PublishSceneChanges(); }
         if (rosterDirty)
         {
             rosterDirty = false;
@@ -420,9 +494,23 @@ public sealed class InteractionServer : IModule, ILoadCompleted, IEventUpdate, I
                 if (!session.Syncing) { history.Clear(); ModNet.Send(InteractionProtocol.Channel, session.Client.Connection, output => InteractionProtocol.Header(output, InteractionPacket.HistoryEnd)); }
             }
         }
+        foreach (Session session in sessions.Values) { if (session.WorldReadyRequested && !session.WorldReady) { QueueDeviceReplay(session, now); } }
+        ReportWorldExports();
+        ObserveDevices(now);
+        foreach (Session session in sessions.Values) {
+            if (!session.WorldReady || session.Client.NeedsMidRoundSync) { continue; }
+            PumpDeviceOffers(session); PumpDeviceSnapshot(session);
+            int limit = Math.Min(session.DeviceReplay.Count, session.DeviceCursor + 8);
+            for (; session.DeviceCursor < limit; session.DeviceCursor++) {
+                var edit = session.DeviceReplay[session.DeviceCursor];
+                if (edit.Lease.Current && session.DeviceBindings.Contains(edit.Lease.Id)) { ModNet.Send(InteractionProtocol.Channel, session.Client.Connection, output => WriteDeviceDelta(output, edit.Lease, edit.Component, edit.Field)); }
+            }
+            if (session.DeviceCursor >= session.DeviceReplay.Count) { session.DeviceReplay.Clear(); session.DeviceCursor = 0; }
+        }
         if (now < nextMaintenance) { return; }
         nextMaintenance = now + 1;
         PruneDirected(now);
+        PruneDevices();
         gmTools.TryAttach();
         foreach (var session in sessions.Values) {
             if (session.Actions.Count == 0) { continue; }
@@ -441,12 +529,13 @@ public sealed class InteractionServer : IModule, ILoadCompleted, IEventUpdate, I
             InteractionProtocol.Header(output, InteractionPacket.DirectorStatus); output.WriteByte((byte)activeDirected.Count);
             foreach (var entry in activeDirected.Values) {
                 output.WriteString(entry.Event.Id); output.WriteString(entry.Actor); output.WriteString(entry.Event.Target); output.WriteByte((byte)entry.Event.Kind);
-                string label = entry.Event.Kind == DirectorKind.Caption ? entry.Event.Text : System.IO.Path.GetFileNameWithoutExtension(entry.Event.Resource);
+                string label = DirectorCatalog.Describe(entry.Event);
                 output.WriteString(label.Length > 80 ? label.Substring(0, 80) : label); output.WriteSingle((float)Math.Max(0, entry.End - Now));
             }
         });
     }
     private readonly List<string> expiredIds = new();
+    internal static void RecordEmote(Client sender, string text) { if (!string.IsNullOrWhiteSpace(text)) { instance?.OnChatMessage("*" + text + "*", sender, ChatMessageType.Default, null); } }
     private void Publish(PrivateMessage entry) {
         foreach (var session in sessions.Values) {
             if (permissions.Allows(session.Client, InteractionAction.ViewGMFeed) || entry.Kind == MessageKind.Support && entry.Thread == session.Account) { SendMessage(session.Client, entry); }

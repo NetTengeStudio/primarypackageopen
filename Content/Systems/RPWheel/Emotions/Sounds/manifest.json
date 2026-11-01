@@ -1,0 +1,279 @@
+{
+ "salute": {
+  "seconds": 0.157,
+  "lufs": -70.0,
+  "peak": -3.9,
+  "onsets": [
+   0.029
+  ],
+  "source": "RPWheel/Sounds/emotes/salute.ogg",
+  "kind": "hit"
+ },
+ "applause": {
+  "seconds": 2.401,
+  "lufs": -34.1,
+  "peak": -4.2,
+  "onsets": [
+   0.012,
+   0.406,
+   0.83,
+   1.289,
+   1.788,
+   2.31
+  ],
+  "source": "RPWheel/Sounds/emotes/clap.ogg",
+  "kind": "hit"
+ },
+ "clap": {
+  "seconds": 0.139,
+  "lufs": -70.0,
+  "peak": -4.1,
+  "onsets": [
+   0.017
+  ],
+  "source": "Sounds/Interactions/Clap.ogg",
+  "kind": "hit"
+ },
+ "snap1": {
+  "seconds": 0.162,
+  "lufs": -70.0,
+  "peak": -4.6,
+  "onsets": [
+   0.012
+  ],
+  "source": "RPWheel/Sounds/emotes/snap.ogg",
+  "kind": "hit"
+ },
+ "snap2": {
+  "seconds": 0.157,
+  "lufs": -70.0,
+  "peak": -4.2,
+  "onsets": [
+   0.023
+  ],
+  "source": "Sounds/Interactions/FingerClap.ogg",
+  "kind": "hit"
+ },
+ "thump": {
+  "seconds": 0.29,
+  "lufs": -70.0,
+  "peak": -4.1,
+  "onsets": [
+   0.023
+  ],
+  "source": "RPWheel/Sounds/emotes/thump.ogg",
+  "kind": "hit"
+ },
+ "knock1": {
+  "seconds": 0.716,
+  "lufs": -23.2,
+  "peak": -4.1,
+  "onsets": [
+   0.012,
+   0.203,
+   0.395
+  ],
+  "source": "Sounds/Interactions/Knock.ogg",
+  "kind": "hit"
+ },
+ "knock2": {
+  "seconds": 0.335,
+  "lufs": -70.0,
+  "peak": -3.9,
+  "onsets": [
+   0.017
+  ],
+  "source": "Sounds/Interactions/Knock1.ogg",
+  "kind": "hit"
+ },
+ "knock3": {
+  "seconds": 0.724,
+  "lufs": -25.4,
+  "peak": -4.0,
+  "onsets": [
+   0.012,
+   0.192,
+   0.36
+  ],
+  "source": "Sounds/Interactions/Knock2.ogg",
+  "kind": "hit"
+ },
+ "laugh": {
+  "seconds": 1.667,
+  "lufs": -18.2,
+  "peak": -4.3,
+  "onsets": [
+   0.476
+  ],
+  "source": "RPWheel/Sounds/laugh.ogg",
+  "kind": "voice"
+ },
+ "scream_m": {
+  "seconds": 1.512,
+  "lufs": -18.0,
+  "peak": -3.8,
+  "onsets": [
+   0.435
+  ],
+  "source": "RPWheel/Sounds/emotes/scream.ogg",
+  "kind": "voice"
+ },
+ "scream_f1": {
+  "seconds": 1.935,
+  "lufs": -18.0,
+  "peak": -8.6,
+  "onsets": [
+   0.273,
+   0.54,
+   0.76,
+   1.178,
+   1.329,
+   1.55,
+   1.701
+  ],
+  "source": "Sounds/Interactions/WomanAgony2.ogg",
+  "kind": "voice"
+ },
+ "scream_f2": {
+  "seconds": 2.081,
+  "lufs": -18.0,
+  "peak": -8.5,
+  "onsets": [
+   0.006,
+   0.435,
+   0.569,
+   1.022,
+   1.155,
+   1.608,
+   1.84
+  ],
+  "source": "Sounds/Interactions/WomanAgony3.ogg",
+  "kind": "voice"
+ },
+ "cry": {
+  "seconds": 0.908,
+  "lufs": -18.3,
+  "peak": -1.6,
+  "onsets": [
+   0.18,
+   0.331,
+   0.58
+  ],
+  "source": "RPWheel/Sounds/emotes/cry.ogg",
+  "kind": "voice"
+ },
+ "sigh": {
+  "seconds": 1.073,
+  "lufs": -18.3,
+  "peak": -3.2,
+  "onsets": [
+   0.58,
+   0.714
+  ],
+  "source": "RPWheel/Sounds/emotes/sigh.ogg",
+  "kind": "voice"
+ },
+ "whistle": {
+  "seconds": 0.898,
+  "lufs": -17.7,
+  "peak": -11.6,
+  "onsets": [
+   0.0
+  ],
+  "source": "RPWheel/Sounds/emotes/whistle.ogg",
+  "kind": "voice"
+ },
+ "cough": {
+  "seconds": 0.539,
+  "lufs": -22.6,
+  "peak": -1.8,
+  "onsets": [
+   0.012
+  ],
+  "source": "RPWheel/Sounds/emotes/cough.ogg",
+  "kind": "voice"
+ },
+ "yawn": {
+  "seconds": 1.792,
+  "lufs": -17.9,
+  "peak": -7.7,
+  "onsets": [
+   0.975
+  ],
+  "source": "RPWheel/Sounds/emotes/yawn.ogg",
+  "kind": "voice"
+ },
+ "gasp": {
+  "seconds": 2.203,
+  "lufs": -18.3,
+  "peak": -2.7,
+  "onsets": [
+   0.296
+  ],
+  "source": "RPWheel/Sounds/emotes/deathgasp.ogg",
+  "kind": "voice"
+ },
+ "spit1": {
+  "seconds": 0.3,
+  "lufs": -70.0,
+  "peak": -4.7,
+  "onsets": [
+   0.058
+  ],
+  "source": "Sounds/Interactions/Spit.ogg",
+  "kind": "hit"
+ },
+ "spit2": {
+  "seconds": 0.217,
+  "lufs": -70.0,
+  "peak": -4.0,
+  "onsets": [
+   0.017
+  ],
+  "source": "Sounds/Interactions/Spit1.ogg",
+  "kind": "hit"
+ },
+ "spit3": {
+  "seconds": 0.231,
+  "lufs": -70.0,
+  "peak": -4.0,
+  "onsets": [
+   0.017
+  ],
+  "source": "Sounds/Interactions/Spit2.ogg",
+  "kind": "hit"
+ },
+ "vomit1": {
+  "seconds": 0.767,
+  "lufs": -18.0,
+  "peak": -5.3,
+  "onsets": [
+   0.232,
+   0.354,
+   0.511
+  ],
+  "source": "Sounds/Interactions/Vomit1.ogg",
+  "kind": "voice"
+ },
+ "vomit2": {
+  "seconds": 0.485,
+  "lufs": -18.0,
+  "peak": -4.8,
+  "onsets": [
+   0.203,
+   0.342
+  ],
+  "source": "Sounds/Interactions/Vomit2.ogg",
+  "kind": "voice"
+ },
+ "vomit3": {
+  "seconds": 1.079,
+  "lufs": -18.0,
+  "peak": -5.3,
+  "onsets": [
+   0.389
+  ],
+  "source": "Sounds/Interactions/Vomit3.ogg",
+  "kind": "voice"
+ }
+}

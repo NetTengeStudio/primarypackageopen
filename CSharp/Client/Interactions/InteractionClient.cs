@@ -12,7 +12,7 @@ using PrimaryPackage.GUI;
 
 namespace PrimaryPackage.Interactions;
 
-public sealed class InteractionClient : IModule, ILoadCompleted, IEventUpdate {
+public sealed partial class InteractionClient : IModule, ILoadCompleted, IEventUpdate, IEventRoundEnded {
     internal static InteractionClient Instance { get; private set; }
     internal sealed class Peer {
         public string Account, Name;
@@ -72,12 +72,15 @@ public sealed class InteractionClient : IModule, ILoadCompleted, IEventUpdate {
         WorldQueryService.Instance.Attach(harmony);
         LightEffectService.Attach(harmony);
         receiver = ModNet.Listen(InteractionProtocol.Channel, Receive);
-        playback = new DirectorPlayback();
-        views = new InteractionViews(this);
+        playback = new DirectorPlayback(DirectorFailed);
+        InitializeScenes();
+        PhantomRenderer.Attach(harmony);
+        views = new InteractionViews(this); InitializeLiveEditor();
         GUIRuntime.Instance.Input.Shortcut += Shortcut;
         GUIRuntime.Instance.Input.WorldPressed += WorldPressed;
         GUIRuntime.Instance.Updating += UpdateView;
         LuaCsSetup.Instance.EventService.Subscribe<IEventUpdate>(this);
+        LuaCsSetup.Instance.EventService.Subscribe<IEventRoundEnded>(this);
         ModCommands.Register("ppgui", "Открыть панель взаимодействий Primary Package", _ => hubRequested = true, localOnClient: true);
         ModCommands.Register("ppgui_profile", "Измерения этапов PrimaryGUI", _ => {
             GUIRuntime.Instance.Profiler.Enabled = true;
@@ -86,23 +89,26 @@ public sealed class InteractionClient : IModule, ILoadCompleted, IEventUpdate {
     }
     public void LoadCompleted() => DirectorCatalog.Load();
     public void RoundStart() {
-        WorldQueryService.Instance.Clear(); CharacterCreationService.Instance.Clear(); LightEffectService.Instance.Clear(); views?.Reset(); playback?.Stop();
-        worldSelection = null; Effects.Clear(); EffectsChanged?.Invoke(); picks.Clear(); Results.Clear(); lastLight = null; lastComponent = -1; lastLightClick = 0;
+        localScenes.Clear(); SceneRows.Clear(); ResetDevices();
+        WorldQueryService.Instance.Clear(); CharacterCreationService.Instance.Clear(); LightEffectService.Instance.Clear(); views?.Reset(); playback?.Reset();
+        worldSelection = null; worldSelectionCancelled = null; Effects.Clear(); EffectsChanged?.Invoke(); picks.Clear(); Results.Clear(); lastLight = null; lastComponent = -1; lastLightClick = 0;
     }
+    public void OnRoundEnd() => RoundStart();
     public void Release() {
         LuaCsSetup.Instance?.EventService?.Unsubscribe<IEventUpdate>(this);
-        if (GUIRuntime.Instance != null) { GUIRuntime.Instance.Input.Shortcut -= Shortcut; GUIRuntime.Instance.Input.WorldPressed -= WorldPressed; GUIRuntime.Instance.Updating -= UpdateView; }
-        receiver?.Dispose(); receiver = null;
-        views?.Dispose(); playback?.Dispose(); playback = null;
+        LuaCsSetup.Instance?.EventService?.Unsubscribe<IEventRoundEnded>(this);
         RoundStart();
+        if (GUIRuntime.Instance != null) { GUIRuntime.Instance.Input.Shortcut -= Shortcut; GUIRuntime.Instance.Input.WorldPressed -= WorldPressed; GUIRuntime.Instance.Updating -= UpdateView; }
+        receiver?.Dispose(); receiver = null; editorOverlay?.Dispose(); editorOverlay = null;
+        views?.Dispose(); playback?.Dispose(); playback = null;
         ClearMessages(); outbox.Clear(); retry.Clear(); Peers.Clear();
         Instance = null;
         MessagesChanged = null; EffectsChanged = null; ResultsChanged = null; PermissionsChanged = null;
     }
-    private void UpdateView() { if (hubRequested && PlayView.Running) { hubRequested = false; views.OpenHub(); } LightEffectService.Instance.Update(); playback?.Update(); views.Update(); }
+    private void UpdateView() { ApplyDeviceDeltas(); UpdateLiveEditor(); if (hubRequested && PlayView.Running) { hubRequested = false; views.OpenHub(); } LightEffectService.Instance.Update(); playback?.Update(); if (!Multiplayer && GUIRuntime.Now >= nextSceneTick) { nextSceneTick = GUIRuntime.Now + .1; localScenes.Advance(GUIRuntime.Now); if (localSceneVersion != localScenes.Version) { RequestScenes(); } } views.Update(); }
     public void OnUpdate(double fixedDeltaTime) {
         var connection = GameMain.Client?.ClientPeer?.ServerConnection;
-        if (connection != lastConnection) { lastConnection = connection; receipts.Clear(); directorSequence = 0; playback?.Stop(); ready = false; nextHello = 0; }
+        if (connection != lastConnection) { ResetDevices(); localScenes.Clear(); lastConnection = connection; receipts.Clear(); directorSequence = 0; playback?.Reset(); ready = false; nextHello = 0; }
         string currentEndpoint = connection?.Endpoint?.ToString() ?? "";
         if (currentEndpoint.Length == 0) { ready = false; nextHello = 0; return; }
         if (endpoint != currentEndpoint) {
@@ -112,7 +118,7 @@ public sealed class InteractionClient : IModule, ILoadCompleted, IEventUpdate {
             nextHello = 0;
         }
         double now = GUIRuntime.Now;
-        if (!ready && now >= nextHello) { nextHello = now + 3; replaying = true; Send(InteractionPacket.Hello, null); }
+        if (!ready && now >= nextHello) { nextHello = now + 3; replaying = true; Send(InteractionPacket.Hello, output => { output.WriteUInt32((uint)WorldContract.Supported); output.WriteByte(WorldContract.SchemaVersion); }); }
         if (!ready) { return; }
         FlushReceipts(now);
         for (int i = 0; i < outbox.Count; i++) {
@@ -201,6 +207,25 @@ public sealed class InteractionClient : IModule, ILoadCompleted, IEventUpdate {
     private void Receive(IReadMessage message) {
         if (!InteractionProtocol.Read(message, out var packet)) { return; }
         switch (packet) {
+            case InteractionPacket.DirectorFailure:
+                message.ReadString(); views.Error(message.ReadString()); break;
+            case InteractionPacket.GMAnnouncement:
+                DisplayAnnouncement(GMAnnouncement.Read(message)); break;
+            case InteractionPacket.WorldTransform:
+                ReadWorldTransform(message); break;
+            case InteractionPacket.DeviceForget:
+                ForgetDevice(Guid.ParseExact(message.ReadString(), "N")); break;
+            case InteractionPacket.DeviceBind:
+                ReadDeviceBind(message); break;
+            case InteractionPacket.EditHistory:
+                ReadEditHistory(message); break;
+            case InteractionPacket.DeviceSnapshot:
+                ReadDevice(message); break;
+            case InteractionPacket.DeviceDelta:
+                ReadDeviceDelta(message); break;
+            case InteractionPacket.SceneStatus:
+                ReadScenes(message);
+                break;
             case InteractionPacket.Snapshot:
                 uint oldPermissions = permissions;
                 string authenticated = message.ReadString();
@@ -214,6 +239,7 @@ public sealed class InteractionClient : IModule, ILoadCompleted, IEventUpdate {
                     views.BindRecovery(recovery);
                 }
                 permissions = message.ReadUInt32(); ready = true;
+                if ((oldPermissions & 1u << (int)InteractionAction.DirectEvents) != 0 && !Allows(InteractionAction.DirectEvents)) { SceneRows.Clear(); Effects.Clear(); views.Reset(); }
                 if ((oldPermissions & 1u << (int)InteractionAction.ViewGMFeed) != 0 && !Allows(InteractionAction.ViewGMFeed)) {
                     var removed = new List<string>();
                     foreach (var entry in messages) { if (entry.Value.Kind != MessageKind.Private && entry.Value.Thread != account) { removed.Add(entry.Key); } }
@@ -283,8 +309,10 @@ public sealed class InteractionClient : IModule, ILoadCompleted, IEventUpdate {
                 break;
             case InteractionPacket.Flicker:
                 ushort itemId = message.ReadUInt16(); byte component = message.ReadByte(); float duration = message.ReadSingle();
-                if (itemId == 0 && duration == 0) { LightEffectService.Instance.Clear(); break; }
-                if (Entity.FindEntityByID(itemId) is Item item && component < item.Components.Count && item.Components[component] is LightComponent light) { LightEffectService.Instance.Start(light, duration); }
+                Guid lease = Guid.ParseExact(message.ReadString(), "N");
+                if (itemId == 0 && duration == 0 && lease == Guid.Empty) { LightEffectService.Instance.Clear(); break; }
+                if (duration == 0) { LightEffectService.Instance.Cancel(lease); break; }
+                if (Entity.FindEntityByID(itemId) is Item item && component < item.Components.Count && item.Components[component] is LightComponent light) { LightEffectService.Instance.Start(light, duration, lease); }
                 break;
             case InteractionPacket.Error:
                 foreach (PrivateMessage queued in outbox) { retry[queued.Id] = GUIRuntime.Now + 30; }
@@ -297,7 +325,8 @@ public sealed class InteractionClient : IModule, ILoadCompleted, IEventUpdate {
         while (messages.Count >= 2000 && messageOrder.TryDequeue(out string key, out _)) { messages.Remove(key); }
     }
     private bool CanView(PrivateMessage message) => MessageAccess.CanView(message, account, Allows(InteractionAction.ViewGMFeed));
-    private void Shortcut(Keys key) { if (key == Keys.Escape) { worldSelection = null; } if (key == Keys.F2 && PlayView.Running) { views.ToggleInteraction(); GUIRuntime.Instance.Input.ConsumePointer(); } }
+    private void Shortcut(Keys key) { if (key == Keys.F4 && PlayView.Running) { ToggleLiveEditor(); GUIRuntime.Instance.Input.ConsumePointer(); } if (key == Keys.Escape) { editorDrag = editorMarquee = false; editorMoving = null; worldSelection = null; var cancel = worldSelectionCancelled; worldSelectionCancelled = null; cancel?.Invoke(); } if (key == Keys.F3 && PlayView.Running) { views.ToggleGMMessage(); GUIRuntime.Instance.Input.ConsumePointer(); } if (key == Keys.F2 && PlayView.Running) { views.ToggleInteraction(); GUIRuntime.Instance.Input.ConsumePointer(); } }
+    internal void ToggleGMMessage() => views.ToggleGMMessage();
     internal void ToggleStudio() => views.ToggleStudio();
     internal void RefreshStudioKits() => views.RefreshStudioKits();
     internal void Act(ushort id, EntityOperation operation, string value = "", Vector2 point = default) {
@@ -308,7 +337,7 @@ public sealed class InteractionClient : IModule, ILoadCompleted, IEventUpdate {
     internal void Direct(DirectorEvent value, bool preview = false) {
         if (!Allows(InteractionAction.DirectEvents)) { return; }
         DirectorEvent.Validate(value);
-        if (!Multiplayer || preview) { playback.Start(value); if (!preview) { RequestEffects(); } return; }
+        if (!Multiplayer || preview) { if (!preview && value.Kind == DirectorKind.Stop && value.Target.Length == 0) { localScenes.Clear(); } playback.Start(value, !preview); if (!preview) { RequestEffects(); } return; }
         Send(InteractionPacket.Director, output => DirectorEvent.Write(output, value));
     }
     internal void DirectSequence(IReadOnlyList<DirectorEvent> events) {
@@ -318,7 +347,9 @@ public sealed class InteractionClient : IModule, ILoadCompleted, IEventUpdate {
         Send(InteractionPacket.DirectorBatch, output => { output.WriteByte((byte)events.Count); foreach (var value in events) { DirectorEvent.Write(output, value); } });
     }
     private Action<Vector2> worldSelection;
-    internal void PickWorld(Action<Vector2> selected) {
+    private Action worldSelectionCancelled;
+    internal void PickWorld(Action<Vector2> selected, Action cancelled = null) {
+        worldSelectionCancelled?.Invoke(); worldSelectionCancelled = cancelled;
         worldSelection = selected ?? throw new ArgumentNullException(nameof(selected));
         GUIRuntime.Instance.Input.SetFocus(null);
         var hint = GUIRuntime.Instance.Windows.Notify("Выберите точку в мире", new Vector2(30, 30), 8);
@@ -334,13 +365,15 @@ public sealed class InteractionClient : IModule, ILoadCompleted, IEventUpdate {
     private void WorldPressed(Vector2 pointer, bool primary, bool secondary) {
         if (RPWheel.RPWheelMod.IsWheelOpen || !PlayView.Running) { return; }
         Vector2 world = GameMain.GameScreen.Cam.ScreenToWorld(pointer);
+        if (editorActive) { LiveWorldPressed(pointer, primary, secondary); GUIRuntime.Instance.Input.ConsumePointer(); return; }
         if (primary && worldSelection != null) {
-            var selected = worldSelection; worldSelection = null;
+            var selected = worldSelection; worldSelection = null; worldSelectionCancelled = null;
             GUIRuntime.Instance.Input.ConsumePointer();
             try { selected(world); } catch (Exception error) when (error is ArgumentException or InvalidOperationException) { views.Error(error.Message); }
             return;
         }
         if (secondary && Keyboard.GetState().IsKeyDown(Keys.LeftAlt)) { views.OpenHub(); GUIRuntime.Instance.Input.ConsumePointer(); return; }
+        if (secondary && Allows(InteractionAction.ManageEntities)) { views.OpenWorldContext(world, pointer); GUIRuntime.Instance.Input.ConsumePointer(); return; }
         if (!primary) { return; }
         bool alt = Keyboard.GetState().IsKeyDown(Keys.LeftAlt) || Keyboard.GetState().IsKeyDown(Keys.RightAlt);
         if (!alt) { WorldQueryService.Instance.Query(world, 50 / Math.Max(.1f, GameMain.GameScreen.Cam.Zoom), true, "", picks);
