@@ -10,7 +10,10 @@ internal readonly record struct BaselineProperty(ushort Component, string Type, 
 internal sealed record BaselineItem(Guid Incarnation, ushort NativeId, string Prefab, ushort Submarine,
     bool HasPosition, Guid Frame, int X, int Y, ulong PositionRevision, BaselineProperty[] Properties);
 internal sealed record WorldBaseline(Guid Epoch, ulong Cut, BaselineGraph[] Graphs, BaselineItem[] Items) {
-    internal const int MaxProperties = 4096, MaxItems = 1024, MaxEncodedBytes = 4 * 1024 * 1024;
+    internal const int MaxProperties = WorldEditJournal.Capacity, MaxItems = 1024;
+    // The byte bound must accommodate every legal character in every admitted field.
+    // A flat 4 MiB cap rejected a valid journal full of multi-byte UTF-8 values at late join.
+    internal const int MaxEncodedBytes = 128 + 255 * 40 + MaxItems * (128 + 3 * 128) + MaxProperties * (40 + 3 * (160 + 128 + 512));
     internal byte[] Encode() {
         int estimate = 128 + Graphs.Length * 40, fields = 0;
         foreach (var item in Items) {

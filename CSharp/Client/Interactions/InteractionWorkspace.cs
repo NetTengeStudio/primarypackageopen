@@ -25,9 +25,17 @@ internal sealed partial class InteractionViews {
     private GUIWindow director;
     private VirtualList activeEffectsList;
     private void EffectsChanged() { if (activeEffectsList is { Disposed: false }) { activeEffectsList.Count = client.Effects.Count; } }
-    internal void BindRecovery(InteractionRecovery recovery) {
-        drafts.Clear(); seenMessages.Clear(); headerCache.Clear();
-        foreach (var entry in recovery.Data.Drafts) { drafts.Add(entry.Key, entry.Value); }
+    internal void BindRecovery(InteractionRecovery recovery, bool preserveCurrent = false) {
+        if (preserveCurrent && recovery != null) {
+            int merged = drafts.Count;
+            foreach (string key in recovery.Data.Drafts.Keys) { if (!drafts.ContainsKey(key) && ++merged > 256) { throw new System.IO.InvalidDataException("Не удалось объединить черновики: превышен предел 256. Существующие данные сохранены"); } }
+            merged = seenMessages.Count;
+            foreach (string id in recovery.Data.Seen) { if (!seenMessages.Contains(id) && ++merged > 10000) { throw new System.IO.InvalidDataException("Не удалось объединить квитанции: превышен предел 10000. Существующие данные сохранены"); } }
+        }
+        if (!preserveCurrent) { drafts.Clear(); seenMessages.Clear(); }
+        headerCache.Clear();
+        if (recovery == null) { return; }
+        foreach (var entry in recovery.Data.Drafts) { drafts.TryAdd(entry.Key, entry.Value); }
         foreach (string id in recovery.Data.Seen) { seenMessages.Add(id); }
     }
     private void SaveInteractionView() {

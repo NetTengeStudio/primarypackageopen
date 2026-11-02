@@ -25,6 +25,7 @@ internal sealed partial class InteractionViews {
         deviceWindow?.Dispose(); deviceItem = item; deviceRows.Clear(); visibleDeviceRows.Clear(); selectedDeviceField = "";
         var layout = GUIRuntime.Instance.Layout;
         deviceWindow = GUIRuntime.Instance.Windows.Open("Live Editor · " + item.Name, new Vector2(Math.Max(0, layout.Viewport.X - 390 * layout.Scale), 35 * layout.Scale), 380, Math.Min(640, layout.Viewport.Y / layout.Scale - 60));
+        deviceWindow.AllowsViewportInputOutside = true;
         deviceWindow.ClosingRequested += _ => client.StopDeviceInspection();
         deviceSearch = deviceWindow.Add(new TextInput("", 80) { Placeholder = "Поиск по компонентам и свойствам" });
         deviceSearch.Changed += _ => FilterDeviceRows();

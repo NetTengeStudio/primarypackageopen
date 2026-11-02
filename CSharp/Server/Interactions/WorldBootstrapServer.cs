@@ -21,6 +21,8 @@ public sealed partial class InteractionServer {
         internal Task<WorldBlob> Preparing;
         internal WorldBlob Blob;
         internal ChunkSender Sender;
+        internal Guid Transfer;
+        internal WorldReplayWindow Replay;
         internal Guid[] Targets;
         internal bool Accepted;
         internal double LastOffer, LastAck, WaitingApplyAt;
@@ -101,31 +103,36 @@ public sealed partial class InteractionServer {
             if (!ChunkWire.TryOpen(NativeWire.Read(message), out var reader, out var kind, out Guid transfer)) { return; }
             double now = Now;
             if (kind == ChunkPacket.Accept) {
-                Guid flow = reader.Guid(); uint schema = reader.UInt32(), rate = reader.UInt32(); reader.Finish();
+                Guid flow = reader.Guid(), epoch = reader.Guid(); uint schema = reader.UInt32(), rate = reader.UInt32(); reader.Finish();
                 if (schema != WorldContract.SchemaVersion || rate is < 2048 or > 262144) { throw new ArgumentException("Несовместимый протокол восстановления мира"); }
+                if (GameMain.GameSession?.IsRunning != true) { return; }
+                if (epoch != worldEpoch) { SendSnapshot(session); return; }
                 var peer = session.Bootstrap;
                 if (peer == null) {
                     if (transfer != flow || flow == Guid.Empty) { throw new ArgumentException("Invalid bootstrap request"); }
                     peer = session.Bootstrap = new WorldBootstrapPeer(flow, (int)rate);
                     PrepareBaseline(session, peer, 0);
-                } else if (peer.Flow != flow) { throw new ArgumentException("World bootstrap flow changed without round reset"); }
+                } else if (peer.Flow != flow) { return; }
                 else if (peer.Released) { SendBootstrapComplete(session, peer); }
                 else if (peer.Blob?.Id == transfer) { peer.Accepted = true; }
                 return;
             }
             var active = session.Bootstrap;
-            if (active?.Blob == null || active.Blob.Id != transfer) { return; }
+            if (active == null || active.Transfer != transfer) { return; }
             if (kind == ChunkPacket.Ack) {
                 int prefix = checked((int)reader.UInt32()); ulong following = reader.Bits(64); reader.Finish();
                 if (now - active.LastAck < .02) { return; } active.LastAck = now;
-                active.Sender.Acknowledge(prefix, following, now);
+                active.Sender?.Acknowledge(prefix, following, now);
             } else if (kind == ChunkPacket.Complete) {
                 Guid flow = reader.Guid(); uint part = reader.UInt32(); ulong cut = reader.UInt(); reader.Finish();
-                if (flow != active.Flow || part != active.Part || cut != active.Cut || !active.Sender.Complete) { return; }
+                if (flow != active.Flow || part != active.Part || cut != active.Cut || !active.Cursor.Applied && active.Sender?.Complete != true) { return; }
                 CatchupResult decision = active.Cursor.Confirm(flow, (int)part, cut, worldEdits.Head);
                 if (decision == CatchupResult.Ignore) { return; }
                 foreach (Guid token in active.Targets) { if (deviceLifetimes.TryGetValue(token, out var lease) && lease.Current) { session.DeviceBindings.Add(token); } }
+                active.Targets = Array.Empty<Guid>();
                 if (decision == CatchupResult.Tail) {
+                    active.Replay = new WorldReplayWindow(cut, active.Rate, now);
+                    active.Blob = null; active.Sender = null; // retain the transfer identity, not the snapshot payload per released peer
                     active.ReplayIndex = 0;
                     while (active.ReplayIndex < worldEdits.Changes.Count && worldEdits.Changes[active.ReplayIndex].Sequence <= cut) { active.ReplayIndex++; }
                 } else { SendBootstrapComplete(session, active); }
@@ -140,11 +147,14 @@ public sealed partial class InteractionServer {
             var peer = session.Bootstrap; if (peer == null || peer.Released) { continue; }
             if (peer.Preparing is { IsCompleted: true }) {
                 if (peer.Preparing.IsFaulted) { FailBootstrap(session, peer.Preparing.Exception?.GetBaseException().Message ?? "Snapshot preparation failed"); continue; }
-                peer.Blob = peer.Preparing.GetAwaiter().GetResult(); peer.Preparing = null;
+                peer.Blob = peer.Preparing.GetAwaiter().GetResult(); peer.Transfer = peer.Blob.Id; peer.Preparing = null;
                 peer.Sender = new ChunkSender(peer.Blob, peer.Rate, now); peer.LastOffer = double.NegativeInfinity;
             }
+            if (peer.Cursor.Applied) {
+                if (peer.Replay.Expired(now)) { FailBootstrap(session, "Клиент не подтверждает применение изменений мира 60 секунд"); continue; }
+                PumpBootstrapReplay(session, peer, now); continue;
+            }
             if (peer.Blob == null) { continue; }
-            if (peer.Cursor.Applied) { PumpBootstrapReplay(session, peer); continue; }
             if (peer.Sender.Complete) {
                 if (peer.WaitingApplyAt == 0) { peer.WaitingApplyAt = now; }
                 if (now - peer.WaitingApplyAt >= 60) { FailBootstrap(session, "Клиент не подтвердил применение полученного снимка за 60 секунд"); }
@@ -153,7 +163,7 @@ public sealed partial class InteractionServer {
             if (peer.Sender.Expired(now)) { FailBootstrap(session, "Передача мира не продвигается 60 секунд. Можно переподключиться для нового снимка"); continue; }
             if (!peer.Accepted) {
                 if (now - peer.LastOffer < peer.Sender.RetransmitTimeout) { continue; } peer.LastOffer = now;
-                var writer = ChunkWire.Start(worldPacket, ChunkPacket.Offer, peer.Blob.Id); writer.Guid(peer.Flow); writer.UInt((uint)peer.Part); writer.UInt(peer.Cut); writer.UInt((uint)peer.Blob.Length); writer.Bytes(peer.Blob.Digest);
+                var writer = ChunkWire.Start(worldPacket, ChunkPacket.Offer, peer.Blob.Id); writer.Guid(peer.Flow); writer.Guid(worldEpoch); writer.UInt((uint)peer.Part); writer.UInt(peer.Cut); writer.UInt((uint)peer.Blob.Length); writer.Bytes(peer.Blob.Digest);
                 SendWorldPacket(session.Client, ChunkWire.Finish(ref writer, worldPacket)); continue;
             }
             for (int budget = 0; budget < 4 && peer.Sender.TryNext(now, out int index, out var bytes); budget++) {
@@ -163,12 +173,26 @@ public sealed partial class InteractionServer {
         }
     }
     private bool SendWorldPacket(Client client, int length) => ModNet.Send(WorldContract.Channel, client.Connection, output => NativeWire.Write(output, worldPacket, length), DeliveryMethod.Unreliable);
-    private void PumpBootstrapReplay(Session session, WorldBootstrapPeer peer) {
+    private void PumpBootstrapReplay(Session session, WorldBootstrapPeer peer, double now) {
         // Replay complete journal operations, including group inverses, in server order.
         // Unlike repeatedly recapturing snapshots, this can hand off during continuous edits.
         for (int budget = 0; budget < 8 && peer.ReplayIndex < worldEdits.Changes.Count; budget++) {
             int first = peer.ReplayIndex, end = first + 1; ulong sequence = worldEdits.Changes[first].Sequence;
             while (end < worldEdits.Changes.Count && worldEdits.Changes[end].Sequence == sequence) { end++; }
+            int size = 128; bool positionHeader = false;
+            for (int i = first; i < end; i++) {
+                var change = worldEdits.Changes[i];
+                if (!deviceLifetimes.TryGetValue(change.Key.Incarnation, out var lease) || !lease.Current || !NativeWorld.IsConstructionEntity(lease.Item)) { continue; }
+                if (change.Key.Component == ushort.MaxValue && change.Key.Property == LiveItemTransform.PositionKey) {
+                    if (!positionHeader) { size += 128; positionHeader = true; }
+                    size += 16 + 16 + 5 + 5; // two GUIDs and the maximum two signed coordinate varints
+                } else {
+                    size = checked(size + 128 + WireEncoding.Utf8.GetByteCount(change.Key.Property) + WireEncoding.Utf8.GetByteCount(change.After));
+                }
+            }
+            // Conservative UTF-8/envelope budget: no operation is split to fit the window.
+            if (size > WorldReplayWindow.ByteCapacity) { FailBootstrap(session, "Операция мира превышает ограничение очереди синхронизации"); return; }
+            if (!peer.Replay.CanSend(size, now)) { return; }
             var positions = new List<TranslationWire.StateRow>(end - first);
             for (int i = first; i < end; i++) {
                 var change = worldEdits.Changes[i];
@@ -193,7 +217,11 @@ public sealed partial class InteractionServer {
                     output.WriteUInt64(sequence); output.WriteUInt64(sample); output.WriteString(change.After);
                 })) { return; }
             }
-            peer.ReplayIndex = end; peer.Cursor.Advance(sequence);
+            if (!ModNet.Send(InteractionProtocol.Channel, session.Client.Connection, output => {
+                InteractionProtocol.Header(output, InteractionPacket.WorldBootstrapProgress); output.WriteString(peer.Flow.ToString("N"));
+                output.WriteString(worldEpoch.ToString("N")); output.WriteUInt64(sequence);
+            })) { return; }
+            peer.Replay.Enqueue(sequence, size, now); peer.ReplayIndex = end; peer.Cursor.Advance(sequence);
         }
         if (peer.ReplayIndex == worldEdits.Changes.Count && peer.Cursor.CanRelease(worldEdits.Head)) {
             // Same reliable ordered channel as the tail. The client cannot start native
@@ -201,8 +229,14 @@ public sealed partial class InteractionServer {
             ulong head = worldEdits.Head;
             if (ModNet.Send(InteractionProtocol.Channel, session.Client.Connection, output => {
                 InteractionProtocol.Header(output, InteractionPacket.WorldBootstrapRelease); output.WriteString(peer.Flow.ToString("N")); output.WriteString(worldEpoch.ToString("N")); output.WriteUInt64(head);
-            })) { peer.Cursor.Release(head); }
+            })) { peer.Cursor.Release(head); peer.Replay = null; }
         }
+    }
+    private void AcknowledgeBootstrapReplay(IReadMessage input, Session session, double now) {
+        Guid flow = Guid.ParseExact(input.ReadString(), "N"), epoch = Guid.ParseExact(input.ReadString(), "N"); ulong sequence = input.ReadUInt64();
+        var peer = session.Bootstrap;
+        if (input.BitPosition > input.LengthBits || peer == null || flow != peer.Flow || epoch != worldEpoch || peer.Released || peer.Replay == null) { return; }
+        peer.Replay.Acknowledge(sequence, now);
     }
     private void SendBootstrapComplete(Session session, WorldBootstrapPeer peer) {
         ModNet.Send(InteractionProtocol.Channel, session.Client.Connection, output => {

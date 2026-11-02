@@ -44,6 +44,7 @@ public sealed partial class InteractionServer {
         public void Validate(in WorldEditKey key, string value) {
             if (IsPosition(key)) {
                 if (!Current) { throw new InvalidOperationException("Цель удалена"); }
+                if (PositionState == value) { return; } // unchanged alignment anchor: read dependency, no physical mutation
                 LiveItemTransform.Validate(Item, PositionValue(value), true); return;
             }
             Target(key).Field.Parse(value);

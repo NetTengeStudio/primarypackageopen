@@ -72,6 +72,16 @@ internal static partial class Program {
         Guid baseEpoch = Guid.NewGuid(); Guid first = BaseWorldIdentity.For(baseEpoch, 1), second = BaseWorldIdentity.For(baseEpoch, 2);
         Check(first != second && BaseWorldIdentity.TryResolve(baseEpoch, first, out ushort nativeId) && nativeId == 1, "verified original entities have compact round-scoped identities");
         Check(!BaseWorldIdentity.TryResolve(Guid.NewGuid(), first, out _) && !BaseWorldIdentity.TryResolve(Guid.Empty, first, out _), "native ID reuse across world epochs cannot bind an old incarnation");
+        var maximumItems = new BaselineItem[8]; string longestType = new('型', 160), longestValue = new('值', 512);
+        for (int i = 0; i < maximumItems.Length; i++) {
+            var properties = new BaselineProperty[512];
+            for (int p = 0; p < properties.Length; p++) { properties[p] = new(0, longestType, p.ToString().PadRight(128, '名'), longestValue, 1); }
+            maximumItems[i] = new(Guid.NewGuid(), (ushort)(i + 1), new string('船', 128), 65532, false, Guid.Empty, 0, 0, 0, properties);
+        }
+        var maximumBaseline = new WorldBaseline(epoch, 1, original.Graphs, maximumItems); byte[] maximumEncoded = maximumBaseline.Encode();
+        var maximumDecoded = WorldBaseline.Decode(maximumEncoded);
+        Check(maximumEncoded.Length > 4 * 1024 * 1024 && maximumEncoded.Length <= WorldBaseline.MaxEncodedBytes && maximumEncoded.Length <= WorldBlob.MaxBytes && maximumDecoded.Items[^1].Properties[^1].Value == longestValue,
+            "maximum admitted Unicode property journal always fits the bounded late-join transfer, beyond the previous inconsistent 4 MiB cap");
     }
     private readonly record struct Datagram(double Due, int Index, ReadOnlyMemory<byte> Payload, int Prefix, ulong Following, bool Ack);
     private static object NetworkTransfers() {

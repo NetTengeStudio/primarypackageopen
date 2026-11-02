@@ -31,7 +31,7 @@ public sealed partial class InteractionClient {
         }
         public void Validate(in WorldEditKey key, string value) {
             var item = Resolve(key).Item;
-            if (key.Component == ushort.MaxValue) { LiveItemTransform.Validate(item, Position(value), simulation); }
+            if (key.Component == ushort.MaxValue) { if (Read(key) != value) { LiveItemTransform.Validate(item, Position(value), simulation); } }
             else { Field(item, key, out _).Parse(value); }
         }
         public void Write(in WorldEditKey key, string value) {
@@ -49,13 +49,13 @@ public sealed partial class InteractionClient {
         });
     }
     private void TranslateSelection() {
-        if (editorDelta == Vector2.Zero) { return; }
+        if (editorDelta == Vector2.Zero && !editorArrangement.HasValue) { return; }
         var rows = new TranslationWire.IntentRow[editorMoving.Count];
         var items = new Item[rows.Length]; var mutations = new WorldMutation[rows.Length];
         for (int i = 0; i < rows.Length; i++) {
             var moving = editorMoving[i]; var item = moving.Item; var before = moving.Before;
             if (item.Removed || item.Submarine != before.Frame || Multiplayer && (!deviceBindings.TryGetValue(before.Token, out var bound) || bound != item)) { throw new InvalidOperationException("Выделение удалено, заменено или сменило подлодку"); }
-            var point = new Point(checked(moving.Original.X + (int)editorDelta.X), checked(moving.Original.Y + (int)editorDelta.Y));
+            var point = editorArrangement.HasValue ? new Point(editorArranged[i].X, editorArranged[i].Y) : new Point(checked(moving.Original.X + (int)editorDelta.X), checked(moving.Original.Y + (int)editorDelta.Y));
             string after = LiveItemTransform.Encode(LiveItemTransform.Decode(before.Position).Frame, point);
             rows[i] = new(before.Token, before.Revision, before.Position, after);
             items[i] = item; mutations[i] = new(new(before.Token, ushort.MaxValue, LiveItemTransform.PositionKey), before.Revision, before.Position, after);

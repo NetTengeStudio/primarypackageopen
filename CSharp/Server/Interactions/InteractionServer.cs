@@ -48,6 +48,8 @@ public sealed partial class InteractionServer : IModule, ILoadCompleted, IEventU
         public readonly Queue<DeviceLease> DeviceOffers = new();
         public readonly HashSet<Guid> PendingDeviceOffers = new();
         public readonly Dictionary<string, double> Actions = new(StringComparer.Ordinal);
+        public readonly Dictionary<Guid, GMAnnouncementReceipt> Announcements = new();
+        public readonly Queue<Guid> AnnouncementOrder = new();
     }
     private readonly Dictionary<byte, Session> sessions = new();
     private readonly List<WorldQueryResult> query = new();
@@ -282,6 +284,8 @@ public sealed partial class InteractionServer : IModule, ILoadCompleted, IEventU
                     }
                     ModLog.Error("Director client failure " + session.Account + " " + failedId + ": " + reason);
                     break;
+                case InteractionPacket.WorldBootstrapApplied:
+                    AcknowledgeBootstrapReplay(message, session, now); break;
                 case InteractionPacket.GMAnnouncement:
                     Announce(message, session, now); break;
                 case InteractionPacket.RevivePlayer:
@@ -435,10 +439,11 @@ public sealed partial class InteractionServer : IModule, ILoadCompleted, IEventU
         ModNet.Send(InteractionProtocol.Channel, session.Client.Connection, output =>
         {
             InteractionProtocol.Header(output, InteractionPacket.Snapshot);
-            output.WriteString(session.Account);
+            output.WriteString(session.Account); output.WriteString(worldEpoch.ToString("N"));
             uint mask = 0;
             foreach (InteractionAction action in Enum.GetValues<InteractionAction>()) { if ((action != InteractionAction.SendPrivateMessage || messages != null) && permissions.Allows(session.Client, action)) { mask |= 1u << (int)action; } }
             output.WriteUInt32(mask);
+            output.WriteByte(permissions.AnnouncementFormats(session.Client));
             var clients = GameMain.Server.ConnectedClients;
             int count = Math.Min(128, clients.Count);
             output.WriteByte((byte)count);

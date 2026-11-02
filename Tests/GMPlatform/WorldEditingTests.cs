@@ -78,6 +78,17 @@ internal static partial class Program {
         Check(journal.Faulted && journal.Entries.Count == 0, "uncertain world state faults the journal without publishing a successful transaction");
         Reject<InvalidOperationException>(() => journal.Apply(Guid.NewGuid(), "gm", b, 0, "0", "blocked", world, 23), "a failed restoration blocks all further editor writes");
         journal.Clear(); Check(!journal.Faulted, "new round resets the transaction fault");
+        world.Values[a] = world.Values[b] = "0";
+        var aligned = journal.ApplyBatch(Guid.NewGuid(), "gm", new[] { new WorldMutation(a, 0, "0", "0"), new WorldMutation(b, 0, "0", "10") }, world, 24);
+        journal.Apply(Guid.NewGuid(), "other", a, aligned.Revision, "0", "1", world, 25);
+        Reject<InvalidOperationException>(() => journal.Reverse(aligned.Request, "gm", aligned.Revision, false, world, 26), "an unchanged alignment anchor remains a revision dependency for the inverse");
+        Check(world.Values[a] == "1" && world.Values[b] == "10", "alignment inverse cannot erase a later anchor edit or partially restore the moved objects");
+        journal.Clear(); world.Values[a] = world.Values[b] = "0";
+        aligned = journal.ApplyBatch(Guid.NewGuid(), "gm", new[] { new WorldMutation(a, 0, "0", "0"), new WorldMutation(b, 0, "0", "10") }, world, 27);
+        world.Values[a] = "simulation";
+        Reject<InvalidOperationException>(() => journal.Reverse(aligned.Request, "gm", aligned.Revision, false, world, 28), "simulation changes to an alignment anchor also invalidate the whole inverse");
+        Check(world.Values[b] == "10", "failed anchor precondition performs no partial physical reversal");
+        journal.Clear();
         var capacityKey = new WorldEditKey(Guid.NewGuid(), 0, "field"); world.Values[capacityKey] = "0";
         for (int i = 0; i < WorldEditJournal.Capacity; i++) {
             string old = world.Values[capacityKey]; journal.Apply(Guid.NewGuid(), "gm", capacityKey, journal.Revision(capacityKey), old, (i + 1).ToString(), world, i);

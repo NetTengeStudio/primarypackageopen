@@ -16,6 +16,8 @@ public class GUIWindow : ScrollView {
     public GUIWindow OwnerWindow { get; internal set; }
     internal readonly Screen OwnerScreen;
     public bool DismissOnOutside { get; set; }
+    // Editor tool panels leave their surrounding viewport usable; ordinary windows capture it.
+    internal bool AllowsViewportInputOutside { get; set; }
     public bool InputTransparent { get; internal set; }
     public string Title { get; }
     public event Action<GUIWindow> Closed;

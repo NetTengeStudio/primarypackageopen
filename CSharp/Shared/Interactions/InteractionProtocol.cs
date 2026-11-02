@@ -12,7 +12,7 @@ public enum MessageKind : byte { Private, Support, Roleplay }
 public enum EntityOperation : byte { Condition, RemoveItem, Gib, BreakDoor, SpawnCreature, SpawnDormantCreature, AIEnabled }
 public enum DirectorKind : byte { Sound, Scare, Caption, Stop, StopOne, Hallucination, SignalCollapse }
 public enum MessageStatus : byte { Queued, Stored, Delivered, Read }
-internal enum InteractionPacket : byte { Hello, Query, Spawn, Flicker, PermissionList, PermissionChange, MessageSend, MessageAck, MessageRead, Snapshot, QueryResult, Message, MessageState, PermissionResult, Error, ChannelSend, EntityAction, Director, DirectorEvent, HistoryEnd, DirectorBatch, DirectorList, DirectorStatus, ReceiptBatch, ScenePut, SceneRemove, SceneList, SceneStatus, DeviceInspect, DeviceSnapshot, DeviceChange, DeviceDelta, DirectorFailure, WorldReady, DeviceBind, DeviceBindAck, EditHistory, EditReverse, GMAnnouncement, RevivePlayer, WorldTranslate, WorldTransform, DeviceForget, WorldExport, DeviceUninspect, WorldTransformSelection, WorldTransformBatch, WorldEditFailure, WorldBootstrapRelease }
+internal enum InteractionPacket : byte { Hello, Query, Spawn, Flicker, PermissionList, PermissionChange, MessageSend, MessageAck, MessageRead, Snapshot, QueryResult, Message, MessageState, PermissionResult, Error, ChannelSend, EntityAction, Director, DirectorEvent, HistoryEnd, DirectorBatch, DirectorList, DirectorStatus, ReceiptBatch, ScenePut, SceneRemove, SceneList, SceneStatus, DeviceInspect, DeviceSnapshot, DeviceChange, DeviceDelta, DirectorFailure, WorldReady, DeviceBind, DeviceBindAck, EditHistory, EditReverse, GMAnnouncement, RevivePlayer, WorldTranslate, WorldTransform, DeviceForget, WorldExport, DeviceUninspect, WorldTransformSelection, WorldTransformBatch, WorldEditFailure, WorldBootstrapRelease, GMAnnouncementReceipt, WorldBootstrapProgress, WorldBootstrapApplied }
 
 internal static class InteractionProtocol
 {
@@ -25,22 +25,11 @@ internal static class InteractionProtocol
         if (message.LengthBits - message.BitPosition < 16) { return false; }
         if (message.ReadByte() != Version) { return false; }
         byte value = message.ReadByte();
-        if (value > (byte)InteractionPacket.WorldBootstrapRelease) { return false; }
+        if (value > (byte)InteractionPacket.WorldBootstrapApplied) { return false; }
         packet = (InteractionPacket)value;
         return true;
     }
-    public static bool ValidText(string value, int max)
-    {
-        if (string.IsNullOrWhiteSpace(value) || value.Length > max) { return false; }
-        for (int i = 0; i < value.Length; i++)
-        {
-            char c = value[i];
-            if (char.IsControl(c) || c is '<' or '>') { return false; }
-            if (char.IsHighSurrogate(c)) { if (++i >= value.Length || !char.IsLowSurrogate(value[i])) { return false; } }
-            else if (char.IsLowSurrogate(c)) { return false; }
-        }
-        return true;
-    }
+    public static bool ValidText(string value, int max) => InteractionText.Valid(value, max);
 }
 
 public sealed class PrivateMessage

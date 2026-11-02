@@ -14,6 +14,7 @@ public sealed class GUIInput {
     private MouseState previousMouse;
     private KeyboardState previousKeyboard;
     private bool consumeUntilRelease;
+    private bool shortcutConsumed;
     private long lastClick;
     private double lastClickTime;
     private Vector2 lastClickPosition;
@@ -23,6 +24,8 @@ public sealed class GUIInput {
     public Vector2 Pointer { get; private set; }
     public event Action<Vector2, bool, bool> WorldPressed;
     public event Action<Keys> Shortcut;
+    public void ConsumeShortcut() => shortcutConsumed = true;
+    private bool DispatchShortcut(Keys key) { shortcutConsumed = false; Shortcut?.Invoke(key); return shortcutConsumed; }
     internal GUIInput(GUIRuntime runtime) { this.runtime = runtime; previousMouse = Mouse.GetState(); previousKeyboard = Keyboard.GetState(); }
 
     internal void Update() {
@@ -93,8 +96,8 @@ public sealed class GUIInput {
         if (keyboard.IsKeyDown(Keys.Escape) && previousKeyboard.IsKeyUp(Keys.Escape)) {
             GUIWindow top = null;
             for (int i = windows.Count - 1; i >= 0; i--) { if (windows[i].Visible && !windows[i].Disposed && !windows[i].InputTransparent) { top = windows[i]; break; } }
-            Shortcut?.Invoke(Keys.Escape);
-            if (top != null) { top.Close(); consumeUntilRelease = down || mouse.RightButton == ButtonState.Pressed; }
+            bool consumed = DispatchShortcut(Keys.Escape);
+            if (!consumed && top != null) { top.Close(); consumeUntilRelease = down || mouse.RightButton == ButtonState.Pressed; }
             SetFocus(null);
         }
         if (keyboard.IsKeyDown(Keys.Tab) && previousKeyboard.IsKeyUp(Keys.Tab) && windows.Count > 0) { NextFocus(windows[windows.Count - 1], keyboard.IsKeyDown(Keys.LeftShift) || keyboard.IsKeyDown(Keys.RightShift)); }
@@ -103,9 +106,9 @@ public sealed class GUIInput {
             if (keyboard.IsKeyDown(Keys.Up) && previousKeyboard.IsKeyUp(Keys.Up)) { Focus.Navigate(-1); }
             if (keyboard.IsKeyDown(Keys.Down) && previousKeyboard.IsKeyUp(Keys.Down)) { Focus.Navigate(1); }
         }
-        if (keyboard.IsKeyDown(Keys.F3) && previousKeyboard.IsKeyUp(Keys.F3)) { Shortcut?.Invoke(Keys.F3); }
-        if (keyboard.IsKeyDown(Keys.F4) && previousKeyboard.IsKeyUp(Keys.F4)) { Shortcut?.Invoke(Keys.F4); }
-        if (keyboard.IsKeyDown(Keys.F2) && previousKeyboard.IsKeyUp(Keys.F2)) { Shortcut?.Invoke(Keys.F2); }
+        if (keyboard.IsKeyDown(Keys.F5) && previousKeyboard.IsKeyUp(Keys.F5)) { DispatchShortcut(Keys.F5); }
+        if (keyboard.IsKeyDown(Keys.F4) && previousKeyboard.IsKeyUp(Keys.F4)) { DispatchShortcut(Keys.F4); }
+        if (keyboard.IsKeyDown(Keys.F2) && previousKeyboard.IsKeyUp(Keys.F2)) { DispatchShortcut(Keys.F2); }
         if (!BlocksWorld && Barotrauma.GUI.MouseOn == null && Barotrauma.GUI.KeyboardDispatcher.Subscriber == null && (pressed || secondary)) {
             WorldPressed?.Invoke(Pointer, pressed, secondary);
         }

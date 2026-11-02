@@ -121,8 +121,9 @@ internal static class Contracts {
             if (Convert.ToInt32(Enum.Parse(Engine("Barotrauma.Networking.ChatMessageType"), "ServerMessageBoxInGame")) != 11) { throw new InvalidOperationException("Native in-game message type changed"); }
             Type announcementType = mod.GetType("PrimaryPackage.Interactions.GMAnnouncement", true);
             object announcement = Activator.CreateInstance(announcementType, true);
-            void SetAnnouncement(string name, object value) => announcementType.GetField(name, flags).SetValue(announcement, value);
+            void SetAnnouncement(string name, object value) => announcementType.GetProperty(name, flags).SetValue(announcement, value);
             SetAnnouncement("Id", Guid.NewGuid()); SetAnnouncement("Format", (byte)11); SetAnnouncement("Text", "Цветное сообщение игроку"); SetAnnouncement("Target", "Steam64:123456");
+            SetAnnouncement("Sender", Enum.ToObject(mod.GetType("PrimaryPackage.Interactions.GMMessageSender", true), 5)); SetAnnouncement("CustomSender", "Капитан");
             object announcementMessage = Activator.CreateInstance(messageType);
             announcementType.GetMethod("Write", flags).Invoke(announcement, new[] { announcementMessage });
             int announcementBits = (int)messageType.GetProperty("LengthBits").GetValue(announcementMessage);
@@ -141,13 +142,33 @@ internal static class Contracts {
                 catch (TargetInvocationException) { rejectedAnnouncements++; }
             }
             if (rejectedAnnouncements != (announcementBits + 7) / 8) { throw new InvalidOperationException("A truncated GM announcement was accepted"); }
-            foreach (byte format in new byte[] { 0, 1, 4, 8, 254 }) {
+            foreach (byte format in new byte[] { 0, 1, 4, 8, 253 }) {
                 SetAnnouncement("Format", format);
                 try { announcementType.GetMethod("Validate", flags).Invoke(announcement, null); throw new InvalidOperationException("Unsupported GM format accepted"); }
                 catch (TargetInvocationException invalidFormat) when (invalidFormat.InnerException is ArgumentException) { }
             }
+            foreach (byte format in new byte[] { 3, 7, 10, 11, 254, 255 }) {
+                SetAnnouncement("Format", format); announcementType.GetMethod("Validate", flags).Invoke(announcement, null);
+            }
+            Type receiptType = mod.GetType("PrimaryPackage.Interactions.GMAnnouncementReceipt", true);
+            object receipt = Activator.CreateInstance(receiptType, true);
+            receiptType.GetProperty("Id", flags).SetValue(receipt, Guid.NewGuid()); receiptType.GetProperty("Sender", flags).SetValue(receipt, "Капитан");
+            receiptType.GetProperty("Recipients", flags).SetValue(receipt, 128); receiptType.GetProperty("Timestamp", flags).SetValue(receipt, 1700000000000L);
+            object receiptMessage = Activator.CreateInstance(messageType); receiptType.GetMethod("Write", flags).Invoke(receipt, new[] { receiptMessage });
+            int receiptBits = (int)messageType.GetProperty("LengthBits").GetValue(receiptMessage);
+            byte[] receiptBuffer = (byte[])messageType.GetProperty("Buffer").GetValue(receiptMessage);
+            messageType.GetProperty("BitPosition").SetValue(receiptMessage, 0);
+            object receivedReceipt = receiptType.GetMethod("Read", flags).Invoke(null, new[] { receiptMessage });
+            if ((int)receiptType.GetProperty("Recipients", flags).GetValue(receivedReceipt) != 128 || (string)receiptType.GetProperty("Sender", flags).GetValue(receivedReceipt) != "Капитан") { throw new InvalidOperationException("Announcement receipt did not roundtrip"); }
+            int rejectedReceipts = 0;
+            for (int size = 0; size < (receiptBits + 7) / 8; size++) {
+                object input = Activator.CreateInstance(messageType, new object[] { receiptBuffer.AsSpan(0, size).ToArray(), 0, size * 8, false });
+                try { receiptType.GetMethod("Read", flags).Invoke(null, new[] { input }); }
+                catch (TargetInvocationException) { rejectedReceipts++; }
+            }
+            if (rejectedReceipts != (receiptBits + 7) / 8) { throw new InvalidOperationException("Truncated announcement receipt accepted"); }
             object translationCodec = VerifyTranslationCodec(mod, messageType);
-            return new { module = Path.GetFileName(Path.GetDirectoryName(module)), engineModules = new[] { client.ManifestModule.ModuleVersionId, core.ManifestModule.ModuleVersionId }, patchMethods = methods, bootstrapFinalizeCalls, bootstrapInjectedMarkers, submarineConstructors, devices, parsedProperties, deniedValues, sceneWireBits = length, truncatedPacketsRejected = rejected, announcementBits, rejectedAnnouncements, transformFrameCases = 6, translationCodec, scope = "installed metadata, actual startup IL transformation and native message codec; no engine initialization, renderer or network connection" };
+            return new { module = Path.GetFileName(Path.GetDirectoryName(module)), engineModules = new[] { client.ManifestModule.ModuleVersionId, core.ManifestModule.ModuleVersionId }, patchMethods = methods, bootstrapFinalizeCalls, bootstrapInjectedMarkers, submarineConstructors, devices, parsedProperties, deniedValues, sceneWireBits = length, truncatedPacketsRejected = rejected, announcementBits, rejectedAnnouncements, receiptBits, rejectedReceipts, transformFrameCases = 6, translationCodec, scope = "installed metadata, actual startup IL transformation and native message codec; no engine initialization, renderer or network connection" };
         } finally { if (context.IsCollectible) { context.Unload(); } }
     }
     private static int CountCalls(MethodInfo method, string declaringType, string name, string receiverField) {
@@ -194,8 +215,9 @@ internal static class Contracts {
             string position = Guid.NewGuid().ToString("N") + "|120,-30", after = position[..33] + "220,-10";
             for (int n = 0; n < count; n++) {
                 Guid token = Guid.NewGuid();
-                intents.SetValue(Activator.CreateInstance(intentType, new object[] { token, (ulong)123, position, after }), n);
-                states.SetValue(Activator.CreateInstance(stateType, new object[] { token, (ushort)65532, after }), n);
+                string target = count > 1 ? (n == 0 ? position : position[..33] + (220 + n) + "," + (-10 - n)) : after;
+                intents.SetValue(Activator.CreateInstance(intentType, new object[] { token, (ulong)123, position, target }), n);
+                states.SetValue(Activator.CreateInstance(stateType, new object[] { token, (ushort)65532, target }), n);
             }
             foreach (bool state in new[] { false, true }) {
                 MethodInfo write = codec.GetMethod(state ? "WriteState" : "WriteIntent", flags), read = codec.GetMethod(state ? "ReadState" : "ReadIntent", flags);
@@ -218,7 +240,7 @@ internal static class Contracts {
             var badRows = Array.CreateInstance(intentType, 2);
             badRows.SetValue(intents.GetValue(0), 0); badRows.SetValue(intents.GetValue(0), 1);
             RejectWire(() => codec.GetMethod("WriteIntent", flags).Invoke(null, new object[] { Activator.CreateInstance(messageType), request, badRows }));
-            badRows.SetValue(Activator.CreateInstance(intentType, new object[] { Guid.NewGuid(), (ulong)123, position, position[..33] + "221,-10" }), 1);
+            badRows.SetValue(Activator.CreateInstance(intentType, new object[] { Guid.NewGuid(), (ulong)123, position, Guid.NewGuid().ToString("N") + "|221,-10" }), 1);
             RejectWire(() => codec.GetMethod("WriteIntent", flags).Invoke(null, new object[] { Activator.CreateInstance(messageType), request, badRows }));
             var badStates = Array.CreateInstance(stateType, 2);
             badStates.SetValue(states.GetValue(0), 0); badStates.SetValue(states.GetValue(0), 1);

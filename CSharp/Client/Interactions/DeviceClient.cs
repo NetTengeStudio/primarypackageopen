@@ -22,7 +22,7 @@ public sealed partial class InteractionClient {
     private double nextDeviceBindAck;
     private readonly Dictionary<Guid, List<DeviceRow>> deviceSnapshots = new();
     private bool worldReadySent;
-    private void ResetDevices() { StopLiveEditor(); transformStates.Clear(); deviceValues.Clear(); deviceBindings.Clear(); deviceOffers.Clear(); deviceOfferQueue.Clear(); deviceBindAcks.Clear(); nextDeviceBindAck = 0; deviceSnapshots.Clear(); EditHistory.Clear(); worldReadySent = false; }
+    private void ResetDevices() { StopLiveEditor(); views?.CloseLiveEditor(); transformStates.Clear(); deviceValues.Clear(); deviceBindings.Clear(); deviceOffers.Clear(); deviceOfferQueue.Clear(); deviceBindAcks.Clear(); nextDeviceBindAck = 0; deviceSnapshots.Clear(); EditHistory.Clear(); worldReadySent = false; }
     internal void InspectDevice(Item item) {
         if (!Allows(InteractionAction.ManageEntities)) { return; }
         if (Multiplayer) { Send(InteractionPacket.DeviceInspect, output => output.WriteUInt16(item.ID)); return; }
@@ -121,7 +121,7 @@ public sealed partial class InteractionClient {
         var rows = new List<EditHistoryRow>(count);
         for (int i = 0; i < count; i++) {
             Guid request = Guid.ParseExact(input.ReadString(), "N"); string actor = input.ReadString(); Guid target = Guid.ParseExact(input.ReadString(), "N"); string property = input.ReadString();
-            if (actor.Length > 128 || property.Length > 288) { throw new ArgumentException("Некорректная история"); }
+            if (actor.Length > 128 || property.Length > WorldEditJournal.MaxPropertyAddressLength) { throw new ArgumentException("Некорректная история"); }
             ulong revision = input.ReadUInt64(); long timestamp = input.ReadInt64(); bool undone = input.ReadBoolean(), own = input.ReadBoolean(); byte changes = input.ReadByte();
             if (changes is < 1 or > WorldEditJournal.MaxBatch) { throw new ArgumentException("Некорректное число изменений в истории"); }
             rows.Add(new(request, actor, target, property, revision, timestamp, undone, own, changes));

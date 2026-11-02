@@ -37,6 +37,7 @@ internal sealed partial class InteractionViews : IDisposable {
         client.PermissionsChanged += PermissionsChanged;
         client.EffectsChanged += EffectsChanged;
         client.ScenesChanged += ScenesChanged;
+        client.AnnouncementsChanged += GMAnnouncementsChanged;
         client.DeviceReceived += DeviceReceived; client.DeviceValueReceived += DeviceValueReceived; client.HistoryReceived += EditHistoryReceived;
         templateStore = new AtomicStore<List<CharacterTemplate>>(ModAssets.Resolve("Data/Interactions/character-templates.client.json"), ValidateTemplates);
         templates = templateStore.Load(() => new List<CharacterTemplate>(), error => ModLog.Error("Character templates recovered: " + error.Message));
@@ -63,7 +64,7 @@ internal sealed partial class InteractionViews : IDisposable {
         hub.Add(new Button("Character Studio", _ => OpenStudio()) { Enabled = client.Allows(InteractionAction.SpawnCharacter) });
         hub.Add(new Button("Horror Director", _ => OpenDirector()) { Enabled = client.Allows(InteractionAction.DirectEvents) });
         hub.Add(new Button("Взаимодействие · F2", _ => OpenMessages(null, "")));
-        hub.Add(new Button("Сообщение игрокам · F3", _ => ToggleGMMessage()) { Enabled = client.Allows(InteractionAction.SendGMMessage) });
+        hub.Add(new Button("Сообщение игрокам · F5", _ => ToggleGMMessage()) { Enabled = client.Allows(InteractionAction.SendGMMessage) });
         hub.Add(new Button("Возродить игрока", _ => OpenPlayerRevival()) { Enabled = client.Multiplayer && client.Allows(InteractionAction.RevivePlayers) });
         hub.Add(new Button("Полномочия", _ => OpenPermissions()) { Enabled = client.Multiplayer && client.Allows(InteractionAction.ManagePermissions) });
         hub.Add(new Text("Alt + ЛКМ: мерцание лампы · Alt + ПКМ: это окно") { Color = GUITheme.Muted });
@@ -198,7 +199,7 @@ internal sealed partial class InteractionViews : IDisposable {
         InteractionAction.ViewGMFeed => "Обращения и RP-лента",
         InteractionAction.ManageEntities => "Редактирование сущностей",
         InteractionAction.DirectEvents => "Horror Director",
-        InteractionAction.SendGMMessage => "GM-сообщения · F3",
+        InteractionAction.SendGMMessage => "GM-сообщения · F5",
         InteractionAction.RevivePlayers => "Возрождение игроков",
         InteractionAction.OverrideRespawnRules => "Исключения кампании / permadeath",
         InteractionAction.ManageKits => "Сохранение и удаление Kits",
@@ -222,7 +223,7 @@ internal sealed partial class InteractionViews : IDisposable {
     }
     public void Reset() {
         CloseLiveEditor();
-        deviceWindow?.Dispose(); deviceWindow = null; deviceItem = null; editHistoryWindow?.Dispose(); gmMessageWindow?.Dispose();
+        deviceWindow?.Dispose(); deviceWindow = null; deviceItem = null; editHistoryWindow?.Dispose(); gmMessageWindow?.Dispose(); gmMessageWindow = null; gmMessageHistory = null; gmMessageStatus = null;
         context?.Dispose(); hub?.Dispose(); queryWindow?.Dispose(); messageWindow?.Dispose(); permissionWindow?.Dispose(); creator?.Dispose(); errorWindow?.Dispose();
         context = hub = queryWindow = messageWindow = permissionWindow = creator = errorWindow = null;
         resultList = auditList = activeEffectsList = runningScenes = draftSteps = null;
@@ -235,6 +236,7 @@ internal sealed partial class InteractionViews : IDisposable {
         client.ResultsChanged -= ResultsChanged; client.MessagesChanged -= MessagesChanged; client.PermissionsChanged -= PermissionsChanged;
         client.EffectsChanged -= EffectsChanged;
         client.ScenesChanged -= ScenesChanged;
+        client.AnnouncementsChanged -= GMAnnouncementsChanged;
         client.DeviceReceived -= DeviceReceived; client.DeviceValueReceived -= DeviceValueReceived; client.HistoryReceived -= EditHistoryReceived;
         Reset();
     }

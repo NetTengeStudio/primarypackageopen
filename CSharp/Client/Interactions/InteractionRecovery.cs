@@ -12,6 +12,7 @@ internal sealed class InteractionRecovery {
         public List<PrivateMessage> Outbox { get; set; } = new();
         public Dictionary<string, string> Drafts { get; set; } = new(StringComparer.Ordinal);
         public HashSet<string> Seen { get; set; } = new(StringComparer.Ordinal);
+        public GMMessageState GM { get; set; } = new();
     }
     private readonly AtomicStore<State> store;
     public State Data { get; }
@@ -29,6 +30,8 @@ internal sealed class InteractionRecovery {
         }
         foreach (var draft in state.Drafts) { if (draft.Key.Length > 160 || draft.Value == null || draft.Value.Length > 512) { throw new InvalidDataException("Invalid message draft"); } }
         foreach (string id in state.Seen) { if (id == null || id.Length > 164) { throw new InvalidDataException("Invalid message receipt"); } }
+        if (state.GM == null) { throw new InvalidDataException("Missing GM message state"); }
+        state.GM.Validate();
     }
     public void SaveOutbox(List<PrivateMessage> values) {
         var previous = Data.Outbox;
@@ -40,5 +43,10 @@ internal sealed class InteractionRecovery {
         Data.Drafts = new Dictionary<string, string>(drafts, StringComparer.Ordinal);
         Data.Seen = new HashSet<string>(seen, StringComparer.Ordinal);
         try { store.Save(Data); } catch { Data.Drafts = previousDrafts; Data.Seen = previousSeen; throw; }
+    }
+    public void SaveGM(GMMessageState state) {
+        var previous = Data.GM;
+        Data.GM = state.Copy();
+        try { store.Save(Data); } catch { Data.GM = previous; throw; }
     }
 }

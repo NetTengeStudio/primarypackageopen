@@ -1,3 +1,5 @@
+> Актуальные Live Editor / F5 и общий проверочный runner описаны в [LIVE_EDITOR_VERIFICATION.md](LIVE_EDITOR_VERIFICATION.md). Дальнейшие команды этого документа относятся к предыдущему этапу GM platform.
+
 # Приёмка GM platform
 
 ## Выполняемые офлайн-проверки

@@ -53,6 +53,8 @@ public sealed partial class InteractionClient : IModule, ILoadCompleted, IEventU
     private DirectorPlayback playback;
     private InteractionRecovery recovery;
     private string recoveryScope = "";
+    private double nextRecoveryLoad;
+    private string recoveryError = "";
     internal InteractionRecovery Recovery => recovery;
     private long directorSequence;
     public bool Connected => ready;
@@ -90,6 +92,7 @@ public sealed partial class InteractionClient : IModule, ILoadCompleted, IEventU
     }
     public void LoadCompleted() => DirectorCatalog.Load();
     public void RoundStart() {
+        ResetAnnouncements();
         ResetWorldBootstrap(); localScenes.Clear(); SceneRows.Clear(); ResetDevices();
         WorldQueryService.Instance.Clear(); CharacterCreationService.Instance.Clear(); LightEffectService.Instance.Clear(); views?.Reset(); playback?.Reset();
         worldSelection = null; worldSelectionCancelled = null; Effects.Clear(); EffectsChanged?.Invoke(); picks.Clear(); Results.Clear(); lastLight = null; lastComponent = -1; lastLightClick = 0;
@@ -104,12 +107,12 @@ public sealed partial class InteractionClient : IModule, ILoadCompleted, IEventU
         views?.Dispose(); playback?.Dispose(); playback = null;
         ClearMessages(); outbox.Clear(); retry.Clear(); Peers.Clear();
         Instance = null;
-        MessagesChanged = null; EffectsChanged = null; ResultsChanged = null; PermissionsChanged = null;
+        MessagesChanged = null; EffectsChanged = null; ResultsChanged = null; PermissionsChanged = null; AnnouncementsChanged = null;
     }
-    private void UpdateView() { ApplyDeviceDeltas(); UpdateLiveEditor(); if (hubRequested && PlayView.Running) { hubRequested = false; views.OpenHub(); } LightEffectService.Instance.Update(); playback?.Update(); if (!Multiplayer && GUIRuntime.Now >= nextSceneTick) { nextSceneTick = GUIRuntime.Now + .1; localScenes.Advance(GUIRuntime.Now); if (localSceneVersion != localScenes.Version) { RequestScenes(); } } views.Update(); }
+    private void UpdateView() { UpdateAnnouncements(); ApplyDeviceDeltas(); UpdateLiveEditor(); if (hubRequested && PlayView.Running) { hubRequested = false; views.OpenHub(); } LightEffectService.Instance.Update(); playback?.Update(); if (!Multiplayer && GUIRuntime.Now >= nextSceneTick) { nextSceneTick = GUIRuntime.Now + .1; localScenes.Advance(GUIRuntime.Now); if (localSceneVersion != localScenes.Version) { RequestScenes(); } } views.Update(); }
     public void OnUpdate(double fixedDeltaTime) {
         var connection = GameMain.Client?.ClientPeer?.ServerConnection;
-        if (connection != lastConnection) { ResetWorldBootstrap(); ResetDevices(); localScenes.Clear(); lastConnection = connection; receipts.Clear(); directorSequence = 0; playback?.Reset(); ready = false; nextHello = 0; }
+        if (connection != lastConnection) { ResetAnnouncements(); ResetWorldBootstrap(); ResetDevices(); localScenes.Clear(); lastConnection = connection; receipts.Clear(); directorSequence = 0; playback?.Reset(); ready = false; nextHello = 0; }
         string currentEndpoint = connection?.Endpoint?.ToString() ?? "";
         if (currentEndpoint.Length == 0) { ready = false; nextHello = 0; return; }
         if (endpoint != currentEndpoint) {
@@ -122,6 +125,7 @@ public sealed partial class InteractionClient : IModule, ILoadCompleted, IEventU
         if (!ready && now >= nextHello) { nextHello = now + 3; replaying = true; Send(InteractionPacket.Hello, output => { output.WriteUInt32((uint)WorldContract.Supported); output.WriteByte(WorldContract.SchemaVersion); }); }
         if (!ready) { return; }
         PumpWorldBootstrap(now);
+        if (recovery == null && now >= nextRecoveryLoad) { LoadLocalRecovery(now); }
         FlushReceipts(now);
         for (int i = 0; i < outbox.Count; i++) {
             PrivateMessage queued = outbox[i];
@@ -211,8 +215,12 @@ public sealed partial class InteractionClient : IModule, ILoadCompleted, IEventU
         switch (packet) {
             case InteractionPacket.DirectorFailure:
                 message.ReadString(); views.Error(message.ReadString()); break;
+            case InteractionPacket.GMAnnouncementReceipt:
+                ReadAnnouncementReceipt(message); break;
             case InteractionPacket.GMAnnouncement:
                 DisplayAnnouncement(GMAnnouncement.Read(message)); break;
+            case InteractionPacket.WorldBootstrapProgress:
+                ReadBootstrapProgress(message); break;
             case InteractionPacket.WorldBootstrapRelease:
                 ReleaseWorldBootstrap(message); break;
             case InteractionPacket.WorldTransformBatch:
@@ -234,17 +242,20 @@ public sealed partial class InteractionClient : IModule, ILoadCompleted, IEventU
                 break;
             case InteractionPacket.Snapshot:
                 uint oldPermissions = permissions;
+                byte oldAnnouncementFormats = announcementFormats;
                 string authenticated = message.ReadString();
+                Guid epoch = Guid.ParseExact(message.ReadString(), "N");
+                uint nextPermissions = message.ReadUInt32(); byte nextFormats = message.ReadByte();
                 string scope = endpoint + "|" + authenticated;
                 if (account.Length > 0 && account != authenticated) { ClearMessages(); outbox.Clear(); retry.Clear(); views.Reset(); }
                 account = authenticated;
                 if (recoveryScope != scope) {
-                    recovery = new InteractionRecovery(endpoint, account); recoveryScope = scope;
+                    views.Reset();
+                    recovery = null; recoveryScope = scope; nextRecoveryLoad = 0; recoveryError = "";
                     ClearMessages(); outbox.Clear(); retry.Clear();
-                    foreach (var queued in recovery.Data.Outbox) { if (queued.From == account) { outbox.Add(queued); messages[account + ":" + queued.Id] = queued; retry[queued.Id] = 0; } }
-                    views.BindRecovery(recovery);
+                    views.BindRecovery(null);
                 }
-                permissions = message.ReadUInt32(); ready = true;
+                permissions = nextPermissions; announcementFormats = nextFormats;
                 if ((oldPermissions & 1u << (int)InteractionAction.DirectEvents) != 0 && !Allows(InteractionAction.DirectEvents)) { SceneRows.Clear(); Effects.Clear(); views.Reset(); }
                 if ((oldPermissions & 1u << (int)InteractionAction.ViewGMFeed) != 0 && !Allows(InteractionAction.ViewGMFeed)) {
                     var removed = new List<string>();
@@ -257,6 +268,11 @@ public sealed partial class InteractionClient : IModule, ILoadCompleted, IEventU
                 int peers = message.ReadByte();
                 if (peers > 128) { throw new InvalidOperationException("Invalid peer count"); }
                 for (int i = 0; i < peers; i++) { Peers.Add(new Peer { Account = message.ReadString(), Name = message.ReadString(), Character = message.ReadUInt16() }); }
+                if (message.BitPosition > message.LengthBits) { throw new ArgumentException("Оборвано согласование Primary Package"); }
+                ReadBootstrapEpoch(epoch); ready = true;
+                // World readiness must never depend on optional local message/draft I/O.
+                if (recovery == null && GUIRuntime.Now >= nextRecoveryLoad) { LoadLocalRecovery(GUIRuntime.Now); }
+                if (oldAnnouncementFormats != announcementFormats) { views.RefreshAnnouncementFormats(); }
                 MessagesChanged?.Invoke();
                 break;
             case InteractionPacket.QueryResult:
@@ -326,12 +342,42 @@ public sealed partial class InteractionClient : IModule, ILoadCompleted, IEventU
                 break;
         }
     }
+    private void LoadLocalRecovery(double now) {
+        nextRecoveryLoad = now + 5;
+        try {
+            var loaded = new InteractionRecovery(endpoint, account);
+            views.BindRecovery(loaded, preserveCurrent: true);
+            recovery = loaded;
+            foreach (var queued in loaded.Data.Outbox) {
+                string key = account + ":" + queued.Id;
+                if (queued.From != account || messages.TryGetValue(key, out var received) && received.Sequence > 0) { continue; }
+                outbox.Add(queued); messages[key] = queued; retry[queued.Id] = 0;
+            }
+            recoveryError = "";
+            TryBindAnnouncements(loaded);
+        } catch (Exception error) when (error is System.IO.IOException or System.IO.InvalidDataException or UnauthorizedAccessException or System.Text.Json.JsonException or System.Security.Cryptography.CryptographicException) {
+            string message = "Локальные сообщения и черновики недоступны: " + error.Message + ". Вход в игровой мир продолжается";
+            if (message != recoveryError) { recoveryError = message; ModLog.Error(message); views.Error(message); }
+        }
+    }
     private void ClearMessages() { receipts.Clear(); messages.Clear(); messageOrder.Clear(); }
     private void TrimMessages() {
         while (messages.Count >= 2000 && messageOrder.TryDequeue(out string key, out _)) { messages.Remove(key); }
     }
     private bool CanView(PrivateMessage message) => MessageAccess.CanView(message, account, Allows(InteractionAction.ViewGMFeed));
-    private void Shortcut(Keys key) { if (key == Keys.F4 && PlayView.Running) { ToggleLiveEditor(); GUIRuntime.Instance.Input.ConsumePointer(); } if (key == Keys.Escape) { editorDrag = editorMarquee = editorAwaitingTransform = false; editorMoving.Clear(); worldSelection = null; var cancel = worldSelectionCancelled; worldSelectionCancelled = null; cancel?.Invoke(); } if (key == Keys.F3 && PlayView.Running) { views.ToggleGMMessage(); GUIRuntime.Instance.Input.ConsumePointer(); } if (key == Keys.F2 && PlayView.Running) { views.ToggleInteraction(); GUIRuntime.Instance.Input.ConsumePointer(); } }
+    private void Shortcut(Keys key) {
+        if (key == Keys.Escape) {
+            bool preview = editorDrag || editorMarquee || editorAwaitingTransform || editorArrangement.HasValue;
+            if (preview || worldSelection != null) { GUIRuntime.Instance.Input.ConsumeShortcut(); }
+            CancelEditorPreview(); worldSelection = null;
+            var cancel = worldSelectionCancelled; worldSelectionCancelled = null; cancel?.Invoke();
+            return;
+        }
+        if (!PlayView.Running) { return; }
+        if (key == Keys.F4) { ToggleLiveEditor(); GUIRuntime.Instance.Input.ConsumePointer(); }
+        else if (key == Keys.F5) { views.ToggleGMMessage(); GUIRuntime.Instance.Input.ConsumePointer(); }
+        else if (key == Keys.F2) { views.ToggleInteraction(); GUIRuntime.Instance.Input.ConsumePointer(); }
+    }
     internal void ToggleGMMessage() => views.ToggleGMMessage();
     internal void ToggleStudio() => views.ToggleStudio();
     internal void RefreshStudioKits() => views.RefreshStudioKits();

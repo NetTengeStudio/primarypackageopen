@@ -56,6 +56,7 @@ public sealed class PermissionService {
         if (assignments.TryGetValue((account, action), out bool allowed)) { return allowed; }
         if (action is InteractionAction.ViewCharacter or InteractionAction.SendPrivateMessage) { return true; }
         if (action == InteractionAction.ManagePermissions) { return client.HasPermission(ClientPermissions.ManagePermissions); }
+        if (action == InteractionAction.SendGMMessage) { return CommandAllowed(client, "message") || CommandAllowed(client, "msg"); }
         string command = action switch {
             InteractionAction.QueryCharacters => "nearchars",
             InteractionAction.QueryItems => "nearitems",
@@ -64,7 +65,6 @@ public sealed class PermissionService {
             InteractionAction.ViewGMFeed => "ahelp",
             InteractionAction.ManageEntities => "edititem",
             InteractionAction.DirectEvents => "spawnchar",
-            InteractionAction.SendGMMessage => "message",
             InteractionAction.RevivePlayers => "revive",
             InteractionAction.ManageKits => "createkit",
             _ => ""
@@ -84,6 +84,12 @@ public sealed class PermissionService {
         if (function?.Type != DataType.Function && function?.Type != DataType.ClrFunction) { return false; }
         DynValue result = LuaCsSetup.Instance.CallLuaFunction(function, client, command);
         return result?.Type == DataType.Boolean && result.Boolean;
+    }
+    internal byte AnnouncementFormats(Client client) {
+        if (!Allows(client, InteractionAction.SendGMMessage)) { return 0; }
+        if (Owner(client) || assignments.TryGetValue((Account(client), InteractionAction.SendGMMessage), out bool allowed) && allowed || CommandAllowed(client, "message")) { return GMAnnouncement.AllFormats; }
+        // Inheriting native msg alone must not grant intrusive popups or ScriptToast.
+        return CommandAllowed(client, "msg") ? GMAnnouncement.ChatFormats : (byte)0;
     }
     public void Set(Client actor, string account, InteractionAction action, bool? allowed) {
         if (!Allows(actor, InteractionAction.ManagePermissions) || !ValidAccount(account) || !Enum.IsDefined(action)) { throw new UnauthorizedAccessException("Permission change denied"); }

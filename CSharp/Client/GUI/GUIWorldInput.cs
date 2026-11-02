@@ -37,12 +37,15 @@ internal static class GUICharacterCursor {
 [HarmonyPatch(typeof(Camera), nameof(Camera.MoveCamera))]
 internal static class GUICameraInput {
     [HarmonyPrefix]
-    public static void Prefix(Camera __instance, ref bool allowMove, ref bool allowZoom, ref bool allowInput) {
-        if (Screen.Selected != GameMain.GameScreen || !GUIBridge.CapturesViewInput) { return; }
+    public static bool Prefix(Camera __instance, float deltaTime, ref bool allowMove, ref bool allowZoom, ref bool allowInput) {
+        if (Screen.Selected != GameMain.GameScreen) { return true; }
+        if (__instance == GameMain.GameScreen.Cam && GUIRuntime.Instance?.MoveOverlayCamera(__instance, deltaTime) == true) { return false; }
+        if (!GUIBridge.CapturesViewInput) { return true; }
         allowZoom = false;
         allowInput = false;
         if (__instance.TargetPos == Microsoft.Xna.Framework.Vector2.Zero) { allowMove = false; }
         else { __instance.Freeze = true; }
+        return true;
     }
 }
 
@@ -101,7 +104,7 @@ internal static class GUIWorldKeyboard {
         if (!GUIBridge.BlocksWorld) { return true; }
         if (GUIVoiceInput.Allows(inputType)) { return true; }
         bool movement = inputType is InputType.Up or InputType.Down or InputType.Left or InputType.Right or InputType.Run or InputType.ToggleRun or InputType.Crouch;
-        if (movement && GUIRuntime.Instance?.Input.BlocksWorld != true) { return true; }
+        if (movement && GUIRuntime.Instance?.Input.BlocksWorld != true && GUIRuntime.Instance?.MovementCapture != true) { return true; }
         __result = false;
         return false;
     }

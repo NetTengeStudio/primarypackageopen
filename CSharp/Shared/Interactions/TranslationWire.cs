@@ -7,23 +7,24 @@ using Barotrauma.Networking;
 
 namespace PrimaryPackage.Interactions;
 
-// Only submarine-local translation. Geometry, links and properties have other contracts.
+// Submarine-local positions, including alignment. Geometry, links and properties have other contracts.
 internal static class TranslationWire {
     internal readonly record struct IntentRow(Guid Token, ulong Revision, string Before, string After);
     internal readonly record struct StateRow(Guid Token, ushort NativeFrame, string Position);
     internal static void Validate(Guid request, ReadOnlySpan<IntentRow> rows) {
         if (request == Guid.Empty || rows.Length is < 1 or > WorldEditJournal.MaxBatch) { throw new ArgumentException("Недопустимое выделение для перемещения"); }
         var tokens = new HashSet<Guid>(rows.Length);
-        long dx = 0, dy = 0;
+        bool changed = false;
         for (int i = 0; i < rows.Length; i++) {
             var row = rows[i];
             if (row.Token == Guid.Empty || !tokens.Add(row.Token)) { throw new ArgumentException("Повторная или пустая цель перемещения"); }
             var before = LiveItemTransform.Decode(row.Before); var after = LiveItemTransform.Decode(row.After);
             long x = (long)after.Position.X - before.Position.X, y = (long)after.Position.Y - before.Position.Y;
-            if (before.Frame != after.Frame || x == 0 && y == 0) { throw new ArgumentException("Изменена система координат или отсутствует перемещение"); }
-            if (i == 0) { dx = x; dy = y; }
-            else if (dx != x || dy != y) { throw new ArgumentException("Группа должна перемещаться одним вектором"); }
+            if (before.Frame != after.Frame) { throw new ArgumentException("Изменена система координат перемещения"); }
+            changed |= x != 0 || y != 0;
         }
+        // Unchanged members pin alignment anchors to the same CAS and conditional undo.
+        if (!changed) { throw new ArgumentException("Выделение уже находится в заданных позициях"); }
     }
     internal static void WriteIntent(IWriteMessage output, Guid request, IntentRow[] rows) {
         Validate(request, rows);
@@ -31,11 +32,10 @@ internal static class TranslationWire {
         try {
             var writer = new BitWriter(buffer.AsSpan(0, NativeWire.MaxFrameBytes));
             writer.Guid(request); writer.Bits((ulong)(rows.Length - 1), 6);
-            var first = LiveItemTransform.Decode(rows[0].Before); var last = LiveItemTransform.Decode(rows[0].After);
-            writer.Int(last.Position.X - first.Position.X); writer.Int(last.Position.Y - first.Position.Y);
             foreach (var row in rows) {
-                var before = LiveItemTransform.Decode(row.Before);
+                var before = LiveItemTransform.Decode(row.Before); var after = LiveItemTransform.Decode(row.After);
                 writer.Guid(row.Token); writer.UInt(row.Revision); writer.Guid(before.Frame); writer.Int(before.Position.X); writer.Int(before.Position.Y);
+                writer.Int(after.Position.X - before.Position.X); writer.Int(after.Position.Y - before.Position.Y);
             }
             writer.Align(); NativeWire.Write(output, buffer, writer.LengthBytes);
         } finally { ArrayPool<byte>.Shared.Return(buffer); }
@@ -43,10 +43,10 @@ internal static class TranslationWire {
     internal static IntentRow[] ReadIntent(IReadMessage input, out Guid request) {
         var reader = new BitReader(NativeWire.Read(input));
         request = reader.Guid(); int count = (int)reader.Bits(6) + 1;
-        int dx = reader.Int(), dy = reader.Int();
         var rows = new IntentRow[count];
         for (int i = 0; i < count; i++) {
             Guid token = reader.Guid(); ulong revision = reader.UInt(); Guid frame = reader.Guid(); int x = reader.Int(), y = reader.Int();
+            int dx = reader.Int(), dy = reader.Int();
             long afterX = (long)x + dx, afterY = (long)y + dy;
             if (Math.Abs((long)x) > 10000000 || Math.Abs((long)y) > 10000000 || Math.Abs(afterX) > 10000000 || Math.Abs(afterY) > 10000000) { throw new ArgumentException("Wire position outside world limits"); }
             rows[i] = new(token, revision, LiveItemTransform.Encode(frame, new Point(x, y)), LiveItemTransform.Encode(frame, new Point((int)afterX, (int)afterY)));

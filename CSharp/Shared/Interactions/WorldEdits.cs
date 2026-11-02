@@ -18,6 +18,7 @@ internal interface IWorldEditTarget {
 /// World state remains owned by adapters. An inverse does not rewind elapsed simulation.</summary>
 internal sealed class WorldEditJournal {
     internal const int Capacity = 4096, MaxBatch = 64;
+    internal const int MaxPropertyAddressLength = 160 + 1 + 128;
     internal sealed class Entry {
         internal readonly Guid Request;
         internal readonly string Actor;
@@ -56,7 +57,7 @@ internal sealed class WorldEditJournal {
         EnsureCapacity(mutations.Length);
         var keys = new HashSet<WorldEditKey>(mutations.Length);
         foreach (var mutation in mutations) {
-            if (mutation.Key.Incarnation == Guid.Empty || string.IsNullOrEmpty(mutation.Key.Property) || mutation.Key.Property.Length > 288 ||
+            if (mutation.Key.Incarnation == Guid.Empty || string.IsNullOrEmpty(mutation.Key.Property) || mutation.Key.Property.Length > MaxPropertyAddressLength ||
                 mutation.Before == null || mutation.After == null || mutation.Before.Length > 512 || mutation.After.Length > 512 || !keys.Add(mutation.Key)) { throw new ArgumentException("Недопустимый или повторный адрес изменения мира"); }
         }
         // Own caller data and reserve publication storage before the first engine mutation.

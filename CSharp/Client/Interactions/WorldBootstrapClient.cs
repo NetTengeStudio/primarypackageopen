@@ -24,6 +24,10 @@ public sealed partial class InteractionClient {
     private PrimaryPackage.GUI.GUIWindow bootstrapWindow;
     private PrimaryPackage.GUI.Text bootstrapText;
     private int bootstrapShownProgress = -1;
+    private Guid bootstrapServerEpoch;
+    private ulong bootstrapReplaySequence;
+    private bool bootstrapReplayPending;
+    private double bootstrapReplayAckAt;
     internal static bool WorldSynchronizing => Instance is { bootstrapReleased: false, bootstrapNativeReady: true } client && client.Multiplayer;
     private void AttachWorldBootstrap(Harmony harmony) {
         worldReceiver = ModNet.Listen(WorldContract.Channel, ReadWorldPacket);
@@ -39,10 +43,11 @@ public sealed partial class InteractionClient {
         bootstrapReceiver?.Dispose(); bootstrapReceiver = null; bootstrapParsing = null;
         bootstrapFlow = bootstrapEpoch = Guid.Empty; bootstrapPart = -1; bootstrapCut = 0;
         bootstrapApplied = bootstrapReleased = bootstrapFailed = bootstrapNativeReady = false; bootstrapRequestAt = bootstrapAckAt = 0; bootstrapShownProgress = -1;
+        bootstrapReplayPending = false; bootstrapReplaySequence = 0; bootstrapReplayAckAt = 0;
         bootstrapWindow?.Dispose(); bootstrapWindow = null; bootstrapText = null; NativeWorld.Prune();
     }
     private void PumpWorldBootstrap(double now) {
-        if (!bootstrapNativeReady || !GameMain.Client.GameStarted || bootstrapFailed || bootstrapReleased) { return; }
+        if (!bootstrapNativeReady || bootstrapServerEpoch == Guid.Empty || !GameMain.Client.GameStarted || bootstrapFailed || bootstrapReleased) { return; }
         if (bootstrapFlow == Guid.Empty) { bootstrapFlow = Guid.NewGuid(); bootstrapProgressAt = now; }
         if (bootstrapReceiver == null) {
             if (now >= bootstrapRequestAt) { bootstrapRequestAt = now + 1; SendBootstrapAccept(bootstrapFlow); }
@@ -62,7 +67,7 @@ public sealed partial class InteractionClient {
                 if (bootstrapParsing.IsFaulted) { FailBootstrap(bootstrapParsing.Exception?.GetBaseException().Message ?? "Invalid snapshot"); return; }
                 try {
                     WorldBaseline snapshot = bootstrapParsing.GetAwaiter().GetResult(); bootstrapParsing = null;
-                    ApplyBaseline(snapshot); bootstrapApplied = true; bootstrapRequestAt = double.NegativeInfinity;
+                    ApplyBaseline(snapshot); bootstrapApplied = true; bootstrapReplaySequence = snapshot.Cut; bootstrapProgressAt = now; bootstrapRequestAt = double.NegativeInfinity;
                 } catch (Exception error) { FailBootstrap(error.Message); return; }
             }
             if (bootstrapApplied && now >= bootstrapRequestAt) {
@@ -70,6 +75,12 @@ public sealed partial class InteractionClient {
                 var writer = ChunkWire.Start(worldPacket, ChunkPacket.Complete, bootstrapReceiver.Id); writer.Guid(bootstrapFlow); writer.UInt((uint)bootstrapPart); writer.UInt(bootstrapCut);
                 SendWorldPacket(ChunkWire.Finish(ref writer, worldPacket));
             }
+            if (bootstrapApplied && bootstrapReplayPending && now >= bootstrapReplayAckAt) {
+                if (Send(InteractionPacket.WorldBootstrapApplied, output => {
+                    output.WriteString(bootstrapFlow.ToString("N")); output.WriteString(bootstrapEpoch.ToString("N")); output.WriteUInt64(bootstrapReplaySequence);
+                })) { bootstrapReplayPending = false; bootstrapReplayAckAt = now + .1; }
+            }
+            if (bootstrapApplied && now - bootstrapProgressAt >= 60) { FailBootstrap("Догоняющая синхронизация не продвигается 60 секунд"); return; }
         }
         ShowBootstrapProgress();
     }
@@ -88,7 +99,7 @@ public sealed partial class InteractionClient {
     }
     private static void NativeRoundReady() { if (Instance != null) { Instance.bootstrapNativeReady = true; } }
     private void SendBootstrapAccept(Guid transfer) {
-        var writer = ChunkWire.Start(worldPacket, ChunkPacket.Accept, transfer); writer.Guid(bootstrapFlow); writer.UInt(WorldContract.SchemaVersion); writer.UInt(32768);
+        var writer = ChunkWire.Start(worldPacket, ChunkPacket.Accept, transfer); writer.Guid(bootstrapFlow); writer.Guid(bootstrapServerEpoch); writer.UInt(WorldContract.SchemaVersion); writer.UInt(32768);
         SendWorldPacket(ChunkWire.Finish(ref writer, worldPacket));
     }
     private void ReadWorldPacket(IReadMessage message) {
@@ -97,8 +108,8 @@ public sealed partial class InteractionClient {
             if (!ChunkWire.TryOpen(NativeWire.Read(message), out var reader, out var kind, out Guid transfer)) { return; }
             double now = PrimaryPackage.GUI.GUIRuntime.Now;
             if (kind == ChunkPacket.Offer) {
-                Guid flow = reader.Guid(); uint part = reader.UInt32(); ulong cut = reader.UInt(); uint length = reader.UInt32(); ReadOnlySpan<byte> hash = reader.Bytes(32); reader.Finish();
-                if (flow != bootstrapFlow || bootstrapReleased) { return; }
+                Guid flow = reader.Guid(), epoch = reader.Guid(); uint part = reader.UInt32(); ulong cut = reader.UInt(); uint length = reader.UInt32(); ReadOnlySpan<byte> hash = reader.Bytes(32); reader.Finish();
+                if (flow != bootstrapFlow || epoch != bootstrapServerEpoch || bootstrapReleased) { return; }
                 if (part > 4096 || length > WorldBaseline.MaxEncodedBytes) { throw new ArgumentException("Invalid snapshot segment"); }
                 if (bootstrapReceiver?.Id == transfer) { SendBootstrapAccept(transfer); return; }
                 if (part != bootstrapPart + 1 || bootstrapReceiver != null && !bootstrapApplied || cut < bootstrapCut) { return; }
@@ -115,13 +126,27 @@ public sealed partial class InteractionClient {
     }
     private void ReleaseWorldBootstrap(IReadMessage message) {
         Guid flow = Guid.ParseExact(message.ReadString(), "N"), epoch = Guid.ParseExact(message.ReadString(), "N"); ulong head = message.ReadUInt64();
-        if (flow != bootstrapFlow || epoch != bootstrapEpoch || head < bootstrapCut || !bootstrapApplied) { FailBootstrap("Invalid ordered world handoff"); return; }
+        if (flow != bootstrapFlow || epoch != bootstrapEpoch) { return; }
+        if (head != bootstrapReplaySequence || head < bootstrapCut || !bootstrapApplied) { FailBootstrap("Invalid ordered world handoff"); return; }
         if (bootstrapReleased) { return; }
         bootstrapReleased = true; bootstrapReceiver?.Dispose(); bootstrapReceiver = null;
         bootstrapWindow?.Dispose(); bootstrapWindow = null; bootstrapText = null;
     }
+    private void ReadBootstrapEpoch(Guid epoch) {
+        if (epoch == Guid.Empty) { throw new ArgumentException("Empty server world epoch"); }
+        if (bootstrapServerEpoch == epoch) { return; }
+        bool nativeReady = bootstrapNativeReady;
+        ResetWorldBootstrap(); ResetDevices(); bootstrapNativeReady = nativeReady; bootstrapServerEpoch = epoch;
+    }
+    private void ReadBootstrapProgress(IReadMessage input) {
+        Guid flow = Guid.ParseExact(input.ReadString(), "N"), epoch = Guid.ParseExact(input.ReadString(), "N"); ulong sequence = input.ReadUInt64();
+        if (flow != bootstrapFlow || epoch != bootstrapEpoch || bootstrapReleased) { return; }
+        if (input.BitPosition > input.LengthBits || !bootstrapApplied || sequence < bootstrapReplaySequence) { FailBootstrap("Invalid ordered world progress"); return; }
+        if (sequence > bootstrapReplaySequence) { bootstrapReplaySequence = sequence; bootstrapProgressAt = PrimaryPackage.GUI.GUIRuntime.Now; }
+        bootstrapReplayPending = true;
+    }
     private void ApplyBaseline(WorldBaseline snapshot) {
-        if (snapshot.Cut != bootstrapCut || bootstrapEpoch != Guid.Empty && snapshot.Epoch != bootstrapEpoch) { throw new InvalidOperationException("World epoch/revision changed during transfer"); }
+        if (snapshot.Cut != bootstrapCut || snapshot.Epoch != bootstrapServerEpoch || bootstrapEpoch != Guid.Empty && snapshot.Epoch != bootstrapEpoch) { throw new InvalidOperationException("World epoch/revision changed during transfer"); }
         NativeWorld.Validate(snapshot.Graphs);
         var mutations = new List<WorldMutation>(); var targets = new List<Item>(); var bindings = new List<(BaselineItem State, Item Item)>();
         foreach (var state in snapshot.Items) {

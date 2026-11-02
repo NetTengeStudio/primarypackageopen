@@ -33,6 +33,21 @@ public sealed class GUIRuntime : IDisposable {
     internal bool OverlayCapture {
         get { for (int i = 0; i < overlays.Count; i++) { if (overlays[i].BlocksWorld && overlays[i].Visible()) { return true; } } return false; }
     }
+    internal bool MovementCapture {
+        get { for (int i = 0; i < overlays.Count; i++) { if (overlays[i].CapturesMovement && overlays[i].Visible()) { return true; } } return false; }
+    }
+    internal bool ViewportInputAvailable {
+        get {
+            if (Input.BlocksWorld || Barotrauma.GUI.MouseOn != null || Barotrauma.GUI.KeyboardDispatcher.Subscriber != null || Barotrauma.GUI.InputBlockingMenuOpen || DebugConsole.IsOpen) { return false; }
+            var windows = Windows.Windows;
+            for (int i = 0; i < windows.Count; i++) { var window = windows[i]; if (!window.Disposed && window.Visible && !window.InputTransparent && !window.AllowsViewportInputOutside) { return false; } }
+            return true;
+        }
+    }
+    internal bool MoveOverlayCamera(Camera camera, float deltaTime) {
+        for (int i = overlays.Count - 1; i >= 0; i--) { var overlay = overlays[i]; if (overlay.MoveCamera != null && overlay.Visible()) { overlay.MoveCamera(camera, deltaTime); return true; } }
+        return false;
+    }
     public static double Now => Stopwatch.GetTimestamp() / (double)Stopwatch.Frequency;
     public event Action Updating;
 
@@ -42,8 +57,9 @@ public sealed class GUIRuntime : IDisposable {
         screen = Screen.Selected;
         Input = new GUIInput(this);
     }
-    public GUIOverlay RegisterOverlay(Func<bool> visible, Action<SpriteBatch> draw, Action cancel = null, bool blocksWorld = false, bool hidesCursor = false, bool cancelOnWindowOpen = true) {
-        var overlay = new GUIOverlay(overlays, visible, draw, cancel, blocksWorld, hidesCursor, cancelOnWindowOpen);
+    public GUIOverlay RegisterOverlay(Func<bool> visible, Action<SpriteBatch> draw, Action cancel = null, bool blocksWorld = false, bool hidesCursor = false, bool cancelOnWindowOpen = true, bool capturesMovement = false, Action<Camera, float> moveCamera = null) {
+        if ((capturesMovement || moveCamera != null) && !blocksWorld) { throw new ArgumentException("Viewport ownership requires world-input capture"); }
+        var overlay = new GUIOverlay(overlays, visible, draw, cancel, blocksWorld, hidesCursor, cancelOnWindowOpen, capturesMovement, moveCamera);
         overlays.Add(overlay);
         return overlay;
     }
@@ -190,12 +206,13 @@ public sealed class GUIOverlay : IDisposable {
     internal readonly Func<bool> Visible;
     internal readonly Action<SpriteBatch> Draw;
     internal readonly Action Cancel;
-    internal readonly bool BlocksWorld, HidesCursor, CancelOnWindowOpen;
-    internal GUIOverlay(List<GUIOverlay> owner, Func<bool> visible, Action<SpriteBatch> draw, Action cancel, bool blocksWorld, bool hidesCursor, bool cancelOnWindowOpen) {
+    internal readonly bool BlocksWorld, HidesCursor, CancelOnWindowOpen, CapturesMovement;
+    internal readonly Action<Camera, float> MoveCamera;
+    internal GUIOverlay(List<GUIOverlay> owner, Func<bool> visible, Action<SpriteBatch> draw, Action cancel, bool blocksWorld, bool hidesCursor, bool cancelOnWindowOpen, bool capturesMovement, Action<Camera, float> moveCamera) {
         this.owner = owner;
         Visible = visible ?? throw new ArgumentNullException(nameof(visible));
         Draw = draw ?? throw new ArgumentNullException(nameof(draw));
-        Cancel = cancel; BlocksWorld = blocksWorld; HidesCursor = hidesCursor; CancelOnWindowOpen = cancelOnWindowOpen;
+        Cancel = cancel; BlocksWorld = blocksWorld; HidesCursor = hidesCursor; CancelOnWindowOpen = cancelOnWindowOpen; CapturesMovement = capturesMovement; MoveCamera = moveCamera;
     }
     public void Dispose() { if (owner.Remove(this)) { Cancel?.Invoke(); } }
 }
