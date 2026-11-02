@@ -12,6 +12,15 @@ internal static partial class Program {
             Values[key] = value; Writes++;
         }
     }
+    private sealed class UnrestorableWorld : IWorldEditTarget {
+        internal string Value = "before";
+        public string Read(in WorldEditKey key) => Value;
+        public void Validate(in WorldEditKey key, string value) { }
+        public void Write(in WorldEditKey key, string value) {
+            if (value == "before") { throw new InvalidOperationException("restore refused"); }
+            Value = value; throw new InvalidOperationException("callback failed after mutation");
+        }
+    }
     private static void WorldEditing() {
         var world = new EditWorld(); var journal = new WorldEditJournal();
         Guid entity = Guid.NewGuid(); WorldEditKey a = new(entity, 0, "A|Power"), b = new WorldEditKey(entity, 1, "A|Power");
@@ -45,7 +54,30 @@ internal static partial class Program {
         Reject<InvalidOperationException>(() => journal.Apply(Guid.NewGuid(), "gm1", a, journal.Revision(a), "1", "7", world, 11), "deleted incarnation cannot target a replacement with the same native address");
         journal.Apply(Guid.NewGuid(), "gm2", replacement, 0, "0", "new", world, 12);
         Check(world.Values[replacement] == "new", "replacement has an independent revision namespace");
+        journal.Clear();
+        world.Values[a] = "0"; world.Values[b] = "0";
+        var group = new[] { new WorldMutation(a, 0, "0", "group-a"), new WorldMutation(b, 0, "0", "group-b") };
+        Guid groupRequest = Guid.NewGuid();
+        var grouped = journal.ApplyBatch(groupRequest, "gm", group, world, 15);
+        Check(journal.Revision(a) == journal.Revision(b) && world.Values[a] == "group-a" && world.Values[b] == "group-b", "group changes receive one committed revision");
+        group[0] = new(a, 0, "0", "caller-mutated");
+        Check(grouped.Mutations[0].After == "group-a", "journal owns a copy of the submitted mutation array");
+        journal.Reverse(groupRequest, "gm", grouped.Revision, false, world, 16);
+        Check(world.Values[a] == "0" && world.Values[b] == "0", "group undo restores every member");
+        journal.Reverse(groupRequest, "gm", grouped.Revision, true, world, 17);
+        journal.Apply(Guid.NewGuid(), "other", b, journal.Revision(b), "group-b", "later", world, 18);
+        Reject<InvalidOperationException>(() => journal.Reverse(groupRequest, "gm", grouped.Revision, false, world, 19), "one conflicting member blocks the complete group inverse");
+        Check(world.Values[a] == "group-a" && world.Values[b] == "later", "conflicting group inverse leaves all members unchanged");
+        ulong groupRevisionA = journal.Revision(a), groupRevisionB = journal.Revision(b); int beforeBatchFailure = journal.Changes.Count;
+        Reject<InvalidOperationException>(() => journal.ApplyBatch(Guid.NewGuid(), "gm", new[] { new WorldMutation(a, groupRevisionA, "group-a", "temporary"), new WorldMutation(b, groupRevisionB, "later", "failure") }, world, 20), "failure of a later member aborts the complete transaction");
+        Check(world.Values[a] == "group-a" && world.Values[b] == "later" && journal.Revision(a) == groupRevisionA && journal.Changes.Count == beforeBatchFailure, "failed group restores earlier writes and publishes no journal entries");
+        Reject<ArgumentException>(() => journal.ApplyBatch(Guid.NewGuid(), "gm", new[] { new WorldMutation(a, groupRevisionA, "group-a", "x"), new WorldMutation(a, groupRevisionA, "group-a", "y") }, world, 21), "duplicate targets inside a group are rejected before writing");
         journal.Clear(); Check(journal.Entries.Count == 0 && journal.Revision(replacement) == 0, "round clears journal ownership");
+        var faultKey = new WorldEditKey(Guid.NewGuid(), 0, "fault"); var faultWorld = new UnrestorableWorld();
+        Reject<AggregateException>(() => journal.Apply(Guid.NewGuid(), "gm", faultKey, 0, "before", "after", faultWorld, 22), "restoration failure retains all errors");
+        Check(journal.Faulted && journal.Entries.Count == 0, "uncertain world state faults the journal without publishing a successful transaction");
+        Reject<InvalidOperationException>(() => journal.Apply(Guid.NewGuid(), "gm", b, 0, "0", "blocked", world, 23), "a failed restoration blocks all further editor writes");
+        journal.Clear(); Check(!journal.Faulted, "new round resets the transaction fault");
         var capacityKey = new WorldEditKey(Guid.NewGuid(), 0, "field"); world.Values[capacityKey] = "0";
         for (int i = 0; i < WorldEditJournal.Capacity; i++) {
             string old = world.Values[capacityKey]; journal.Apply(Guid.NewGuid(), "gm", capacityKey, journal.Revision(capacityKey), old, (i + 1).ToString(), world, i);

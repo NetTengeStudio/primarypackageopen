@@ -8,6 +8,12 @@
     <DefineConstants>$(DefineConstants);PRIMARY_PACKAGE_OFFLINE_TESTS</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="../../CSharp/Shared/Interactions/BaseWorldIdentity.cs" Link="Production/BaseWorldIdentity.cs" />
+    <Compile Include="../../CSharp/Shared/Interactions/WorldCatchup.cs" Link="Production/WorldCatchup.cs" />
+    <Compile Include="../../CSharp/Shared/Interactions/WorldBaseline.cs" Link="Production/WorldBaseline.cs" />
+    <Compile Include="../../CSharp/Shared/Networking/ChunkTransfer.cs" Link="Production/ChunkTransfer.cs" />
+    <Compile Include="../../CSharp/Shared/Networking/ChunkWire.cs" Link="Production/ChunkWire.cs" />
+    <Compile Include="../../CSharp/Shared/Networking/BitStream.cs" Link="Production/BitStream.cs" />
     <Compile Include="../../CSharp/Shared/Interactions/WorldEdits.cs" Link="Production/WorldEdits.cs" />
     <Compile Include="../../CSharp/Shared/Interactions/BoundsIndex.cs" Link="Production/BoundsIndex.cs" />
     <Compile Include="../../CSharp/Shared/Interactions/HorrorSignal.cs" Link="Production/HorrorSignal.cs" />

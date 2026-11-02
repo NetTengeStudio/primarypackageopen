@@ -8,7 +8,7 @@ namespace PrimaryPackage.Interactions;
 
 public sealed partial class InteractionClient {
     internal readonly record struct DeviceRow(ushort Component, string Type, string Field, DeviceValueKind Kind, ulong Revision, string Value, ulong Sample);
-    internal readonly record struct EditHistoryRow(Guid Request, string Actor, Guid Target, string Property, ulong Revision, long Timestamp, bool Undone, bool Own);
+    internal readonly record struct EditHistoryRow(Guid Request, string Actor, Guid Target, string Property, ulong Revision, long Timestamp, bool Undone, bool Own, byte Changes);
     private readonly record struct DeviceOffer(ushort Id, string Prefab);
     internal readonly List<EditHistoryRow> EditHistory = new();
     internal event Action HistoryReceived;
@@ -54,6 +54,11 @@ public sealed partial class InteractionClient {
         if (descriptor.Kind != kind) { throw new ArgumentException("Схема компонента отличается от серверной"); }
         return new(component, type, field, kind, revision, value, sample);
     }
+    private bool ResolveWorldItem(Guid token, out Item item) {
+        if (deviceBindings.TryGetValue(token, out item)) { return !item.Removed && Entity.FindEntityByID(item.ID) == item; }
+        if (!BaseWorldIdentity.TryResolve(bootstrapEpoch, token, out ushort id) || Entity.FindEntityByID(id) is not Item { Removed: false, FullyInitialized: true } original || !NativeWorld.IsConstructionEntity(original)) { item = null; return false; }
+        deviceBindings.Add(token, original); item = original; return true;
+    }
     private void ReadDeviceBind(IReadMessage input) {
         ushort id = input.ReadUInt16(); Guid token = Guid.ParseExact(input.ReadString(), "N"); string prefab = input.ReadString();
         if (token == Guid.Empty || prefab.Length > 128 || deviceOffers.Count >= 1024) { throw new ArgumentException("Неверная привязка объекта"); }
@@ -62,7 +67,7 @@ public sealed partial class InteractionClient {
     }
     private void ReadDevice(IReadMessage input) {
         Guid token = Guid.ParseExact(input.ReadString(), "N"); bool first = input.ReadBoolean(), last = input.ReadBoolean(); int count = input.ReadByte();
-        if (!deviceBindings.TryGetValue(token, out Item item) || item.Removed || Entity.FindEntityByID(item.ID) != item) { return; }
+        if (!ResolveWorldItem(token, out Item item) || item.Removed || Entity.FindEntityByID(item.ID) != item) { return; }
         if (count > 8) { throw new ArgumentException("Слишком большой пакет свойств"); }
         if (first) { deviceSnapshots[token] = new(); }
         if (!deviceSnapshots.TryGetValue(token, out var rows)) { throw new InvalidOperationException("Нет начала снимка объекта"); }
@@ -76,15 +81,15 @@ public sealed partial class InteractionClient {
     }
     private void ReadDeviceDelta(IReadMessage input) {
         Guid token = Guid.ParseExact(input.ReadString(), "N");
-        if (!deviceBindings.TryGetValue(token, out Item item) || item.Removed || Entity.FindEntityByID(item.ID) != item) { return; }
+        if (!ResolveWorldItem(token, out Item item) || item.Removed || Entity.FindEntityByID(item.ID) != item) { return; }
         bool apply = input.ReadBoolean(); DeviceRow row = ReadDeviceRow(input, item); var key = (token, row.Component, row.Field);
-        if (deviceValues.TryGetValue(key, out var previous) && previous.Sample >= row.Sample) { return; }
+        if (deviceValues.TryGetValue(key, out var previous) && (previous.Sample >= row.Sample || apply && previous.Revision >= row.Revision)) { return; }
         if (apply) { DeviceEditor.Resolve(item.Components[row.Component], row.Field).Write(item.Components[row.Component], row.Value); }
         if (row.Revision > 0) { deviceValues[key] = row; } DeviceValueReceived?.Invoke(item.ID, token, row);
     }
     private void ApplyDeviceDeltas() {
-        if (!Multiplayer || !Connected || GameMain.GameSession?.IsRunning != true || GameMain.Client.MidRoundSyncing) { return; }
-        if (!worldReadySent) { worldReadySent = Send(InteractionPacket.WorldReady, null); }
+        if (!Multiplayer || !Connected || GameMain.GameSession?.IsRunning != true || !bootstrapReleased) { return; }
+        if (!GameMain.Client.MidRoundSyncing && !worldReadySent) { worldReadySent = Send(InteractionPacket.WorldReady, null); }
         if (deviceOffers.Count == 0 || GUIRuntime.Now < nextDeviceBindAck) { return; }
         nextDeviceBindAck = GUIRuntime.Now + .125; deviceBindAcks.Clear();
         int count = Math.Min(32, deviceOfferQueue.Count);
@@ -117,7 +122,9 @@ public sealed partial class InteractionClient {
         for (int i = 0; i < count; i++) {
             Guid request = Guid.ParseExact(input.ReadString(), "N"); string actor = input.ReadString(); Guid target = Guid.ParseExact(input.ReadString(), "N"); string property = input.ReadString();
             if (actor.Length > 128 || property.Length > 288) { throw new ArgumentException("Некорректная история"); }
-            rows.Add(new(request, actor, target, property, input.ReadUInt64(), input.ReadInt64(), input.ReadBoolean(), input.ReadBoolean()));
+            ulong revision = input.ReadUInt64(); long timestamp = input.ReadInt64(); bool undone = input.ReadBoolean(), own = input.ReadBoolean(); byte changes = input.ReadByte();
+            if (changes is < 1 or > WorldEditJournal.MaxBatch) { throw new ArgumentException("Некорректное число изменений в истории"); }
+            rows.Add(new(request, actor, target, property, revision, timestamp, undone, own, changes));
         }
         EditHistory.Clear(); EditHistory.AddRange(rows); HistoryReceived?.Invoke();
     }

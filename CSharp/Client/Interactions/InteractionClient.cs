@@ -69,6 +69,7 @@ public sealed partial class InteractionClient : IModule, ILoadCompleted, IEventU
 
     public void Attach(Harmony harmony) {
         Instance = this;
+        NativeWorld.Attach(harmony); AttachWorldBootstrap(harmony);
         WorldQueryService.Instance.Attach(harmony);
         LightEffectService.Attach(harmony);
         receiver = ModNet.Listen(InteractionProtocol.Channel, Receive);
@@ -89,7 +90,7 @@ public sealed partial class InteractionClient : IModule, ILoadCompleted, IEventU
     }
     public void LoadCompleted() => DirectorCatalog.Load();
     public void RoundStart() {
-        localScenes.Clear(); SceneRows.Clear(); ResetDevices();
+        ResetWorldBootstrap(); localScenes.Clear(); SceneRows.Clear(); ResetDevices();
         WorldQueryService.Instance.Clear(); CharacterCreationService.Instance.Clear(); LightEffectService.Instance.Clear(); views?.Reset(); playback?.Reset();
         worldSelection = null; worldSelectionCancelled = null; Effects.Clear(); EffectsChanged?.Invoke(); picks.Clear(); Results.Clear(); lastLight = null; lastComponent = -1; lastLightClick = 0;
     }
@@ -99,7 +100,7 @@ public sealed partial class InteractionClient : IModule, ILoadCompleted, IEventU
         LuaCsSetup.Instance?.EventService?.Unsubscribe<IEventRoundEnded>(this);
         RoundStart();
         if (GUIRuntime.Instance != null) { GUIRuntime.Instance.Input.Shortcut -= Shortcut; GUIRuntime.Instance.Input.WorldPressed -= WorldPressed; GUIRuntime.Instance.Updating -= UpdateView; }
-        receiver?.Dispose(); receiver = null; editorOverlay?.Dispose(); editorOverlay = null;
+        receiver?.Dispose(); receiver = null; worldReceiver?.Dispose(); worldReceiver = null; NativeWorld.Clear(); editorOverlay?.Dispose(); editorOverlay = null;
         views?.Dispose(); playback?.Dispose(); playback = null;
         ClearMessages(); outbox.Clear(); retry.Clear(); Peers.Clear();
         Instance = null;
@@ -108,7 +109,7 @@ public sealed partial class InteractionClient : IModule, ILoadCompleted, IEventU
     private void UpdateView() { ApplyDeviceDeltas(); UpdateLiveEditor(); if (hubRequested && PlayView.Running) { hubRequested = false; views.OpenHub(); } LightEffectService.Instance.Update(); playback?.Update(); if (!Multiplayer && GUIRuntime.Now >= nextSceneTick) { nextSceneTick = GUIRuntime.Now + .1; localScenes.Advance(GUIRuntime.Now); if (localSceneVersion != localScenes.Version) { RequestScenes(); } } views.Update(); }
     public void OnUpdate(double fixedDeltaTime) {
         var connection = GameMain.Client?.ClientPeer?.ServerConnection;
-        if (connection != lastConnection) { ResetDevices(); localScenes.Clear(); lastConnection = connection; receipts.Clear(); directorSequence = 0; playback?.Reset(); ready = false; nextHello = 0; }
+        if (connection != lastConnection) { ResetWorldBootstrap(); ResetDevices(); localScenes.Clear(); lastConnection = connection; receipts.Clear(); directorSequence = 0; playback?.Reset(); ready = false; nextHello = 0; }
         string currentEndpoint = connection?.Endpoint?.ToString() ?? "";
         if (currentEndpoint.Length == 0) { ready = false; nextHello = 0; return; }
         if (endpoint != currentEndpoint) {
@@ -120,6 +121,7 @@ public sealed partial class InteractionClient : IModule, ILoadCompleted, IEventU
         double now = GUIRuntime.Now;
         if (!ready && now >= nextHello) { nextHello = now + 3; replaying = true; Send(InteractionPacket.Hello, output => { output.WriteUInt32((uint)WorldContract.Supported); output.WriteByte(WorldContract.SchemaVersion); }); }
         if (!ready) { return; }
+        PumpWorldBootstrap(now);
         FlushReceipts(now);
         for (int i = 0; i < outbox.Count; i++) {
             PrivateMessage queued = outbox[i];
@@ -211,6 +213,10 @@ public sealed partial class InteractionClient : IModule, ILoadCompleted, IEventU
                 message.ReadString(); views.Error(message.ReadString()); break;
             case InteractionPacket.GMAnnouncement:
                 DisplayAnnouncement(GMAnnouncement.Read(message)); break;
+            case InteractionPacket.WorldBootstrapRelease:
+                ReleaseWorldBootstrap(message); break;
+            case InteractionPacket.WorldTransformBatch:
+                ReadTranslationBatch(message); break;
             case InteractionPacket.WorldTransform:
                 ReadWorldTransform(message); break;
             case InteractionPacket.DeviceForget:
@@ -325,7 +331,7 @@ public sealed partial class InteractionClient : IModule, ILoadCompleted, IEventU
         while (messages.Count >= 2000 && messageOrder.TryDequeue(out string key, out _)) { messages.Remove(key); }
     }
     private bool CanView(PrivateMessage message) => MessageAccess.CanView(message, account, Allows(InteractionAction.ViewGMFeed));
-    private void Shortcut(Keys key) { if (key == Keys.F4 && PlayView.Running) { ToggleLiveEditor(); GUIRuntime.Instance.Input.ConsumePointer(); } if (key == Keys.Escape) { editorDrag = editorMarquee = false; editorMoving = null; worldSelection = null; var cancel = worldSelectionCancelled; worldSelectionCancelled = null; cancel?.Invoke(); } if (key == Keys.F3 && PlayView.Running) { views.ToggleGMMessage(); GUIRuntime.Instance.Input.ConsumePointer(); } if (key == Keys.F2 && PlayView.Running) { views.ToggleInteraction(); GUIRuntime.Instance.Input.ConsumePointer(); } }
+    private void Shortcut(Keys key) { if (key == Keys.F4 && PlayView.Running) { ToggleLiveEditor(); GUIRuntime.Instance.Input.ConsumePointer(); } if (key == Keys.Escape) { editorDrag = editorMarquee = editorAwaitingTransform = false; editorMoving.Clear(); worldSelection = null; var cancel = worldSelectionCancelled; worldSelectionCancelled = null; cancel?.Invoke(); } if (key == Keys.F3 && PlayView.Running) { views.ToggleGMMessage(); GUIRuntime.Instance.Input.ConsumePointer(); } if (key == Keys.F2 && PlayView.Running) { views.ToggleInteraction(); GUIRuntime.Instance.Input.ConsumePointer(); } }
     internal void ToggleGMMessage() => views.ToggleGMMessage();
     internal void ToggleStudio() => views.ToggleStudio();
     internal void RefreshStudioKits() => views.RefreshStudioKits();

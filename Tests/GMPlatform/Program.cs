@@ -166,7 +166,7 @@ internal static partial class Program {
             catch (Exception error) { Console.Error.WriteLine(error); return 2; }
         }
         string root = args.Length > 0 ? Path.GetFullPath(args[0]) : Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../../../"));
-        try { Scenes(); Phantoms(); Motion(); Emotions(root); Leases(); Migration(); WorldEditing(); PickingIndex(); HorrorSignals(); object editorMeasurement = MeasureEditor(); object measurement = Measure(); Console.WriteLine(JsonSerializer.Serialize(new { checks, failed = failures.Count, failures, measurement, editorMeasurement }, new JsonSerializerOptions { WriteIndented = true })); }
+        try { Scenes(); Phantoms(); Motion(); Emotions(root); Leases(); Migration(); WorldEditing(); PickingIndex(); HorrorSignals(); NetworkBits(); object networkChecks = NetworkTransfers(); object networkMeasurement = MeasureNetworkBits(); object editorMeasurement = MeasureEditor(); object measurement = Measure(); Console.WriteLine(JsonSerializer.Serialize(new { checks, failed = failures.Count, failures, measurement, editorMeasurement, networkChecks, networkMeasurement }, new JsonSerializerOptions { WriteIndented = true })); }
         catch (Exception error) { Console.Error.WriteLine(error); return 2; }
         return failures.Count == 0 ? 0 : 1;
     }

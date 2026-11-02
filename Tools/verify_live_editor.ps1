@@ -24,9 +24,16 @@ Run-Check 'contracts-client' 'dotnet' @($test, '--contracts', $GameRoot, (Join-P
 Run-Check 'contracts-server' 'dotnet' @($test, '--contracts', (Join-Path $LuaCsRoot 'Binary'), (Join-Path $evidenceRoot 'build/server/InternalsAwareAssembly.dll'))
 Run-Check 'contentclient-build' 'dotnet' @($simulator, '--mod', (Join-Path $GameRoot 'LocalMods/contentclient'), '--luacs', $LuaCsRoot, '--out', (Join-Path $evidenceRoot 'contentclient-build'), '--compile-only')
 Run-Check 'contentserver-build' 'dotnet' @($simulator, '--mod', (Join-Path $GameRoot 'LocalMods/contentserver'), '--luacs', $LuaCsRoot, '--out', (Join-Path $evidenceRoot 'contentserver-build'), '--compile-only')
+$activeClient = 'C:/Users/Admin/AppData/Local/Daedalic Entertainment GmbH/Barotrauma/WorkshopMods/Installed/3831040655'
+Run-Check 'active-contentclient-build' 'dotnet' @($simulator, '--mod', $activeClient, '--luacs', $LuaCsRoot, '--out', (Join-Path $evidenceRoot 'active-contentclient-build'), '--compile-only')
 $contentTests = Join-Path $primaryRoot 'Tests/ContentContracts'
 Run-Check 'content-tests-build' 'dotnet' @('build', $contentTests, '-c', 'Release', '--no-restore', '-v', 'minimal')
 Run-Check 'content-tests' 'dotnet' @((Join-Path $contentTests 'bin/Release/net10.0/ContentContracts.dll'))
+$physicsTests = Join-Path $primaryRoot 'Tests/PhysicsContracts'
+Run-Check 'physics-tests-build' 'dotnet' @('build', $physicsTests, '-c', 'Release', '--no-restore', '-v', 'minimal')
+Run-Check 'physics-tests' 'dotnet' @((Join-Path $physicsTests 'bin/Release/net10.0/PhysicsContracts.dll'))
+Run-Check 'sync-log-tests' 'python' @('-m', 'unittest', 'discover', '-s', (Join-Path $primaryRoot 'Tests'), '-p', 'test_world_sync_diagnostics.py')
+Run-Check 'sync-log-analysis' 'python' @((Join-Path $PSScriptRoot 'diagnose_world_sync.py'))
 Run-Check 'audit' 'python' @((Join-Path $PSScriptRoot 'audit_live_editor.py'))
 Run-Check 'gm-audit' 'python' @((Join-Path $PSScriptRoot 'audit_gm_platform.py'))
 Run-Check 'diff-check' 'git' @('-C', $primaryRoot, 'diff', '--check')

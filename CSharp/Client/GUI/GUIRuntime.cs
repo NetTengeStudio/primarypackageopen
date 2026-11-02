@@ -144,6 +144,10 @@ public sealed class GUIRuntime : IDisposable {
 public sealed class GUIBridge : IModule {
     private GUIRuntime runtime;
     public static bool BlocksWorld => GUIRuntime.Instance?.Input.BlocksWorld == true || GUIRuntime.Instance?.OverlayCapture == true;
+    // Native widgets retain their raw input; only world consumers use this capture.
+    internal static bool CapturesViewInput => BlocksWorld || GUIRuntime.Instance?.CapturesAim == true ||
+        Character.IsMouseOnUI || Barotrauma.GUI.InputBlockingMenuOpen ||
+        Barotrauma.GUI.KeyboardDispatcher.Subscriber != null || DebugConsole.IsOpen;
     public void Attach(Harmony harmony) {
         runtime = new GUIRuntime();
         harmony.Patch(AccessTools.Method(typeof(GameScreen), nameof(GameScreen.Update)),
@@ -155,6 +159,8 @@ public sealed class GUIBridge : IModule {
         harmony.CreateClassProcessor(typeof(GUIInventoryInput)).Patch();
         harmony.CreateClassProcessor(typeof(GUICharacterInteraction)).Patch();
         harmony.CreateClassProcessor(typeof(GUICharacterCursor)).Patch();
+        harmony.CreateClassProcessor(typeof(GUICameraInput)).Patch();
+        harmony.CreateClassProcessor(typeof(GUICharacterUI)).Patch();
         harmony.CreateClassProcessor(typeof(GUIWorldMouse)).Patch();
         harmony.CreateClassProcessor(typeof(GUIWorldScroll)).Patch();
         harmony.CreateClassProcessor(typeof(GUIWorldKeyboard)).Patch();

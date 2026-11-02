@@ -29,7 +29,27 @@ internal static class GUICharacterInteraction {
 [HarmonyPatch(typeof(Character), "UpdateLocalCursor")]
 internal static class GUICharacterCursor {
     [HarmonyPrefix]
-    public static bool Prefix(Character __instance) => GUIRuntime.Instance?.CapturesAim != true || __instance != Character.Controlled;
+    public static bool Prefix(Character __instance) => !GUIBridge.CapturesViewInput || __instance != Character.Controlled;
+}
+
+// Camera reads raw pointer coordinates in both follow and spectator modes. Masking
+// ScrollWheelSpeed alone does not stop mouse-look zoom or the follow-camera offset.
+[HarmonyPatch(typeof(Camera), nameof(Camera.MoveCamera))]
+internal static class GUICameraInput {
+    [HarmonyPrefix]
+    public static void Prefix(Camera __instance, ref bool allowMove, ref bool allowZoom, ref bool allowInput) {
+        if (Screen.Selected != GameMain.GameScreen || !GUIBridge.CapturesViewInput) { return; }
+        allowZoom = false;
+        allowInput = false;
+        if (__instance.TargetPos == Microsoft.Xna.Framework.Vector2.Zero) { allowMove = false; }
+        else { __instance.Freeze = true; }
+    }
+}
+
+[HarmonyPatch(typeof(Character), nameof(Character.IsMouseOnUI), MethodType.Getter)]
+internal static class GUICharacterUI {
+    [HarmonyPostfix]
+    public static void Postfix(ref bool __result) => __result |= GUIRuntime.Instance?.CapturesAim == true;
 }
 
 [HarmonyPatch(typeof(PlayerInput))]

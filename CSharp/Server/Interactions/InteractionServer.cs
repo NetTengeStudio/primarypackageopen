@@ -28,6 +28,14 @@ public sealed partial class InteractionServer : IModule, ILoadCompleted, IEventU
         public readonly List<(DeviceLease Lease, ushort Component, string Field)> DeviceReplay = new();
         public int DeviceCursor;
         public bool WorldReady, WorldReadyRequested;
+        public WorldBootstrapPeer Bootstrap;
+        public double WorldIngressBytes = 4096, WorldIngressAt;
+        public ushort NativeSyncProgress;
+        public double NativeSyncProgressAt;
+        public PendingTranslation Translation;
+        public readonly Queue<ConfirmedTranslation> TranslationOutbox = new();
+        public readonly Dictionary<Guid, bool> PendingTransformSnapshots = new();
+        public readonly HashSet<Guid> TransformSnapshots = new();
         public WorldCapabilities Capabilities;
         public Guid InspectedDevice;
         public readonly Dictionary<(ushort Component, string Field), (string Value, ulong Revision)> DeviceObserved = new();
@@ -60,6 +68,7 @@ public sealed partial class InteractionServer : IModule, ILoadCompleted, IEventU
     public void Attach(Harmony harmony)
     {
         instance = this;
+        NativeWorld.Attach(harmony); AttachWorldBootstrap(harmony);
         WorldQueryService.Instance.Attach(harmony);
         LightEffectService.Attach(harmony);
         harmony.Patch(AccessTools.Method(typeof(Client), nameof(Client.SetPermissions)), postfix: ModuleHost.Bind(typeof(InteractionServer), nameof(RosterChanged)));
@@ -88,7 +97,7 @@ public sealed partial class InteractionServer : IModule, ILoadCompleted, IEventU
     {
         rosterDirty = true;
         scenes.Clear();
-        ClearDevices();
+        ResetWorldBootstrap(); ClearDevices();
         activeDirected.Clear();
         query.Clear();
         WorldQueryService.Instance.Clear();
@@ -98,7 +107,7 @@ public sealed partial class InteractionServer : IModule, ILoadCompleted, IEventU
     public void Release()
     {
         live = false;
-        receiver?.Dispose(); receiver = null;
+        receiver?.Dispose(); receiver = null; worldReceiver?.Dispose(); worldReceiver = null; NativeWorld.Clear();
         LuaCsSetup.Instance?.EventService?.Unsubscribe<IEventUpdate>(this);
         LuaCsSetup.Instance?.EventService?.Unsubscribe<IEventClientConnected>(this);
         LuaCsSetup.Instance?.EventService?.Unsubscribe<IEventClientDisconnected>(this);
@@ -148,7 +157,9 @@ public sealed partial class InteractionServer : IModule, ILoadCompleted, IEventU
             {
                 case InteractionPacket.Hello:
                     WorldCapabilities capabilities = (WorldCapabilities)message.ReadUInt32(); byte schema = message.ReadByte();
-                    if (schema != WorldContract.SchemaVersion || (capabilities & WorldContract.Supported) != WorldContract.Supported) { throw new InvalidOperationException("Несовместимая версия Primary Package Live Editor. Обновите клиент и сервер вместе"); }
+                    if (schema != WorldContract.SchemaVersion || (capabilities & WorldContract.Supported) != WorldContract.Supported) {
+                        GameMain.Server.DisconnectClient(sender, PeerDisconnectPacket.Custom("Несовместимая версия Primary Package Live Editor: требуется схема " + WorldContract.SchemaVersion + ". Обновите клиент и сервер вместе")); return;
+                    }
                     session.Capabilities = capabilities;
                     SendSnapshot(session);
                     foreach (var effect in LightEffectService.Instance.Active)
@@ -282,6 +293,10 @@ public sealed partial class InteractionServer : IModule, ILoadCompleted, IEventU
                     ExportWorldEdits(session); break;
                 case InteractionPacket.WorldTranslate:
                     Require(sender, InteractionAction.ManageEntities); TranslateWorld(message, session); break;
+                case InteractionPacket.WorldTransformSelection:
+                    Require(sender, InteractionAction.ManageEntities); InspectTransforms(message, session); break;
+                case InteractionPacket.WorldEditFailure:
+                    ReportEditFailure(message, session); break;
                 case InteractionPacket.WorldReady:
                     QueueDeviceReplay(session, now);
                     break;
@@ -408,8 +423,9 @@ public sealed partial class InteractionServer : IModule, ILoadCompleted, IEventU
                     break;
             }
         }
-        catch (Exception error) when (error is ArgumentException or InvalidOperationException or UnauthorizedAccessException or IOException)
+        catch (Exception error) when (error is ArgumentException or InvalidOperationException or UnauthorizedAccessException or IOException or AggregateException)
         {
+            if (error is AggregateException) { ModLog.Error("World transaction restoration failed: " + error); }
             ModNet.Send(InteractionProtocol.Channel, sender.Connection, output => { InteractionProtocol.Header(output, InteractionPacket.Error); output.WriteString(error is IOException ? "Хранилище недоступно: операция не подтверждена" : error.Message); });
             ModLog.Once("Interaction request rejected: " + error.Message);
         }
@@ -495,10 +511,14 @@ public sealed partial class InteractionServer : IModule, ILoadCompleted, IEventU
             }
         }
         foreach (Session session in sessions.Values) { if (session.WorldReadyRequested && !session.WorldReady) { QueueDeviceReplay(session, now); } }
+        PumpWorldBootstrap(now);
         ReportWorldExports();
+        PumpTranslations(now);
         ObserveDevices(now);
         foreach (Session session in sessions.Values) {
-            if (!session.WorldReady || session.Client.NeedsMidRoundSync) { continue; }
+            if (!session.WorldReady && session.Bootstrap?.Released != true) { continue; }
+            if (!PumpTranslationOutbox(session)) { continue; }
+            PumpTransformSnapshots(session);
             PumpDeviceOffers(session); PumpDeviceSnapshot(session);
             int limit = Math.Min(session.DeviceReplay.Count, session.DeviceCursor + 8);
             for (; session.DeviceCursor < limit; session.DeviceCursor++) {

@@ -24,13 +24,22 @@ assert 'MapEntity.MapEntityList' not in editor, 'picking must use indexed bounds
 assert 'DeviceEditor.Fields' not in client + server
 assert 'GetAttribute<Serialize>()' in schema and 'InGameEditable' in schema
 assert 'PropertyInfo.SetMethod?.IsPublic' in schema and 'registered.Contains(type)' in schema
-assert 'StaticBodyConfig' in transform and 'StaticFixtures.Count' in transform, 'submarine-body fixture ownership must be checked'
+assert 'StaticBodyConfig' in transform and 'StaticFixtures.Count' in transform
+assert 'StaticFixtureTranslation.Validate' in transform and 'fixtures.Apply()' in transform
+fixtures = read('CSharp/Shared/Interactions/StaticFixtureTranslation.cs')
+assert 'owner.World.IsLocked' in fixtures and 'owner.Remove(shape.Fixture)' in fixtures and 'owner.Add(shape.Fixture' in fixtures
 assert 'item.FindHull()' in transform
 assert 'deviceBindings.TryGetValue(token' in client and 'Entity.FindEntityByID(item.ID) != item' in client
 assert 'lease.Current' in server and 'PendingDeviceOffers' in server
 assert 'session.WorldReadyRequested = true' in server
 assert 'RequireEditingClients' in server and 'AllowEditedWorldSync' in server
 assert 'CancelOnWindowOpen' in runtime and 'cancelOnWindowOpen: false' in editor
+translation = read('CSharp/Server/Interactions/WorldTranslationServer.cs')
+assert 'BindTranslation(pending.Mutations)' in translation and 'ValidateTranslation(pending.Mutations)' in translation
+assert 'TranslationOutboxCapacity = 32' in translation and 'if (!accepted) { return false; }' in translation
+assert 'TranslationWire.WriteIntent' in read('CSharp/Client/Interactions/WorldTranslationClient.cs')
+assert 'WorldCapabilities.BatchTranslation' in read('CSharp/Shared/Interactions/WorldCapabilities.cs')
+assert 'Faulted = true' in journal
 assert 'PreviousRevision' in journal and 'RequireCurrent' in journal and 'WorldEditChangeKind.Undo' in journal
 for relative in ('CSharp/Client/Interactions/LiveEditor.cs', 'CSharp/Client/Interactions/PhantomRenderer.cs',
                  'CSharp/Client/Interactions/DirectorPlayback.cs', 'CSharp/Shared/Interactions/HorrorSignal.cs'):
@@ -87,9 +96,14 @@ for relative, anchors in sources.items():
 
 enabled = [p.attrib.get('path', '') for p in ET.parse(GAME / 'config_player.xml').iter('package')]
 active_client = [p for p in enabled if '3831040655' in p or 'contentclient' in p.lower()]
+active_client_root = Path('C:/Users/Admin/AppData/Local/Daedalic Entertainment GmbH/Barotrauma/WorkshopMods/Installed/3831040655')
+active_client_matches = all((active_client_root / 'CSharp/Client' / name).read_bytes() == (content / name).read_bytes() for name in ('LoadPatches.cs', 'ResidentAsset.cs'))
+assert active_client_matches, 'active contentclient must contain the verified load fixes'
+assert 'Camera reads raw pointer coordinates' in read('CSharp/Client/GUI/GUIWorldInput.cs')
+assert 'allowZoom = false' in read('CSharp/Client/GUI/GUIWorldInput.cs')
 OUT.mkdir(parents=True, exist_ok=True)
 result = {'status': 'PASS', 'scope': 'static guardrails and hashes/anchors of inspected engine paths; not live simulation or network acceptance',
-          'engineSources': evidence, 'activeContentClient': active_client,
+          'engineSources': evidence, 'activeContentClient': active_client, 'activeContentClientMatchesVerifiedFixes': active_client_matches,
           'localContentClientEnabled': any('LocalMods/contentclient/filelist.xml' == p.replace('\\', '/') for p in enabled)}
 (OUT / 'source-evidence.json').write_text(json.dumps(result, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
 print(json.dumps({key: result[key] for key in ('status', 'scope', 'activeContentClient', 'localContentClientEnabled')}, ensure_ascii=False))

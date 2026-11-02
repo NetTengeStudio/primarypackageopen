@@ -103,7 +103,7 @@ internal sealed partial class InteractionViews {
     private void OpenEditHistory() {
         editHistoryWindow?.Dispose(); editHistoryWindow = OpenCentered("История мира · последние 16 операций", 720, 440);
         editHistoryList = editHistoryWindow.Add(new VirtualList(i => {
-            var row = client.EditHistory[i]; return row.Actor + " · " + row.Property[(row.Property.IndexOf('|') + 1)..] + (row.Undone ? " · отменено" : " · применено");
+            var row = client.EditHistory[i]; return DateTimeOffset.FromUnixTimeMilliseconds(row.Timestamp).ToLocalTime().ToString("HH:mm:ss") + " · " + row.Actor + " · " + row.Property[(row.Property.IndexOf('|') + 1)..] + " · правок: " + row.Changes + (row.Undone ? " · отменено" : " · применено");
         }) { FillHeight = true, Count = client.EditHistory.Count });
         editHistoryWindow.Add(new Text("Отмена восстанавливает настройку. Последствия симуляции не отменяются; чужие и последующие правки защищены.") { Wrap = true, Height = 50 });
         editHistoryWindow.Add(new Button("Отменить / повторить выбранное", _ => SceneTry(() => {
