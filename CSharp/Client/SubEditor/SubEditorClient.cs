@@ -42,7 +42,6 @@ public sealed class SubEditorClient : IModule, IRoundEnded, IEventUpdate, IEvent
     private bool compatible, incompatible;
     private ulong sessionToken;
     private bool snapshotReady, snapshotPrepared;
-    private bool snapshotAnnounced;
     private ulong announcedRevision;
     private ulong snapshotCut;
     private ushort snapshotNativeEventId;
@@ -98,7 +97,7 @@ public sealed class SubEditorClient : IModule, IRoundEnded, IEventUpdate, IEvent
         compatible = incompatible = false;
         sessionToken = 0;
         snapshotReady = snapshotPrepared = false;
-        snapshotAnnounced = false; announcedRevision = 0;
+        announcedRevision = 0;
         pendingRequests.Clear();
         replica.Reset();
         entries.Clear(); rollbacks.Clear(); accepted.Clear(); afterRevision.Clear(); replacements.Clear(); beforeRevision.Clear();
