@@ -345,13 +345,7 @@ public static class EntityOps
                 if (entity is Item { body: not null } item) { item.body.Submarine = owners[i]; }
                 if (owners[i] != null) { entity.Move(owners[i].HiddenSubPosition, ignoreContacts: true); }
             }
-            bool rebuild = false;
-            foreach (MapEntity entity in loaded) { rebuild |= entity is Hull; LiveGeometry.Touch(entity); }
-            if (rebuild)
-            {
-                var rebuilt = new HashSet<Submarine>();
-                foreach (MapEntity entity in loaded) { if (entity is Hull && entity.Submarine != null && rebuilt.Add(entity.Submarine)) { LiveGeometry.Rebuild(entity.Submarine); } }
-            }
+            foreach (MapEntity entity in loaded) { LiveGeometry.Touch(entity); }
             if (!LoadPlacements(loaded, root, ids, exact)) { return null; }
             MapEntity.MapLoaded(loaded, updateHulls: true);
             for (int i = 0; i < loaded.Count; i++)

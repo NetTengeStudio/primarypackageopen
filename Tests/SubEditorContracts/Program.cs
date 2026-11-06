@@ -52,6 +52,20 @@ internal static class Program
         Submarine.MainSub = sub;
         var hulls = EntityOps.LoadAt(System.Text.Encoding.UTF8.GetBytes("<Entities><Hull ID='1' rect='-128,128,256,256'/></Entities>"), sub, 32000);
         Check(hulls is { Count: 1 }, "native hull loaded");
+        var collisionBody = sub.SubBody?.Body?.FarseerBody;
+        Check(collisionBody != null, "native submarine collision body exists");
+        bool initiallyEnabled = collisionBody.Enabled;
+        int originalFixtureCount = collisionBody.FixtureList.Count;
+        LiveGeometry.Rebuild(sub);
+        Check(ReferenceEquals(collisionBody, sub.SubBody.Body.FarseerBody), "geometry rebuild preserves native submarine body identity");
+        Check(collisionBody.Enabled == initiallyEnabled, "geometry rebuild restores body collision activation");
+        Check(collisionBody.FixtureList.Count == originalFixtureCount, "geometry rebuild does not accumulate duplicate fixtures");
+        using (LiveGeometry.Enter())
+        {
+            LiveGeometry.Touch(hulls[0]);
+            LiveGeometry.Touch(hulls[0]);
+        }
+        Check(collisionBody.FixtureList.Count == originalFixtureCount, "coalesced geometry mutation retains stable fixture count");
         var file = (ItemFile)RuntimeHelpers.GetUninitializedObject(typeof(ItemFile));
         ItemPrefab Container(string identifier) => new ItemPrefab(XElement.Parse($"<Item name='{identifier}' identifier='{identifier}'><ItemContainer capacity='8'/></Item>").FromPackage(null), file);
         var box = Container("contractbox");
