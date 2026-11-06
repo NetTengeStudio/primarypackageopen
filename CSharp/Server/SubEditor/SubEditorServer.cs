@@ -61,30 +61,28 @@ public sealed partial class SubEditorServer : IModule, IRoundEnded, IEventUpdate
     }
     private static ushort NativeEventId => GameMain.Server?.EntityEventManager?.ID ?? 0;
 
+    private static void RetainBaseNativeEvents(List<NetEntityEvent> events)
+    {
+        int write = 0;
+        for (int i = 0; i < events.Count; i++)
+        {
+            NetEntityEvent ev = events[i];
+            if (ev?.Entity is not MapEntity entity || entity.ID < SubRegistry.EditorIdLimit)
+            {
+                events[write++] = ev;
+            }
+        }
+        if (write < events.Count) { events.RemoveRange(write, events.Count - write); }
+    }
+
     internal static void FilterNativeEvents(Client client, List<NetEntityEvent> events)
     {
         SubEditorServer server = instance;
-        if (server?.authority == null || server.authority.Rev == 0 || events == null || events.Count == 0) { return; }
-        if (client == null) { return; }
+        if (server?.authority == null || server.authority.Rev == 0 || events == null || events.Count == 0 || client == null) { return; }
 
-        if (!server.sessions.TryGetValue(client.SessionId, out Session session))
+        if (!server.sessions.TryGetValue(client.SessionId, out Session session) || !session.Prepared)
         {
-            int valid = 0;
-            for (int i = 0; i < events.Count; i++)
-            {
-                NetEntityEvent ev = events[i];
-                if (ev?.Entity is not MapEntity me || me.ID < SubRegistry.EditorIdLimit)
-                {
-                    events[valid++] = ev;
-                }
-            }
-            if (valid < events.Count) { events.RemoveRange(valid, events.Count - valid); }
-            return;
-        }
-
-        if (!session.Prepared)
-        {
-            events.Clear();
+            RetainBaseNativeEvents(events);
             return;
         }
 
@@ -98,28 +96,19 @@ public sealed partial class SubEditorServer : IModule, IRoundEnded, IEventUpdate
         {
             server.Send(session, w => w.WriteByte((byte)ServerPacket.Restart));
             server.sessions.Remove(client.SessionId);
-            events.Clear();
+            RetainBaseNativeEvents(events);
             return;
         }
         int write = 0;
         for (int i = 0; i < events.Count; i++)
         {
             NetEntityEvent ev = events[i];
-            if (ev?.Entity is not MapEntity)
-            {
-                events[write++] = ev;
-                continue;
-            }
-
-            if (!NetIdUtils.IdMoreRecent(ev.ID, cut))
+            if (ev?.Entity is not MapEntity entity || entity.ID < SubRegistry.EditorIdLimit || !NetIdUtils.IdMoreRecent(ev.ID, cut))
             {
                 events[write++] = ev;
             }
         }
-        if (write < events.Count)
-        {
-            events.RemoveRange(write, events.Count - write);
-        }
+        if (write < events.Count) { events.RemoveRange(write, events.Count - write); }
     }
 
     public void Attach(Harmony harmony)
