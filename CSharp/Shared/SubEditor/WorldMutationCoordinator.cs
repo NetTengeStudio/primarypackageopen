@@ -28,8 +28,8 @@ public static class WorldMutationCoordinator
                 changed = true;
                 if (!FrameApplier.Apply(kind, ids, payload))
                 {
-                    Restore(inverse);
                     restored = true;
+                    Restore(inverse);
                     return false;
                 }
             }
@@ -65,8 +65,8 @@ public static class WorldMutationCoordinator
                 {
                     if (!FrameApplier.CaptureInverse(operation.Kind, operation.Ids, operation.Payload, out BatchPayload.Sub inverse))
                     {
-                        RestoreReverse(undo);
                         restored = true;
+                        RestoreReverse(undo);
                         return false;
                     }
                     undo.Add(inverse);
@@ -91,6 +91,42 @@ public static class WorldMutationCoordinator
                 catch (Exception rollbackError)
                 {
                     throw new InvalidOperationException("SubEditor batch commit and rollback both failed", rollbackError);
+                }
+            }
+            throw;
+        }
+        finally { applying--; }
+    }
+
+    public static bool ApplyPrepared(OpKind kind, ReadOnlySpan<ushort> ids, ReadOnlySpan<byte> payload, Action rollback)
+    {
+        if (rollback == null) { throw new ArgumentNullException(nameof(rollback)); }
+        using var world = WorldContext.Enter();
+        applying++;
+        bool attempted = false;
+        bool restored = false;
+        try
+        {
+            using (LiveGeometry.Enter())
+            {
+                attempted = true;
+                if (!FrameApplier.Apply(kind, ids, payload))
+                {
+                    restored = true;
+                    rollback();
+                    return false;
+                }
+            }
+            return true;
+        }
+        catch
+        {
+            if (attempted && !restored)
+            {
+                try { using (LiveGeometry.Enter()) { rollback(); } }
+                catch (Exception rollbackError)
+                {
+                    throw new InvalidOperationException("Server-side SubEditor mutation and rollback both failed", rollbackError);
                 }
             }
             throw;
