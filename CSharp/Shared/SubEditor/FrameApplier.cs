@@ -29,22 +29,9 @@ public static class FrameApplier
 
     public static bool ApplyTransaction(OpKind kind, ReadOnlySpan<ushort> ids, ReadOnlySpan<byte> payload)
     {
-        if (kind == OpKind.Batch) { return ApplyBatch(payload); }
+        if (kind == OpKind.Batch) { return WorldMutationCoordinator.ApplyBatch(payload); }
         if (kind is OpKind.SpawnSub or OpKind.DeleteSub or OpKind.Circuit) { return Apply(kind, ids, payload); }
-        return ApplyTransaction(kind, ids, payload, out _);
-    }
-
-    private static bool ApplyTransaction(OpKind kind, ReadOnlySpan<ushort> ids, ReadOnlySpan<byte> payload, out BatchPayload.Sub inverse)
-    {
-        using var geometry = LiveGeometry.Enter();
-        using var world = WorldContext.Enter();
-        if (!CaptureInverse(kind, ids, payload, out inverse)) { return false; }
-        bool committed = false;
-        try { committed = Apply(kind, ids, payload); return committed; }
-        finally
-        {
-            if (!committed) { Restore(inverse); }
-        }
+        return WorldMutationCoordinator.Apply(kind, ids, payload, out _);
     }
 
     internal static void Restore(BatchPayload.Sub inverse)
@@ -201,33 +188,8 @@ public static class FrameApplier
     }
 
     /// <summary>Sub-operations are applied directly without re-encoding to an OpFrame.</summary>
-    private static bool ApplyBatch(ReadOnlySpan<byte> payload)
-    {
-        if (!BatchPayload.TryRead(payload, SubEditorProtocol.MaxFrameBytes, out BatchPayload.Sub[] subs)) { return false; }
-        var undo = new List<BatchPayload.Sub>(subs.Length);
-        bool committed = false;
-        try
-        {
-            foreach (BatchPayload.Sub sub in subs)
-            {
-                if (!ApplyTransaction(sub.Kind, sub.Ids, sub.Payload, out BatchPayload.Sub inverse)) { return false; }
-                undo.Add(inverse);
-            }
-            committed = true;
-            return true;
-        }
-        finally
-        {
-            if (!committed)
-            {
-                for (int i = undo.Count - 1; i >= 0; i--)
-                {
-                    BatchPayload.Sub inverse = undo[i];
-                    Restore(inverse);
-                }
-            }
-        }
-    }
+    private static bool ApplyBatch(ReadOnlySpan<byte> payload) =>
+        WorldMutationCoordinator.ApplyBatch(payload);
 
     private static bool ApplySpawn(ReadOnlySpan<byte> payload)
     {
