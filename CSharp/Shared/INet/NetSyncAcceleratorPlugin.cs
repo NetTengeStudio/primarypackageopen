@@ -14,8 +14,6 @@ using Voronoi2;
 namespace INet {
     public sealed class NetSyncAcceleratorPlugin : IModule {
         private static Harmony harmony;
-        private static FieldInfo entitiesField;
-        private static FieldInfo allEntitiesField;
         private static GCLatencyMode previousLatencyMode;
 
         private static readonly ConditionalWeakTable<VoronoiCell, StrongBox<Vector4>> CellAabbCache = new();
@@ -53,12 +51,6 @@ namespace INet {
                 harmony.Patch(createDroppedStacks, prefix: new HarmonyMethod(typeof(NetSyncAcceleratorPlugin), nameof(PrefixCreateDroppedStacks)));
             }
 
-            entitiesField = AccessTools.Field(typeof(EntityGrid), "entities");
-            allEntitiesField = AccessTools.Field(typeof(EntityGrid), "allEntities");
-            MethodInfo removeEntity = AccessTools.Method(typeof(EntityGrid), nameof(EntityGrid.RemoveEntity), new[] { typeof(MapEntity) });
-            if (removeEntity != null && entitiesField != null && allEntitiesField != null) {
-                harmony.Patch(removeEntity, prefix: new HarmonyMethod(typeof(NetSyncAcceleratorPlugin), nameof(PrefixRemoveEntity)));
-            }
         }
 
         public void RoundStart() {
@@ -69,8 +61,6 @@ namespace INet {
         public void Release() {
             harmony?.UnpatchSelf();
             harmony = null;
-            entitiesField = null;
-            allEntitiesField = null;
             CellAabbCache.Clear();
             LastPrefabIndex.Clear();
         }
@@ -195,51 +185,6 @@ namespace INet {
 #endif
             list.Insert(i, __instance);
             if (prefab != null) { LastPrefabIndex[prefab] = i; }
-            return false;
-        }
-
-        private static bool PrefixRemoveEntity(EntityGrid __instance, MapEntity entity) {
-            if (entity == null) { return false; }
-            if (entitiesField?.GetValue(__instance) is not List<MapEntity>[,] grid ||
-                allEntitiesField?.GetValue(__instance) is not List<MapEntity> allEntities) {
-                return true;
-            }
-
-            Rectangle rect = entity.Rect;
-            Rectangle indices = __instance.GetIndices(rect);
-
-            int maxX = grid.GetLength(0) - 1;
-            int maxY = grid.GetLength(1) - 1;
-
-            int startX = Math.Max(indices.X, 0);
-            int endX = Math.Min(indices.Width, maxX);
-            int startY = Math.Max(indices.Y, 0);
-            int endY = Math.Min(indices.Height, maxY);
-
-            bool removed = false;
-            if (startX <= endX && startY <= endY) {
-                for (int x = startX; x <= endX; x++) {
-                    for (int y = startY; y <= endY; y++) {
-                        var cell = grid[x, y];
-                        if (cell != null && cell.Remove(entity)) {
-                            removed = true;
-                        }
-                    }
-                }
-            }
-
-            if (!removed) {
-                for (int x = 0; x <= maxX; x++) {
-                    for (int y = 0; y <= maxY; y++) {
-                        var cell = grid[x, y];
-                        if (cell != null && cell.Contains(entity)) {
-                            cell.Remove(entity);
-                        }
-                    }
-                }
-            }
-
-            allEntities.Remove(entity);
             return false;
         }
 
