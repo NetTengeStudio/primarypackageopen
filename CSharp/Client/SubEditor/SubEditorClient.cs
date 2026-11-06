@@ -193,7 +193,7 @@ public sealed class SubEditorClient : IModule, IRoundEnded, IEventUpdate, IEvent
         compatible = false;
         sessionToken = 0;
         snapshotReady = snapshotPrepared = false;
-        snapshotAnnounced = false; announcedRevision = 0;
+        announcedRevision = 0;
         entries.Clear(); rollbacks.Clear(); accepted.Clear(); afterRevision.Clear(); replacements.Clear(); beforeRevision.Clear(); InventoryBridge.Reset(restore: true); WireTracker.Reset(); LayerTracker.Reset(); LiveView.Reset();
         pendingSubs = Array.Empty<SubSpawn>(); pendingCircuit.Clear();
         LiveHistory.Clear();
