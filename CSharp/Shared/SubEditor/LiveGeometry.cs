@@ -11,6 +11,7 @@ public static class LiveGeometry
 {
     private static readonly HashSet<Submarine> dirty = new();
     private static int depth;
+    private static bool flushing;
     private static long nextRebuild;
 
     public readonly struct Scope : IDisposable
@@ -26,28 +27,38 @@ public static class LiveGeometry
 
     public static void Flush(bool force = true)
     {
-        if (dirty.Count == 0) { return; }
+        if (depth != 0 || flushing || dirty.Count == 0) { return; }
         long now = Environment.TickCount64;
         if (!force && now < nextRebuild) { return; }
         nextRebuild = now + 66;
+        flushing = true;
         try
         {
-            while (dirty.Count > 0)
+            while (dirty.Count != 0)
             {
-                Submarine sub;
-                using (var cursor = dirty.GetEnumerator()) { cursor.MoveNext(); sub = cursor.Current; }
-                dirty.Remove(sub);
-                if (sub != null && !sub.Removed) { Rebuild(sub); }
+                Submarine submarine = null;
+                foreach (Submarine candidate in dirty)
+                {
+                    if (submarine == null || candidate.ID < submarine.ID) { submarine = candidate; }
+                }
+                dirty.Remove(submarine);
+                if (submarine == null || submarine.Removed) { continue; }
+                try { Rebuild(submarine); }
+                catch
+                {
+                    dirty.Add(submarine);
+                    throw;
+                }
             }
         }
-        finally { dirty.Clear(); }
+        finally { flushing = false; }
     }
 
     public static void Touch(MapEntity entity)
     {
         if (entity?.Submarine?.SubBody == null || !Contributes(entity)) { return; }
         dirty.Add(entity.Submarine);
-        if (depth == 0)
+        if (depth == 0 && !flushing)
         {
             Flush(force: false);
         }
@@ -88,6 +99,7 @@ public static class LiveGeometry
                 moved++;
             }
             replacement = new SubmarineBody(sub, showErrorMessages: false);
+            if (replacement.Body?.FarseerBody == null) { throw new InvalidOperationException("Submarine collision rebuild produced no body"); }
             var copies = new Dictionary<Fixture, Fixture>();
             foreach (Fixture fixture in replacement.Body.FarseerBody.FixtureList)
             {
@@ -98,9 +110,16 @@ public static class LiveGeometry
             foreach (var entry in oldFixtures)
             {
                 List<Fixture> fixtures = entry.Item.StaticFixtures;
-                for (int i = 0; i < fixtures.Count; i++) { fixtures[i] = copies[fixtures[i]]; }
+                for (int i = 0; i < fixtures.Count; i++)
+                {
+                    if (!copies.TryGetValue(fixtures[i], out Fixture mapped)) { throw new InvalidOperationException("Static fixture was not included in rebuilt body"); }
+                    fixtures[i] = mapped;
+                }
                 if (entry.Item.GetComponent<Door>() is Door door && door.OutsideSubmarineFixture != null)
-                { door.OutsideSubmarineFixture = copies[door.OutsideSubmarineFixture]; }
+                {
+                    if (!copies.TryGetValue(door.OutsideSubmarineFixture, out Fixture mapped)) { throw new InvalidOperationException("Door fixture was not included in rebuilt body"); }
+                    door.OutsideSubmarineFixture = mapped;
+                }
             }
             original.Borders = replacement.Borders;
             original.VisibleBorders = replacement.VisibleBorders;
@@ -136,6 +155,5 @@ public static class LiveGeometry
         }
         Item.UpdateHulls();
         Gap.UpdateHulls();
-        dirty.Remove(sub);
     }
 }
