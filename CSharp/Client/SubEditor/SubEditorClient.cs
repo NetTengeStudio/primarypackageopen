@@ -322,11 +322,6 @@ public sealed class SubEditorClient : IModule, IRoundEnded, IEventUpdate, IEvent
         bool applied = false;
         WireTracker.Quietly(() => applied = ApplySnapshot(snapshotCut, snapshotNativeEventId, entitiesOnly: waitingForNative));
         if (!applied) { if (awaitingFiles.Count == 0) { Join(); } return; }
-        if (!snapshotAnnounced)
-        {
-            snapshotAnnounced = INet.Net.Send(SubEditorProtocol.Channel, w => { SubEditorProtocol.WriteClientHeader(w, ClientPacket.SnapshotReady, sessionToken); w.WriteUInt64(snapshotCut); });
-            if (!snapshotAnnounced) { return; }
-        }
         if (waitingForNative) { return; }
         ulong cut = snapshotCut;
         snapshotReady = false;
