@@ -23,7 +23,7 @@ public enum EntityState : byte { Gone = 0, Full = 1, InPlace = 2, Meta = 3 }
 public static class SubEditorProtocol
 {
     public const string Channel = "pp.subeditor.v5";
-    public const ushort Version = 7;
+    public const ushort Version = 8;
     public const byte ServerMarker = 230;
     public const int MaxPendingRequests = 128;
     public const int MaxFrameBytes = 48 * 1024;
