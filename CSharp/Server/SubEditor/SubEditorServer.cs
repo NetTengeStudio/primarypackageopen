@@ -706,9 +706,8 @@ public sealed partial class SubEditorServer : IModule, IRoundEnded, IEventUpdate
 
     private Prepared ApplyPrepared(Prepared operation)
     {
-        try { if (ApplyDirect(operation.Kind, operation.Ids, operation.Redo)) { return operation; } }
-        catch { Revert(operation); throw; }
-        Revert(operation);
+        if (WorldMutationCoordinator.ApplyPrepared(operation.Kind, operation.Ids, operation.Redo, () => Revert(operation)))
+        { return operation; }
         return Fail(SubmitStatus.Malformed);
     }
 
