@@ -82,6 +82,12 @@ internal static class Program
             LiveGeometry.Touch(hulls[0]);
         }
         Check(collisionBody.FixtureList.Count == originalFixtureCount, "coalesced geometry mutation retains stable fixture count");
+        Check(!FrameApplier.ApplyTransaction(OpKind.Transform, new[] { hulls[0].ID }, Array.Empty<byte>()),
+            "invalid transform cannot enter committed world state");
+        Check(collisionBody.FixtureList.Count == originalFixtureCount && ReferenceEquals(collisionBody, sub.SubBody.Body.FarseerBody),
+            "rejected world transaction preserves original collision body");
+        Check(!WorldMutationCoordinator.Applying && !WorldMutationCoordinator.RollingBack,
+            "transaction coordinator restores nesting state after failed validation");
         var file = (ItemFile)RuntimeHelpers.GetUninitializedObject(typeof(ItemFile));
         ItemPrefab Container(string identifier) => new ItemPrefab(XElement.Parse($"<Item name='{identifier}' identifier='{identifier}'><ItemContainer capacity='8'/></Item>").FromPackage(null), file);
         var box = Container("contractbox");
