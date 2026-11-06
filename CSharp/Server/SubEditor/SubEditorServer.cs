@@ -248,7 +248,7 @@ public sealed partial class SubEditorServer : IModule, IRoundEnded, IEventUpdate
             case ClientPacket.Resend: Resend(sender, m.ReadUInt64(), m.ReadUInt64()); break;
             case ClientPacket.SnapshotReady:
                 if (m.LengthBits - m.BitPosition >= 64 && sessions.TryGetValue(sender.SessionId, out Session prepared) &&
-                    prepared.Finished && m.ReadUInt64() == prepared.SnapshotRevision) { prepared.Prepared = true; }
+                    prepared.Finished && m.ReadUInt64() == prepared.SnapshotRevision) { }
                 break;
             case ClientPacket.Applied:
                 if (m.LengthBits - m.BitPosition >= 64 && sessions.TryGetValue(sender.SessionId, out Session applied))
@@ -257,6 +257,7 @@ public sealed partial class SubEditorServer : IModule, IRoundEnded, IEventUpdate
                     if (applied.Finished && revision >= applied.SnapshotRevision && revision <= authority.Rev)
                     {
                         applied.Prepared = true;
+                        applied.Live = true;
                         applied.AppliedRevision = Math.Max(applied.AppliedRevision, revision);
                         OnAck(applied, applied.Produced);
                     }
@@ -374,8 +375,7 @@ public sealed partial class SubEditorServer : IModule, IRoundEnded, IEventUpdate
     {
         s.Window.OnAck(cumulative, NowMs);
         foreach (int done in s.Chunks.Keys.Where(k => k < s.Window.Acked).ToList()) { s.Chunks.Remove(done); }
-        if (s.Finished && s.Window.Acked >= s.Produced)
-        { s.Prepared = s.Live = true; s.AppliedRevision = Math.Max(s.AppliedRevision, s.SnapshotRevision); }
+
     }
 
     private void Resend(Client c, ulong from, ulong to)
