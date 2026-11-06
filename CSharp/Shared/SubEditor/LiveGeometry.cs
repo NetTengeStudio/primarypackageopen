@@ -74,6 +74,7 @@ public static class LiveGeometry
         Body body = original.Body.FarseerBody;
         Vector2 velocity = body.LinearVelocity;
         float angularVelocity = body.AngularVelocity;
+        bool enabled = body.Enabled;
         bool loading = sub.Loading;
         sub.Loading = true;
         var entities = new List<MapEntity>(); for (int i = 0; i < MapEntity.MapEntityList.Count; i++) { MapEntity e = MapEntity.MapEntityList[i]; if (e != null && !e.Removed && e.Submarine == sub && Contributes(e)) { entities.Add(e); } }
@@ -100,6 +101,7 @@ public static class LiveGeometry
             }
             replacement = new SubmarineBody(sub, showErrorMessages: false);
             if (replacement.Body?.FarseerBody == null) { throw new InvalidOperationException("Submarine collision rebuild produced no body"); }
+            body.Enabled = false;
             var copies = new Dictionary<Fixture, Fixture>();
             foreach (Fixture fixture in replacement.Body.FarseerBody.FixtureList)
             {
@@ -147,11 +149,21 @@ public static class LiveGeometry
                     if (entry.Item.GetComponent<Door>() is Door door) { door.OutsideSubmarineFixture = entry.Door; }
                 }
             }
-            replacement?.Body.Remove();
-            for (int i = 0; i < moved; i++) { entities[i].Move(sub.HiddenSubPosition, ignoreContacts: true); }
-            body.LinearVelocity = velocity;
-            body.AngularVelocity = angularVelocity;
-            sub.Loading = loading;
+            try { replacement?.Body.Remove(); }
+            finally
+            {
+                try
+                {
+                    for (int i = 0; i < moved; i++) { entities[i].Move(sub.HiddenSubPosition, ignoreContacts: true); }
+                }
+                finally
+                {
+                    body.LinearVelocity = velocity;
+                    body.AngularVelocity = angularVelocity;
+                    sub.Loading = loading;
+                    body.Enabled = enabled;
+                }
+            }
         }
         Item.UpdateHulls();
         Gap.UpdateHulls();
