@@ -52,6 +52,22 @@ internal static class Program
         Submarine.MainSub = sub;
         var hulls = EntityOps.LoadAt(System.Text.Encoding.UTF8.GetBytes("<Entities><Hull ID='1' rect='-128,128,256,256'/></Entities>"), sub, 32000);
         Check(hulls is { Count: 1 }, "native hull loaded");
+        EntityGrid removalGrid = new(new Rectangle(hulls[0].Rect.X - 128, hulls[0].Rect.Y + 128, 1024, 1024), 64);
+        Rectangle originalRect = hulls[0].Rect;
+        removalGrid.InsertEntity(hulls[0]);
+        hulls[0].Rect = new Rectangle(originalRect.X + 128, originalRect.Y, originalRect.Width, originalRect.Height);
+        try
+        {
+            removalGrid.RemoveEntity(hulls[0]);
+            var cells = (List<MapEntity>[,])AccessTools.Field(typeof(EntityGrid), "entities").GetValue(removalGrid);
+            bool anyStale = false;
+            foreach (List<MapEntity> cell in cells)
+            {
+                if (cell.Contains(hulls[0])) { anyStale = true; break; }
+            }
+            Check(!anyStale && !removalGrid.GetAllEntities().Contains(hulls[0]), "moving entity removal leaves no stale grid cells");
+        }
+        finally { hulls[0].Rect = originalRect; }
         var collisionBody = sub.SubBody?.Body?.FarseerBody;
         Check(collisionBody != null, "native submarine collision body exists");
         bool initiallyEnabled = collisionBody.Enabled;
