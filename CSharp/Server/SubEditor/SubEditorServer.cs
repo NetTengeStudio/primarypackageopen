@@ -21,6 +21,8 @@ namespace PrimaryPackage.SubEditor;
 /// </summary>
 public sealed partial class SubEditorServer : IModule, IRoundEnded, IEventUpdate, IEventClientDisconnected, IEventRoundEnded
 {
+    private enum SyncPhase : byte { Streaming, AwaitingApplication, Live }
+
     private sealed class Session
     {
         public Client Client;
@@ -29,8 +31,8 @@ public sealed partial class SubEditorServer : IModule, IRoundEnded, IEventUpdate
         public uint Join;
         public ulong Token;
         public long LastCursor;
-        public bool Live;
-        public bool Prepared;
+        public SyncPhase Phase;
+        public bool Live => Phase == SyncPhase.Live;
         public ulong SnapshotRevision, AppliedRevision;
         public ushort SnapshotNativeId;
         public SnapshotCursor Cursor;
@@ -80,7 +82,7 @@ public sealed partial class SubEditorServer : IModule, IRoundEnded, IEventUpdate
         SubEditorServer server = instance;
         if (server?.authority == null || server.authority.Rev == 0 || events == null || events.Count == 0 || client == null) { return; }
 
-        if (!server.sessions.TryGetValue(client.SessionId, out Session session) || !session.Prepared)
+        if (!server.sessions.TryGetValue(client.SessionId, out Session session) || !session.Live)
         {
             RetainBaseNativeEvents(events);
             return;
@@ -88,8 +90,7 @@ public sealed partial class SubEditorServer : IModule, IRoundEnded, IEventUpdate
 
         if (client.NeedsMidRoundSync) { return; }
         ushort cut;
-        if (!session.Live) { cut = session.SnapshotNativeId; }
-        else if (session.AppliedRevision >= server.authority.Rev) { return; }
+        if (session.AppliedRevision >= server.authority.Rev) { return; }
         else if (server.authority.TryGetFrame(session.AppliedRevision + 1, out ReadOnlySpan<byte> bytes) && OpFrame.TryRead(bytes, out OpFrame.View frame))
         { cut = frame.NativeEventId; }
         else
@@ -246,18 +247,13 @@ public sealed partial class SubEditorServer : IModule, IRoundEnded, IEventUpdate
                     break;
                 }
             case ClientPacket.Resend: Resend(sender, m.ReadUInt64(), m.ReadUInt64()); break;
-            case ClientPacket.SnapshotReady:
-                if (m.LengthBits - m.BitPosition >= 64 && sessions.TryGetValue(sender.SessionId, out Session prepared) &&
-                    prepared.Finished && m.ReadUInt64() == prepared.SnapshotRevision) { }
-                break;
             case ClientPacket.Applied:
                 if (m.LengthBits - m.BitPosition >= 64 && sessions.TryGetValue(sender.SessionId, out Session applied))
                 {
                     ulong revision = m.ReadUInt64();
                     if (applied.Finished && revision >= applied.SnapshotRevision && revision <= authority.Rev)
                     {
-                        applied.Prepared = true;
-                        applied.Live = true;
+                        applied.Phase = SyncPhase.Live;
                         applied.AppliedRevision = Math.Max(applied.AppliedRevision, revision);
                         OnAck(applied, applied.Produced);
                     }
@@ -375,7 +371,8 @@ public sealed partial class SubEditorServer : IModule, IRoundEnded, IEventUpdate
     {
         s.Window.OnAck(cumulative, NowMs);
         foreach (int done in s.Chunks.Keys.Where(k => k < s.Window.Acked).ToList()) { s.Chunks.Remove(done); }
-
+        if (s.Phase == SyncPhase.Streaming && s.Finished && s.Window.Acked >= s.Produced)
+        { s.Phase = SyncPhase.AwaitingApplication; }
     }
 
     private void Resend(Client c, ulong from, ulong to)
