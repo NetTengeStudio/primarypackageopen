@@ -8,6 +8,7 @@ using PrimaryPackage.Core;
 namespace PrimaryPackage.Interactions;
 
 public sealed class LightEffectService {
+    internal const float FlickerDuration = 3;
     private readonly TimedLeases<LightComponent> leases = new(128);
     public static LightEffectService Instance { get; } = new();
     private static double Now => Stopwatch.GetTimestamp() / (double)Stopwatch.Frequency;
@@ -19,17 +20,21 @@ public sealed class LightEffectService {
     }
     internal static void Attach(Harmony harmony) {
 #if CLIENT
-        harmony.Patch(AccessTools.Method(typeof(LightComponent), "SetLightSourceState"), prefix: ModuleHost.Bind(typeof(LightEffectService), nameof(Modulate)));
+        var target = AccessTools.Method(typeof(LightComponent), "SetLightSourceState", new[] { typeof(bool), typeof(float) })
+            ?? throw new MissingMethodException(typeof(LightComponent).FullName, "SetLightSourceState(bool, float)");
+        harmony.Patch(target, prefix: ModuleHost.Bind(typeof(LightEffectService), nameof(Modulate)));
 #endif
     }
 #if CLIENT
     private const double PulseHertz = .8;
     private const float MinimumBrightness = .65f;
     private static void Modulate(LightComponent __instance, ref float brightness) {
-        if (!Instance.leases.TryGetEnd(__instance, out double end) || end <= Now) { return; }
+        if (!Instance.leases.TryGetEnd(__instance, out double end)) { return; }
+        double now = Now;
+        if (end <= now) { return; }
         // Smooth, low-contrast modulation; never activate vanilla's frame-random blackout/zap path.
-        double wave = .5 - .5 * Math.Cos(Now * Math.Tau * PulseHertz);
-        float envelope = (float)Math.Clamp((end - Now) / .35, 0, 1);
+        double wave = .5 - .5 * Math.Cos(now * Math.Tau * PulseHertz);
+        float envelope = (float)Math.Clamp((end - now) / .35, 0, 1);
         brightness *= 1 - (1 - MinimumBrightness) * (float)wave * envelope;
     }
 #endif

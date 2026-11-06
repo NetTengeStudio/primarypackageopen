@@ -10,10 +10,15 @@ static class ItemRegistry
 {
     const int SweepPerTick = 96;
 
-    static readonly Dictionary<Item, int> slotOf = new(ReferenceEqualityComparer.Instance);
+    static readonly int[] itemSlotById = new int[65536];
     static Item[] items = new Item[8192];
     static readonly SlotBitSet active = new();
     static int nextSlot, live, sweepCursor;
+
+    static ItemRegistry()
+    {
+        Array.Fill(itemSlotById, -1);
+    }
 
     public static bool Tracking;
     public static long Rebuilds, Missed, Compactions;
@@ -26,23 +31,37 @@ static class ItemRegistry
     {
         bool was = item.IsActive;
         item.IsActive = value;
-        if (!Tracking || (!value && Simulation.Dormancy.Probing == null) || !slotOf.TryGetValue(item, out int slot)) { return; }
+        if (!Tracking || (!value && Simulation.Dormancy.Probing == null) || !TryGetSlot(item, out int slot)) { return; }
         if (value) { active.Set(slot); }
         Simulation.Dormancy.OnIsActiveWritten(slot, was != value);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool TryGetSlot(Item item, out int slot) => slotOf.TryGetValue(item, out slot);
+    public static bool TryGetSlot(Item item, out int slot)
+    {
+        if (item != null)
+        {
+            int s = itemSlotById[item.ID];
+            if ((uint)s < (uint)nextSlot && ReferenceEquals(items[s], item))
+            {
+                slot = s;
+                return true;
+            }
+        }
+        slot = -1;
+        return false;
+    }
 
     public static void OnListed(Item item)
     {
-        if (!Tracking || slotOf.ContainsKey(item)) { return; }
+        if (!Tracking || TryGetSlot(item, out _)) { return; }
         Assign(item);
     }
 
     public static void OnUnlisted(Item item)
     {
-        if (!Tracking || !slotOf.Remove(item, out int slot)) { return; }
+        if (!Tracking || !TryGetSlot(item, out int slot)) { return; }
+        itemSlotById[item.ID] = -1;
         items[slot] = null;
         active.Clear(slot);
         Simulation.Dormancy.OnFreed(slot);
@@ -56,7 +75,7 @@ static class ItemRegistry
         int slot = nextSlot++;
         active.EnsureCapacity(nextSlot);
         items[slot] = item;
-        slotOf[item] = slot;
+        itemSlotById[item.ID] = slot;
         live++;
         Simulation.Dormancy.OnAssigned(slot);
         HullIndex.OnAssigned(slot, item);
@@ -74,8 +93,8 @@ static class ItemRegistry
         Simulation.Dormancy.Reset();
         HullIndex.Clear();
         Tracking = false;
-        slotOf.Clear();
-        Array.Clear(items);
+        Array.Fill(itemSlotById, -1);
+        Array.Clear(items, 0, nextSlot);
         active.ClearAll();
         nextSlot = live = 0;
     }
@@ -85,19 +104,44 @@ static class ItemRegistry
         Simulation.Dormancy.Reset();
         Simulation.SpatialCore.MarkDirty();
         HullIndex.Clear();
-        slotOf.Clear();
+        Array.Fill(itemSlotById, -1);
         Array.Clear(items, 0, nextSlot);
         active.ClearAll();
         nextSlot = live = 0;
         sweepCursor = 0;
-        foreach (Item item in Item.ItemList) { if (!slotOf.ContainsKey(item)) { Assign(item); } }
+        foreach (Item item in Item.ItemList) { if (!TryGetSlot(item, out _)) { Assign(item); } }
         Rebuilds++;
+    }
+
+    static void Reconcile()
+    {
+        var list = Item.ItemList;
+        if (live < list.Count)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                Item item = list[i];
+                if (!TryGetSlot(item, out _)) { Assign(item); }
+            }
+        }
+        if (live > list.Count)
+        {
+            for (int s = 0; s < nextSlot; s++)
+            {
+                Item it = items[s];
+                if (it != null && (it.Removed || itemSlotById[it.ID] != s))
+                {
+                    OnUnlisted(it);
+                }
+            }
+        }
+        if (live != list.Count) { Rebuild(); }
     }
 
     public static void BeginTick()
     {
         var list = Item.ItemList;
-        if (live != list.Count) { Rebuild(); return; }
+        if (live != list.Count) { Reconcile(); return; }
         if (nextSlot > 4096 && nextSlot > live * 2) { Rebuild(); Compactions++; return; }
         HullIndex.Sweep();
         int n = Math.Min(SweepPerTick, list.Count);
@@ -105,7 +149,7 @@ static class ItemRegistry
         {
             if (sweepCursor >= list.Count) { sweepCursor = 0; }
             Item item = list[sweepCursor++];
-            if (item.IsActive && slotOf.TryGetValue(item, out int slot) && !active.Get(slot))
+            if (item.IsActive && TryGetSlot(item, out int slot) && !active.Get(slot))
             {
                 active.Set(slot);
                 Missed++;
@@ -120,7 +164,7 @@ static class ItemRegistry
         int uncovered = 0;
         foreach (Item item in Item.ItemList)
         {
-            if (item.IsActive && (!slotOf.TryGetValue(item, out int slot) || !active.Get(slot))) { uncovered++; }
+            if (item.IsActive && (!TryGetSlot(item, out int slot) || !active.Get(slot))) { uncovered++; }
         }
         return uncovered;
     }
@@ -130,7 +174,7 @@ static class ItemRegistry
         int prev = -1;
         foreach (Item item in Item.ItemList)
         {
-            if (!slotOf.TryGetValue(item, out int slot) || slot <= prev) { return false; }
+            if (!TryGetSlot(item, out int slot) || slot <= prev) { return false; }
             prev = slot;
         }
         return true;

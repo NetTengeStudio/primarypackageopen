@@ -1,9 +1,10 @@
 using Barotrauma;
 using Barotrauma.Items.Components;
+using Barotrauma.Networking;
 using Microsoft.Xna.Framework;
 
 namespace PrimaryPackage.Cold {
-    public partial class ColdSourceComponent : ItemComponent, IColdSource {
+    public partial class ColdSourceComponent : ItemComponent, IColdSource, IServerSerializable {
         private const float ResolveInterval = 1.0f;
 
         [Editable(MinValueFloat = -45.0f, MaxValueFloat = 60.0f, DecimalCount = 1), Serialize(-25.0f, IsPropertySaveable.Yes, description: "Температура, к которой источник тянет привязанный отсек.", alwaysUseInstanceValues: true)]
@@ -67,6 +68,20 @@ namespace PrimaryPackage.Cold {
         private void Resolve() {
             if (bound != null && !bound.Removed && Submarine.RectContains(bound.WorldRect, BindPosition)) { return; }
             bound = Hull.FindHull(BindPosition, item.CurrentHull) ?? item.CurrentHull;
+        }
+
+        public void ServerEventWrite(IWriteMessage msg, Client c, NetEntityEvent.IData extraData = null) {
+            msg.WriteBoolean(Enabled);
+            msg.WriteSingle(TargetTemperature);
+            msg.WriteSingle(Rate);
+            msg.WritePadBits();
+        }
+
+        public void ClientEventRead(IReadMessage msg, float sendingTime) {
+            Enabled = msg.ReadBoolean();
+            TargetTemperature = msg.ReadSingle();
+            Rate = msg.ReadSingle();
+            msg.ReadPadBits();
         }
 
         partial void UpdateProjSpecific(float deltaTime);

@@ -41,6 +41,8 @@ public static class ItemUpdatePolicy {
 
     public static event Action<object> Invalidated;
 
+    public static void NotifyInvalidated(object entity) => Invalidated?.Invoke(entity);
+
     public static Registration Register(ReadOnlySpan<MethodInfo> observers, Func<object, bool> canSkipIdle) {
         if (observers.IsEmpty) { throw new ArgumentException("At least one observer is required.", nameof(observers)); }
         ArgumentNullException.ThrowIfNull(canSkipIdle);

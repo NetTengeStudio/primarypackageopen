@@ -8,7 +8,7 @@ namespace PrimaryPackage.Economy {
         public void RoundStart() { }
 
         public void Attach(Harmony harmony) {
-            PrimaryPackage.Core.ModNet.Receive(CheckComponent.PrintNetId, OnPrintRequest, 0.5);
+            INet.Net.Receive(CheckComponent.PrintNetId, OnPrintRequest, 0.5);
         }
         public void Release() {}
         private static void OnPrintRequest(IReadMessage msg, Client sender) {

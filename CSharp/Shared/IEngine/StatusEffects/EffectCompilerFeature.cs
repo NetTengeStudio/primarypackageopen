@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using Barotrauma;
 using Barotrauma.Items.Components;
 using HarmonyLib;
@@ -11,67 +12,99 @@ namespace IEngine.StatusEffects;
 
 sealed class EffectCompilerFeature : Feature
 {
-    const int MaxPlans = 1 << 19;
-
     static EffectCompilerFeature instance;
-    static readonly Dictionary<PropertyConditional, CompiledConditional> plans = new(1 << 14, ReferenceEqualityComparer.Instance);
-    static MethodBase hasConditions, matches, matchesDirect;
-    static string observers;
-    static bool on, verify, bypass;
-    static long evaluations, verified, mismatches;
+    static readonly ConditionCompiler compiler = new();
+    static MethodBase hasConditions, matches, matchesDirect, applyProperty, checkConditions;
+    static MethodBase[] dependencies;
+    static string observers, propertyObservers;
+    static bool on, propertiesOn, verify, bypass;
+    static long verified, mismatches, verifySkipped, propertyWrites;
 
     public override string Name => "effects";
 
     protected override string Install(Harmony harmony)
     {
         instance = this;
+        on = propertiesOn = false;
+        if (!RuntimeFeature.IsDynamicCodeSupported) { return "Dynamic code generation is unavailable"; }
         hasConditions = AccessTools.Method(typeof(StatusEffect), "HasRequiredConditions", new[] { typeof(IReadOnlyList<ISerializableEntity>), typeof(IReadOnlyList<PropertyConditional>), typeof(bool) });
         matches = AccessTools.Method(typeof(PropertyConditional), nameof(PropertyConditional.Matches));
         matchesDirect = AccessTools.Method(typeof(PropertyConditional), "MatchesDirect");
-        if (hasConditions == null || matches == null || matchesDirect == null) { return "StatusEffect/PropertyConditional shape differs in this build"; }
+        applyProperty = AccessTools.Method(typeof(StatusEffect), "ApplyToProperty");
+        checkConditions = AccessTools.Method(typeof(PropertyConditional), nameof(PropertyConditional.CheckConditionals));
+        if (hasConditions == null || matches == null || matchesDirect == null || applyProperty == null || checkConditions == null) { return "StatusEffect/PropertyConditional shape differs in this build"; }
+        var observed = new List<MethodBase> { hasConditions, matches, matchesDirect };
+        observed.AddRange(typeof(PropertyConditional).GetMethods(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly));
+        foreach (MethodInfo method in typeof(SerializableProperty).GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly))
+        {
+            if (method.Name is "GetFloatValue" or "GetBoolValue" or "TryGetFloatValueWithoutReflection" or "TryGetBoolValueWithoutReflection" or
+                "TrySetFloatValueWithoutReflection" or "TrySetBoolValueWithoutReflection" or "TrySetValue") { observed.Add(method); }
+        }
+        foreach (MethodInfo method in typeof(MathUtils).GetMethods(BindingFlags.Public | BindingFlags.Static))
+        {
+            if (method.Name == nameof(MathUtils.NearlyEqual)) { observed.Add(method); }
+        }
+        dependencies = observed.Distinct().ToArray();
         harmony.Patch(hasConditions, prefix: new HarmonyMethod(typeof(EffectCompilerFeature), nameof(HasConditionsPrefix)) { priority = Priority.First });
         harmony.Patch(matches, prefix: new HarmonyMethod(typeof(EffectCompilerFeature), nameof(MatchesPrefix)) { priority = Priority.First });
+        harmony.Patch(checkConditions, prefix: new HarmonyMethod(typeof(EffectCompilerFeature), nameof(CheckConditionsPrefix)) { priority = Priority.First });
+        harmony.Patch(applyProperty, prefix: new HarmonyMethod(typeof(EffectCompilerFeature), nameof(PropertyPrefix)) { priority = Priority.First });
         var reset = new HarmonyMethod(typeof(EffectCompilerFeature), nameof(ResetPlans));
         foreach (MethodInfo m in typeof(GameSession).GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly))
         {
             if (m.Name is nameof(GameSession.StartRound) or nameof(GameSession.EndRound)) { harmony.Patch(m, postfix: reset); }
         }
+        harmony.Patch(AccessTools.Method(typeof(StatusEffect), nameof(StatusEffect.StopAll)), postfix: reset);
         return null;
     }
 
     internal override void OnLoadCompleted() => Refresh();
     protected override void OnToggled() => Refresh();
     internal override void RecheckObservers() => Refresh();
+    internal override void Uninstall() { on = propertiesOn = false; ResetPlans(); }
 
     static void Refresh()
     {
-        var foreign = new[] { hasConditions, matches, matchesDirect }.Select(PatchCensus.Of).Where(f => f.Any).ToArray();
-        observers = foreign.Length > 0 ? string.Join("; ", foreign) : null;
+        observers = null;
+        foreach (MethodBase method in dependencies)
+        {
+            PatchCensus.Foreign foreign = PatchCensus.Of(method);
+            if (foreign.Any) { observers = $"{method}: {foreign}"; break; }
+        }
         on = instance.Active && observers == null;
+        PatchCensus.Foreign property = PatchCensus.Of(applyProperty);
+        propertyObservers = property.Any ? property.ToString() : observers;
+        propertiesOn = instance.Active && propertyObservers == null;
         ResetPlans();
     }
 
     static void ResetPlans()
     {
-        plans.Clear();
-        CompiledConditional.Epoch++;
+        compiler.Clear();
     }
 
-    static CompiledConditional PlanOf(PropertyConditional c)
+    static bool MatchesPrefix(PropertyConditional __instance, ISerializableEntity target, ref bool __result, bool __runOriginal)
     {
-        if (plans.TryGetValue(c, out CompiledConditional cc)) { return cc; }
-        if (plans.Count >= MaxPlans) { plans.Clear(); }
-        cc = new CompiledConditional(c);
-        plans[c] = cc;
-        return cc;
+        if (!__runOriginal || !on || bypass || !CompiledConditional.Supports(__instance)) { return true; }
+        CompiledConditional cc = compiler.Predicate(__instance);
+        bool check = verify && cc.CanVerify(target);
+        if (verify && !check) { verifySkipped++; }
+        __result = check ? Checked(cc, target) : cc.Match(target);
+        return false;
     }
 
-    static bool MatchesPrefix(PropertyConditional __instance, ISerializableEntity target, ref bool __result)
+    static bool CheckConditionsPrefix(ISerializableEntity conditionalTarget, IEnumerable<PropertyConditional> conditionals, PropertyConditional.LogicalOperatorType logicalOperator, ref bool __result, bool __runOriginal)
     {
-        if (!on || bypass || __instance.TargetContainedItem) { return true; }
-        CompiledConditional cc = PlanOf(__instance);
-        if (!cc.IsCompiled) { return true; }
-        __result = verify ? Checked(cc, target) : cc.Match(target);
+        if (!__runOriginal || !on || bypass || logicalOperator is not (PropertyConditional.LogicalOperatorType.And or PropertyConditional.LogicalOperatorType.Or)) { return true; }
+        if (!compiler.TryEvaluateDirect(conditionalTarget, conditionals, logicalOperator == PropertyConditional.LogicalOperatorType.Or, out __result)) { return true; }
+        if (verify && compiler.LastEvaluationPure)
+        {
+            bypass = true;
+            try { if (__result != PropertyConditional.CheckConditionals(conditionalTarget, conditionals, logicalOperator)) { mismatches++; } }
+            finally { bypass = false; }
+            verified++;
+        }
+        else if (verify) { verifySkipped++; }
         return false;
     }
 
@@ -85,99 +118,54 @@ sealed class EffectCompilerFeature : Feature
         return fast;
     }
 
-    static bool HasConditionsPrefix(StatusEffect __instance, IReadOnlyList<ISerializableEntity> targets, IReadOnlyList<PropertyConditional> conditionals, bool targetingContainer, ref bool __result)
+    static bool HasConditionsPrefix(StatusEffect __instance, IReadOnlyList<ISerializableEntity> targets, IReadOnlyList<PropertyConditional> conditionals, bool targetingContainer, ref bool __result, bool __runOriginal)
     {
-        if (!on || bypass) { return true; }
+        if (!__runOriginal || !on || bypass) { return true; }
         var logic = __instance.conditionalLogicalOperator;
         if (logic is not (PropertyConditional.LogicalOperatorType.And or PropertyConditional.LogicalOperatorType.Or)) { return true; }
-        evaluations++;
-        __result = Evaluate(__instance, targets, conditionals, targetingContainer, logic == PropertyConditional.LogicalOperatorType.Or);
-        if (verify)
+        __result = compiler.Evaluate(__instance, targets, conditionals, targetingContainer, logic == PropertyConditional.LogicalOperatorType.Or);
+        if (verify && compiler.LastEvaluationPure)
         {
             bypass = true;
             try { if (__result != __instance.HasRequiredConditions(targets, conditionals, targetingContainer)) { mismatches++; } }
             finally { bypass = false; }
             verified++;
         }
+        else if (verify) { verifySkipped++; }
         return false;
     }
 
-    static bool Evaluate(StatusEffect effect, IReadOnlyList<ISerializableEntity> targets, IReadOnlyList<PropertyConditional> conditionals, bool targetingContainer, bool or)
+    static bool PropertyPrefix(StatusEffect __instance, ISerializableEntity target, SerializableProperty property, object value, float deltaTime, bool __runOriginal)
     {
-        int n = conditionals.Count;
-        if (n == 0) { return true; }
-        if (targets.Count == 0 && effect.requiredItems != null && effect.requiredItems.All(ri => ri.MatchOnEmpty)) { return true; }
-        for (int i = 0; i < n; i++)
+        if (!__runOriginal || !propertiesOn || bypass || verify || property == null) { return true; }
+        Type type = property.PropertyType;
+        if (value is bool boolean && type == typeof(bool))
         {
-            PropertyConditional pc = conditionals[i];
-            bool r;
-            if (!pc.TargetContainer | targetingContainer)
-            {
-                r = AnyTargetMatches(targets, pc.TargetItemComponent, pc);
-            }
-            else
-            {
-                Item item = OwnerItem(targets);
-                if (item?.ParentInventory == null)
-                {
-                    r = pc.ComparisonOperator == PropertyConditional.ComparisonOperatorType.NotEquals;
-                }
-                else
-                {
-                    Entity entity = item.ParentInventory.Owner;
-                    if (pc.TargetGrandParent && entity is Item grand) { entity = grand.ParentInventory?.Owner; }
-                    if (entity is Item container)
-                    {
-                        r = pc.Type == PropertyConditional.ConditionType.HasTag ? Match(pc, container) : AnyTargetMatches(container.AllPropertyObjects, pc.TargetItemComponent, pc);
-                    }
-                    else if (entity is Character character)
-                    {
-                        r = Match(pc, character);
-                    }
-                    else { continue; }
-                }
-            }
-            if (r == or) { return or; }
+            PropertyAccess.Of(property).WriteBool(target, boolean);
         }
-        return !or;
-    }
-
-    static bool Match(PropertyConditional pc, ISerializableEntity target)
-    {
-        if (pc.TargetContainedItem) { return pc.Matches(target); }
-        CompiledConditional cc = PlanOf(pc);
-        return cc.IsCompiled ? cc.Match(target) : pc.Matches(target);
-    }
-
-    static bool AnyTargetMatches(IReadOnlyList<ISerializableEntity> list, string component, PropertyConditional pc)
-    {
-        bool any = string.IsNullOrEmpty(component);
-        for (int i = 0; i < list.Count; i++)
+        else if (value is int or float && (type == typeof(float) || type == typeof(int)))
         {
-            ISerializableEntity t = list[i];
-            if ((any || (t is ItemComponent ic && ic.Name == component)) && Match(pc, t)) { return true; }
+            PropertyAccess.Binding access = PropertyAccess.Of(property);
+            float current = access.ReadFloat(target);
+            float number = value is float single ? single : (int)value;
+            float result = __instance.setValue ? number : current + number * (__instance.disableDeltaTime ? 1f : deltaTime);
+            if (type == typeof(float)) { access.WriteFloat(target, result); }
+            else { access.WriteInt(target, (int)result); }
         }
+        else { return true; }
+        propertyWrites++;
         return false;
-    }
-
-    static Item OwnerItem(IReadOnlyList<ISerializableEntity> list)
-    {
-        for (int i = 0; i < list.Count; i++)
-        {
-            if (list[i] is Item item) { return item; }
-            if (list[i] is ItemComponent ic) { return ic.Item; }
-        }
-        return null;
     }
 
     public override void SetVerify(bool value)
     {
         verify = value;
-        verified = mismatches = 0;
+        verified = mismatches = verifySkipped = 0;
     }
 
     public override string Report() =>
-        $"compiling={on} plans={plans.Count} compiled={CompiledConditional.Compiled} fallback={CompiledConditional.Fallbacks} evaluations={evaluations}" +
+        $"compiling={on} propertyWrites={propertiesOn}/{propertyWrites} {compiler.Report()} accessors={PropertyAccess.Compiled} accessorFaults={PropertyAccess.Faults}" +
         (observers != null ? $" disabled: observed by {observers}" : "") +
-        (verify ? $" verified={verified} mismatches={mismatches}" : "");
+        (propertyObservers != null ? $" property fallback: {propertyObservers}" : "") +
+        (verify ? $" verified={verified} mismatches={mismatches} impureSkipped={verifySkipped}" : "");
 }

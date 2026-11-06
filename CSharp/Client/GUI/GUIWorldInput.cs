@@ -1,6 +1,10 @@
+using System;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Reflection.Emit;
 using Barotrauma;
 using HarmonyLib;
-using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
 using PrimaryPackage.Core;
 
 namespace PrimaryPackage.GUI;
@@ -19,7 +23,9 @@ internal static class GUIInventoryInput {
 internal static class GUICharacterInteraction {
     [HarmonyPrefix]
     public static bool Prefix(Character __instance) {
-        if (!GUIBridge.BlocksWorld || __instance != Character.Controlled) { return true; }
+        // Native hover only suppresses focusing in the engine. Skipping the whole
+        // interaction update also skips ladder traversal and deselection.
+        if (__instance != Character.Controlled || !GUIBridge.CapturesCustomViewInput) { return true; }
         __instance.FocusedCharacter = null;
         __instance.FocusedItem = null;
         return false;
@@ -29,11 +35,11 @@ internal static class GUICharacterInteraction {
 [HarmonyPatch(typeof(Character), "UpdateLocalCursor")]
 internal static class GUICharacterCursor {
     [HarmonyPrefix]
-    public static bool Prefix(Character __instance) => !GUIBridge.CapturesViewInput || __instance != Character.Controlled;
+    public static bool Prefix(Character __instance) => !GUIBridge.CapturesCharacterInput(__instance);
 }
 
-// Camera reads raw pointer coordinates in both follow and spectator modes. Masking
-// ScrollWheelSpeed alone does not stop mouse-look zoom or the follow-camera offset.
+// The engine owns the retained follow offset. UI capture freezes that offset,
+// while target following, smoothing, shake and interpolation continue normally.
 [HarmonyPatch(typeof(Camera), nameof(Camera.MoveCamera))]
 internal static class GUICameraInput {
     [HarmonyPrefix]
@@ -43,16 +49,42 @@ internal static class GUICameraInput {
         if (!GUIBridge.CapturesViewInput) { return true; }
         allowZoom = false;
         allowInput = false;
-        if (__instance.TargetPos == Microsoft.Xna.Framework.Vector2.Zero) { allowMove = false; }
-        else { __instance.Freeze = true; }
+        __instance.Freeze = true;
+        if (__instance.TargetPos == Vector2.Zero) { allowMove = false; }
+
         return true;
     }
+
+    // Native Freeze only restores previousOffset when the newly calculated
+    // pointer offset is nonzero. At the screen centre (or OffsetAmount == 0)
+    // that still recentres the view. Select the retained offset at its source.
+    [HarmonyTranspiler]
+    private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions) {
+        var code = new List<CodeInstruction>(instructions);
+        MethodInfo amount = AccessTools.PropertyGetter(typeof(Camera), nameof(Camera.OffsetAmount));
+        MethodInfo multiply = AccessTools.Method(typeof(Vector2), "op_Multiply", new[] { typeof(Vector2), typeof(float) });
+        MethodInfo followOffset = AccessTools.Method(typeof(GUICameraInput), nameof(FollowOffset));
+        int matches = 0;
+        for (int i = 1; i < code.Count; i++) {
+            if (!code[i - 1].Calls(amount) || !code[i].Calls(multiply)) { continue; }
+            CodeInstruction operation = code[i];
+            code.Insert(i, new CodeInstruction(OpCodes.Ldarg_0).MoveLabelsFrom(operation).MoveBlocksFrom(operation));
+            operation.operand = followOffset;
+            matches++;
+            i++;
+        }
+        if (matches != 1) { throw new InvalidOperationException($"Expected one Camera follow-offset calculation, found {matches}"); }
+        return code;
+    }
+
+    private static Vector2 FollowOffset(Vector2 direction, float amount, Camera camera) =>
+        camera.Freeze ? camera.previousOffset : direction * amount;
 }
 
 [HarmonyPatch(typeof(Character), nameof(Character.IsMouseOnUI), MethodType.Getter)]
 internal static class GUICharacterUI {
     [HarmonyPostfix]
-    public static void Postfix(ref bool __result) => __result |= GUIRuntime.Instance?.CapturesAim == true;
+    public static void Postfix(ref bool __result) => __result |= GUIBridge.CapturesCustomViewInput;
 }
 
 [HarmonyPatch(typeof(PlayerInput))]
@@ -78,7 +110,7 @@ internal static class GUIWorldMouse {
     [HarmonyPatch("SecondaryDoubleClicked")]
     [HarmonyPatch("InventoryKeyHit")]
     public static bool Prefix(ref bool __result) {
-        if (!GUIBridge.BlocksWorld) { return true; }
+        if (!GUIWorldInputScope.Active || !GUIBridge.BlocksWorld) { return true; }
         __result = false;
         return false;
     }
@@ -88,47 +120,55 @@ internal static class GUIWorldMouse {
 internal static class GUIWorldScroll {
     [HarmonyPrefix]
     public static bool Prefix(ref int __result) {
-        if (!GUIBridge.BlocksWorld) { return true; }
+        if (!GUIWorldInputScope.Active || !GUIBridge.BlocksWorld) { return true; }
         __result = 0;
         return false;
     }
 }
 
-[HarmonyPatch(typeof(PlayerInput))]
-internal static class GUIWorldKeyboard {
-    [HarmonyPrefix]
-    [HarmonyPatch("KeyHit", new[] { typeof(InputType) })]
-    [HarmonyPatch("KeyDown", new[] { typeof(InputType) })]
-    [HarmonyPatch("KeyUp", new[] { typeof(InputType) })]
-    public static bool Prefix(InputType inputType, ref bool __result) {
-        if (!GUIBridge.BlocksWorld) { return true; }
-        if (GUIVoiceInput.Allows(inputType)) { return true; }
-        bool movement = inputType is InputType.Up or InputType.Down or InputType.Left or InputType.Right or InputType.Run or InputType.ToggleRun or InputType.Crouch;
-        if (movement && GUIRuntime.Instance?.Input.BlocksWorld != true && GUIRuntime.Instance?.MovementCapture != true) { return true; }
-        __result = false;
-        return false;
+// PlayerInput is shared by native widgets and the world. Only world update
+// consumers may mask its pointer; GUI.Update and menu hotkeys keep raw input.
+[HarmonyPatch]
+internal static class GUIWorldInputScope {
+    [ThreadStatic] private static int depth;
+    internal static bool Active => depth != 0;
+
+    private static IEnumerable<MethodBase> TargetMethods() {
+        yield return AccessTools.Method(typeof(Character), nameof(Character.ControlLocalPlayer));
+        yield return AccessTools.Method(typeof(SubEditorScreen), nameof(SubEditorScreen.Update));
+        yield return AccessTools.Method(typeof(Inventory), nameof(Inventory.Update));
     }
+
+    [HarmonyPrefix]
+    internal static void Prefix(out int __state) { __state = depth; depth++; }
+
+    internal static int Suspend() { int previous = depth; depth = 0; return previous; }
+
+    // Finalizers run even when another patch skips the original or it throws.
+    [HarmonyFinalizer]
+    internal static void Finalizer(int __state) { depth = __state; }
 }
 
-[HarmonyPatch(typeof(PlayerInput))]
-internal static class GUIWorldKeys {
+[HarmonyPatch(typeof(Key), nameof(Key.SetState), new Type[0])]
+internal static class GUICharacterKeys {
     [HarmonyPrefix]
-    [HarmonyPatch("KeyHit", new[] { typeof(Microsoft.Xna.Framework.Input.Keys) })]
-    [HarmonyPatch("KeyDown", new[] { typeof(Microsoft.Xna.Framework.Input.Keys) })]
-    [HarmonyPatch("KeyUp", new[] { typeof(Microsoft.Xna.Framework.Input.Keys) })]
-    public static bool Prefix(Microsoft.Xna.Framework.Input.Keys __0, ref bool __result) {
-        if (!GUIBridge.BlocksWorld || GUIVoiceInput.Allows(__0)) { return true; }
-        __result = false;
+    public static bool Prefix(Key __instance, InputType ___inputType, out int __state) {
+        // Once classified as an allowed action, its binding must read raw input.
+        // Movement and voice can be rebound to mouse buttons as well as keys.
+        __state = GUIWorldInputScope.Suspend();
+        if (!GUIBridge.BlocksWorld) { return true; }
+        if (GUIVoiceInput.Allows(___inputType)) { return true; }
+        bool movement = ___inputType is InputType.Up or InputType.Down or InputType.Left or InputType.Right or InputType.Run or InputType.ToggleRun or InputType.Crouch;
+        if (movement && GUIRuntime.Instance?.Input.BlocksWorld != true && GUIRuntime.Instance?.MovementCapture != true) { return true; }
+        __instance.Reset();
         return false;
     }
+
+    [HarmonyFinalizer]
+    internal static void Finalizer(int __state) => GUIWorldInputScope.Finalizer(__state);
 }
 
 internal static class GUIVoiceInput {
     private static bool TextFocused => Barotrauma.GUI.KeyboardDispatcher.Subscriber != null;
     internal static bool Allows(InputType type) => !TextFocused && type is InputType.Voice or InputType.RadioVoice or InputType.LocalVoice;
-    internal static bool Allows(Microsoft.Xna.Framework.Input.Keys key) {
-        if (TextFocused || key == Microsoft.Xna.Framework.Input.Keys.None) { return false; }
-        var bindings = GameSettings.CurrentConfig.KeyMap.Bindings;
-        return bindings[InputType.Voice].Key == key || bindings[InputType.RadioVoice].Key == key || bindings[InputType.LocalVoice].Key == key;
-    }
 }

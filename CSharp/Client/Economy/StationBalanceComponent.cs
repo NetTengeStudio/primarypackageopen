@@ -14,7 +14,7 @@ namespace PrimaryPackage.Economy {
             base.OnItemLoaded();
             if (GameMain.Client != null && !EconomyClientState.FullSyncRequested) {
                 EconomyClientState.FullSyncRequested = true;
-                item.CreateClientEvent(this, new FullSyncRequestEventData());
+                item.CreateClientEvent(this, new StationBalanceSyncRequestEventData());
             }
         }
         public override void Update(float deltaTime, Camera cam) {

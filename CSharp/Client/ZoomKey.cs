@@ -42,11 +42,11 @@ using GUI = global::Barotrauma.GUI;
         }
         private static void ManualZoom() {
             bool keyboardFocused = PrimaryPackage.Core.PlayView.Typing;
-            bool mouseOnUi = GUI.MouseOn != null || Inventory.IsMouseOnInventory || GUI.PauseMenuOpen;
+            bool mouseOnUi = PrimaryPackage.GUI.GUIBridge.CapturesViewInput;
             int scrollDelta = mouseOnUi ? 0 : PlayerInput.ScrollWheelSpeed;
-            bool zoomInHit = !keyboardFocused && PrimaryPackage.Core.ModSettings.ZoomInKey.Hit();
-            bool zoomOutHit = !keyboardFocused && PrimaryPackage.Core.ModSettings.ZoomOutKey.Hit();
-            if (!keyboardFocused && PrimaryPackage.Core.ModSettings.ZoomResetKey.Hit()) {
+            bool zoomInHit = !keyboardFocused && !mouseOnUi && PrimaryPackage.Core.ModSettings.ZoomInKey.Hit();
+            bool zoomOutHit = !keyboardFocused && !mouseOnUi && PrimaryPackage.Core.ModSettings.ZoomOutKey.Hit();
+            if (!keyboardFocused && !mouseOnUi && PrimaryPackage.Core.ModSettings.ZoomResetKey.Hit()) {
                 PrimaryPackage.Core.ViewState.Bias = 0f;
                 return;
             }
@@ -80,8 +80,8 @@ using GUI = global::Barotrauma.GUI;
             PrimaryPackage.Core.ViewState.Contribute(PrimaryPackage.Core.ViewChannel.Immersion, 1.0f);
         }
         private static bool Eligible() {
-            if (Screen.Selected != GameMain.GameScreen || GUI.PauseMenuOpen || GUI.MouseOn != null
-                || Inventory.IsMouseOnInventory || PrimaryPackage.Core.PlayView.Typing) { return false; }
+            if (Screen.Selected != GameMain.GameScreen || PrimaryPackage.Core.PlayView.Typing) { return false; }
+
             Character c = Character.Controlled;
             if (c?.Inventory == null || c.IsDead || c.IsUnconscious || c.InWater) { return false; }
             return c.Inventory.GetItemInLimbSlot(InvSlotType.RightHand) == null && c.Inventory.GetItemInLimbSlot(InvSlotType.LeftHand) == null;
@@ -97,22 +97,26 @@ using GUI = global::Barotrauma.GUI;
         }
         internal static void Update(Camera cam, float deltaTime) {
             bool eligible = Eligible();
+            bool capturesView = PrimaryPackage.GUI.GUIBridge.CapturesViewInput;
             bool rmb = PlayerInput.SecondaryMouseButtonHeld();
             State st = States.GetOrCreateValue(cam);
             bool pressEdge = rmb && !st.PrevRmb;
-            if (pressEdge) { st.PressValid = eligible; }
+            if (pressEdge) { st.PressValid = eligible && !capturesView; }
             if (!rmb) { st.PressValid = false; }
             bool held = rmb && st.PressValid && eligible;
             st.PrevRmb = rmb;
             effectiveHeld = held;
-            st.Charge = MathHelper.Clamp(st.Charge + (held ? deltaTime : -deltaTime) / ChargeSeconds, 0f, 1f);
+            // Hover suspends an existing look gesture; it neither cancels it nor
+            // starts/charges one from a press that belongs to the GUI.
+            float step = capturesView && held ? 0f : deltaTime;
+            st.Charge = MathHelper.Clamp(st.Charge + (held ? step : -step) / ChargeSeconds, 0f, 1f);
             if (!held) { st.Engaged = false; }
             else if (st.Charge >= 1f) { st.Engaged = true; }
             st.Factor = MathHelper.Clamp(SmoothDamp(st.Factor, st.Engaged ? 1f : 0f, ref st.FactorVel,
-                st.Engaged ? EntrySmoothTime : ExitSmoothTime, deltaTime), 0f, 1f);
+                st.Engaged ? EntrySmoothTime : ExitSmoothTime, step), 0f, 1f);
             barCharge = st.Charge;
             barFactor = st.Factor;
-            barAlpha = MathHelper.Clamp(SmoothDamp(barAlpha, held ? 1f : 0f, ref barAlphaVel, held ? FadeInTime : FadeOutTime, deltaTime), 0f, 1f);
+            barAlpha = MathHelper.Clamp(SmoothDamp(barAlpha, held ? 1f : 0f, ref barAlphaVel, held ? FadeInTime : FadeOutTime, step), 0f, 1f);
             PrimaryPackage.Core.ViewState.Contribute(PrimaryPackage.Core.ViewChannel.Immersion,
                 MathHelper.Lerp(1.0f, ZoomOutFactor, st.Factor));
             if (st.Factor > Eps) {

@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Reflection;
-using System.Reflection.Emit;
 using Barotrauma;
 using Op = Barotrauma.PropertyConditional.ComparisonOperatorType;
 
@@ -13,7 +11,6 @@ sealed class CompiledConditional
     enum Kind : byte { Original, Property, HasTag }
     enum Value : byte { Unresolved, Missing, Number, Bool, Other }
 
-    static readonly Dictionary<PropertyInfo, Delegate> getters = new();
     public static int Epoch = 1;
     public static long Compiled, Fallbacks;
 
@@ -25,21 +22,19 @@ sealed class CompiledConditional
     readonly float number;
     readonly ImmutableArray<Identifier> tags;
 
-    sealed class Shape
+    sealed class TargetShape
     {
         public Dictionary<Identifier, SerializableProperty> Dict;
-        public int Count;
         public SerializableProperty Prop;
         public Value Value;
-        public Func<object, float> FloatGetter;
-        public Func<object, bool> BoolGetter;
+        public PropertyAccess.Binding Access;
     }
 
     const int MaxShapes = 8;
     int epoch;
-    bool isAffliction;
-    readonly Shape[] shapes = new Shape[MaxShapes];
+    readonly TargetShape[] shapes = new TargetShape[MaxShapes];
     int shapeCount, nextVictim;
+    TargetShape lastShape;
 
     public CompiledConditional(PropertyConditional c)
     {
@@ -62,6 +57,21 @@ sealed class CompiledConditional
 
     public bool IsCompiled => kind != Kind.Original;
 
+    public static bool Supports(PropertyConditional source) => !source.TargetContainedItem &&
+        source.Type is PropertyConditional.ConditionType.PropertyValueOrAffliction or PropertyConditional.ConditionType.HasTag;
+
+    public bool CanVerify(ISerializableEntity target)
+    {
+        if (kind != Kind.Property || target is Character or Limb or null) { return false; }
+        Type type = target.GetType();
+        if (!PropertyAccess.CanCacheMap(type)) { return false; }
+        Dictionary<Identifier, SerializableProperty> map = target.SerializableProperties;
+        if (map == null) { return true; }
+        if (!ReferenceEquals(map.Comparer, EqualityComparer<Identifier>.Default)) { return false; }
+        if (!map.TryGetValue(name, out SerializableProperty property)) { return true; }
+        return property != null && PropertyAccess.Of(property).TryField(type, out _);
+    }
+
     public bool Match(ISerializableEntity target)
     {
         switch (kind)
@@ -76,117 +86,114 @@ sealed class CompiledConditional
     {
         if (target is Character or Limb or null) { return Source.MatchesDirect(target); }
         if (target is not Item item) { return notEquals; }
-        int matches = 0;
         ImmutableArray<Identifier> t = tags;
-        for (int i = 0; i < t.Length; i++) { if (item.HasTag(t[i])) { matches++; } }
-        return notEquals ? matches <= 0 : matches >= t.Length;
+        if (notEquals)
+        {
+            for (int i = 0; i < t.Length; i++) { if (item.HasTag(t[i])) { return false; } }
+            return true;
+        }
+        else
+        {
+            for (int i = 0; i < t.Length; i++) { if (!item.HasTag(t[i])) { return false; } }
+            return true;
+        }
     }
 
     bool MatchProperty(ISerializableEntity target)
     {
-        if (target is Character or Limb or null) { return Source.MatchesDirect(target); }
+        if (target == null) { return Source.Matches(null); }
+        if (target is Character or Limb) { return Source.MatchesDirect(target); }
+        Type type = target.GetType();
+        if (!PropertyAccess.CanCacheMap(type)) { return Source.MatchesDirect(target); }
+        Dictionary<Identifier, SerializableProperty> map = target.SerializableProperties;
+        if (map == null || !ReferenceEquals(map.Comparer, EqualityComparer<Identifier>.Default))
+        {
+            return Source.MatchesDirect(target);
+        }
+
+        TargetShape shape = lastShape;
+        if (shape == null || !ReferenceEquals(shape.Dict, map) || epoch != Epoch)
+        {
+            shape = LookupShape(map, type);
+            if (shape == null) { return Source.MatchesDirect(target); }
+            lastShape = shape;
+        }
+
+        switch (shape.Value)
+        {
+            case Value.Missing:
+                return notEquals;
+            case Value.Number:
+                float current;
+                if (!shape.Access.TryGetFloat(target, shape.Prop, out current)) { return Source.MatchesDirect(target); }
+                return op switch
+                {
+                    Op.Equals => Math.Abs(current - number) < 0.00001f,
+                    Op.NotEquals => Math.Abs(current - number) >= 0.00001f,
+                    Op.GreaterThan => current > number,
+                    Op.LessThan => current < number,
+                    Op.GreaterThanEquals => current >= number,
+                    Op.LessThanEquals => current <= number,
+                    _ => Source.MatchesDirect(target)
+                };
+            case Value.Bool:
+                bool flag;
+                if (!shape.Access.TryGetBool(target, shape.Prop, out flag)) { return Source.MatchesDirect(target); }
+                return notEquals ? flag != expectedBool : flag == expectedBool;
+            default:
+                return Source.MatchesDirect(target);
+        }
+    }
+
+    TargetShape LookupShape(Dictionary<Identifier, SerializableProperty> map, Type type)
+    {
         if (epoch != Epoch)
         {
+            Array.Clear(shapes, 0, shapeCount);
+            shapeCount = 0;
+            nextVictim = 0;
             epoch = Epoch;
-            isAffliction = AfflictionPrefab.Prefabs.ContainsKey(name);
-            Array.Clear(shapes);
-            shapeCount = nextVictim = 0;
         }
-        if (isAffliction) { return notEquals; }
-        Dictionary<Identifier, SerializableProperty> props = target.SerializableProperties;
-        if (props == null) { return notEquals; }
-        Shape s = ShapeOf(props);
-        switch (s.Value)
-        {
-            case Value.Missing: return notEquals;
-            case Value.Number:
-                if (!hasNumber) { return notEquals; }
-                return PropertyConditional.CompareFloat(ReadFloat(s, target), number, op);
-            case Value.Bool:
-                bool equal = ReadBool(s, target) == expectedBool;
-                return notEquals ? !equal : equal;
-            default: return Source.MatchesDirect(target);
-        }
-    }
 
-    Shape ShapeOf(Dictionary<Identifier, SerializableProperty> props)
-    {
-        Shape[] a = shapes;
         for (int i = 0; i < shapeCount; i++)
         {
-            Shape s = a[i];
-            if (ReferenceEquals(s.Dict, props))
-            {
-                if (s.Count != props.Count) { Resolve(s, props); }
-                return s;
-            }
+            if (ReferenceEquals(shapes[i].Dict, map)) { return shapes[i]; }
         }
-        Shape fresh = new Shape();
-        Resolve(fresh, props);
-        if (shapeCount < MaxShapes) { a[shapeCount++] = fresh; }
+
+        var shape = new TargetShape { Dict = map };
+        if (!map.TryGetValue(name, out SerializableProperty prop) || prop == null)
+        {
+            shape.Value = Value.Missing;
+        }
         else
         {
-            a[nextVictim] = fresh;
+            shape.Prop = prop;
+            shape.Access = PropertyAccess.Of(prop);
+            Type pType = prop.PropertyType;
+            if (hasNumber && (pType == typeof(float) || pType == typeof(int)))
+            {
+                shape.Value = Value.Number;
+            }
+            else if (pType == typeof(bool))
+            {
+                shape.Value = Value.Bool;
+            }
+            else
+            {
+                shape.Value = Value.Other;
+            }
+        }
+
+        if (shapeCount < MaxShapes)
+        {
+            shapes[shapeCount++] = shape;
+        }
+        else
+        {
+            shapes[nextVictim] = shape;
             nextVictim = (nextVictim + 1) % MaxShapes;
         }
-        return fresh;
-    }
 
-    void Resolve(Shape s, Dictionary<Identifier, SerializableProperty> props)
-    {
-        s.Dict = props;
-        s.Count = props.Count;
-        s.FloatGetter = null;
-        s.BoolGetter = null;
-        if (!props.TryGetValue(name, out s.Prop))
-        {
-            s.Prop = null;
-            s.Value = Value.Missing;
-            return;
-        }
-        Type t = s.Prop.PropertyType;
-        PropertyInfo info = s.Prop.PropertyInfo;
-        if (info == null || info.GetGetMethod(true) == null || info.DeclaringType == null || info.DeclaringType.IsValueType) { s.Value = Value.Other; return; }
-        if (t == typeof(float) || t == typeof(int))
-        {
-            s.Value = Value.Number;
-            s.FloatGetter = (Func<object, float>)GetterOf(info, typeof(float));
-        }
-        else if (op is Op.Equals or Op.NotEquals && t == typeof(bool))
-        {
-            s.Value = Value.Bool;
-            s.BoolGetter = (Func<object, bool>)GetterOf(info, typeof(bool));
-        }
-        else { s.Value = Value.Other; }
-    }
-
-    static float ReadFloat(Shape s, ISerializableEntity target)
-    {
-        try { return s.FloatGetter(target); }
-        catch (Exception) { return s.Prop.GetFloatValue(target); }
-    }
-
-    static bool ReadBool(Shape s, ISerializableEntity target)
-    {
-        try { return s.BoolGetter(target); }
-        catch (Exception) { return s.Prop.GetBoolValue(target); }
-    }
-
-    static Delegate GetterOf(PropertyInfo info, Type result)
-    {
-        lock (getters)
-        {
-            if (getters.TryGetValue(info, out Delegate d)) { return d; }
-            var dm = new DynamicMethod($"ie_get_{info.DeclaringType.Name}_{info.Name}", result, new[] { typeof(object) }, typeof(CompiledConditional).Module, skipVisibility: true);
-            ILGenerator il = dm.GetILGenerator();
-            il.Emit(OpCodes.Ldarg_0);
-            il.Emit(OpCodes.Castclass, info.DeclaringType);
-            il.Emit(OpCodes.Callvirt, info.GetGetMethod(true));
-            if (info.PropertyType == typeof(int)) { il.Emit(OpCodes.Conv_R4); }
-            il.Emit(OpCodes.Ret);
-            d = dm.CreateDelegate(result == typeof(float) ? typeof(Func<object, float>) : typeof(Func<object, bool>));
-            getters[info] = d;
-            return d;
-        }
+        return shape;
     }
 }

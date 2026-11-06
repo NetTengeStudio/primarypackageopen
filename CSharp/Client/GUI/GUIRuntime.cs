@@ -5,6 +5,7 @@ using Barotrauma;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Linq;
 using PrimaryPackage.Core;
 
 namespace PrimaryPackage.GUI;
@@ -160,10 +161,39 @@ public sealed class GUIRuntime : IDisposable {
 public sealed class GUIBridge : IModule {
     private GUIRuntime runtime;
     public static bool BlocksWorld => GUIRuntime.Instance?.Input.BlocksWorld == true || GUIRuntime.Instance?.OverlayCapture == true;
+    internal static bool CapturesCustomViewInput => BlocksWorld || GUIRuntime.Instance?.CapturesAim == true;
+    internal static bool CapturesCharacterInput(Character character) {
+        if (character != Character.Controlled) { return false; }
+        return Screen.Selected is SubEditorScreen editor && editor.dummyCharacter == character ? CapturesCustomViewInput : CapturesViewInput;
+    }
     // Native widgets retain their raw input; only world consumers use this capture.
-    internal static bool CapturesViewInput => BlocksWorld || GUIRuntime.Instance?.CapturesAim == true ||
-        Character.IsMouseOnUI || Barotrauma.GUI.InputBlockingMenuOpen ||
-        Barotrauma.GUI.KeyboardDispatcher.Subscriber != null || DebugConsole.IsOpen;
+    internal static bool CapturesViewInput {
+        get {
+            if (CapturesCustomViewInput) { return true; }
+            if (Barotrauma.GUI.MouseOn != null) { return true; }
+            if (Barotrauma.GUI.InputBlockingMenuOpen || Barotrauma.GUI.PauseMenuOpen || Barotrauma.GUI.SettingsMenuOpen) { return true; }
+            if (Barotrauma.GUI.KeyboardDispatcher.Subscriber != null) { return true; }
+            if (DebugConsole.IsOpen) { return true; }
+            if (CharacterInventory.DraggingItemToWorld) { return false; }
+            if (Inventory.IsMouseOnInventory) { return true; }
+            if (Character.IsMouseOnUI) { return true; }
+            if (CharacterHealth.OpenHealthWindow != null) { return true; }
+            if (CrewManager.IsCommandInterfaceOpen) { return true; }
+            if (ConversationAction.IsDialogOpen) { return true; }
+            if (GameSession.IsTabMenuOpen) { return true; }
+            if (GameMain.GameSession?.Campaign != null && (GameMain.GameSession.Campaign.ShowCampaignUI || GameMain.GameSession.Campaign.ForceMapUI)) { return true; }
+            if (Screen.Selected is SubEditorScreen) { return true; }
+
+            Character controlled = Character.Controlled;
+            if (controlled != null) {
+                if (controlled.SelectedCharacter != null) { return true; }
+                if (controlled.SelectedItem != null && controlled.SelectedItem.Components.Any(ic => ic?.GuiFrame != null && ic.ShouldDrawHUD(controlled))) { return true; }
+            }
+            return false;
+        }
+    }
+
+
     public void Attach(Harmony harmony) {
         runtime = new GUIRuntime();
         harmony.Patch(AccessTools.Method(typeof(GameScreen), nameof(GameScreen.Update)),
@@ -179,18 +209,47 @@ public sealed class GUIBridge : IModule {
         harmony.CreateClassProcessor(typeof(GUICharacterUI)).Patch();
         harmony.CreateClassProcessor(typeof(GUIWorldMouse)).Patch();
         harmony.CreateClassProcessor(typeof(GUIWorldScroll)).Patch();
-        harmony.CreateClassProcessor(typeof(GUIWorldKeyboard)).Patch();
-        harmony.CreateClassProcessor(typeof(GUIWorldKeys)).Patch();
+        harmony.CreateClassProcessor(typeof(GUIWorldInputScope)).Patch();
+        harmony.CreateClassProcessor(typeof(GUICharacterKeys)).Patch();
         harmony.Patch(AccessTools.Method(typeof(Barotrauma.GUI), "DrawCursor"), prefix: ModuleHost.Bind(typeof(GUIBridge), nameof(CursorPrefix)));
+        harmony.Patch(AccessTools.Method(typeof(Barotrauma.GUI), "UpdateMouseCursorState"), prefix: ModuleHost.Bind(typeof(GUIBridge), nameof(ResolveCursor)));
+        harmony.Patch(AccessTools.Method(typeof(Barotrauma.GUI), nameof(Barotrauma.GUI.UpdateMouseOn)), prefix: ModuleHost.Bind(typeof(GUIBridge), nameof(ValidateMouseCapture)));
     }
     public static void UpdatePrefix() {
+        if (Screen.Selected != GameMain.GameScreen) { return; }
+        UpdateEditorInput();
+    }
+    internal static void UpdateEditorInput() {
+        // Persistent menus are appended inside GUI.Update, after the world's update.
+        // Resolving hover against the earlier world-only list steals their pressed
+        // button capture before GUI.Update can see the menu again.
+        if (!GameMain.WindowActive || Barotrauma.GUI.InputBlockingMenuOpen || DebugConsole.IsOpen) {
+            GUIRuntime.Instance?.Update();
+            return;
+        }
+        Barotrauma.GUI.RefreshUpdateList();
         Barotrauma.GUI.UpdateMouseOn();
         GUIRuntime.Instance?.Update();
     }
     public static void UpdateListPostfix() => GUIRuntime.Instance?.AddNativeSurfaces();
     public static void ValidatePrefix() {
-        if (Screen.Selected != GameMain.GameScreen) { Barotrauma.GUI.UpdateMouseOn(); GUIRuntime.Instance?.Update(); }
+        if (Screen.Selected != GameMain.GameScreen && Screen.Selected is not PrimaryPackage.SubEditor.LiveEditorScreen) { UpdateEditorInput(); }
         else if (!GameMain.WindowActive || Barotrauma.GUI.InputBlockingMenuOpen || DebugConsole.IsOpen) { GUIRuntime.Instance?.Reset(); }
+    }
+    private static bool ResolveCursor(Barotrauma.GUIComponent c, ref CursorState __result) {
+        if (Barotrauma.GUI.MouseCursor == CursorState.Waiting || GUIScrollBar.DraggingBar != null) { return true; }
+        if (GUIRuntime.Instance?.Input.TryGetCursor(out __result) == true) { return false; }
+        if (Screen.Selected is PrimaryPackage.SubEditor.LiveEditorScreen && SubEditorScreen.DraggedItemPrefab == null && (c == null || c is GUICustomComponent) && Inventory.IsMouseOnInventory) {
+            __result = Inventory.GetInventoryMouseCursor();
+            return false;
+        }
+        return true;
+    }
+    private static void ValidateMouseCapture() {
+        lock (Barotrauma.GUI.mutex) {
+            Barotrauma.GUIComponent previous = Barotrauma.GUI.MouseOn;
+            if (previous != null && (!Barotrauma.GUI.updateListSet.Contains(previous) || !previous.Visible)) { Barotrauma.GUI.ForceMouseOn(null); }
+        }
     }
     public static void CursorPrefix(SpriteBatch spriteBatch) {
         if (!GameMain.WindowActive || GUIRuntime.Instance == null) { return; }

@@ -22,8 +22,14 @@ public sealed class GUIInput {
     public GUIComponent Focus { get; private set; }
     public bool BlocksWorld { get; private set; }
     public Vector2 Pointer { get; private set; }
-    public event Action<Vector2, bool, bool> WorldPressed;
+    internal bool TryGetCursor(out CursorState cursor) {
+        cursor = dragged != null ? CursorState.Dragging
+            : (captured ?? hovered) is TextInput ? CursorState.IBeam
+            : (captured ?? hovered) != null ? CursorState.Hand : CursorState.Default;
+        return BlocksWorld;
+    }
     public event Action<Keys> Shortcut;
+    internal event Action<Vector2> WorldPrimaryPressed;
     public void ConsumeShortcut() => shortcutConsumed = true;
     private bool DispatchShortcut(Keys key) { shortcutConsumed = false; Shortcut?.Invoke(key); return shortcutConsumed; }
     internal GUIInput(GUIRuntime runtime) { this.runtime = runtime; previousMouse = Mouse.GetState(); previousKeyboard = Keyboard.GetState(); }
@@ -35,7 +41,6 @@ public sealed class GUIInput {
         bool down = mouse.LeftButton == ButtonState.Pressed;
         bool pressed = down && previousMouse.LeftButton == ButtonState.Released;
         bool released = !down && previousMouse.LeftButton == ButtonState.Pressed;
-        bool secondary = mouse.RightButton == ButtonState.Pressed && previousMouse.RightButton == ButtonState.Released;
         if (Focus is TextInput && !ReferenceEquals(Barotrauma.GUI.KeyboardDispatcher.Subscriber, Focus)) { SetFocus(null); }
         var windows = runtime.Windows.Windows;
         GUIComponent hit = null;
@@ -107,11 +112,8 @@ public sealed class GUIInput {
             if (keyboard.IsKeyDown(Keys.Down) && previousKeyboard.IsKeyUp(Keys.Down)) { Focus.Navigate(1); }
         }
         if (keyboard.IsKeyDown(Keys.F5) && previousKeyboard.IsKeyUp(Keys.F5)) { DispatchShortcut(Keys.F5); }
-        if (keyboard.IsKeyDown(Keys.F4) && previousKeyboard.IsKeyUp(Keys.F4)) { DispatchShortcut(Keys.F4); }
         if (keyboard.IsKeyDown(Keys.F2) && previousKeyboard.IsKeyUp(Keys.F2)) { DispatchShortcut(Keys.F2); }
-        if (!BlocksWorld && Barotrauma.GUI.MouseOn == null && Barotrauma.GUI.KeyboardDispatcher.Subscriber == null && (pressed || secondary)) {
-            WorldPressed?.Invoke(Pointer, pressed, secondary);
-        }
+        if (pressed && runtime.ViewportInputAvailable && !runtime.OverlayCapture) { WorldPrimaryPressed?.Invoke(Pointer); }
         previousMouse = mouse;
         previousKeyboard = keyboard;
         if (!down && mouse.RightButton == ButtonState.Released) { consumeUntilRelease = false; }
@@ -194,5 +196,5 @@ public sealed class GUIInput {
         if (previous != null) { previous.Pressed = false; previous.Invalidate(GUIDirty.Style); previous.CancelInteraction(); }
     }
     public void ConsumePointer() { consumeUntilRelease = true; BlocksWorld = true; }
-    internal void Release() { Cancel(); WorldPressed = null; Shortcut = null; }
+    internal void Release() { Cancel(); Shortcut = null; WorldPrimaryPressed = null; }
 }

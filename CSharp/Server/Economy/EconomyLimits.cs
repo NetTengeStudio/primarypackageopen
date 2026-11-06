@@ -1,4 +1,5 @@
-﻿using Barotrauma.Networking;
+using INet;
+using Barotrauma.Networking;
 using PrimaryPackage.Core;
 
 namespace PrimaryPackage.Economy {

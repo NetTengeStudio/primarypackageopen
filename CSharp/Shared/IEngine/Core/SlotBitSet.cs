@@ -44,7 +44,7 @@ public sealed class SlotBitSet
     public void Clear(int slot)
     {
         int w = slot >> 6;
-        if (w >= words.Length) { return; }
+        if ((uint)w >= (uint)words.Length) { return; }
         ulong before = words[w], after = before & ~(1UL << slot);
         if (before == after) { return; }
         words[w] = after;
@@ -55,37 +55,52 @@ public sealed class SlotBitSet
     public bool Get(int slot)
     {
         int w = slot >> 6;
-        return w < words.Length && (words[w] & (1UL << slot)) != 0;
+        return (uint)w < (uint)words.Length && (words[w] & (1UL << slot)) != 0;
     }
 
     public int Next(int from)
     {
         int w = from >> 6;
         ulong[] ws = words;
-        if (w >= ws.Length) { return -1; }
+        if ((uint)w >= (uint)ws.Length) { return -1; }
         ulong bits = ws[w] & (ulong.MaxValue << from);
         if (bits != 0) { return (w << 6) + BitOperations.TrailingZeroCount(bits); }
-        if (++w == ws.Length) { return -1; }
-        if (ws[w] == 0) { w = NextOccupiedWord(w + 1); }
-        if (w < 0) { return -1; }
-        bits = ws[w];
-        return (w << 6) + BitOperations.TrailingZeroCount(bits);
+        if (++w >= ws.Length) { return -1; }
+        ulong cur = ws[w];
+        if (cur == 0)
+        {
+            w = NextOccupiedWord(w + 1);
+            if (w < 0) { return -1; }
+            cur = ws[w];
+        }
+        return (w << 6) + BitOperations.TrailingZeroCount(cur);
     }
 
     public int NextAndNot(SlotBitSet mask, int from)
     {
         int w = from >> 6;
-        ulong[] ws = words, ms = mask.words;
-        if (w >= ws.Length) { return -1; }
-        ulong bits = ws[w] & (w < ms.Length ? ~ms[w] : ulong.MaxValue) & (ulong.MaxValue << from);
-        while (bits == 0)
+        ulong[] ws = words;
+        if ((uint)w >= (uint)ws.Length) { return -1; }
+        ulong[] ms = mask.words;
+        int msLen = ms.Length;
+        ulong bits = ws[w] & ((uint)w < (uint)msLen ? ~ms[w] : ulong.MaxValue) & (ulong.MaxValue << from);
+        if (bits != 0) { return (w << 6) + BitOperations.TrailingZeroCount(bits); }
+        while (true)
         {
-            if (++w == ws.Length) { return -1; }
-            if (ws[w] == 0) { w = NextOccupiedWord(w + 1); }
-            if (w < 0) { return -1; }
-            bits = ws[w] & (w < ms.Length ? ~ms[w] : ulong.MaxValue);
+            if (++w >= ws.Length) { return -1; }
+            ulong word = ws[w];
+            if (word == 0)
+            {
+                w = NextOccupiedWord(w + 1);
+                if (w < 0) { return -1; }
+                word = ws[w];
+            }
+            bits = word & ((uint)w < (uint)msLen ? ~ms[w] : ulong.MaxValue);
+            if (bits != 0)
+            {
+                return (w << 6) + BitOperations.TrailingZeroCount(bits);
+            }
         }
-        return (w << 6) + BitOperations.TrailingZeroCount(bits);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -93,11 +108,11 @@ public sealed class SlotBitSet
     {
         int group = from >> 6;
         ulong[] summary = occupied;
-        if (group >= summary.Length) { return -1; }
+        if ((uint)group >= (uint)summary.Length) { return -1; }
         ulong bits = summary[group] & (ulong.MaxValue << from);
         while (bits == 0)
         {
-            if (++group == summary.Length) { return -1; }
+            if (++group >= summary.Length) { return -1; }
             bits = summary[group];
         }
         return (group << 6) + BitOperations.TrailingZeroCount(bits);

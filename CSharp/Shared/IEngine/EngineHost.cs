@@ -41,7 +41,14 @@ public static class EngineHost
 
     public static void LoadCompleted()
     {
-        if (harmony != null) { Runtime.OnLoadCompleted(); }
+        if (harmony != null)
+        {
+            Runtime.OnLoadCompleted();
+            if (Environment.GetEnvironmentVariable("IE_SEQ") is { Length: > 0 } seq)
+            {
+                Sequencer.Start(seq);
+            }
+        }
     }
 
     public static void Stop()

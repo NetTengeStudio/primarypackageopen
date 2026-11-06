@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Barotrauma;
 using Barotrauma.Items.Components;
 using Barotrauma.LuaCs;
@@ -16,7 +16,7 @@ namespace PrimaryPackage.Documents {
             if (!subsystemEnabled) { return; }
             harmony.Patch(AccessTools.Method(typeof(Holdable), nameof(Holdable.Use)),
                 prefix: new HarmonyMethod(AccessTools.Method(typeof(StampDefinitions), nameof(StampDefinitions.HoldableUsePrefix))));
-            PrimaryPackage.Core.ModNet.Receive(StampDefinitions.ApplyNetId, OnStampRequest, 0.25);
+            INet.Net.Receive(StampDefinitions.ApplyNetId, OnStampRequest, 0.25);
         }
         public void Release() {
         }

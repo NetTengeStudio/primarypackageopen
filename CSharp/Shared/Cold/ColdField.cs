@@ -89,6 +89,14 @@ namespace PrimaryPackage.Cold {
             return i < 0 ? ColdConfig.BaseTemperature : shown[i];
         }
 
+        public static void ApplyNetworkHullTemperature(ushort hullId, float value) {
+            if (Entity.FindEntityByID(hullId) is Hull hull) {
+                Set(hull, value);
+            } else {
+                restored[hullId] = Clamp(value);
+            }
+        }
+
         public static void Set(Hull hull, float value) {
             int i = IndexOf(hull);
             if (i < 0) { return; }

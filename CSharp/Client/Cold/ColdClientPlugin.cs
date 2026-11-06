@@ -40,6 +40,7 @@ using GUI = global::Barotrauma.GUI;
 
 
         public void Release() {
+            ColdClientNet.Release();
             ColdDebug.Disable();
             ColdDebugMap.Release();
             ColdVisuals.Dispose();

@@ -110,12 +110,19 @@ sealed class FireFeature : Feature
         if (verify) { Verify(hull); }
         SlotBitSet set = HullIndex.Of(hull);
         if (set == null) { return false; }
+        float reach = MathF.Sqrt(__instance.size.X) * 10f;
+        float minX = __instance.position.X - reach;
+        float maxX = __instance.position.X + __instance.size.X + reach;
+        float minY = __instance.position.Y - __instance.size.Y;
+        float maxY = (float)hull.Rect.Y;
         Item[] items = ItemRegistry.Items;
         for (int slot = set.Next(0); slot >= 0; slot = set.Next(slot + 1))
         {
             Item item = items[slot];
             candidates++;
             if (item.CurrentHull != hull || item.FireProof || item.Condition <= 0f) { continue; }
+            var pos = item.Position;
+            if (pos.X < minX || pos.X > maxX || pos.Y < minY || pos.Y > maxY) { continue; }
             Item container = item.Container;
             bool fireProof = false;
             while (container != null)
@@ -128,9 +135,6 @@ sealed class FireFeature : Feature
                 container = container.Container;
             }
             if (fireProof) { continue; }
-            float reach = (float)Math.Sqrt(__instance.size.X) * 10f;
-            if (item.Position.X < __instance.position.X - reach || item.Position.X > __instance.position.X + __instance.size.X + reach ||
-                item.Position.Y < __instance.position.Y - __instance.size.Y || item.Position.Y > (float)hull.Rect.Y) { continue; }
             item.ApplyStatusEffects(ActionType.OnFire, deltaTime);
             if (item.Condition <= 0f)
             {

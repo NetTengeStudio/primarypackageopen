@@ -86,7 +86,7 @@ namespace PrimaryPackage.Documents {
                 .FirstOrDefault(mark => mark != null && mark.GetStamps().Count < 5);
         }
         private static void SendStampRequest(Item document, Identifier stampId, Vector2 offset, float rotation) {
-            PrimaryPackage.Core.ModNet.Send(StampDefinitions.ApplyNetId, msg => {
+            INet.Net.Send(StampDefinitions.ApplyNetId, msg => {
                 msg.WriteUInt16(document.ID);
                 msg.WriteIdentifier(stampId);
                 msg.WriteSingle(offset.X);

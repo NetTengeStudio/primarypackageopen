@@ -31,20 +31,38 @@ sealed class SchedulerFeature : Feature
     internal override void OnLoadCompleted()
     {
         PerformanceFixBridge.Detect();
-        if (Active) { PerformanceFixBridge.Neutralize(); }
+        if (Active)
+        {
+            PerformanceFixBridge.Neutralize();
+            MapEntity.MapEntityUpdateInterval = 2;
+        }
     }
 
     protected override void OnToggled()
     {
-        if (Active) { PerformanceFixBridge.Neutralize(); }
+        if (Active)
+        {
+            PerformanceFixBridge.Neutralize();
+            MapEntity.MapEntityUpdateInterval = 2;
+        }
+        else
+        {
+            MapEntity.MapEntityUpdateInterval = 1;
+        }
     }
 
     static void RoundStarted()
     {
         if (!On) { return; }
         System.Array.Clear(owners);
+        MapEntity.MapEntityUpdateInterval = 2;
         PerformanceFixBridge.RoundStarted();
         lateNeutralize = LateNeutralizeTicks;
+    }
+
+    internal override void Uninstall()
+    {
+        MapEntity.MapEntityUpdateInterval = 1;
     }
 
     public static void BeginTick()
@@ -55,8 +73,8 @@ sealed class SchedulerFeature : Feature
 
     public static bool IsEveryTick(int slot, Item item)
     {
-        if (!PerformanceFixBridge.Present) { return false; }
-        if (PerformanceFixBridge.Hands && item.ParentInventory is CharacterInventory { Owner: Character owner } && owner.HasEquippedItem(item)) { return true; }
+        if (item.ParentInventory is CharacterInventory { Owner: Character owner } && owner.HasEquippedItem(item)) { return true; }
+        if (item.body != null && item.body.Enabled && item.body.LinearVelocity.LengthSquared() > 0.05f) { return true; }
         if (slot >= owners.Length)
         {
             int size = System.Math.Max(slot + 1, owners.Length * 2);
@@ -66,9 +84,26 @@ sealed class SchedulerFeature : Feature
         if (!ReferenceEquals(owners[slot], item))
         {
             owners[slot] = item;
-            classes[slot] = PerformanceFixBridge.IsStaticPriority(item) ? (byte)1 : (byte)0;
+            classes[slot] = ClassifyItem(item) ? (byte)1 : (byte)0;
         }
         return classes[slot] != 0;
+    }
+
+    static bool ClassifyItem(Item item)
+    {
+        if (PerformanceFixBridge.Present && PerformanceFixBridge.IsStaticPriority(item)) { return true; }
+        if (item.HasTag("highpriority".ToIdentifier())) { return true; }
+        foreach (Barotrauma.Items.Components.ItemComponent c in item.Components)
+        {
+            switch (c)
+            {
+                case Barotrauma.Items.Components.Turret or Barotrauma.Items.Components.Engine or Barotrauma.Items.Components.Reactor or Barotrauma.Items.Components.Pump or Barotrauma.Items.Components.Sonar or Barotrauma.Items.Components.Controller or Barotrauma.Items.Components.Steering:
+                case Barotrauma.Items.Components.RangedWeapon or Barotrauma.Items.Components.MeleeWeapon or Barotrauma.Items.Components.Projectile or Barotrauma.Items.Components.RepairTool:
+                case Barotrauma.Items.Components.MotionSensor or Barotrauma.Items.Components.Door:
+                    return true;
+            }
+        }
+        return false;
     }
 
     public override string Report() =>

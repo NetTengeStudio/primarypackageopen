@@ -18,5 +18,6 @@ public enum Phase : byte
     Draw,
     Present,
     Frame,
+    Spawning,
     Count
 }

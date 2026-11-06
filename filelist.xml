@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<contentpackage name="Primary package" modversion="1.1.4" corepackage="False" steamworkshopid="3831772123" gameversion="1.13.5.0">
+<contentpackage name="Primary Package 2" modversion="1.1.5" corepackage="False" steamworkshopid="3834840920" gameversion="1.13.5.0">
   <Text file="%ModDir%/Content/Texts/barotrauma_items.xml" />
   <Text file="%ModDir%/Content/Texts/custom_mods_text.xml" />
   <Text file="%ModDir%/Content/Texts/thoughts_russian.xml" />

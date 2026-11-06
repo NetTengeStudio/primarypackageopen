@@ -1,0 +1,6 @@
+C:\Steam\steamapps\common\Barotrauma\LocalMods\Primary package\Tests\SubEditorContracts\obj\Debug\net8.0\SubEditorContracts.csproj.AssemblyReference.cache
+C:\Steam\steamapps\common\Barotrauma\LocalMods\Primary package\Tests\SubEditorContracts\obj\Debug\net8.0\SubEditorContracts.GeneratedMSBuildEditorConfig.editorconfig
+C:\Steam\steamapps\common\Barotrauma\LocalMods\Primary package\Tests\SubEditorContracts\obj\Debug\net8.0\SubEditorContracts.AssemblyInfoInputs.cache
+C:\Steam\steamapps\common\Barotrauma\LocalMods\Primary package\Tests\SubEditorContracts\obj\Debug\net8.0\SubEditorContracts.AssemblyInfo.cs
+C:\Steam\steamapps\common\Barotrauma\LocalMods\Primary package\Tests\SubEditorContracts\obj\Debug\net8.0\SubEditorContracts.csproj.CoreCompileInputs.cache
+C:\Steam\steamapps\common\Barotrauma\LocalMods\Primary package\Tests\SubEditorContracts\obj\Debug\net8.0\SubEditorContracts.sourcelink.json

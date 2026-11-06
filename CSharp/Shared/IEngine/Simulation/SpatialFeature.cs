@@ -10,7 +10,6 @@ sealed class SpatialFeature : Feature
     static SpatialFeature instance;
 
     public override string Name => "spatial";
-    public override bool OptIn => true;
 
     protected override string Install(Harmony harmony)
     {

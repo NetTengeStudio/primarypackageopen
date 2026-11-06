@@ -44,7 +44,7 @@ namespace MoreBlood
     public XElement ToXML()
     {
       return new XElement("ColorPoint",
-        new XAttribute("Color", XMLExtensions.ColorToString(Color)),
+        new XAttribute("Color", XMLExtensions.ToStringHex(Color)),
         new XAttribute("Lambda", Lambda)
       );
     }

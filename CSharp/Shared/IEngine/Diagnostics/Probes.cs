@@ -24,6 +24,7 @@ static partial class Probes
         EngineCounters.Install(harmony);
         Wrap(harmony, AccessTools.Method(typeof(GameScreen), nameof(GameScreen.Update)), nameof(TickPost));
         Wrap(harmony, AccessTools.Method(typeof(MapEntity), nameof(MapEntity.UpdateAll)), nameof(MapEntityPost));
+        Wrap(harmony, AccessTools.Method(typeof(EntitySpawner), nameof(EntitySpawner.Update)), nameof(SpawningPost));
         Wrap(harmony, AccessTools.Method(typeof(Powered), nameof(Powered.UpdatePower)), nameof(PowerPost));
         Wrap(harmony, AccessTools.Method(typeof(Character), nameof(Character.UpdateAll)), nameof(CharactersPost));
         Wrap(harmony, AccessTools.Method(typeof(Character), nameof(Character.UpdateAnimAll)), nameof(AnimationPost));
@@ -70,6 +71,7 @@ static partial class Probes
     }
 
     static void MapEntityPost(long __state) => Recorder.Add(Phase.MapEntity, __state);
+    static void SpawningPost(long __state) => Recorder.Add(Phase.Spawning, __state);
     static void PowerPost(long __state) => Recorder.Add(Phase.Power, __state);
     static void CharactersPost(long __state) => Recorder.Add(Phase.Characters, __state);
     static void AnimationPost(long __state) => Recorder.Add(Phase.Animation, __state);

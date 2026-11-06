@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <NuGetAudit>false</NuGetAudit>
+    <GameRoot>$(MSBuildThisFileDirectory)../../../../</GameRoot>
+    <EngineName Condition="'$(Server)' != 'true'">Barotrauma</EngineName>
+    <EngineName Condition="'$(Server)' == 'true'">DedicatedServer</EngineName>
+    <DefineConstants Condition="'$(Server)' == 'true'">$(DefineConstants);SERVER</DefineConstants>
+    <DefineConstants Condition="'$(Server)' != 'true'">$(DefineConstants);CLIENT</DefineConstants>
+    <AssemblyName>OnlineEditor.$(EngineName)</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="$(EngineName)" HintPath="$(GameRoot)Publicized/$(EngineName).dll" Private="false" />
+    <Reference Include="BarotraumaCore" HintPath="$(GameRoot)Publicized/BarotraumaCore.dll" Private="false" />
+    <Reference Include="0Harmony" HintPath="$(GameRoot)0Harmony.dll" Private="false" />
+    <Reference Include="MonoMod.Utils" HintPath="$(GameRoot)MonoMod.Utils.dll" Private="false" />
+    <Reference Include="XNATypes" HintPath="$(GameRoot)XNATypes.dll" Private="false" />
+    <Reference Include="MonoGame.Framework.Windows.NetStandard" HintPath="$(GameRoot)MonoGame.Framework.Windows.NetStandard.dll" Private="false" />
+  </ItemGroup>
+</Project>

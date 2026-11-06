@@ -1,134 +1,116 @@
 using System;
 using Barotrauma;
-using Barotrauma.LuaCs;
 using Barotrauma.Networking;
-using PrimaryPackage.Cold;
-using HarmonyLib;
+using INet;
 
 namespace PrimaryPackage.Cold {
     public static class ColdServerNet {
-        private static byte[] sent = Array.Empty<byte>();
-        private static ushort[] pending = Array.Empty<ushort>();
-        private static byte[] pendingValues = Array.Empty<byte>();
-        private static float keepAliveTimer;
-        private static float netTimer;
-        private static int knownVersion = -1;
-        private static bool initialized;
+        private static IDisposable listener;
+        private static float syncTimer;
+        private static float fullSyncTimer;
+        private static byte[] lastSent = Array.Empty<byte>();
 
-        public static double LastSentAt { get; private set; } = double.NegativeInfinity;
+        public static bool LastTickSilent { get; private set; }
+        public static long SentMessages { get; private set; }
+        public static double LastSentAt { get; private set; }
         public static int LastSentHulls { get; private set; }
-        public static int SentMessages { get; private set; }
-        public static bool LastTickSilent { get; private set; } = true;
-
-        public static void Reset() {
-            sent = Array.Empty<byte>();
-            knownVersion = -1;
-            keepAliveTimer = 0.0f;
-            netTimer = 0.0f;
-            LastSentAt = double.NegativeInfinity;
-            LastSentHulls = 0;
-            SentMessages = 0;
-            LastTickSilent = true;
-        }
 
         public static void Hook() {
-            if (initialized) { return; }
-            initialized = true;
-            PrimaryPackage.Core.ModNet.Receive(ColdNet.RequestId, OnRequest, 2.0);
+            listener ??= Net.Listen(ColdNet.RequestId, OnReceiveRequest, minInterval: 0.25);
         }
 
-        private static void OnRequest(IReadMessage msg, Client sender) {
-            if (sender?.Connection == null) { return; }
-            SendFull(sender.Connection);
-        }
-
-        public static void Broadcast(float step) {
+        public static void Update(float deltaTime) {
             if (GameMain.Server == null) { return; }
+            syncTimer += deltaTime;
+            fullSyncTimer += deltaTime;
+            if (syncTimer >= ColdConfig.NetInterval) {
+                syncTimer = 0.0f;
+                Broadcast();
+            }
+        }
+
+        private static void OnReceiveRequest(IReadMessage msg, Client sender) {
+            if (sender?.Connection == null || GameMain.Server == null) { return; }
             int count = ColdField.Count;
             if (count == 0) { return; }
+            Net.Send(ColdNet.StateId, sender.Connection, msgOut => WriteFullPayload(msgOut, count), DeliveryMethod.Reliable);
+        }
 
-            netTimer += step;
-            if (netTimer < ColdConfig.NetInterval) { return; }
-            float elapsed = netTimer;
-            netTimer = 0.0f;
-
-            bool forceAll = knownVersion != ColdField.Version;
-            if (forceAll) { knownVersion = ColdField.Version; }
-            if (sent.Length < count) {
-                sent = new byte[count];
-                forceAll = true;
-            }
-            if (pending.Length < count) {
-                pending = new ushort[count];
-                pendingValues = new byte[count];
+        public static void Broadcast(float step = 0.0f) {
+            int count = ColdField.Count;
+            if (count == 0 || GameMain.Server == null) { return; }
+            if (lastSent.Length < count) {
+                Array.Resize(ref lastSent, count);
             }
 
-            keepAliveTimer += elapsed;
-            bool keepAlive = ColdConfig.NetKeepAlive > 0.0f && keepAliveTimer >= ColdConfig.NetKeepAlive;
-            if (keepAlive) { keepAliveTimer = 0.0f; }
+            bool forceFull = fullSyncTimer >= 5.0f;
+            if (forceFull) {
+                fullSyncTimer = 0.0f;
+                Net.Broadcast(ColdNet.StateId, msgOut => WriteFullPayload(msgOut, count), DeliveryMethod.Unreliable, NetAudience.InGame);
+                return;
+            }
 
             int changed = 0;
             for (int i = 0; i < count; i++) {
                 byte q = ColdNet.Quantize(ColdField.Raw(i));
-                if (q == sent[i] && !forceAll && !keepAlive) { continue; }
-                sent[i] = q;
-                Hull hull = ColdField.HullAt(i);
-                if (hull == null) { continue; }
-                pending[changed] = hull.ID;
-                pendingValues[changed] = q;
-                changed++;
+                if (q != lastSent[i]) { changed++; }
             }
-            LastTickSilent = changed == 0;
-            if (changed == 0) { return; }
+
+            if (changed == 0) {
+                LastTickSilent = true;
+                return;
+            }
+
+            LastTickSilent = false;
+            SentMessages++;
             LastSentAt = Timing.TotalTime;
-            LastSentHulls = changed;
+            LastSentHulls = count;
 
-            int offset = 0;
-            while (offset < changed) {
-                int chunk = Math.Min(ColdNet.MaxPerMessage, changed - offset);
-                int start = offset;
-                int size = chunk;
-                PrimaryPackage.Core.ModNet.Broadcast(ColdNet.StateId, msg => {
-                    msg.WriteByte(0);
-                    msg.WriteUInt16((ushort)size);
-                    for (int i = 0; i < size; i++) {
-                        msg.WriteUInt16(pending[start + i]);
-                        msg.WriteByte(pendingValues[start + i]);
-                    }
-                });
-                SentMessages++;
-                offset += chunk;
+            if (changed > count / 2) {
+                fullSyncTimer = 0.0f;
+                Net.Broadcast(ColdNet.StateId, msgOut => WriteFullPayload(msgOut, count), DeliveryMethod.Unreliable, NetAudience.InGame);
+            } else {
+                Net.Broadcast(ColdNet.StateId, msgOut => WriteDeltaPayload(msgOut, count, changed), DeliveryMethod.Unreliable, NetAudience.InGame);
             }
         }
 
-        private static void SendFull(NetworkConnection connection) {
-            int count = ColdField.Count;
-            int offset = 0;
-            while (offset < count) {
-                int chunk = Math.Min(ColdNet.MaxPerMessage, count - offset);
-                int start = offset;
-                int size = chunk;
-                PrimaryPackage.Core.ModNet.Send(ColdNet.StateId, connection, msg => {
-                    msg.WriteByte(ColdNet.FlagFull);
-                    msg.WriteUInt16((ushort)size);
-                    for (int i = 0; i < size; i++) {
-                        Hull hull = ColdField.HullAt(start + i);
-                        msg.WriteUInt16(hull == null ? (ushort)0 : hull.ID);
-                        msg.WriteByte(ColdNet.Quantize(ColdField.Raw(start + i)));
-                    }
-                });
-                offset += chunk;
+        private static void WriteFullPayload(IWriteMessage msg, int count) {
+            msg.WriteByte(0);
+            msg.WriteUInt16((ushort)count);
+            for (int i = 0; i < count; i++) {
+                Hull h = ColdField.HullAt(i);
+                byte q = ColdNet.Quantize(ColdField.Raw(i));
+                if (i < lastSent.Length) { lastSent[i] = q; }
+                msg.WriteUInt16(h?.ID ?? 0);
+                msg.WriteByte(q);
             }
         }
-    }
 
-    public sealed class ColdServerPlugin : PrimaryPackage.Core.IModule {
-        public void RoundStart() { }
+        private static void WriteDeltaPayload(IWriteMessage msg, int count, int changed) {
+            msg.WriteByte(1);
+            NativeWire.WriteVarUInt32(msg, (uint)changed);
+            for (int i = 0; i < count; i++) {
+                byte q = ColdNet.Quantize(ColdField.Raw(i));
+                if (q != lastSent[i]) {
+                    lastSent[i] = q;
+                    Hull h = ColdField.HullAt(i);
+                    NativeWire.WriteVarUInt32(msg, h?.ID ?? 0);
+                    msg.WriteByte(q);
+                }
+            }
+        }
 
-        public void Attach(Harmony harmony) => ColdServerNet.Hook();
+        public static void Reset() {
+            syncTimer = 0.0f;
+            fullSyncTimer = 0.0f;
+            Array.Clear(lastSent, 0, lastSent.Length);
+        }
 
-
-
-        public void Release() {}
+        public static void Release() {
+            listener?.Dispose();
+            listener = null;
+            syncTimer = 0.0f;
+            fullSyncTimer = 0.0f;
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+#nullable enable
+using System;
 using Barotrauma;
 using Barotrauma.LuaCs;
 using HarmonyLib;

@@ -128,10 +128,10 @@ static class Dormancy
     public static void WakeSlot(int slot, Item item, byte mask)
     {
         if (slot >= reasons.Length) { return; }
-        Probe.Set(slot);
-        dirty[slot] = 0;
         byte r = reasons[slot];
         if ((r & mask) == 0) { return; }
+        Probe.Set(slot);
+        dirty[slot] = 0;
         byte left = (byte)(r & ~mask);
         if ((r & ByContainer) != 0 && (left & ByContainer) == 0)
         {

@@ -18,10 +18,109 @@ static class ContainerCore
     static readonly Dictionary<string, int> blockers = new();
     static readonly Dictionary<string, int> mismatchPrefabs = new();
     static readonly List<ISerializableEntity> targets = new(), valid = new();
-    static readonly HashSet<object> seenNow = new(ReferenceEqualityComparer.Instance);
-    static object[] lastDurations = Array.Empty<object>(), lastDelays = Array.Empty<object>();
-    static int lastDurationCount, lastDelayCount;
+    static readonly IEngine.Core.ReferenceSnapshot<DurationListElement> durationTags = new();
+    static readonly IEngine.Core.ReferenceSnapshot<DelayedListElement> delayTags = new();
+    static readonly HarmonyLib.AccessTools.FieldRef<List<DurationListElement>, int> DurationVersion = HarmonyLib.AccessTools.FieldRefAccess<List<DurationListElement>, int>("_version");
+    static readonly HarmonyLib.AccessTools.FieldRef<List<DelayedListElement>, int> DelayVersion = HarmonyLib.AccessTools.FieldRefAccess<List<DelayedListElement>, int>("_version");
+    static int lastDurationVersion = int.MinValue, lastDelayVersion = int.MinValue;
     static readonly ActionType[] periodicContained = { ActionType.Always, ActionType.OnContained, ActionType.NotInWater };
+
+    static readonly Func<CustomInterface, System.Collections.IList> GetCiElements = InitCiElementsGetter();
+    static readonly Func<object, float> GetCiInterval = InitCiIntervalGetter();
+    static readonly Func<object, bool> GetCiContinuous = InitCiContinuousGetter();
+    static readonly Func<object, object> GetCiConnection = InitCiConnectionGetter();
+    static readonly Func<object, int> GetCiEffectCount = InitCiEffectCountGetter();
+
+    static Func<CustomInterface, System.Collections.IList> InitCiElementsGetter()
+    {
+        try
+        {
+            var field = typeof(CustomInterface).GetField("customInterfaceElementList", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            if (field == null) { return null; }
+            var param = System.Linq.Expressions.Expression.Parameter(typeof(CustomInterface), "ci");
+            var access = System.Linq.Expressions.Expression.Field(param, field);
+            return System.Linq.Expressions.Expression.Lambda<Func<CustomInterface, System.Collections.IList>>(access, param).Compile();
+        }
+        catch { return null; }
+    }
+
+    static Func<object, float> InitCiIntervalGetter()
+    {
+        try
+        {
+            var elemType = typeof(CustomInterface).GetNestedType("CustomInterfaceElement", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public);
+            var prop = elemType?.GetProperty("GetValueInterval");
+            if (prop == null) { return null; }
+            var param = System.Linq.Expressions.Expression.Parameter(typeof(object), "el");
+            var cast = System.Linq.Expressions.Expression.Convert(param, elemType);
+            var call = System.Linq.Expressions.Expression.Property(cast, prop);
+            return System.Linq.Expressions.Expression.Lambda<Func<object, float>>(call, param).Compile();
+        }
+        catch { return null; }
+    }
+
+    static Func<object, bool> InitCiContinuousGetter()
+    {
+        try
+        {
+            var elemType = typeof(CustomInterface).GetNestedType("CustomInterfaceElement", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public);
+            var field = elemType?.GetField("ContinuousSignal");
+            if (field == null) { return null; }
+            var param = System.Linq.Expressions.Expression.Parameter(typeof(object), "el");
+            var cast = System.Linq.Expressions.Expression.Convert(param, elemType);
+            var access = System.Linq.Expressions.Expression.Field(cast, field);
+            return System.Linq.Expressions.Expression.Lambda<Func<object, bool>>(access, param).Compile();
+        }
+        catch { return null; }
+    }
+
+    static Func<object, object> InitCiConnectionGetter()
+    {
+        try
+        {
+            var elemType = typeof(CustomInterface).GetNestedType("CustomInterfaceElement", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public);
+            var field = elemType?.GetField("Connection");
+            if (field == null) { return null; }
+            var param = System.Linq.Expressions.Expression.Parameter(typeof(object), "el");
+            var cast = System.Linq.Expressions.Expression.Convert(param, elemType);
+            var access = System.Linq.Expressions.Expression.Field(cast, field);
+            return System.Linq.Expressions.Expression.Lambda<Func<object, object>>(System.Linq.Expressions.Expression.Convert(access, typeof(object)), param).Compile();
+        }
+        catch { return null; }
+    }
+
+    static Func<object, int> InitCiEffectCountGetter()
+    {
+        try
+        {
+            var elemType = typeof(CustomInterface).GetNestedType("CustomInterfaceElement", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public);
+            var field = elemType?.GetField("StatusEffects");
+            if (field == null) { return null; }
+            var prop = field.FieldType.GetProperty("Count");
+            var param = System.Linq.Expressions.Expression.Parameter(typeof(object), "el");
+            var cast = System.Linq.Expressions.Expression.Convert(param, elemType);
+            var access = System.Linq.Expressions.Expression.Field(cast, field);
+            var count = System.Linq.Expressions.Expression.Property(access, prop);
+            return System.Linq.Expressions.Expression.Lambda<Func<object, int>>(count, param).Compile();
+        }
+        catch { return null; }
+    }
+
+    static string CustomInterfaceBlocker(CustomInterface ci)
+    {
+        if (GetCiElements == null) { return "component CustomInterface"; }
+        var list = GetCiElements(ci);
+        if (list == null || list.Count == 0) { return null; }
+        for (int i = 0; i < list.Count; i++)
+        {
+            object el = list[i];
+            if (el == null) { continue; }
+            if (GetCiInterval != null && GetCiInterval(el) > 0f) { return "CustomInterface polling"; }
+            if (GetCiEffectCount != null && GetCiEffectCount(el) > 0) { return "CustomInterface status effect"; }
+            if (GetCiContinuous != null && GetCiConnection != null && GetCiContinuous(el) && GetCiConnection(el) != null) { return "CustomInterface continuous signal"; }
+        }
+        return null;
+    }
 
     public static void Update(Item item, int slot, float deltaTime, Camera cam)
     {
@@ -102,7 +201,7 @@ static class ContainerCore
         foreach (ItemComponent ic in item.updateableComponents)
         {
 #if CLIENT
-            if (ic.HasSounds) { return $"{ic.GetType().Name} sounds"; }
+            if ((ic.loopingSoundChannel != null && ic.loopingSoundChannel.IsPlaying) || (ic.playingOneshotSoundChannels != null && ic.playingOneshotSoundChannels.Count > 0)) { return $"{ic.GetType().Name} active sound"; }
 #endif
             if (ic.IsActiveConditionals != null && !StableConditionals(ic.IsActiveConditionals, item)) { return $"{ic.GetType().Name} volatile IsActive conditionals"; }
             if (!(ic.IsActive || ic.UpdateWhenInactive)) { continue; }
@@ -117,6 +216,18 @@ static class ContainerCore
                     }
                     break;
                 case EqualsComponent or BooleanOperatorComponent or ArithmeticComponent or StringComponent or MemoryComponent or ColorComponent or NotComponent:
+                    break;
+                case CustomInterface ci:
+                    if (CustomInterfaceBlocker(ci) is { } cib) { return cib; }
+                    break;
+                case Turret turret:
+                    if (turret.AutoOperate || turret.ActiveUser != null) { return "active turret"; }
+                    break;
+                case Sonar sonar:
+                    if (sonar.CurrentMode == Sonar.Mode.Active) { return "active sonar"; }
+                    break;
+                case LightComponent light:
+                    if (light.IsOn) { return "light on"; }
                     break;
                 default:
                     return $"component {ic.GetType().Name}";
@@ -154,13 +265,7 @@ static class ContainerCore
         bool hasTargets = effect.TargetIdentifiers == null;
         if (effect.HasTargetType(StatusEffect.TargetType.Contained))
         {
-            foreach (Item contained in item.ContainedItems)
-            {
-                if (effect.TargetIdentifiers != null && !effect.TargetIdentifiers.Contains(((MapEntity)contained).Prefab.Identifier) && !effect.TargetIdentifiers.Any(id => contained.HasTag(id))) { continue; }
-                if (effect.TargetSlot > -1 && !item.OwnInventory.GetItemsAt(effect.TargetSlot).Contains(contained)) { continue; }
-                hasTargets = true;
-                targets.AddRange(contained.AllPropertyObjects);
-            }
+            hasTargets |= ContainedTargetsFeature.Append(item, effect, targets);
         }
         if (!hasTargets) { return null; }
         if (effect.HasTargetType(StatusEffect.TargetType.This)) { targets.AddRange(item.AllPropertyObjects); }
@@ -171,7 +276,7 @@ static class ContainerCore
     static string EffectBlocker(StatusEffect effect, Item entity, List<ISerializableEntity> effectTargets)
     {
         if (effect.Disabled) { return null; }
-        if (effect.Interval > 0 && effect.intervalTimers != null && effect.intervalTimers.TryGetValue(entity, out float timer) && timer > 0)
+        if (effect.Interval > 0 && StatusEffectRef.IntervalTimers(effect) is { } timers && timers.TryGetValue(entity, out float timer) && timer > 0)
         {
             wakeAfter = Math.Min(wakeAfter, timer);
             return null;
@@ -179,7 +284,7 @@ static class ContainerCore
         EffectInfo info = EffectAnalysis.Of(effect);
         if (!info.Supported)
         {
-            if (info.GateOnContainerOnly && effect is not DelayedEffect && effect.requiredItems == null && ContainerGateFails(effect, entity)) { return null; }
+            if (info.GateOnContainerOnly && effect is not DelayedEffect && StatusEffectRef.RequiredItems(effect) == null && ContainerGateFails(effect, entity)) { return null; }
             return $"effect {info.Blocker}";
         }
         if (effectTargets != null && StableReads(info, effect, entity, effectTargets) is { } volatileRead) { return $"volatile read {volatileRead}"; }
@@ -264,32 +369,25 @@ static class ContainerCore
 
     public static void BeginTick()
     {
+        var durations = StatusEffect.DurationList;
+        var delays = DelayedEffect.DelayList;
+        int dv = DurationVersion(durations);
+        int lv = DelayVersion(delays);
+        if (dv == lastDurationVersion && lv == lastDelayVersion) { return; }
         long t0 = System.Diagnostics.Stopwatch.GetTimestamp();
-        WakeChangedTags(StatusEffect.DurationList, ref lastDurations, ref lastDurationCount, static e => ((DurationListElement)e) is { Parent.statusEffectTags.Count: > 0 } d ? d.Targets : null);
-        WakeChangedTags(DelayedEffect.DelayList, ref lastDelays, ref lastDelayCount, static e => ((DelayedListElement)e) is { Parent.statusEffectTags.Count: > 0 } d ? d.Targets : null);
-        TagDiffCost.Add(System.Diagnostics.Stopwatch.GetTimestamp() - t0);
-    }
-
-    static void WakeChangedTags<T>(List<T> list, ref object[] last, ref int lastCount, Func<object, List<ISerializableEntity>> targetsOf) where T : class
-    {
-        int n = list.Count;
-        bool same = n == lastCount;
-        for (int i = 0; same && i < n; i++) { same = ReferenceEquals(list[i], last[i]); }
-        if (same) { return; }
-        if (Dormancy.Count > 0)
+        if (dv != lastDurationVersion)
         {
-            seenNow.Clear();
-            foreach (T e in list) { seenNow.Add(e); }
-            for (int i = 0; i < lastCount; i++) { if (!seenNow.Contains(last[i])) { WakeTargets(targetsOf(last[i])); } }
-            seenNow.Clear();
-            for (int i = 0; i < lastCount; i++) { seenNow.Add(last[i]); }
-            foreach (T e in list) { if (!seenNow.Contains(e)) { WakeTargets(targetsOf(e)); } }
-            seenNow.Clear();
+            durationTags.Update(durations, static e => e is { Parent.statusEffectTags.Count: > 0 },
+                Dormancy.Count > 0 ? static e => WakeTargets(e.Targets) : null);
+            lastDurationVersion = dv;
         }
-        if (last.Length < n) { last = new object[Math.Max(n, last.Length * 2)]; }
-        for (int i = 0; i < n; i++) { last[i] = list[i]; }
-        Array.Clear(last, n, Math.Max(0, lastCount - n));
-        lastCount = n;
+        if (lv != lastDelayVersion)
+        {
+            delayTags.Update(delays, static e => e is { Parent.statusEffectTags.Count: > 0 },
+                Dormancy.Count > 0 ? static e => WakeTargets(e.Targets) : null);
+            lastDelayVersion = lv;
+        }
+        TagDiffCost.Add(System.Diagnostics.Stopwatch.GetTimestamp() - t0);
     }
 
     static void WakeTargets(List<ISerializableEntity> list)
@@ -300,17 +398,21 @@ static class ContainerCore
         {
             switch (t)
             {
-                case Item i: WakeHooks.WakeNear(i); break;
-                case ItemComponent c: WakeHooks.WakeNear(c.Item); break;
+                case Item i:
+                    if (ItemRegistry.TryGetSlot(i, out int s) && Dormancy.ReasonsOf(s) != 0) { WakeHooks.WakeNear(i); }
+                    break;
+                case ItemComponent c:
+                    if (ItemRegistry.TryGetSlot(c.Item, out int cs) && Dormancy.ReasonsOf(cs) != 0) { WakeHooks.WakeNear(c.Item); }
+                    break;
             }
         }
     }
 
     public static void Reset()
     {
-        Array.Clear(lastDurations);
-        Array.Clear(lastDelays);
-        lastDurationCount = lastDelayCount = 0;
+        durationTags.Clear();
+        delayTags.Clear();
+        lastDurationVersion = lastDelayVersion = int.MinValue;
         blockers.Clear();
         mismatchPrefabs.Clear();
         Probes = Rejected = VerifyChecks = Mismatches = 0;

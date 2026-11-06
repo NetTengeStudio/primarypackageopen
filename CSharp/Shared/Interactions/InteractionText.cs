@@ -3,6 +3,11 @@ using System;
 namespace PrimaryPackage.Interactions;
 
 internal static class InteractionText {
+    internal static bool ValidAccount(string value) {
+        if (string.IsNullOrWhiteSpace(value) || value.Length > 128 || value != value.Trim()) { return false; }
+        for (int i = 0; i < value.Length; i++) { if (char.IsControl(value[i])) { return false; } }
+        return true;
+    }
     internal static bool Valid(string value, int max) {
         if (string.IsNullOrWhiteSpace(value) || value.Length > max) { return false; }
         for (int i = 0; i < value.Length; i++) {

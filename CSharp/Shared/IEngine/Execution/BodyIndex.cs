@@ -12,6 +12,7 @@ static class BodyIndex
     static readonly List<PhysicsBody> candidates = new(1024);
     static readonly Dictionary<PhysicsBody, int> slots = new(1024, ReferenceEqualityComparer.Instance);
     static readonly Dictionary<Body, PhysicsBody> owners = new(4096, ReferenceEqualityComparer.Instance);
+    static double lastServedTime = -1;
     static int untilAudit;
     public static bool On;
     public static long Missed, Audits, Served;
@@ -76,6 +77,7 @@ static class BodyIndex
         candidates.Clear();
         slots.Clear();
         owners.Clear();
+        lastServedTime = -1;
     }
 
     static void Rebuild()
@@ -92,6 +94,13 @@ static class BodyIndex
     public static List<PhysicsBody> ForUpdate()
     {
         if (!On) { return PhysicsBody.List; }
+        double now = Timing.TotalTime;
+        if (now == lastServedTime)
+        {
+            Served++;
+            return candidates;
+        }
+        lastServedTime = now;
         if (--untilAudit <= 0) { Audit(); }
         for (int i = candidates.Count - 1; i >= 0; i--)
         {

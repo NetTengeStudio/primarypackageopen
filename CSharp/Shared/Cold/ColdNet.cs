@@ -1,10 +1,7 @@
 ﻿namespace PrimaryPackage.Cold {
     public static class ColdNet {
-        public const string StateId = "PP_ColdState";
-        public const string RequestId = "PP_ColdRequest";
-
-        public const byte FlagFull = 1;
-        public const int MaxPerMessage = 220;
+        public const string StateId = "PP_INetColdStateV1";
+        public const string RequestId = "PP_INetColdRequestV1";
 
         private static readonly PrimaryPackage.Core.BitField temperature = new PrimaryPackage.Core.BitField(0, 8);
 

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Barotrauma;
 using Barotrauma.LuaCs;
 using Barotrauma.Networking;
@@ -110,7 +110,7 @@ namespace PrimaryPackage.Economy {
 
         public void Attach(Harmony harmony) {
             PrimaryPackage.Core.HudFrame.Over(PrimaryPackage.Core.HudFrame.Hint, GuiDrawPostfix);
-            PrimaryPackage.Core.ModNet.Receive(HintToastNet.NetId, OnHintReceived);
+            INet.Net.Receive(HintToastNet.NetId, OnHintReceived);
         }
         public void Release() {
         }

@@ -10,20 +10,20 @@ namespace PrimaryPackage.WallCollision {
         public static void Hook() {
             if (hooked) { return; }
             hooked = true;
-            ModNet.Receive(WallCollisionNet.RequestId, OnRequest, 1.0);
+            INet.Net.Receive(WallCollisionNet.RequestId, OnRequest, 1.0);
         }
 
         public static void OnRoundStart() {
             WallCollisionNet.BeginEpoch((uint)RandomNumberGenerator.GetInt32(1, int.MaxValue));
             uint revision = WallCollisionNet.Advance();
-            ModNet.Broadcast(WallCollisionNet.StateId, message => WriteSnapshot(message, revision));
+            INet.Net.Broadcast(WallCollisionNet.StateId, message => WriteSnapshot(message, revision));
         }
 
         public static int Activate() {
             if (WallCollisionNet.Epoch == 0) { WallCollisionNet.BeginEpoch((uint)RandomNumberGenerator.GetInt32(1, int.MaxValue)); }
             int count = WallRules.ActivatePrepared();
             uint revision = WallCollisionNet.Advance();
-            ModNet.Broadcast(WallCollisionNet.StateId, message => WriteSnapshot(message, revision));
+            INet.Net.Broadcast(WallCollisionNet.StateId, message => WriteSnapshot(message, revision));
             return count;
         }
 
@@ -33,7 +33,7 @@ namespace PrimaryPackage.WallCollision {
             ushort id = change.Id;
             byte mode = (byte)change.Mode;
             byte face = (byte)change.Face;
-            ModNet.Broadcast(WallCollisionNet.StateId, message => {
+            INet.Net.Broadcast(WallCollisionNet.StateId, message => {
                 message.WriteByte((byte)WallPacket.Set);
                 message.WriteUInt32(WallCollisionNet.Epoch);
                 message.WriteUInt32(revision);
@@ -46,7 +46,7 @@ namespace PrimaryPackage.WallCollision {
         private static void OnRequest(IReadMessage message, Client sender) {
             if (sender == null || sender.Connection == null) { return; }
             uint revision = WallCollisionNet.Revision;
-            ModNet.Send(WallCollisionNet.StateId, sender.Connection, snapshot => WriteSnapshot(snapshot, revision));
+            INet.Net.Send(WallCollisionNet.StateId, sender.Connection, snapshot => WriteSnapshot(snapshot, revision));
         }
 
         private static void WriteSnapshot(IWriteMessage message, uint revision) {

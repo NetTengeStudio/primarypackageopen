@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 using Barotrauma;
+using Barotrauma.Networking;
 using PrimaryPackage.Zones;
 
 namespace PrimaryPackage.Cold {
-    public partial class ColdZoneComponent : ZoneComponent, IColdArea {
+    public partial class ColdZoneComponent : ZoneComponent, IColdArea, IServerSerializable {
         private static readonly List<ColdZoneComponent> instances = new List<ColdZoneComponent>();
 
         [Editable(MinValueFloat = -45.0f, MaxValueFloat = 60.0f, DecimalCount = 1), Serialize(-12.0f, IsPropertySaveable.Yes, description: "Температура, к которой зона тянет накрытые отсеки.", alwaysUseInstanceValues: true)]
@@ -48,6 +49,18 @@ namespace PrimaryPackage.Cold {
         }
 
         protected override void UpdateZone(float deltaTime) => UpdateProjSpecific(deltaTime);
+
+        public void ServerEventWrite(IWriteMessage msg, Client c, NetEntityEvent.IData extraData = null) {
+            msg.WriteSingle(TargetTemperature);
+            msg.WriteSingle(Rate);
+            msg.WritePadBits();
+        }
+
+        public void ClientEventRead(IReadMessage msg, float sendingTime) {
+            TargetTemperature = msg.ReadSingle();
+            Rate = msg.ReadSingle();
+            msg.ReadPadBits();
+        }
 
         partial void UpdateProjSpecific(float deltaTime);
     }

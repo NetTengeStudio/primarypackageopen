@@ -37,7 +37,7 @@ namespace PrimaryPackage.WallCollision {
         public static void Hook() {
             if (hooked) { return; }
             hooked = true;
-            ModNet.Receive(WallCollisionNet.StateId, OnState);
+            INet.Net.Receive(WallCollisionNet.StateId, OnState);
         }
 
         public static void OnRoundStart() {
@@ -73,7 +73,7 @@ namespace PrimaryPackage.WallCollision {
             if (synced || deltaTime <= 0f || connection is null || session is null) { return; }
             timer -= deltaTime;
             if (timer > 0f) { return; }
-            if (ModNet.Send(WallCollisionNet.RequestId, static message => message.WriteByte(0))) {
+            if (INet.Net.Send(WallCollisionNet.RequestId, static message => message.WriteByte(0))) {
                 timer = delay;
                 delay = Math.Min(MaxRequestDelay, delay * 2f);
             }

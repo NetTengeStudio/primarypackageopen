@@ -1,0 +1,30 @@
+=== PrimaryPackage Server: native LuaCs verification ===
+Server: 335 files; actual LuaCs compiler context
+Compilation: PASSED
+Module/patch startup failures: 0
+=== Isolated contracts ===
+Passed: 23, Failed: 0
+[PASS] ColdNet.Quantize.Bounds
+[PASS] ColdNet.Quantize.Precision
+[PASS] BitField.WriteRead
+[PASS] FaultLedger.SiteRegistration
+[PASS] FaultLedger.CircuitBreakerTrip
+[PASS] Manifest.FileListExists
+[PASS] Manifest.FilesReferencedExist
+[PASS] Manifest.ModConfigExists
+[PASS] INet.ChannelInit
+[PASS] INet.ReportFormat
+[PASS] NativeWire.Crc16Deterministic
+[PASS] NetDelta.ChangedCount
+[PASS] NetDelta.AppliedCount
+[PASS] NetMemoryPool.Rent
+[PASS] NetCompression.Nibbles
+[PASS] NetCompression.RLE
+[PASS] SnapshotHistory.DeltaCompute
+[PASS] SnapshotHistory.DeltaApply
+[PASS] NetInterpolator.Evaluate
+[PASS] NetSequencer.RoundTrip
+[PASS] NetMultiplexer.RejectOversized
+[PASS] NetPing.PacketStructure
+[PASS] VoronoiCell.FastAabbReject
+VERIFICATION: PASSED; errors=0 warnings=0

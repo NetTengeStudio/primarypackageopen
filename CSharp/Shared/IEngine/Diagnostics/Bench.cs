@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -19,6 +20,7 @@ static class Bench
     static string[] modes;
     static int cycles, cycle, modeIndex, settle;
     static double seconds, windowStart;
+    static long wallStart;
     static long allocStart;
     static int gc0, gc1, gc2;
     static bool running;
@@ -60,6 +62,7 @@ static class Bench
             {
                 Probes.Recorder.Begin();
                 windowStart = Timing.TotalTime;
+                wallStart = Stopwatch.GetTimestamp();
                 allocStart = GC.GetTotalAllocatedBytes(false);
                 gc0 = GC.CollectionCount(0);
                 gc1 = GC.CollectionCount(1);
@@ -82,14 +85,19 @@ static class Bench
 
     static Window Capture()
     {
+        // Stop measurement before sorting samples and constructing the report.
+        double wallSeconds = Stopwatch.GetElapsedTime(wallStart).TotalSeconds;
+        long allocated = GC.GetTotalAllocatedBytes(false) - allocStart;
+        int collected0 = GC.CollectionCount(0) - gc0;
+        int collected1 = GC.CollectionCount(1) - gc1;
+        int collected2 = GC.CollectionCount(2) - gc2;
         var rec = Probes.Recorder;
         if (scratch.Length < Math.Max(rec.Count, rec.TickCount)) { scratch = new float[Math.Max(rec.Count, rec.TickCount)]; }
         var counters = EngineCounters.End(rec.Count);
         var stats = new SampleStats[(int)Phase.Count];
         for (int i = 0; i < stats.Length; i++) { stats[i] = SampleStats.Of(PhaseRecorder.PerFrame((Phase)i) ? rec.Samples((Phase)i) : rec.TickSamples((Phase)i), scratch); }
-        return new Window(cycle, CurrentMode, Timing.TotalTime - windowStart, stats,
-            GC.CollectionCount(0) - gc0, GC.CollectionCount(1) - gc1, GC.CollectionCount(2) - gc2,
-            GC.GetTotalAllocatedBytes(false) - allocStart, Census.Brief(), counters, WorstTicks(rec, 3));
+        return new Window(cycle, CurrentMode, wallSeconds, stats,
+            collected0, collected1, collected2, allocated, Census.Brief(), counters, WorstTicks(rec, 3));
     }
 
     static string WorstTicks(PhaseRecorder rec, int k)

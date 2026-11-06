@@ -13,6 +13,7 @@ static partial class MapEntityExecutor
     static readonly StableKeyOrder gapOrder = new();
     static Gap[] gapSnapshot = new Gap[512];
 
+
     public static bool ActiveSet;
     public static long ItemsVisited, ItemsUpdated;
 
@@ -63,9 +64,9 @@ static partial class MapEntityExecutor
         if (full)
         {
             UpdateSpriteStates(stepped);
+            rec.AddTicks(Phase.SpriteStates, Stopwatch.GetTimestamp() - t4);
             Entity.Spawner?.Update();
         }
-        rec.AddTicks(Phase.SpriteStates, Stopwatch.GetTimestamp() - t4);
     }
 
     static void UpdateGaps(float deltaTime, Camera cam)
@@ -93,6 +94,7 @@ static partial class MapEntityExecutor
         bool staggered = interval > 1;
         var priority = LuaCsSetup.Instance.Game.UpdatePriorityItems;
         bool hasPriority = priority.Count > 0;
+
         Item last = null;
         try
         {

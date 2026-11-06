@@ -1,0 +1,15 @@
+C:\Steam\steamapps\common\Barotrauma\LocalMods\Primary package\Tests\IEngineContracts\bin\Release\net8.0\IEngineContracts.exe
+C:\Steam\steamapps\common\Barotrauma\LocalMods\Primary package\Tests\IEngineContracts\bin\Release\net8.0\IEngineContracts.deps.json
+C:\Steam\steamapps\common\Barotrauma\LocalMods\Primary package\Tests\IEngineContracts\bin\Release\net8.0\IEngineContracts.runtimeconfig.json
+C:\Steam\steamapps\common\Barotrauma\LocalMods\Primary package\Tests\IEngineContracts\bin\Release\net8.0\IEngineContracts.dll
+C:\Steam\steamapps\common\Barotrauma\LocalMods\Primary package\Tests\IEngineContracts\bin\Release\net8.0\IEngineContracts.pdb
+C:\Steam\steamapps\common\Barotrauma\LocalMods\Primary package\Tests\IEngineContracts\obj\Release\net8.0\IEngineContracts.GeneratedMSBuildEditorConfig.editorconfig
+C:\Steam\steamapps\common\Barotrauma\LocalMods\Primary package\Tests\IEngineContracts\obj\Release\net8.0\IEngineContracts.AssemblyInfoInputs.cache
+C:\Steam\steamapps\common\Barotrauma\LocalMods\Primary package\Tests\IEngineContracts\obj\Release\net8.0\IEngineContracts.AssemblyInfo.cs
+C:\Steam\steamapps\common\Barotrauma\LocalMods\Primary package\Tests\IEngineContracts\obj\Release\net8.0\IEngineContracts.csproj.CoreCompileInputs.cache
+C:\Steam\steamapps\common\Barotrauma\LocalMods\Primary package\Tests\IEngineContracts\obj\Release\net8.0\IEngineContracts.sourcelink.json
+C:\Steam\steamapps\common\Barotrauma\LocalMods\Primary package\Tests\IEngineContracts\obj\Release\net8.0\IEngineContracts.dll
+C:\Steam\steamapps\common\Barotrauma\LocalMods\Primary package\Tests\IEngineContracts\obj\Release\net8.0\refint\IEngineContracts.dll
+C:\Steam\steamapps\common\Barotrauma\LocalMods\Primary package\Tests\IEngineContracts\obj\Release\net8.0\IEngineContracts.pdb
+C:\Steam\steamapps\common\Barotrauma\LocalMods\Primary package\Tests\IEngineContracts\obj\Release\net8.0\IEngineContracts.genruntimeconfig.cache
+C:\Steam\steamapps\common\Barotrauma\LocalMods\Primary package\Tests\IEngineContracts\obj\Release\net8.0\ref\IEngineContracts.dll

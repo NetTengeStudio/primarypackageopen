@@ -4,7 +4,7 @@ using System.Reflection;
 using Barotrauma;
 using Barotrauma.Items.Components;
 using Barotrauma.Steam;
-using PrimaryPackage.Networking;
+using INet;
 using HarmonyLib;
 using PrimaryPackage.Core;
 using PrimaryPackage.Core.Fault;

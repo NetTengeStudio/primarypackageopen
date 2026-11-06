@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Barotrauma;
 using Barotrauma.Items.Components;
 using Barotrauma.LuaCs;
@@ -37,7 +37,7 @@ namespace PrimaryPackage.Economy {
             if (GameMain.Client != null) {
                 ushort checkId = heldCheck.ID;
                 ushort targetId = __instance.ID;
-                PrimaryPackage.Core.ModNet.Send(CheckComponent.PrintNetId, msg => {
+                INet.Net.Send(CheckComponent.PrintNetId, msg => {
                     msg.WriteUInt16(checkId);
                     msg.WriteUInt16(targetId);
                 });

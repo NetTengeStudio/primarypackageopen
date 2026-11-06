@@ -1,0 +1,15 @@
+C:\Steam\steamapps\common\Barotrauma\LocalMods\Primary package\Tests\UltimateSyncTests\bin\Debug\net8.0\UltimateSyncTests.exe
+C:\Steam\steamapps\common\Barotrauma\LocalMods\Primary package\Tests\UltimateSyncTests\bin\Debug\net8.0\UltimateSyncTests.deps.json
+C:\Steam\steamapps\common\Barotrauma\LocalMods\Primary package\Tests\UltimateSyncTests\bin\Debug\net8.0\UltimateSyncTests.runtimeconfig.json
+C:\Steam\steamapps\common\Barotrauma\LocalMods\Primary package\Tests\UltimateSyncTests\bin\Debug\net8.0\UltimateSyncTests.dll
+C:\Steam\steamapps\common\Barotrauma\LocalMods\Primary package\Tests\UltimateSyncTests\bin\Debug\net8.0\UltimateSyncTests.pdb
+C:\Steam\steamapps\common\Barotrauma\LocalMods\Primary package\Tests\UltimateSyncTests\obj\Debug\net8.0\UltimateSyncTests.GeneratedMSBuildEditorConfig.editorconfig
+C:\Steam\steamapps\common\Barotrauma\LocalMods\Primary package\Tests\UltimateSyncTests\obj\Debug\net8.0\UltimateSyncTests.AssemblyInfoInputs.cache
+C:\Steam\steamapps\common\Barotrauma\LocalMods\Primary package\Tests\UltimateSyncTests\obj\Debug\net8.0\UltimateSyncTests.AssemblyInfo.cs
+C:\Steam\steamapps\common\Barotrauma\LocalMods\Primary package\Tests\UltimateSyncTests\obj\Debug\net8.0\UltimateSyncTests.csproj.CoreCompileInputs.cache
+C:\Steam\steamapps\common\Barotrauma\LocalMods\Primary package\Tests\UltimateSyncTests\obj\Debug\net8.0\UltimateSyncTests.sourcelink.json
+C:\Steam\steamapps\common\Barotrauma\LocalMods\Primary package\Tests\UltimateSyncTests\obj\Debug\net8.0\UltimateSyncTests.dll
+C:\Steam\steamapps\common\Barotrauma\LocalMods\Primary package\Tests\UltimateSyncTests\obj\Debug\net8.0\refint\UltimateSyncTests.dll
+C:\Steam\steamapps\common\Barotrauma\LocalMods\Primary package\Tests\UltimateSyncTests\obj\Debug\net8.0\UltimateSyncTests.pdb
+C:\Steam\steamapps\common\Barotrauma\LocalMods\Primary package\Tests\UltimateSyncTests\obj\Debug\net8.0\UltimateSyncTests.genruntimeconfig.cache
+C:\Steam\steamapps\common\Barotrauma\LocalMods\Primary package\Tests\UltimateSyncTests\obj\Debug\net8.0\ref\UltimateSyncTests.dll

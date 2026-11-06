@@ -141,7 +141,10 @@ static class WakeHooks
         if (__state == null) { return; }
         object now = __instance.GetValue(parentObject) ?? Unset;
         if (Equals(now, __state)) { return; }
-        Dormancy.MarkDirty($"property {parentObject.GetType().Name}.{__instance.Name}");
+        if (Dormancy.Probing != null && !Dormancy.Dirty)
+        {
+            Dormancy.MarkDirty($"property {parentObject.GetType().Name}.{__instance.Name}");
+        }
         WakeNear(OwnerOf(parentObject));
     }
 
@@ -161,13 +164,34 @@ static class WakeHooks
     {
         Dormancy.Source = 5;
         if (!Watching || __state == __instance.isActive) { return; }
-        Dormancy.MarkDirty($"{__instance.GetType().Name}.IsActive");
+        if (Dormancy.Probing != null && !Dormancy.Dirty)
+        {
+            Dormancy.MarkDirty($"{__instance.GetType().Name}.IsActive");
+        }
         Dormancy.Wake(__instance.Item);
     }
 
-    static void ListElementPost()
+    static void ListElementPost(Entity parentEntity = null, IEnumerable<ISerializableEntity> targets = null)
     {
-        if (Armed) { Dormancy.MarkDirty("status list element"); }
+        if (!Armed) { return; }
+        Item probing = Dormancy.Probing;
+        if (probing == null) { return; }
+        if (ReferenceEquals(parentEntity, probing))
+        {
+            Dormancy.MarkDirty("status list element");
+            return;
+        }
+        if (targets != null)
+        {
+            foreach (ISerializableEntity t in targets)
+            {
+                if (ReferenceEquals(t, probing) || (t is ItemComponent ic && ReferenceEquals(ic.Item, probing)))
+                {
+                    Dormancy.MarkDirty("status list element");
+                    return;
+                }
+            }
+        }
     }
 
     static void LuaSetPost(object obj)

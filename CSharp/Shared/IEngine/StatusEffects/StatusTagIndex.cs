@@ -15,9 +15,10 @@ sealed class StatusTagIndex
 
     readonly Dictionary<Identifier, int> bitOfTag = new();
     readonly List<Identifier> tags = new();
-    readonly Dictionary<PropertyConditional, ulong[]> queries = new();
+    readonly Dictionary<PropertyConditional, ulong> queries = new();
     readonly Dictionary<StatusEffect, ulong> parentMasks = new();
     readonly Dictionary<ISerializableEntity, ulong> masks = new(ReferenceEqualityComparer.Instance);
+    readonly Dictionary<ISerializableEntity, int> entityRefCount = new(ReferenceEqualityComparer.Instance);
 
     int durationVersion = int.MinValue, delayVersion = int.MinValue, durationCount, delayCount;
     long epoch, builtEpoch = -1;
@@ -37,7 +38,7 @@ sealed class StatusTagIndex
     {
         result = false;
         if (Suspended != 0) { return false; }
-        if (!queries.TryGetValue(conditional, out ulong[] bits) && !TryRegister(conditional, out bits))
+        if (!queries.TryGetValue(conditional, out ulong requiredMask) && !TryRegister(conditional, out requiredMask))
         {
             Fallbacks++;
             return false;
@@ -51,31 +52,29 @@ sealed class StatusTagIndex
         }
         Refresh();
         ulong mask = masks.TryGetValue(target, out ulong m) ? m : 0UL;
-        int found = 0;
-        foreach (ulong bit in bits) { if ((mask & bit) != 0) { found++; } }
-        result = notEquals ? found < bits.Length : found >= bits.Length;
+        result = ((mask & requiredMask) == requiredMask) ^ notEquals;
         return true;
     }
 
-    bool TryRegister(PropertyConditional conditional, out ulong[] bits)
+    bool TryRegister(PropertyConditional conditional, out ulong requiredMask)
     {
         var tagList = conditional.AttributeValueAsTags;
-        bits = new ulong[tagList.Length];
+        requiredMask = 0UL;
         for (int i = 0; i < tagList.Length; i++)
         {
             Identifier tag = tagList[i];
             if (!bitOfTag.TryGetValue(tag, out int bit))
             {
-                if (tags.Count == MaxTags) { bits = null; return false; }
+                if (tags.Count == MaxTags) { return false; }
                 bit = tags.Count;
                 tags.Add(tag);
                 bitOfTag.Add(tag, bit);
                 parentMasks.Clear();
                 builtEpoch = -1;
             }
-            bits[i] = 1UL << bit;
+            requiredMask |= 1UL << bit;
         }
-        queries.Add(conditional, bits);
+        queries.Add(conditional, requiredMask);
         return true;
     }
 
@@ -85,6 +84,7 @@ sealed class StatusTagIndex
         var delays = DelayedEffect.DelayList;
         int dv = DurationVersion(durations), lv = DelayVersion(delays);
         if (builtEpoch == epoch && dv == durationVersion && lv == delayVersion) { return; }
+
         int dAdded = durations.Count - durationCount, lAdded = delays.Count - delayCount;
         if (builtEpoch == epoch && dAdded >= 0 && lAdded >= 0 && dv - durationVersion == dAdded && lv - delayVersion == lAdded)
         {
@@ -94,6 +94,7 @@ sealed class StatusTagIndex
         }
         else
         {
+            // Full rebuild only when entries were removed, reordered, or tags mutated
             masks.Clear();
             foreach (DurationListElement e in durations) { Add(e.Parent, e.Targets); }
             foreach (DelayedListElement e in delays) { Add(e.Parent, e.Targets); }
@@ -109,9 +110,10 @@ sealed class StatusTagIndex
     void Add(StatusEffect parent, List<ISerializableEntity> targets)
     {
         ulong pm = ParentMask(parent);
-        if (pm == 0) { return; }
-        foreach (ISerializableEntity t in targets)
+        if (pm == 0 || targets == null) { return; }
+        for (int i = 0; i < targets.Count; i++)
         {
+            ISerializableEntity t = targets[i];
             if (t == null) { continue; }
             CollectionsMarshal.GetValueRefOrAddDefault(masks, t, out _) |= pm;
         }
@@ -119,6 +121,7 @@ sealed class StatusTagIndex
 
     ulong ParentMask(StatusEffect parent)
     {
+        if (parent == null) { return 0UL; }
         ref ulong cached = ref CollectionsMarshal.GetValueRefOrAddDefault(parentMasks, parent, out bool exists);
         if (exists) { return cached; }
         ulong m = 0;

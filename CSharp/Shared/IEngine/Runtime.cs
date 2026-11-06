@@ -9,7 +9,6 @@ namespace IEngine;
 public abstract class Feature
 {
     public abstract string Name { get; }
-    public virtual bool OptIn => false;
     bool enabled = true;
 
     public bool Enabled
@@ -91,10 +90,12 @@ public static class Runtime
 
     public static string SetMode(string mode)
     {
-        bool all = mode is "on" or "all";
-        bool none = mode is "off" or "none" or "vanilla";
-        var names = new HashSet<string>(mode.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries), StringComparer.OrdinalIgnoreCase);
-        foreach (Feature f in features) { f.Enabled = (all && !f.OptIn) || (!none && names.Contains(f.Name)); }
+        ArgumentNullException.ThrowIfNull(mode);
+        string selected = mode.Trim();
+        bool all = selected.Equals("on", StringComparison.OrdinalIgnoreCase) || selected.Equals("all", StringComparison.OrdinalIgnoreCase);
+        bool none = selected.Equals("off", StringComparison.OrdinalIgnoreCase) || selected.Equals("none", StringComparison.OrdinalIgnoreCase) || selected.Equals("vanilla", StringComparison.OrdinalIgnoreCase);
+        HashSet<string> names = all || none ? null : new HashSet<string>(selected.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries), StringComparer.OrdinalIgnoreCase);
+        foreach (Feature f in features) { f.Enabled = all || (!none && names.Contains(f.Name)); }
         return Describe();
     }
 

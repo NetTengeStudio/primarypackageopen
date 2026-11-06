@@ -21,6 +21,9 @@ static class SpatialCore
     static readonly Dictionary<long, List<int>> cells = new();
     static readonly HashSet<long> awake = new(), inner = new(), outer = new(), scratch = new();
     static readonly List<Vector2> viewers = new(), npcs = new();
+    static readonly List<Vector2> lastViewers = new(), lastNpcs = new();
+    static bool regionsDirty = true;
+    const float MovementThresholdSq = 150f * 150f;
     static readonly Queue<(int Slot, double Until)> eventAwake = new();
     static readonly List<Submarine> subs = new();
     static readonly HashSet<int> pending = new();
@@ -41,6 +44,9 @@ static class SpatialCore
     public static void Start()
     {
         dirty = true;
+        regionsDirty = true;
+        lastViewers.Clear();
+        lastNpcs.Clear();
         awake.Clear();
         eventAwake.Clear();
         pending.Clear();
@@ -90,11 +96,15 @@ static class SpatialCore
         }
         else if (pendingOrder.Count > 0) { ProcessPending(); }
         CollectViewers();
-        ComputeRegions();
-        scratch.Clear();
-        foreach (long c in awake) { if (!outer.Contains(c)) { scratch.Add(c); } }
-        foreach (long c in scratch) { awake.Remove(c); ChangeCell(c, -1); }
-        foreach (long c in inner) { if (awake.Add(c)) { ChangeCell(c, +1); } }
+        if (regionsDirty || ViewersMoved())
+        {
+            ComputeRegions();
+            scratch.Clear();
+            foreach (long c in awake) { if (!outer.Contains(c)) { scratch.Add(c); } }
+            foreach (long c in scratch) { awake.Remove(c); ChangeCell(c, -1); }
+            foreach (long c in inner) { if (awake.Add(c)) { ChangeCell(c, +1); } }
+            regionsDirty = false;
+        }
         RefreezeExpired();
         TickCost.Add(Stopwatch.GetTimestamp() - t0);
     }
@@ -189,6 +199,40 @@ static class SpatialCore
             if (BotsAsViewers && c.IsHuman) { viewers.Add(c.WorldPosition); }
             else { npcs.Add(c.WorldPosition); }
         }
+    }
+
+    static bool ViewersMoved()
+    {
+        if (viewers.Count != lastViewers.Count || npcs.Count != lastNpcs.Count)
+        {
+            UpdateLastPositions();
+            return true;
+        }
+        for (int i = 0; i < viewers.Count; i++)
+        {
+            if (Vector2.DistanceSquared(viewers[i], lastViewers[i]) > MovementThresholdSq)
+            {
+                UpdateLastPositions();
+                return true;
+            }
+        }
+        for (int i = 0; i < npcs.Count; i++)
+        {
+            if (Vector2.DistanceSquared(npcs[i], lastNpcs[i]) > MovementThresholdSq)
+            {
+                UpdateLastPositions();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    static void UpdateLastPositions()
+    {
+        lastViewers.Clear();
+        lastViewers.AddRange(viewers);
+        lastNpcs.Clear();
+        lastNpcs.AddRange(npcs);
     }
 
     static void ComputeRegions()
@@ -304,7 +348,11 @@ static class SpatialCore
         }
         int r = Find(s);
         if (awake.Contains(cellOf[s])) { islandAwake[r]--; }
-        members[r]?.Remove(s);
+        if (members[r] is { } mem && mem.IndexOf(s) is int mi and >= 0)
+        {
+            mem[mi] = mem[^1];
+            mem.RemoveAt(mem.Count - 1);
+        }
         if (ItemRegistry.Items[s] is { } item && (Dormancy.ReasonsOf(s) & Dormancy.BySpatial) != 0)
         {
             Dormancy.Source = 9;
@@ -316,6 +364,9 @@ static class SpatialCore
     static void Rebuild()
     {
         dirty = false;
+        regionsDirty = true;
+        lastViewers.Clear();
+        lastNpcs.Clear();
         Rebuilds++;
         Dormancy.WakeAll(Dormancy.BySpatial);
         pending.Clear();

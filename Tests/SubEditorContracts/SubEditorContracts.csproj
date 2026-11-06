@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <NuGetAudit>false</NuGetAudit>
+    <GameRoot Condition="'$(GameRoot)' == ''">$(MSBuildThisFileDirectory)../../../../</GameRoot>
+    <ServerRoot Condition="'$(ServerRoot)' == ''">$(GameRoot)../../workshop/content/602960/2559634234/Binary/</ServerRoot>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DedicatedServer" HintPath="$(ServerRoot)Publicized/DedicatedServer.dll" Private="false" />
+    <Reference Include="BarotraumaCore" HintPath="$(GameRoot)Publicized/BarotraumaCore.dll" Private="false" />
+    <Reference Include="Farseer.NetStandard" HintPath="$(GameRoot)Farseer.NetStandard.dll" Private="false" />
+    <Reference Include="XNATypes" HintPath="$(GameRoot)XNATypes.dll" Private="false" />
+    <Reference Include="MonoGame.Framework.Windows.NetStandard" HintPath="$(GameRoot)MonoGame.Framework.Windows.NetStandard.dll" Private="false" />
+    <Reference Include="0Harmony" HintPath="$(GameRoot)0Harmony.dll" Private="false" />
+    <Reference Include="Primary_Package_11_Server" HintPath="$(ModBuild)" />
+  </ItemGroup>
+</Project>

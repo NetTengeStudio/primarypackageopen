@@ -82,18 +82,18 @@ public sealed class PrivateMessageService : IDisposable {
         source.Position = validLength;
     }
     private static bool Valid(PrivateMessage message) => message != null && message.Sequence > 0 &&
-        Guid.TryParseExact(message.Id, "N", out _) && PermissionService.ValidAccount(message.From) && PermissionService.ValidAccount(message.To) &&
+        Guid.TryParseExact(message.Id, "N", out _) && InteractionText.ValidAccount(message.From) && InteractionText.ValidAccount(message.To) &&
         InteractionProtocol.ValidText(message.Text, InteractionProtocol.MaxMessageLength) && Enum.IsDefined(message.Kind) &&
-        (message.Kind == MessageKind.Private || PermissionService.ValidAccount(message.Thread)) &&
+        (message.Kind == MessageKind.Private || InteractionText.ValidAccount(message.Thread)) &&
         message.SenderName != null && message.SenderName.Length <= 128 && message.RecipientName != null && message.RecipientName.Length <= 128 && message.Status is >= MessageStatus.Stored and <= MessageStatus.Read;
     private static string Key(string sender, string id) => sender + ":" + id;
     public PrivateMessage Store(string sender, string recipient, string senderName, string recipientName, string id, string text) {
         return StoreInChannel(sender, recipient, senderName, recipientName, id, text, MessageKind.Private, "");
     }
     public PrivateMessage StoreInChannel(string sender, string recipient, string senderName, string recipientName, string id, string text, MessageKind kind, string thread) {
-        if (!Guid.TryParseExact(id, "N", out _) || !PermissionService.ValidAccount(sender) || !PermissionService.ValidAccount(recipient) || sender == recipient ||
+        if (!Guid.TryParseExact(id, "N", out _) || !InteractionText.ValidAccount(sender) || !InteractionText.ValidAccount(recipient) || sender == recipient ||
             !InteractionProtocol.ValidText(text, InteractionProtocol.MaxMessageLength) || senderName == null || senderName.Length > 128 || recipientName == null || recipientName.Length > 128) { throw new ArgumentException("Invalid private message"); }
-        if (!Enum.IsDefined(kind) || kind != MessageKind.Private && !PermissionService.ValidAccount(thread)) { throw new ArgumentException("Invalid message channel"); }
+        if (!Enum.IsDefined(kind) || kind != MessageKind.Private && !InteractionText.ValidAccount(thread)) { throw new ArgumentException("Invalid message channel"); }
         if (messages.TryGetValue(Key(sender, id), out var existing)) {
             if (existing.To != recipient || existing.Text != text || existing.Kind != kind || existing.Thread != thread) { throw new InvalidDataException("Message id reused with different content"); }
             return existing;

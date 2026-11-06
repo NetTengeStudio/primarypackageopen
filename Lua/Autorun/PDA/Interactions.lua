@@ -127,8 +127,7 @@ if CLIENT then
 
         if Game.IsMultiplayer then
             dropOrElse(character, function()
-                local msg = Networking.Start("PrimaryInteractionMenu")
-                if msg then Networking.Send(msg) end
+                local msg = Networking.Start("PrimaryInteractionMenu"); Networking.Send(msg)
             end)
         else
             toggleMenu(character)

@@ -12,7 +12,7 @@ static partial class Commands
 
     public static void Register()
     {
-        Add("ie_mode", "ie_mode [on|off|feature1,feature2]: switch IEngine features and remember the choice.", args =>
+        Add("ie_mode", "ie_mode [all|on|off|feature1,feature2]: switch IEngine features and remember the choice.", args =>
         {
             if (args.Length > 0)
             {
@@ -46,13 +46,16 @@ static partial class Commands
             Say($"verify {(on ? "on" : "off")}");
         });
         Add("ie_seq", "ie_seq cmd1 | cmd2 | ...: run commands one after another, waiting for benches, shots and waits.", args => Say(Sequencer.Start(string.Join(" ", args))));
-        Add("ie_wait", "ie_wait seconds: block an ie_seq for that many seconds of game time.", args =>
+        Add("ie_wait", "ie_wait seconds: block an ie_seq for that many seconds of in-game time (waiting for round start if needed).", args =>
         {
-            double until = Timing.TotalTime + (args.Length > 0 ? double.Parse(args[0], CultureInfo.InvariantCulture) : 5);
+            double duration = args.Length > 0 ? double.Parse(args[0], CultureInfo.InvariantCulture) : 5;
+            double? startInGameTime = null;
             Sequencer.Blocking = true;
             void Tick()
             {
-                if (Timing.TotalTime < until) { return; }
+                if (Screen.Selected != GameMain.GameScreen || Submarine.MainSub == null) { return; }
+                if (!startInGameTime.HasValue) { startInGameTime = Timing.TotalTime; }
+                if (Timing.TotalTime - startInGameTime.Value < duration) { return; }
                 Probes.TickEnded -= Tick;
                 Sequencer.Blocking = false;
                 Sequencer.Next();
@@ -104,7 +107,6 @@ static partial class Commands
         };
         var command = new DebugConsole.Command(name, help, body);
 #if CLIENT
-        
         command.RelayToServer = false;
         command.OnClientExecute = body;
 #endif

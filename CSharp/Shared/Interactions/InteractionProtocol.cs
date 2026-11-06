@@ -1,34 +1,19 @@
 using System;
-using Barotrauma.Networking;
 
 namespace PrimaryPackage.Interactions;
 
-public enum InteractionAction : byte
-{
-    ViewCharacter, SendPrivateMessage, QueryCharacters, QueryItems, SpawnCharacter, ControlCharacter, FlickerLight, ManagePermissions,
-    ViewGMFeed, ManageEntities, DirectEvents, ManageKits, SendGMMessage, RevivePlayers, OverrideRespawnRules
-}
+// Numeric IDs are retained for existing permissions.json files and client journals.
+public enum InteractionAction : byte { SendPrivateMessage = 1, FlickerLight = 6, ViewGMFeed = 8, SendGMMessage = 12 }
 public enum MessageKind : byte { Private, Support, Roleplay }
-public enum EntityOperation : byte { Condition, RemoveItem, Gib, BreakDoor, SpawnCreature, SpawnDormantCreature, AIEnabled }
-public enum DirectorKind : byte { Sound, Scare, Caption, Stop, StopOne, Hallucination, SignalCollapse }
 public enum MessageStatus : byte { Queued, Stored, Delivered, Read }
-internal enum InteractionPacket : byte { Hello, Query, Spawn, Flicker, PermissionList, PermissionChange, MessageSend, MessageAck, MessageRead, Snapshot, QueryResult, Message, MessageState, PermissionResult, Error, ChannelSend, EntityAction, Director, DirectorEvent, HistoryEnd, DirectorBatch, DirectorList, DirectorStatus, ReceiptBatch, ScenePut, SceneRemove, SceneList, SceneStatus, DeviceInspect, DeviceSnapshot, DeviceChange, DeviceDelta, DirectorFailure, WorldReady, DeviceBind, DeviceBindAck, EditHistory, EditReverse, GMAnnouncement, RevivePlayer, WorldTranslate, WorldTransform, DeviceForget, WorldExport, DeviceUninspect, WorldTransformSelection, WorldTransformBatch, WorldEditFailure, WorldBootstrapRelease, GMAnnouncementReceipt, WorldBootstrapProgress, WorldBootstrapApplied }
+internal enum InteractionPacket : byte {
+    Hello, MessageSend, MessageAck, MessageRead, Snapshot, Message, Error,
+    ChannelSend, HistoryEnd, ReceiptBatch, GMAnnouncement, GMAnnouncementReceipt, Flicker
+}
 
-internal static class InteractionProtocol
-{
-    public const string Channel = "pp.interactions.v4";
-    public const int Version = 4, MaxMessageLength = 512, MaxQueryResults = 200, MaxMessages = 10000;
-    public static void Header(IWriteMessage message, InteractionPacket packet) { message.WriteByte(Version); message.WriteByte((byte)packet); }
-    public static bool Read(IReadMessage message, out InteractionPacket packet)
-    {
-        packet = default;
-        if (message.LengthBits - message.BitPosition < 16) { return false; }
-        if (message.ReadByte() != Version) { return false; }
-        byte value = message.ReadByte();
-        if (value > (byte)InteractionPacket.WorldBootstrapApplied) { return false; }
-        packet = (InteractionPacket)value;
-        return true;
-    }
+internal static partial class InteractionProtocol {
+    public const string Channel = "pp.interactions.v5";
+    public const int Version = 5, MaxMessageLength = 512, MaxMessages = 10000;
     public static bool ValidText(string value, int max) => InteractionText.Valid(value, max);
 }
 
@@ -54,13 +39,4 @@ public static class MessageAccess {
         MessageKind.Roleplay => staff,
         _ => false
     };
-}
-
-public readonly struct PermissionAuditEntry
-{
-    public readonly string Actor;
-    public readonly InteractionAction Action;
-    public readonly byte Mode;
-    public readonly long Timestamp;
-    public PermissionAuditEntry(string actor, InteractionAction action, byte mode, long timestamp) { Actor = actor; Action = action; Mode = mode; Timestamp = timestamp; }
 }

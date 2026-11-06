@@ -14,7 +14,7 @@ internal static class RPWheelNet {
     private static bool ready;
     private static IDisposable receiver;
     internal static bool IsMultiplayer => GameMain.Client != null;
-    internal static void Register() { receiver?.Dispose(); receiver = ModNet.Listen(Cfg.NetId, Receive); }
+    internal static void Register() { receiver?.Dispose(); receiver = INet.Net.Listen(Cfg.NetId, Receive); }
     internal static void Reset() { runs.Clear(); connection = null; ready = false; nextHello = 0; }
     internal static void Release() { receiver?.Dispose(); receiver = null; Reset(); }
     internal static void Update() {
@@ -22,7 +22,7 @@ internal static class RPWheelNet {
         if (current != connection) { Reset(); EmotePlayback.Reset(); connection = current; }
         if (!PlayView.Running || current == null || ready || Timing.TotalTime < nextHello) { return; }
         nextHello = Timing.TotalTime + 3;
-        ModNet.Send(Cfg.NetId, output => output.WriteRangedInteger((int)NetHeader.Hello, Cfg.HeaderMin, Cfg.HeaderMax));
+        INet.Net.Send(Cfg.NetId, output => output.WriteRangedInteger((int)NetHeader.Hello, Cfg.HeaderMin, Cfg.HeaderMax));
     }
     internal static void Note(string text) {
         var window = PrimaryPackage.GUI.GUIRuntime.Instance?.Windows.Notify("Эмоция", new Microsoft.Xna.Framework.Vector2(30, 80), 4);
@@ -57,7 +57,7 @@ internal static class EmoteNet {
         Character actor = Character.Controlled; var definition = EmoteCatalog.Source?[index];
         if (actor == null || definition == null) { return; }
         if (RPWheelNet.IsMultiplayer) {
-            ModNet.Send(Cfg.NetId, output => { output.WriteRangedInteger((int)NetHeader.EmoteRequest, Cfg.HeaderMin, Cfg.HeaderMax); output.WriteByte(index); output.WriteString(EmoteCatalog.Fingerprint); }); return;
+            INet.Net.Send(Cfg.NetId, output => { output.WriteRangedInteger((int)NetHeader.EmoteRequest, Cfg.HeaderMin, Cfg.HeaderMax); output.WriteByte(index); output.WriteString(EmoteCatalog.Fingerprint); }); return;
         }
         double now = Timing.TotalTime;
         EmoteDeny denied = EmoteRules.Check(definition, EmotionFacts.Read(actor, EmotePlayback.Busy(actor), last.TryGetValue(index, out double previous) ? now - previous : double.MaxValue));

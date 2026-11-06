@@ -25,7 +25,7 @@ public sealed partial class InteractionServer {
             // Validate all recipients before sending the first intrusive window or toast.
             foreach (Client recipient in GameMain.Server.ConnectedClients) {
                 if (!AnnouncementRecipient(value, recipient)) { continue; }
-                if (value.Format == GMAnnouncement.Toast && (!sessions.TryGetValue(recipient.SessionId, out Session compatible) || !compatible.WorldReady)) {
+                if (value.Format == GMAnnouncement.Toast && (!sessions.TryGetValue(recipient.SessionId, out Session compatible) || compatible.Client != recipient)) {
                     throw new InvalidOperationException("У получателя ещё не согласован клиент Primary Package");
                 }
             }
@@ -37,7 +37,7 @@ public sealed partial class InteractionServer {
         foreach (Client recipient in GameMain.Server.ConnectedClients) {
             if (!AnnouncementRecipient(value, recipient)) { continue; }
             if (value.Format == GMAnnouncement.Toast) {
-                ModNet.Send(InteractionProtocol.Channel, recipient.Connection, output => { InteractionProtocol.Header(output, InteractionPacket.GMAnnouncement); value.Write(output); });
+                INet.Net.Send(InteractionProtocol.Channel, recipient.Connection, output => { InteractionProtocol.Header(output, InteractionPacket.GMAnnouncement); value.Write(output); });
             } else {
                 // A separate message instance owns each recipient's native queue sequence.
                 GameMain.Server.SendDirectChatMessage(ChatMessage.Create(sender, value.NativeText(sender), (ChatMessageType)value.NativeFormat, null,
@@ -56,5 +56,5 @@ public sealed partial class InteractionServer {
         (value.Target.Length == 0 || PermissionService.Account(recipient) == value.Target) &&
         (value.Format != GMAnnouncement.Toast || recipient.InGame && !recipient.NeedsMidRoundSync);
     private static void SendAnnouncementReceipt(Session session, GMAnnouncementReceipt receipt) =>
-        ModNet.Send(InteractionProtocol.Channel, session.Client.Connection, output => { InteractionProtocol.Header(output, InteractionPacket.GMAnnouncementReceipt); receipt.Write(output); });
+        INet.Net.Send(InteractionProtocol.Channel, session.Client.Connection, output => { InteractionProtocol.Header(output, InteractionPacket.GMAnnouncementReceipt); receipt.Write(output); });
 }

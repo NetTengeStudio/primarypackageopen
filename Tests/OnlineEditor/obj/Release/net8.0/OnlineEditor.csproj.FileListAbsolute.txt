@@ -1,0 +1,46 @@
+C:\Steam\steamapps\common\Barotrauma\LocalMods\Primary package\Tests\OnlineEditor\obj\Release\net8.0\OnlineEditor.csproj.AssemblyReference.cache
+C:\Steam\steamapps\common\Barotrauma\LocalMods\Primary package\Tests\OnlineEditor\obj\Release\net8.0\OnlineEditor.GeneratedMSBuildEditorConfig.editorconfig
+C:\Steam\steamapps\common\Barotrauma\LocalMods\Primary package\Tests\OnlineEditor\obj\Release\net8.0\OnlineEditor.AssemblyInfoInputs.cache
+C:\Steam\steamapps\common\Barotrauma\LocalMods\Primary package\Tests\OnlineEditor\obj\Release\net8.0\OnlineEditor.AssemblyInfo.cs
+C:\Steam\steamapps\common\Barotrauma\LocalMods\Primary package\Tests\OnlineEditor\obj\Release\net8.0\OnlineEditor.csproj.CoreCompileInputs.cache
+C:\Steam\steamapps\common\Barotrauma\LocalMods\Primary package\Tests\OnlineEditor\obj\Release\net8.0\OnlineEditor.sourcelink.json
+C:\Users\Admin\AppData\Local\Temp\primary2-online\driver-server\OnlineEditor.DedicatedServer.deps.json
+C:\Users\Admin\AppData\Local\Temp\primary2-online\driver-server\OnlineEditor.DedicatedServer.dll
+C:\Users\Admin\AppData\Local\Temp\primary2-online\driver-server\OnlineEditor.DedicatedServer.pdb
+C:\Users\Admin\AppData\Local\Temp\primary2-online\driver-client\OnlineEditor.Barotrauma.deps.json
+C:\Users\Admin\AppData\Local\Temp\primary2-online\driver-client\OnlineEditor.Barotrauma.dll
+C:\Users\Admin\AppData\Local\Temp\primary2-online\driver-client\OnlineEditor.Barotrauma.pdb
+C:\Users\Admin\AppData\Local\Temp\primary2-online-run2\driver-server\OnlineEditor.DedicatedServer.deps.json
+C:\Users\Admin\AppData\Local\Temp\primary2-online-run2\driver-server\OnlineEditor.DedicatedServer.dll
+C:\Users\Admin\AppData\Local\Temp\primary2-online-run2\driver-server\OnlineEditor.DedicatedServer.pdb
+C:\Users\Admin\AppData\Local\Temp\primary2-online-run2\driver-client\OnlineEditor.Barotrauma.deps.json
+C:\Users\Admin\AppData\Local\Temp\primary2-online-run2\driver-client\OnlineEditor.Barotrauma.dll
+C:\Users\Admin\AppData\Local\Temp\primary2-online-run2\driver-client\OnlineEditor.Barotrauma.pdb
+C:\Users\Admin\AppData\Local\Temp\primary2-online-run3\driver-server\OnlineEditor.DedicatedServer.deps.json
+C:\Users\Admin\AppData\Local\Temp\primary2-online-run3\driver-server\OnlineEditor.DedicatedServer.dll
+C:\Users\Admin\AppData\Local\Temp\primary2-online-run3\driver-server\OnlineEditor.DedicatedServer.pdb
+C:\Users\Admin\AppData\Local\Temp\primary2-online-run3\driver-client\OnlineEditor.Barotrauma.deps.json
+C:\Users\Admin\AppData\Local\Temp\primary2-online-run3\driver-client\OnlineEditor.Barotrauma.dll
+C:\Users\Admin\AppData\Local\Temp\primary2-online-run3\driver-client\OnlineEditor.Barotrauma.pdb
+C:\Users\Admin\AppData\Local\Temp\primary2-online-run4\driver-server\OnlineEditor.DedicatedServer.deps.json
+C:\Users\Admin\AppData\Local\Temp\primary2-online-run4\driver-server\OnlineEditor.DedicatedServer.dll
+C:\Users\Admin\AppData\Local\Temp\primary2-online-run4\driver-server\OnlineEditor.DedicatedServer.pdb
+C:\Users\Admin\AppData\Local\Temp\primary2-online-run4\driver-client\OnlineEditor.Barotrauma.deps.json
+C:\Users\Admin\AppData\Local\Temp\primary2-online-run4\driver-client\OnlineEditor.Barotrauma.dll
+C:\Users\Admin\AppData\Local\Temp\primary2-online-run4\driver-client\OnlineEditor.Barotrauma.pdb
+C:\Users\Admin\AppData\Local\Temp\primary2-online-snapshot-fixed\driver-server\OnlineEditor.DedicatedServer.deps.json
+C:\Users\Admin\AppData\Local\Temp\primary2-online-snapshot-fixed\driver-server\OnlineEditor.DedicatedServer.dll
+C:\Users\Admin\AppData\Local\Temp\primary2-online-snapshot-fixed\driver-server\OnlineEditor.DedicatedServer.pdb
+C:\Users\Admin\AppData\Local\Temp\primary2-online-snapshot-fixed\driver-client\OnlineEditor.Barotrauma.deps.json
+C:\Users\Admin\AppData\Local\Temp\primary2-online-snapshot-fixed\driver-client\OnlineEditor.Barotrauma.dll
+C:\Users\Admin\AppData\Local\Temp\primary2-online-snapshot-fixed\driver-client\OnlineEditor.Barotrauma.pdb
+C:\Users\Admin\AppData\Local\Temp\primary3-online-final\driver-server\OnlineEditor.DedicatedServer.deps.json
+C:\Users\Admin\AppData\Local\Temp\primary3-online-final\driver-server\OnlineEditor.DedicatedServer.dll
+C:\Users\Admin\AppData\Local\Temp\primary3-online-final\driver-server\OnlineEditor.DedicatedServer.pdb
+C:\Users\Admin\AppData\Local\Temp\primary3-online-final\driver-client\OnlineEditor.Barotrauma.deps.json
+C:\Users\Admin\AppData\Local\Temp\primary3-online-final\driver-client\OnlineEditor.Barotrauma.dll
+C:\Users\Admin\AppData\Local\Temp\primary3-online-final\driver-client\OnlineEditor.Barotrauma.pdb
+C:\Steam\steamapps\common\Barotrauma\LocalMods\Primary package\Tests\OnlineEditor\obj\Release\net8.0\OnlineEditor.Barotrauma.dll
+C:\Steam\steamapps\common\Barotrauma\LocalMods\Primary package\Tests\OnlineEditor\obj\Release\net8.0\refint\OnlineEditor.Barotrauma.dll
+C:\Steam\steamapps\common\Barotrauma\LocalMods\Primary package\Tests\OnlineEditor\obj\Release\net8.0\OnlineEditor.Barotrauma.pdb
+C:\Steam\steamapps\common\Barotrauma\LocalMods\Primary package\Tests\OnlineEditor\obj\Release\net8.0\ref\OnlineEditor.Barotrauma.dll

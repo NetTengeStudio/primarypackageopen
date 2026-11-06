@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using Barotrauma;
 using Barotrauma.Sounds;
@@ -41,7 +42,7 @@ public static class SoundPlayerCrashFix
             {
                 if (target[i] != null && target[i].Sound == null)
                 {
-                    target[i] = null;
+                    target[i] = null!;
                 }
             }
         }
@@ -53,7 +54,7 @@ public static class SoundPlayerCrashFix
             {
                 if (current[i] != null && current[i].Sound == null)
                 {
-                    current[i] = null;
+                    current[i] = null!;
                 }
             }
         }

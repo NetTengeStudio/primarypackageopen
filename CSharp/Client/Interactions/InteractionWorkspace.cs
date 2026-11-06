@@ -22,9 +22,6 @@ internal sealed partial class InteractionViews {
     private readonly Dictionary<string, string> drafts = new(StringComparer.Ordinal);
     private readonly HashSet<string> seenMessages = new(StringComparer.Ordinal);
     private readonly List<(string Header, string Body)> transcriptRows = new();
-    private GUIWindow director;
-    private VirtualList activeEffectsList;
-    private void EffectsChanged() { if (activeEffectsList is { Disposed: false }) { activeEffectsList.Count = client.Effects.Count; } }
     internal void BindRecovery(InteractionRecovery recovery, bool preserveCurrent = false) {
         if (preserveCurrent && recovery != null) {
             int merged = drafts.Count;
@@ -40,14 +37,14 @@ internal sealed partial class InteractionViews {
     }
     private void SaveInteractionView() {
         if (composer is { Disposed: false }) { drafts[DraftKey] = composer.Text; }
-        try { client.Recovery?.SaveViews(drafts, seenMessages); } catch (System.IO.IOException error) { Core.ModLog.Error("Не удалось сохранить черновики: " + error.Message); }
+        try { client.Recovery?.SaveViews(drafts, seenMessages); }
+        catch (Exception error) when (error is System.IO.IOException or UnauthorizedAccessException) { Core.ModLog.Error("Не удалось сохранить черновики: " + error.Message); }
     }
     public void ToggleInteraction() {
         if (messageWindow is { Disposed: false, Closing: false }) { messageWindow.Close(); return; }
         OpenMessages(null, "");
     }
     public void OpenMessages(string target, string name) {
-        hub?.Close();
         if (messageWindow is { Disposed: false }) {
             messageWindow.Reopen();
             GUIRuntime.Instance.Windows.BringToFront(messageWindow);
@@ -155,12 +152,4 @@ internal sealed partial class InteractionViews {
         RefreshConversations();
         connectionStatus.Text = client.Connected ? "Enter: отправить · F2: закрыть" : "Подключение к серверу…";
     }
-    private void Confirm(string title, Action action) {
-        var window = OpenCentered(title, 480, 150);
-        window.Add(new Text("Действие необратимо. Проверьте выбранный объект.") { Wrap = true, Height = 48 });
-        var buttons = window.Add(new Panel { Flow = GUIFlow.Horizontal, Height = GUITheme.ButtonHeight });
-        buttons.Add(new Button("Отмена", _ => window.Close()));
-        buttons.Add(new Button("Подтвердить", _ => { try { action(); window.Close(); } catch (Exception error) when (error is ArgumentException or InvalidOperationException) { Error(error.Message); } }));
-    }
-    private static float Number(TextInput input) => float.TryParse(input.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out float value) && float.IsFinite(value) ? value : throw new ArgumentException("Введите конечное число: " + input.Text);
 }

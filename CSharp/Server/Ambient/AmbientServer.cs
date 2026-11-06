@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Xml.Linq;
 using Barotrauma;
@@ -18,7 +18,7 @@ namespace PrimaryPackage.Ambient {
 
         public void Attach(Harmony harmony) {
             Load();
-            PrimaryPackage.Core.ModNet.Receive(AmbientNet.RequestId, OnRequest, 2.0);
+            INet.Net.Receive(AmbientNet.RequestId, OnRequest, 2.0);
             Register("pp_ambient_global", "pp_ambient_global [on/off]: включить/выключить эмбиент для всех игроков.", args => {
                 enabled = args.Length > 0 ? args[0].Equals("on", StringComparison.OrdinalIgnoreCase) : !enabled;
                 Save();
@@ -57,7 +57,7 @@ namespace PrimaryPackage.Ambient {
         }
 
         private static void SendState(NetworkConnection connection) {
-            PrimaryPackage.Core.ModNet.Send(AmbientNet.StateId, connection, msg => {
+            INet.Net.Send(AmbientNet.StateId, connection, msg => {
                 msg.WriteBoolean(enabled);
                 msg.WriteSingle(volume);
             });

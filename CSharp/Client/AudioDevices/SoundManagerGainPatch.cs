@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using Barotrauma;
 using Barotrauma.Sounds;

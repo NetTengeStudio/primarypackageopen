@@ -11,7 +11,8 @@ static class Settings
     static string root = "";
 
     public static bool Takeover;
-    public static string Mode = "on";
+    public const string DefaultMode = "all";
+    public static string Mode = DefaultMode;
     public static float SpatialRadius = 50, SpatialHysteresis = 10, SpatialNpcRadius = 8;
 
     static string PathOf() => System.IO.Path.Combine(root, FileName);

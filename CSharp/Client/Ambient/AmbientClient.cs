@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Xml.Linq;
 using Barotrauma;
@@ -143,7 +143,7 @@ namespace PrimaryPackage.Ambient {
                 return;
             }
             stateRequested = true;
-            PrimaryPackage.Core.ModNet.Send(AmbientNet.RequestId, msg => msg.WriteByte(1));
+            INet.Net.Send(AmbientNet.RequestId, msg => msg.WriteByte(1));
         }
 
         public static void ResetStateRequest() => stateRequested = false;
@@ -161,7 +161,7 @@ namespace PrimaryPackage.Ambient {
             harmony.Patch(
                 AccessTools.Method(typeof(SoundPlayer), nameof(SoundPlayer.Update)),
                 postfix: new HarmonyMethod(AccessTools.Method(typeof(AmbientClientPlugin), nameof(SoundPlayerUpdatePostfix))));
-            PrimaryPackage.Core.ModNet.Receive(AmbientNet.StateId, AmbientPlayer.OnStateReceived);
+            INet.Net.Receive(AmbientNet.StateId, AmbientPlayer.OnStateReceived);
             PrimaryPackage.Core.ModCommands.Register("pp_ambient",
                 "pp_ambient [on|off]: фоновые звуки станции локально", args => {
                     AmbientPlayer.LocalEnabled = args.Length > 0

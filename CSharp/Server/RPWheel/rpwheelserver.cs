@@ -31,7 +31,7 @@ public sealed class RPWheelServer : IModule, IEventUpdate, IEventClientDisconnec
     private IDisposable receiver;
     private ulong sequence;
     public void Attach(Harmony harmony) {
-        EmoteCatalog.Load(); receiver = ModNet.Listen(Cfg.NetId, Receive, .15);
+        EmoteCatalog.Load(); receiver = INet.Net.Listen(Cfg.NetId, Receive, .15);
         LuaCsSetup.Instance.EventService.Subscribe<IEventUpdate>(this);
         LuaCsSetup.Instance.EventService.Subscribe<IEventClientDisconnected>(this);
         LuaCsSetup.Instance.EventService.Subscribe<IEventRoundEnded>(this);
@@ -52,7 +52,7 @@ public sealed class RPWheelServer : IModule, IEventUpdate, IEventClientDisconnec
         if (input.LengthBytes > 256 || client?.Connection == null) { return; }
         var header = (NetHeader)input.ReadRangedInteger(Cfg.HeaderMin, Cfg.HeaderMax);
         if (header == NetHeader.Hello) {
-            ModNet.Send(Cfg.NetId, client.Connection, output => { output.WriteRangedInteger((int)NetHeader.Hello, Cfg.HeaderMin, Cfg.HeaderMax); output.WriteString(EmoteCatalog.Fingerprint); });
+            INet.Net.Send(Cfg.NetId, client.Connection, output => { output.WriteRangedInteger((int)NetHeader.Hello, Cfg.HeaderMin, Cfg.HeaderMax); output.WriteString(EmoteCatalog.Fingerprint); });
             foreach (var run in active.Values) {
                 if (CanHear(client, run)) { SendStart(client.Connection, run); if (!run.Observers.Contains(client.Connection)) { run.Observers.Add(client.Connection); } }
             }
@@ -79,13 +79,13 @@ public sealed class RPWheelServer : IModule, IEventUpdate, IEventClientDisconnec
         Interactions.InteractionServer.RecordEmote(client, definition.Bubble);
     }
     private static bool CanHear(Client client, Run run) => client.Character == null || client.Character == run.Actor || Vector2.DistanceSquared(client.Character.WorldPosition, run.Actor.WorldPosition) <= Math.Max(run.Definition.Range, ChatMessage.SpeakRange) * Math.Max(run.Definition.Range, ChatMessage.SpeakRange);
-    private static void Deny(Client client, string text) => ModNet.Send(Cfg.NetId, client.Connection, output => { output.WriteRangedInteger((int)NetHeader.Denied, Cfg.HeaderMin, Cfg.HeaderMax); output.WriteString(text); });
-    private static void SendStart(NetworkConnection connection, Run run) => ModNet.Send(Cfg.NetId, connection, output => {
+    private static void Deny(Client client, string text) => INet.Net.Send(Cfg.NetId, client.Connection, output => { output.WriteRangedInteger((int)NetHeader.Denied, Cfg.HeaderMin, Cfg.HeaderMax); output.WriteString(text); });
+    private static void SendStart(NetworkConnection connection, Run run) => INet.Net.Send(Cfg.NetId, connection, output => {
         output.WriteRangedInteger((int)NetHeader.EmoteBroadcast, Cfg.HeaderMin, Cfg.HeaderMax); output.WriteUInt16(run.Actor.ID); output.WriteUInt64(run.Sequence);
         output.WriteByte(run.Definition.Index); output.WriteByte(run.Variant); output.WriteSingle((float)Math.Max(0, Timing.TotalTime - run.Start));
     });
     private static void SendStop(Run run) {
-        foreach (var connection in run.Observers) { ModNet.Send(Cfg.NetId, connection, output => { output.WriteRangedInteger((int)NetHeader.EmoteStop, Cfg.HeaderMin, Cfg.HeaderMax); output.WriteUInt16(run.Actor.ID); output.WriteUInt64(run.Sequence); }); }
+        foreach (var connection in run.Observers) { INet.Net.Send(Cfg.NetId, connection, output => { output.WriteRangedInteger((int)NetHeader.EmoteStop, Cfg.HeaderMin, Cfg.HeaderMax); output.WriteUInt16(run.Actor.ID); output.WriteUInt64(run.Sequence); }); }
     }
     public void OnUpdate(double delta) {
         if (active.Count == 0) { return; }

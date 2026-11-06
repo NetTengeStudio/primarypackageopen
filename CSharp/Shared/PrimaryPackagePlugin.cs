@@ -23,16 +23,22 @@ public sealed class PrimaryPackagePlugin : IAssemblyPlugin {
 #if CLIENT
         ModSettings.Bind();
 #endif
-        ModNet.Mount();
+        INet.Net.Mount();
     }
 
-    public void Initialize() => ModuleHost.Attach(HarmonyId, Modules());
+    public void Initialize() {
+        ModCompiler.Initialize();
+        ModuleHost.Attach(HarmonyId, Modules());
+    }
 
-    public void OnLoadCompleted() => ModuleHost.LoadCompleted();
+    public void OnLoadCompleted() {
+        ModuleHost.LoadCompleted();
+        ModCompiler.ReportStartup();
+    }
 
     public void Dispose() {
         ModuleHost.Release();
-        ModNet.Release();
+        INet.Net.Release();
         ModCommands.Release();
 #if CLIENT
         ModSettings.Release();
@@ -51,16 +57,17 @@ public sealed class PrimaryPackagePlugin : IAssemblyPlugin {
             new ConsolePresentationPlugin(),
             new PrimaryPackage.GUI.GUIBridge(),
             new PrimaryPackage.Interactions.InteractionClient(),
+            new PrimaryPackage.SubEditor.SubEditorClient(),
             new TextMotion.TextMotionPlugin(),
             new BandSlot.BandSlotPlugin(),
             new Cold.ColdPlugin(),
             new CrewManifest.CrewManifestPlugin(),
             new Economy.EconomyRoundResetPlugin(),
-            new Netcode.EntityIdGuardPlugin(),
-            new Netcode.ContentParityPlugin(),
-            new Netcode.WireIndexPlugin(),
+            new INet.ContentParityPlugin(),
+            new INet.FragmentReceiver(),
+            new INet.WireIndexPlugin(),
+            new INet.NetSyncAcceleratorPlugin(),
             new Fault.FaultContainmentPlugin(),
-            new Netcode.NetFaultGuardPlugin(),
             new Inspect.InspectRegistryPlugin(),
             new SlotLayout.SlotLayoutPlugin(),
             new Economy.OrderSetsPlugin(),
@@ -78,15 +85,14 @@ public sealed class PrimaryPackagePlugin : IAssemblyPlugin {
             new Economy.CheckPrintInteractionClientPlugin(),
             new CoalitionDocument.CoalitionDocumentPlugin(),
             new Cold.ColdClientPlugin(),
-            new Netcode.CsActiveClientPlugin(),
+            new INet.CsActiveClientPlugin(),
             new Bloom.ExplosionFlashPlugin(),
-            new Netcode.FileTransferGuardPlugin(),
+            new INet.FileTransferGuardPlugin(),
             new Zones.FogCloudRenderPlugin(),
             new Fonts.FontRegistryPlugin(),
             new Economy.HintToastClientPlugin(),
             new Inspect.InspectEditorPlugin(),
             new Inspect.InspectPromptPlugin(),
-            new Kits.KitStudioPlugin(),
             new Fixes.LevelResourceFixPlugin(),
             new Fixes.SteamLobbyGuardPlugin(),
             new ModInventory.ModInventoryPlugin(),
@@ -102,7 +108,7 @@ public sealed class PrimaryPackagePlugin : IAssemblyPlugin {
             new Reload.WeaponReloadPlugin(),
             new WeaponSwap.WeaponSwapPlugin(),
             new ZoomKey.ZoomKeyPlugin(),
-            new PrimaryPackage.Networking.ChildServerRelayPatchPlugin(),
+            new INet.ChildServerRelayPatchPlugin(),
             new PrimaryPackage.Combat.DamageGuardPlugin(),
             new AudioDevices.SoundManagerGainPatchPlugin(),
             new WallCollision.WallCollisionPlugin(),
@@ -111,15 +117,16 @@ public sealed class PrimaryPackagePlugin : IAssemblyPlugin {
 #else
         return new IModule[] {
             new PrimaryPackage.Interactions.InteractionServer(),
+            new PrimaryPackage.SubEditor.SubEditorServer(),
             new BandSlot.BandSlotPlugin(),
             new Cold.ColdPlugin(),
             new CrewManifest.CrewManifestPlugin(),
             new Economy.EconomyRoundResetPlugin(),
-            new Netcode.EntityIdGuardPlugin(),
-            new Netcode.ContentParityPlugin(),
-            new Netcode.WireIndexPlugin(),
+            new INet.ContentParityPlugin(),
+            new INet.FragmentReceiver(),
+            new INet.WireIndexPlugin(),
+            new INet.NetSyncAcceleratorPlugin(),
             new Fault.FaultContainmentPlugin(),
-            new Netcode.NetFaultGuardPlugin(),
             new Inspect.InspectRegistryPlugin(),
             new SlotLayout.SlotLayoutPlugin(),
             new Economy.OrderSetsPlugin(),
@@ -129,17 +136,15 @@ public sealed class PrimaryPackagePlugin : IAssemblyPlugin {
             new Economy.CheckPrintInteractionServerPlugin(),
             new Doors.HatchStandingPlugin(),
             new Cold.ColdServerPlugin(),
-            new Netcode.CsGuardPlugin(),
+            new INet.CsGuardPlugin(),
             new Economy.EconomyPlugin(),
-            new Kits.KitServerPlugin(),
             new Economy.OrderBoardPlugin(),
             new RPWheel.RPWheelServer(),
             new Documents.StampInteractionServerPlugin(),
-            new Netcode.SyncRecoveryPlugin(),
             new Commands.ConsoleCommandInterceptPlugin(),
             new PrimaryPackage.Server.Safety.EventManagerSafetyPlugin(),
             new PrimaryPackage.Server.Safety.CrewManagerSafetyPlugin(),
-            new PrimaryPackage.Networking.ChildServerRelayPatchPlugin(),
+            new INet.ChildServerRelayPatchPlugin(),
             new PrimaryPackage.Combat.DamageGuardPlugin(),
             new WallCollision.WallCollisionPlugin(),
             new IEngine.EngineModule()

@@ -4,7 +4,7 @@ using GUI = global::Barotrauma.GUI;
 #endif
 
 public static class PlayView {
-    public static bool Busy => GUI.InputBlockingMenuOpen || CharacterHealth.OpenHealthWindow != null || PrimaryPackage.GUI.GUIBridge.BlocksWorld;
+    public static bool Busy => GUI.InputBlockingMenuOpen || CharacterHealth.OpenHealthWindow != null || PrimaryPackage.GUI.GUIBridge.CapturesViewInput;
 
     public static bool Typing => GUI.KeyboardDispatcher.Subscriber != null;
 

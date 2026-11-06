@@ -13,7 +13,7 @@ namespace PrimaryPackage.Economy {
                 DebugConsole.NewMessage(text, severity == HintToastNet.SeverityError ? Color.OrangeRed : Color.LightGreen);
                 return;
             }
-            PrimaryPackage.Core.ModNet.Send(HintToastNet.NetId, c.Connection, msg => {
+            INet.Net.Send(HintToastNet.NetId, c.Connection, msg => {
                 msg.WriteByte(severity);
                 msg.WriteString(text);
             });

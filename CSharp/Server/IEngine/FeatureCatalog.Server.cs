@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using IEngine.Network;
+using INet;
 
 namespace IEngine;
 

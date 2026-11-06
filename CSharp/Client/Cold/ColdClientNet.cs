@@ -1,68 +1,77 @@
-﻿using System;
+using System;
 using Barotrauma;
-using Barotrauma.LuaCs;
 using Barotrauma.Networking;
+using INet;
 
 namespace PrimaryPackage.Cold {
     public static class ColdClientNet {
-        private const float RequestInterval = 3.0f;
+        private static IDisposable listener;
+        private static float requestCooldown;
 
-        private static bool initialized;
-        private static bool synced;
-        private static float requestTimer;
-        private static float backoff = RequestInterval;
-
-        public static bool Synced => synced;
         public static double LastReceivedAt { get; private set; } = double.NegativeInfinity;
         public static int LastReceivedHulls { get; private set; }
         public static int ReceivedMessages { get; private set; }
+        public static bool Synced { get; private set; }
 
         public static void Hook() {
-            if (initialized) { return; }
-            initialized = true;
-            PrimaryPackage.Core.ModNet.Receive(ColdNet.StateId, OnState);
+            listener ??= Net.Listen(ColdNet.StateId, OnReceiveState);
+            Request();
+        }
+
+        public static void Request() {
+            if (GameMain.Client != null && requestCooldown <= 0.0f) {
+                requestCooldown = 0.5f;
+                Net.SendEmpty(ColdNet.RequestId);
+            }
+        }
+
+        public static void Update(float deltaTime) {
+            if (requestCooldown > 0.0f) {
+                requestCooldown -= deltaTime;
+            }
+        }
+
+        private static void OnReceiveState(IReadMessage msg) {
+            if (msg == null) { return; }
+            byte mode = msg.ReadByte();
+            int receivedHulls = 0;
+            if (mode == 0) {
+                ushort count = msg.ReadUInt16();
+                receivedHulls = count;
+                for (int i = 0; i < count; i++) {
+                    ushort hullId = msg.ReadUInt16();
+                    byte q = msg.ReadByte();
+                    ColdField.ApplyNetworkHullTemperature(hullId, ColdNet.Dequantize(q));
+                }
+            } else if (mode == 1) {
+                uint changed = NativeWire.ReadVarUInt32(msg);
+                receivedHulls = (int)changed;
+                for (int i = 0; i < changed; i++) {
+                    ushort hullId = (ushort)NativeWire.ReadVarUInt32(msg);
+                    byte q = msg.ReadByte();
+                    ColdField.ApplyNetworkHullTemperature(hullId, ColdNet.Dequantize(q));
+                }
+            }
+            LastReceivedAt = Timing.TotalTime;
+            LastReceivedHulls = receivedHulls;
+            ReceivedMessages++;
+            Synced = true;
         }
 
         public static void Reset() {
-            synced = false;
-            requestTimer = 0.0f;
-            backoff = RequestInterval;
+            requestCooldown = 0.0f;
             LastReceivedAt = double.NegativeInfinity;
             LastReceivedHulls = 0;
             ReceivedMessages = 0;
+            Synced = false;
+            Request();
         }
 
-        private const float MaxRequestInterval = 30.0f;
-
-        public static void Update(float deltaTime) {
-            if (GameMain.Client == null || GameMain.GameSession == null || synced) { return; }
-            ColdField.Touch();
-            if (ColdField.Count == 0) { return; }
-            requestTimer -= deltaTime;
-            if (requestTimer > 0.0f) { return; }
-            requestTimer = backoff;
-            if (backoff < MaxRequestInterval) { backoff *= 2.0f; }
-            PrimaryPackage.Core.ModNet.Send(ColdNet.RequestId, null);
-        }
-
-        private static void OnState(IReadMessage msg) {
-            byte flags = msg.ReadByte();
-            int count = msg.ReadUInt16();
-            if (count > ColdNet.MaxPerMessage) { return; }
-            ColdField.Touch();
-            int applied = 0;
-            for (int i = 0; i < count; i++) {
-                ushort id = msg.ReadUInt16();
-                float value = ColdNet.Dequantize(msg.ReadByte());
-                if (Entity.FindEntityByID(id) is not Hull hull) { continue; }
-                if (ColdField.IndexOf(hull) < 0) { continue; }
-                ColdField.Set(hull, value);
-                applied++;
-            }
-            if ((flags & ColdNet.FlagFull) != 0 && (count == 0 || applied > 0)) { synced = true; }
-            LastReceivedAt = Timing.TotalTime;
-            LastReceivedHulls = applied;
-            ReceivedMessages++;
+        public static void Release() {
+            listener?.Dispose();
+            listener = null;
+            requestCooldown = 0.0f;
+            Reset();
         }
     }
 }

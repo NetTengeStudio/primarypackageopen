@@ -65,7 +65,7 @@ static partial class Scenarios
             "fire" => new Fire(I("count", 6)),
             "flood" => new Flood(I("count", 4), F("fill", 0.6f)),
             "explosions" => new Explosions(F("period", 2f), F("range", 300f), F("damage", 30f)),
-            "gunfire" => new Gunfire(I("shooters", 6), F("rate", 8f), S("ammo", "9mm_round"), I("targets", 6), F("near", 30f), I("pool", 0), I("mortal", 0) == 1),
+            "gunfire" => new Gunfire(I("shooters", 6), F("rate", 8f), S("ammo", "5.45mm_round"), I("targets", 6), F("near", 30f), I("pool", 0), I("mortal", 0) == 1),
             "npcs" => new Npcs(I("count", 10)),
             "physics" => new Physics(I("count", 60), S("item", "steel")),
             "walk" => new Walk(F("speed", 3f)),
@@ -176,18 +176,27 @@ static partial class Scenarios
         readonly bool mortal;
         readonly Queue<Item> pool = new();
         public long PoolMisses;
-        public Gunfire(int shooters, float rate, string ammo, int targets, float near, int pool, bool mortal) { shooterCount = shooters; this.rate = rate; this.ammo = ammo; targetCount = targets; this.near = near; poolSize = pool; this.mortal = mortal; }
+        public Gunfire(int shooters, float rate, string ammo, int targets, float near, int pool, bool mortal)
+        {
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(shooters);
+            ArgumentOutOfRangeException.ThrowIfNegative(targets);
+            ArgumentOutOfRangeException.ThrowIfNegative(pool);
+            if (!float.IsFinite(rate) || rate <= 0) { throw new ArgumentOutOfRangeException(nameof(rate)); }
+            shooterCount = shooters; this.rate = rate; this.ammo = ammo; targetCount = targets; this.near = near; poolSize = pool; this.mortal = mortal;
+        }
         public override string Name => "gunfire";
         public override void Start()
         {
-            prefab = ItemPrefab.Prefabs.Find(p => p.Identifier == ammo);
-            if (prefab == null || !prefab.ConfigElement.Elements().Any(e => e.Name.ToString().Equals("Projectile", StringComparison.OrdinalIgnoreCase))) { throw new Exception($"{ammo} is not a projectile item"); }
+            prefab = ItemPrefab.Prefabs.Find(p => p.Identifier == ammo)
+                ?? ItemPrefab.Prefabs.Find(p => p.Identifier.Value.Contains("5.45") && p.ConfigElement.Elements().Any(e => e.Name.ToString().Equals("Projectile", StringComparison.OrdinalIgnoreCase)))
+                ?? ItemPrefab.Prefabs.Find(p => p.ConfigElement.Elements().Any(e => e.Name.ToString().Equals("Projectile", StringComparison.OrdinalIgnoreCase)));
+            if (prefab == null) { throw new Exception($"no projectile item found for {ammo}"); }
             List<Hull> spots = Near(near, shooterCount + targetCount);
-            for (int i = 0; i < spots.Count; i++)
-            {
-                if (i % 2 == 0 && shooters.Count < shooterCount) { shooters.Add(Center(spots[i])); }
-                else { targetSpots.Add(Floor(spots[i])); }
-            }
+            if (spots.Count == 0) { spots = hulls.Take(shooterCount + targetCount).ToList(); }
+            // A small number of hulls must not silently lower the requested shot
+            // rate. Hulls supply positions; shooter/target counts define load.
+            for (int i = 0; i < shooterCount; i++) { shooters.Add(Center(spots[(int)((long)i * 2 % spots.Count)])); }
+            for (int i = 0; i < targetCount; i++) { targetSpots.Add(Floor(spots[(int)(((long)i * 2 + 1) % spots.Count)])); }
             if (targetSpots.Count == 0) { targetSpots.Add(Focus()); }
             for (int i = 0; i < poolSize && shooters.Count > 0; i++)
             {

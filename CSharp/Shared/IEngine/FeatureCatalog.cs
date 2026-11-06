@@ -9,8 +9,9 @@ static partial class FeatureCatalog
 {
     public static List<Feature> Create()
     {
-        var list = new List<Feature> { new ExecutorFeature(), new ActiveSetFeature(), new StatusTagFeature(), new PowerFeature(), new TagsFeature(), new ListRemovalFeature(), new Simulation.ContainerFeature(), new Simulation.SpatialFeature(), new BodiesFeature(), new LuaBusFeature(), new EffectCompilerFeature(), new SchedulerFeature(), new LuaEventsFeature(), new ComponentPlansFeature(), new ItemTargetsFeature(), new FireFeature() };
+        var list = new List<Feature> { new ExecutorFeature(), new ActiveSetFeature(), new StatusTagFeature(), new PowerFeature(), new TagsFeature(), new ListRemovalFeature(), new Simulation.ContainerFeature(), new Simulation.SpatialFeature(), new BodiesFeature(), new LuaBusFeature(), new EffectCompilerFeature(), new SchedulerFeature(), new LuaEventsFeature(), new ComponentPlansFeature(), new ItemTargetsFeature(), new FireFeature(), new ContainedTargetsFeature(), new IntervalFeature(), new DurationFeature(), new ApplicationHooksFeature() };
         AddSide(list);
+        list.Add(new INet.NetFeature());
         return list;
     }
 

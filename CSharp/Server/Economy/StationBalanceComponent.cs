@@ -12,6 +12,6 @@ namespace PrimaryPackage.Economy {
         }
         public void ServerEventWrite(IWriteMessage msg, Client c, NetEntityEvent.IData extraData = null)
             => EconomyNetIO.WriteState(msg);
-        public void PushFullSync() => item.CreateServerEvent(this, new FullSyncEventData());
+        public void PushFullSync() => item.CreateServerEvent(this, new StationBalanceSyncEventData());
     }
 }

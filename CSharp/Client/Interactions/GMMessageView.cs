@@ -126,7 +126,7 @@ internal sealed partial class InteractionViews {
         foreach (var channel in channels) { channel.Changed += _ => { CaptureColor(); PreviewColor(); }; }
         text.Changed += input => { draft.Text = input.Text; preview.Text = input.Text.Length > 0 ? input.Text : "Предварительный просмотр цвета"; client.ChangeAnnouncementDraft(); };
         PreviewColor();
-        var palette = content.Add(new GMColorPalette()); palette.Changed += color => SceneTry(() => {
+        var palette = content.Add(new GMColorPalette()); palette.Changed += color => MessageTry(() => {
             if (!byte.TryParse(channels[3].Text, NumberStyles.None, CultureInfo.InvariantCulture, out byte alpha)) { throw new ArgumentException("A: введите прозрачность от 0 до 255"); }
             color.A = alpha; SetColor(color);
         });
@@ -144,7 +144,7 @@ internal sealed partial class InteractionViews {
             saved.Clear();
             for (int i = 0; i < gmColors.Count; i++) { uint packed = gmColors[i]; saved.Add(new Button((i + 1).ToString(), _ => SetColor(new Color(packed))) { Width = 27 }); }
         }
-        RebuildSaved(); content.Add(new Button("Сохранить текущий цвет", _ => SceneTry(() => {
+        RebuildSaved(); content.Add(new Button("Сохранить текущий цвет", _ => MessageTry(() => {
             uint packed = ReadColor().PackedValue;
             if (gmColors.Contains(packed)) { return; }
             var next = new List<uint>(gmColors); if (next.Count == 16) { next.RemoveAt(0); } next.Add(packed);
@@ -167,16 +167,16 @@ internal sealed partial class InteractionViews {
         }, 110) { Count = client.AnnouncementState.History.Count });
         gmMessageHistory.SelectionChanged += i => gmHistorySelection = client.AnnouncementState.History[client.AnnouncementState.History.Count - 1 - i].Message.Id;
         var historyActions = content.Add(new Panel { Flow = GUIFlow.Horizontal, Height = GUITheme.ButtonHeight });
-        historyActions.Add(new Button("В черновик", _ => SceneTry(() => {
+        historyActions.Add(new Button("В черновик", _ => MessageTry(() => {
             client.AnnouncementState.Draft = GMMessageDraft.From(SelectedGMMessage()); client.ChangeAnnouncementDraft(); OpenGMMessage();
         })));
-        historyActions.Add(new Button("Повторить выбранное", _ => SceneTry(() => {
+        historyActions.Add(new Button("Повторить выбранное", _ => MessageTry(() => {
             var value = SelectedGMMessage().Copy(); value.Id = Guid.NewGuid(); client.Announce(value, false);
         })));
         gmMessageStatus = gmMessageWindow.Add(new Text(client.AnnouncementStatus) { Wrap = true, Height = 42 });
         var actions = gmMessageWindow.Add(new Panel { Flow = GUIFlow.Horizontal, Height = GUITheme.ButtonHeight });
-        actions.Add(new Button("Предпросмотр", _ => SceneTry(() => client.Announce(draft.Create(), true))));
-        actions.Add(new Button("Отправить", _ => SceneTry(() => client.Announce(draft.Create(), false))));
+        actions.Add(new Button("Предпросмотр", _ => MessageTry(() => client.Announce(draft.Create(), true))));
+        actions.Add(new Button("Отправить", _ => MessageTry(() => client.Announce(draft.Create(), false))));
         GMAnnouncementsChanged();
     }
     private GMAnnouncement SelectedGMMessage() {
