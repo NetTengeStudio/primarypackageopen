@@ -6,5 +6,5 @@ namespace IEngine;
 
 static partial class FeatureCatalog
 {
-    static partial void AddSide(List<Feature> list) => list.AddRange(new Feature[] { new RenderFeature(), new ShadowFeature(), new SpriteTraversalFeature() });
+    static partial void AddSide(List<Feature> list) => list.AddRange(new Feature[] { new RenderFeature(), new ShadowFeature(), new ShadowQueriesFeature(), new SpriteTraversalFeature() });
 }
